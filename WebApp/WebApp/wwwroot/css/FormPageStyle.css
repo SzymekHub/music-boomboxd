@@ -57,11 +57,11 @@ button:hover {
     gap: 16px;
 }
 
-    .left-links a {
-        font-size: 18px;
-        color: #a9a6a6cb;
-    }
+.left-links a {
+    font-size: 18px;
+    color: #a9a6a6cb;
+}
 
-    .left-links li {
-        margin-left: auto;
-    }
+.left-links li {
+    margin-left: auto;
+}

@@ -27,17 +27,18 @@
             </section>
            
             <div class="footer">
-                <p>Thank you for checking out my website!</p>
-                <ul class="left-links">
-                    <li><a asp-page="/FormPage" class="FormPage"> Form to add songs</a></li>
+                <ul class="left-links-footer">
+                    <li><a href="FormPage.html">Form to add songs</a></li>
+                </ul>
+                <div class="Thank-You-Container">
+                    <p>Thank you for checking out my website!</p>
+                </div>
+                <ul class="right-links-footer">
                     <li><a href="#">Report a bug</a></li>
                 </ul>
             </div>
     </div>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-
+   
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
