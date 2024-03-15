@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace WebApp.Pages
+namespace WebApp.Pages.Products
 {
-    public class FormPageModel: PageModel
+    public class FormPageModel : PageModel
     {
         private readonly ILogger<FormPageModel> _logger;
 
@@ -18,11 +18,6 @@ namespace WebApp.Pages
 
         public void OnPost()
         {
-            string title = Request.Form["title"];
-            string artist = Request.Form["artist"];
-            string date = Request.Form["date"];
-
-            
         }
     }
 

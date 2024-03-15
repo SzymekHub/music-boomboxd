@@ -17,11 +17,8 @@ namespace WebApp.Pages
 
         }
 
-        public IActionResult OnPost()
-        {
-            return RedirectToPage("Index");
-
-            //ViewData["Title"] = "Name";
-        }
+        //public IActionResult OnPost()
+        //{
+        //}
     }
 }

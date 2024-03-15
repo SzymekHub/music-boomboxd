@@ -1,19 +1,39 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - WebApp</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/WebApp.styles.css" asp-append-version="true" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/site.css">
 </head>
 <body>
-       <body>
-        @RenderBody();
-       </body>
+    <div class="container">
+            <div class="nav"> 
+                <ul class="left-links">
+                    <li><a href="#">Search</a></li>
+                    <li><a href="#">Chat</a></li>
+                </ul>
+                <div class="logo-container">
+                    <img src='Images/LogoBlue.png' alt="Logo" class="logo">
+                </div>
+                <ul class="right-links">
+                    <li><a href="#">Profile</a></li>
+                </ul>
+            </div>
            
-
+            <section id="content_container">
+            @RenderBody()
+            </section>
+           
+            <div class="footer">
+                <p>Thank you for checking out my website!</p>
+                <ul class="left-links">
+                    <li><a asp-page="/FormPage" class="FormPage"> Form to add songs</a></li>
+                    <li><a href="#">Report a bug</a></li>
+                </ul>
+            </div>
+    </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

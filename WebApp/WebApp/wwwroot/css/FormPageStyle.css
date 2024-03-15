@@ -49,3 +49,19 @@ button:hover {
     margin: 0 auto;
     align-items: center;
 }
+.left-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 16px;
+}
+
+    .left-links a {
+        font-size: 18px;
+        color: #a9a6a6cb;
+    }
+
+    .left-links li {
+        margin-left: auto;
+    }

@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Form Page";
 }
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,12 +26,15 @@
         <input type="text" id="artist" name="artist">
 
         <label for="date">Date:</label>
-        <input type="number" id="date" name="date">
+        <input type="date" id="date" name="date">
 
         <label for="genre">Genre:</label>
         <input type="text" id="genre" name="genre">
 
         <button type="submit">Add Music</button>
+        <ul class="left-links">
+            <li><a href="Index">Homepage</a></li>
+        </ul>
     </form>
 </body>
 </html>
