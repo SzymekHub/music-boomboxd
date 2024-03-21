@@ -1,10 +1,43 @@
 
-.main-content {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    padding: 15px;
-    flex: 1;
+.body {
+    font-family: Arial, sans-serif;
+}
+
+.h2 {
+    text-align: center
+}
+.form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input[type="text"],
+.input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.button {
+    background-color: darkblue;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.button:hover {
+    background-color: lightblue;
 }
 
 .container {
@@ -16,6 +49,7 @@
     grid-template-columns: auto 1fr;
     gap: 15px;
     padding-bottom: 60px;
+    align-items: center;
 }
 
 .container div {
@@ -59,72 +93,6 @@
     margin-left: auto;
 }
 
-.New-Music-Content {
-    background-color: #024702;
-    gap: 15px;
-    padding: 15px;
-    border-radius: 15px;
-    justify-content: center;
-    align-items: flex-start;
-    grid-column: 1 / 2;
-    margin-bottom: 60px;
-}
-
-.New-Albums {
-    text-align: center;
-    min-width: 200px;
-    flex: 1 1 200px;
-    max-width: 300px;
-}
-
-.New-Albums-Grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    justify-content: center;
-}
-
-.Album-Section {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    justify-content: space-around;
-}
-
-.Album-Section .article {
-    flex: 1 1 300px;
-    max-width: 300px;
-    margin: 15px;
-    padding: 15px;
-    background-color: #024702;
-    border-radius: 10px;
-}
-
-.Album-Section .article:hover {
-    background-color: #036b03;
-}
-
-.albums {
-    width: 100px;
-    height: auto;
-    max-width: 100%;
-    margin: 10px;
-    border: 1px solid lightgrey;
-}
-
-.Album-Name {
-    font-size: 16px;
-    color: red;
-    text-align: center;
-}
-
-.Album-Name p {
-    font-size: 12px;
-    font-family: sans-serif;
-    color: white;
-    text-align: center;
-}
-
 .nav {
     background-color: darkblue;
     text-align: center;
@@ -144,20 +112,6 @@
     margin: 0 auto;
 }
 
-.article {
-    background-color: #024702;
-    padding: 15px;
-    border-radius: 10px;
-    width: 100%;
-}
-
-.article p {
-    font-size: 18px;
-    font-family: sans-serif;
-    color: white;
-    text-align: left;
-}
-
 .footer {
     background-color: darkblue;
     text-align: center;
@@ -169,7 +123,7 @@
 }
 
 .right-links-footer,
-.left-links-footer{
+.left-links-footer {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -179,12 +133,13 @@
 }
 
 .right-links-footer a,
-.left-links-footer a{
+.left-links-footer a {
     font-size: 18px;
     color: #a9a6a6cb;
 }
+
 .left-links-footer li,
-.right-links-footer li{
+.right-links-footer li {
     margin-right: auto;
 }
 
@@ -205,31 +160,7 @@ ul {
     padding: 0;
     gap: 16px;
 }
+
 ul li {
     margin-left: auto;
-}
-
-.Notify-Btn {
-    margin-top: 15px;
-    font-size: 16px;
-    padding: 10px;
-    border: none;
-    background-color: #4CAF50;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.Notify-Btn:hover {
-    background-color: #45a049;
-}
-
-.Album-Info {
-    margin-top: 10px;
-    text-align: center;
-}
-
-.Album-Info p {
-    margin: 5px 0;
-    color: white;
 }

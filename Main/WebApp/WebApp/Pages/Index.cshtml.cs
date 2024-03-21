@@ -17,8 +17,9 @@ namespace WebApp.Pages
 
         }
 
-        //public IActionResult OnPost()
-        //{
-        //}
+        public IActionResult OnPost()
+        {
+            return RedirectToPage("FormPage");
+        }
     }
 }

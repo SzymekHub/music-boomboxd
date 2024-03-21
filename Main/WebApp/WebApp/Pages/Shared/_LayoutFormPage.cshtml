@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/css/site.css">
+    <title>@ViewData["Forms"]</title>
+    <link rel="stylesheet" href="~/css/FormPageStyle.css">
 </head>
 <body>
     <div class="container">
@@ -15,7 +15,7 @@
                     <li><a href="#">Chat</a></li>
                 </ul>
                 <div class="logo-container">
-                    <img src='Images/LogoBlue.png' alt="Logo" class="logo">
+                    <a asp-page="/Index" img src='Images/LogoBlue.png' alt="Logo" class="logo"></a>
                 </div>
                 <ul class="right-links">
                     <li><a href="#">Profile</a></li>
@@ -23,12 +23,12 @@
             </div>
            
             <section id="content_container">
-            @RenderBody()
+                @RenderBody()
             </section>
            
             <div class="footer">
                 <ul class="left-links-footer">
-                    <li><a href="FormPage.html">Form to add songs</a></li>
+                    <li><a asp-page="/FormPage">Form to add songs</a></li>
                 </ul>
                 <div class="Thank-You-Container">
                     <p>Thank you for checking out my website!</p>

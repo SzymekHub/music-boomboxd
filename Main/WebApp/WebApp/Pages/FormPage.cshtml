@@ -1,0 +1,29 @@
+﻿@page
+@model FormPageModel
+@{
+    Layout = "_LayoutFormPage";
+    ViewData["Forms"] = "Form Page";
+}
+
+<h2 class="h2">Add New Music</h2>
+
+<form id="newMusicForm" method="post">
+
+        <label for="title">Title:<sup>*</sup></label>
+        <input type="text" id="title" name="title">
+     
+        <label for="artist">Artist:<sup>*</sup></label>
+        <input type="text" id="artist" name="artist">
+        
+        <label for="date">Date:<sup>*</sup></label>
+        <input type="date" id="date" name="date">
+
+        <label for="genre">Genre:<sup>*</sup></label>
+        <input type="text" id="genre" name="genre">
+
+    <div class="button-container">
+        <input type="submit" value="Save">
+        <input type="reset" value="Cancel">
+    </div>
+        @* <li><a asp-page="/Index">Homepage</a></li> *@
+</form>
