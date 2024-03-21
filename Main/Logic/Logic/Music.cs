@@ -2,24 +2,47 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Logic
 {
-    public class Music
+    public abstract class Music
     {
+        public int ID { get; set; }
+
         public string Title { get; set; }
 
         public string Artist { get; set; }
 
-        public int Date { get; set; }
+        public DateTime ReleaseDate { get; set; }
 
-        public Music(string title, string artist, int date)
+        public genreType GenreType { get; set; }
+
+        public List<Review> Reviews { get; set; }
+
+        public List<Comment> Comments { get; set; }
+
+
+
+        public List<Review> GetReviews()
         {
-            Title = title;
-            Artist = artist;
-            Date = date;
+            return Reviews;
         }
 
+        public List<Comment> GetComments()
+        {
+            return Comments;
+        }
+
+        public void AddReview(Review review)
+        {
+            Reviews.Add(review);
+        }
+
+        public void AddComment(Comment comment)
+        {
+            Comments.Add(comment);
+        }
     }
 }
