@@ -1,4 +1,4 @@
-﻿namespace ClassLibrary
+﻿namespace Logic
 {
     public class NewMusic : Music   
     {
