@@ -1,0 +1,48 @@
+using Logic;
+
+namespace WinFormsApp
+{
+    public partial class Login_Form : Form
+    {
+        private const string AdminUsername = "a";
+        private const string AdminPassword = "p";
+
+        public Login_Form()
+        {
+            InitializeComponent();
+        }
+
+        private void btnLogin_Click(object sender, EventArgs e)
+        {
+            string enteredUsername = txtUsername.Text;
+            string enteredPassword = txtPassword.Text;
+
+            if (enteredUsername == AdminUsername && enteredPassword == AdminPassword)
+            {
+                DashBoard_Form dash_form = new DashBoard_Form();
+                dash_form.Owner = this;
+                dash_form.Text = "Hello" + AdminUsername;
+                this.Visible = false;
+                dash_form.Show();
+                ClearControls();
+            }
+            else if (string.IsNullOrWhiteSpace(enteredUsername) || string.IsNullOrWhiteSpace(enteredPassword)) 
+            {
+                lblWrong.Text = "The Username and Password cannot be empty";
+                lblWrong.Visible = true;
+            }
+            else
+            {
+                lblWrong.Text = "Looks like the Username or Password is incorrect";
+                lblWrong.Visible = true;
+            }
+        }
+
+        public void ClearControls()
+        {
+            txtPassword.Clear();
+            txtUsername.Clear();
+            lblWrong.Visible = false;
+        }
+    }
+}
