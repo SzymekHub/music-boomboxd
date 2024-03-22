@@ -1,8 +1,8 @@
 namespace WinFormsApp
 {
-    public partial class NewMusicForm : Form
+    public partial class NewMusic_Form : Form
     {
-        public NewMusicForm()
+        public NewMusic_Form()
         {
             InitializeComponent();
         }
