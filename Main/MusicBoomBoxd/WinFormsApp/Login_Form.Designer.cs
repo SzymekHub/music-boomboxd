@@ -37,6 +37,7 @@
             txtPassword = new TextBox();
             txtUsername = new TextBox();
             btnLogin = new Button();
+            label1 = new Label();
             LoginPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)logoPB).BeginInit();
             SuspendLayout();
@@ -44,6 +45,7 @@
             // LoginPanel
             // 
             LoginPanel.BackColor = Color.DarkGray;
+            LoginPanel.Controls.Add(label1);
             LoginPanel.Controls.Add(lblWrong);
             LoginPanel.Controls.Add(lblPassword);
             LoginPanel.Controls.Add(lblUsername);
@@ -122,6 +124,16 @@
             btnLogin.UseVisualStyleBackColor = false;
             btnLogin.Click += btnLogin_Click;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.BackColor = Color.White;
+            label1.Location = new Point(22, 42);
+            label1.Name = "label1";
+            label1.Size = new Size(122, 40);
+            label1.TabIndex = 16;
+            label1.Text = "The login: Admin\r\nPassword: p\r\n";
+            // 
             // Login_Form
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -147,5 +159,6 @@
         private TextBox txtUsername;
         private Button btnLogin;
         private Label lblWrong;
+        private Label label1;
     }
 }

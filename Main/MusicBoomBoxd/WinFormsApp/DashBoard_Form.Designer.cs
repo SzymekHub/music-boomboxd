@@ -30,11 +30,11 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DashBoard_Form));
             DashBoardPanel = new Panel();
+            btnReviews = new Button();
+            btnMusic = new Button();
+            btnUsers = new Button();
             lblHello = new Label();
             logoPB = new PictureBox();
-            btnUsers = new Button();
-            btnMusic = new Button();
-            btnReviews = new Button();
             DashBoardPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)logoPB).BeginInit();
             SuspendLayout();
@@ -52,15 +52,50 @@
             DashBoardPanel.Size = new Size(739, 396);
             DashBoardPanel.TabIndex = 0;
             // 
+            // btnReviews
+            // 
+            btnReviews.BackColor = Color.MediumSlateBlue;
+            btnReviews.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnReviews.Location = new Point(468, 271);
+            btnReviews.Name = "btnReviews";
+            btnReviews.Size = new Size(199, 58);
+            btnReviews.TabIndex = 17;
+            btnReviews.Text = "Reviews";
+            btnReviews.UseVisualStyleBackColor = false;
+            btnReviews.Click += btnReviews_Click;
+            // 
+            // btnMusic
+            // 
+            btnMusic.BackColor = Color.MediumSlateBlue;
+            btnMusic.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnMusic.Location = new Point(263, 193);
+            btnMusic.Name = "btnMusic";
+            btnMusic.Size = new Size(199, 58);
+            btnMusic.TabIndex = 16;
+            btnMusic.Text = "Music";
+            btnMusic.UseVisualStyleBackColor = false;
+            btnMusic.Click += btnMusic_Click;
+            // 
+            // btnUsers
+            // 
+            btnUsers.BackColor = Color.MediumSlateBlue;
+            btnUsers.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnUsers.Location = new Point(57, 122);
+            btnUsers.Name = "btnUsers";
+            btnUsers.Size = new Size(199, 58);
+            btnUsers.TabIndex = 15;
+            btnUsers.Text = "Users";
+            btnUsers.UseVisualStyleBackColor = false;
+            btnUsers.Click += btnUsers_Click;
+            // 
             // lblHello
             // 
             lblHello.AutoSize = true;
             lblHello.Font = new Font("Showcard Gothic", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblHello.Location = new Point(188, 35);
             lblHello.Name = "lblHello";
-            lblHello.Size = new Size(17, 23);
+            lblHello.Size = new Size(0, 23);
             lblHello.TabIndex = 14;
-            lblHello.Text = "1";
             // 
             // logoPB
             // 
@@ -72,39 +107,6 @@
             logoPB.TabIndex = 13;
             logoPB.TabStop = false;
             // 
-            // btnUsers
-            // 
-            btnUsers.BackColor = Color.MediumSlateBlue;
-            btnUsers.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnUsers.Location = new Point(515, 124);
-            btnUsers.Name = "btnUsers";
-            btnUsers.Size = new Size(199, 58);
-            btnUsers.TabIndex = 15;
-            btnUsers.Text = "Users";
-            btnUsers.UseVisualStyleBackColor = false;
-            // 
-            // btnMusic
-            // 
-            btnMusic.BackColor = Color.MediumSlateBlue;
-            btnMusic.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnMusic.Location = new Point(515, 198);
-            btnMusic.Name = "btnMusic";
-            btnMusic.Size = new Size(199, 58);
-            btnMusic.TabIndex = 16;
-            btnMusic.Text = "Music";
-            btnMusic.UseVisualStyleBackColor = false;
-            // 
-            // btnReviews
-            // 
-            btnReviews.BackColor = Color.MediumSlateBlue;
-            btnReviews.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnReviews.Location = new Point(515, 274);
-            btnReviews.Name = "btnReviews";
-            btnReviews.Size = new Size(199, 58);
-            btnReviews.TabIndex = 17;
-            btnReviews.Text = "Reviews";
-            btnReviews.UseVisualStyleBackColor = false;
-            // 
             // DashBoard_Form
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -114,6 +116,7 @@
             Controls.Add(DashBoardPanel);
             Name = "DashBoard_Form";
             Text = "DashBoard";
+            FormClosed += DashBoard_Form_FormClosed;
             DashBoardPanel.ResumeLayout(false);
             DashBoardPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)logoPB).EndInit();

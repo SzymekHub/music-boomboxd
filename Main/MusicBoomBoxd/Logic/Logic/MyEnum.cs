@@ -10,7 +10,8 @@ namespace Logic
     {
         Professional,
         Artist,
-        Amateur
+        Amateur,
+        All
     }
 
     public enum genreType

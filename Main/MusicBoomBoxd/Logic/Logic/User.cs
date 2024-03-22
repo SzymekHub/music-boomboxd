@@ -10,13 +10,13 @@ namespace Logic
     {
         private int UserID { get; set; }
 
-        private string UserName { get; set; }
+        public string UserName { get; private set; }
 
         private string Email { get; set; }
 
         private string Password { get; set; }
 
-        private userType UserType { get; set; }
+        public userType UserType { get;  private set; }
 
         public User(int userID, string userName, string email, string password, userType userType)
         {
