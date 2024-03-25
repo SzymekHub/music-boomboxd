@@ -63,7 +63,7 @@
             // CbUsers
             // 
             CbUsers.FormattingEnabled = true;
-            CbUsers.Location = new Point(154, 78);
+            CbUsers.Location = new Point(272, 81);
             CbUsers.Name = "CbUsers";
             CbUsers.Size = new Size(107, 28);
             CbUsers.TabIndex = 22;
@@ -71,9 +71,9 @@
             // 
             // txtSearch
             // 
-            txtSearch.Location = new Point(82, 296);
+            txtSearch.Location = new Point(442, 82);
             txtSearch.Name = "txtSearch";
-            txtSearch.Size = new Size(179, 27);
+            txtSearch.Size = new Size(98, 27);
             txtSearch.TabIndex = 21;
             txtSearch.TextChanged += txtSearch_TextChanged;
             // 
@@ -81,7 +81,7 @@
             // 
             lblSearch.AutoSize = true;
             lblSearch.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblSearch.Location = new Point(21, 296);
+            lblSearch.Location = new Point(385, 85);
             lblSearch.Name = "lblSearch";
             lblSearch.Size = new Size(60, 20);
             lblSearch.TabIndex = 20;
@@ -89,18 +89,18 @@
             // 
             // bntDelete
             // 
-            bntDelete.Location = new Point(82, 339);
+            bntDelete.Location = new Point(433, 302);
             bntDelete.Name = "bntDelete";
-            bntDelete.Size = new Size(62, 29);
+            bntDelete.Size = new Size(107, 40);
             bntDelete.TabIndex = 19;
             bntDelete.Text = "Delete";
             bntDelete.UseVisualStyleBackColor = true;
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(21, 339);
+            btnAdd.Location = new Point(211, 302);
             btnAdd.Name = "btnAdd";
-            btnAdd.Size = new Size(55, 29);
+            btnAdd.Size = new Size(102, 40);
             btnAdd.TabIndex = 18;
             btnAdd.Text = "Add";
             btnAdd.UseVisualStyleBackColor = true;
@@ -109,7 +109,7 @@
             // 
             lblUsersList.AutoSize = true;
             lblUsersList.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblUsersList.Location = new Point(21, 83);
+            lblUsersList.Location = new Point(211, 82);
             lblUsersList.Name = "lblUsersList";
             lblUsersList.Size = new Size(60, 23);
             lblUsersList.TabIndex = 17;
@@ -119,9 +119,9 @@
             // 
             lbUsers.FormattingEnabled = true;
             lbUsers.Items.AddRange(new object[] { "Paul", "Amy", "BooperDooper", "Ringo", "George", "Musiclover1234", "IhateTechno3", "Ruby", "Scrim", "BornIntheUSA", "Gustav", "Austin", "Mac", "IloveMac" });
-            lbUsers.Location = new Point(21, 109);
+            lbUsers.Location = new Point(211, 112);
             lbUsers.Name = "lbUsers";
-            lbUsers.Size = new Size(240, 184);
+            lbUsers.Size = new Size(329, 184);
             lbUsers.TabIndex = 16;
             // 
             // lblUserTitle

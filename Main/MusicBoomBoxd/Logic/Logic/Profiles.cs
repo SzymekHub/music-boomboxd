@@ -9,17 +9,17 @@ namespace Logic
 {
     public class Profiles
     {
-        private int ProfileID {  get; set; }
+        public int ProfileID {  get; private set; }
 
-        private int UserID { get; set; }
+        public int UserID { get; private set; }
 
-        private string Image {  get; set; }
+        public string Image {  get; private set; }
 
-        private List<Music> FavoriteMusic { get; set; }
+        public List<Music> FavoriteMusic { get; private set; }
 
-        private List<Music> PublishedMusic { get; set; }
+        public List<Music> PublishedMusic { get; private set; }
 
-        private List<Profiles> Following {  get; set; }
+        public List<Profiles> Following {  get; private set; }
 
         public Profiles(int profileID, int userID, string image, List<Music> favoriteMusic, List<Music> publishedMusic, List<Profiles> following)
         {
