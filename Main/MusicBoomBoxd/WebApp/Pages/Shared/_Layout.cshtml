@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/site.css">
+</head>
+<body>
+    <div class="container">
+            <div class="nav"> 
+                <ul class="left-links">
+                    <li><a href="#">Search</a></li>
+                    <li><a href="#">Chat</a></li>
+                </ul>
+                <div class="logo-container">
+                    <img src='Images/LogoBlue.png' alt="Logo" class="logo">
+                </div>
+                <ul class="right-links">
+                    <li><a href="#">Profile</a></li>
+                </ul>
+            </div>
+           
+            <section id="content_container">
+            @RenderBody()
+            </section>
+           
+            <div class="footer">
+                <ul class="left-links-footer">
+                    <li><a asp-page="/FormPage">Form to add songs</a></li>
+                </ul>
+                <div class="Thank-You-Container">
+                    <p>Thank you for checking out my website!</p>
+                </div>
+                <ul class="right-links-footer">
+                    <li><a href="#">Report a bug</a></li>
+                </ul>
+            </div>
+    </div>
+   
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
