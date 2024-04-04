@@ -5,21 +5,23 @@ namespace WebApp.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
+        [BindProperty]
+        public string Username { get; set; }
 
-        public IndexModel(ILogger<IndexModel> logger)
-        {
-            _logger = logger;
-        }
+        [BindProperty]
+        public string Password { get; set; }
 
-        public void OnGet()
-        {
-
-        }
 
         public IActionResult OnPost()
         {
-            return RedirectToPage("FormPage");
+            if(Username == "admin" &&  Password == "admin")
+            {
+                return RedirectToPage("/HomePage");
+            }
+            else
+            {
+                return Page();
+            }
         }
     }
 }

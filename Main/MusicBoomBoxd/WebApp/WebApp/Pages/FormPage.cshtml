@@ -5,27 +5,47 @@
     ViewData["Forms"] = "Form Page";
 }
 
-<h2 class="h2">Add New Music</h2>
 
-<div class="centered-container">
-    <form id="newMusicForm" method="post" class="form">
+<div class="container">
+    <h2 class="h2">Add New Music</h2>
+    <div class="centered-container">
+        <form id="newMusicForm" method="post" class="form" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="text-danger"></div>
 
-            <label for="title">Title:<sup>*</sup></label>
-            <input type="text" id="title" name="title">
-     
-            <label for="artist">Artist:<sup>*</sup></label>
-            <input type="text" id="artist" name="artist">
-        
-            <label for="date">Date:<sup>*</sup></label>
-            <input type="date" id="date" name="date">
+            <div class="form-group">
+                <label asp-for="Input.Title">Title:<sup>*</sup></label>
+                <input asp-for="Input.Title" class="form-control">
+                <span asp-validation-for="Input.Title" class="text-danger"></span>
+            </div>
 
-            <label for="genre">Genre:<sup>*</sup></label>
-            <input type="text" id="genre" name="genre">
+            <div class="form-group">
+                <label asp-for="Input.Artist">Artist:<sup>*</sup></label>
+                <input asp-for="Input.Artist" class="form-control">
+                <span asp-validation-for="Input.Artist" class="text-danger"></span>
+            </div>
 
-        <div class="button-container">
-            <input type="submit" value="Save">
-            <input type="reset" value="Cancel">
-        </div>
-    </form>
+            <div class="form-group">
+                <label asp-for="Input.Date">Date:<sup>*</sup></label>
+                <input asp-for="Input.Date" class="form-control" type="date">
+                <span asp-validation-for="Input.Date" class="text-danger"></span>
+            </div>
 
+            <div class="form-group">
+                <label asp-for="Input.Genre">Genre:<sup>*</sup></label>
+                <input asp-for="Input.Genre" class="form-control">
+                <span asp-validation-for="Input.Genre" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.AlbumCover">Album Cover:<sup>*</sup></label>
+                <input asp-for="Input.AlbumCover" class="form-control-file">
+                <span asp-validation-for="Input.AlbumCover" class="text-danger"></span>
+            </div>
+
+            <div class="button-container">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="reset" class="btn btn-secondary">Cancel</button>
+            </div>
+        </form>
+    </div>
 </div>

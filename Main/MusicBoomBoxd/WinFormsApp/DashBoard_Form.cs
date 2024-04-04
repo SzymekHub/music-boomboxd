@@ -17,6 +17,8 @@ namespace WinFormsApp
         {
             InitializeComponent();
             lblHello.Text = $"Hello, {adminUsername}";
+
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         private void btnUsers_Click(object sender, EventArgs e)

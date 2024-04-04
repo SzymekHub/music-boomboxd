@@ -11,11 +11,13 @@ namespace WinFormsApp
             InitializeComponent();
             InitializeComboBox();
             LoadRecentSongs();
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         public void InitializeComboBox()
         {
             CbGenre.DataSource = Enum.GetValues(typeof(genreType));
+
         }
 
         private void BtnAdd_Click(object sender, EventArgs e)

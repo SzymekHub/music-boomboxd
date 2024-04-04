@@ -21,6 +21,7 @@ namespace WinFormsApp
             InitializeComponent();
             InitializeComboBox();
             RefreshListBox();
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         public void InitializeComboBox()
