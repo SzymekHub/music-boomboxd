@@ -21,7 +21,12 @@ namespace WebApp.Pages
 
         public IActionResult OnPost()
         {
-            if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
+            //Hardcoded Login credentials.
+            if (Username == "Admin" && Password == "P")
+            { 
+                return RedirectToPage("/HomePage");
+            }
+            else if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
             {
                 if (_dbConnection.AuthenticateUser(Username, Password))
                 {
