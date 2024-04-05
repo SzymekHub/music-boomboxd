@@ -4,7 +4,7 @@
     ViewData["Title"] = "Register";
 }
 
-<link rel="stylesheet" href="~/css/FormPageStyle.css />
+<link rel="stylesheet" href="~/css/FormPageStyle.css" />
 
 <div class="register">
     <form method="post">
@@ -17,19 +17,12 @@
             <input id="pass" type="password" class="input" asp-for="Input.Password">
         </div>
         <div class="group">
-            <label for="pass" class="label">Repeat Password</label>
-            <input id="pass" type="password" class="input" data-type="password">
-        </div>
-        <div class="group">
-            <label for="pass" class="label">Email Address</label>
+            <label for="pass" class="label">Email</label>
             <input id="pass" type="text" class="input" asp-for="Input.Email">
         </div>
         <div class="group">
             <button type="submit" class="button">Register</button>
         </div>
     </form>
-    <div class="hr"></div>
-    <div class="foot-lnk">
         <a class="login" asp-area="" asp-page="/Index">Already a Member?</a>
-    </div>
 </div>

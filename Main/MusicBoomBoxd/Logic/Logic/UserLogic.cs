@@ -18,13 +18,6 @@ namespace Logic
 
         public bool RegisterUser(string username, string password, string email)
         {
-            // Validate user input (e.g., check for duplicate usernames, password strength, etc.)
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(email))
-            {
-                // Input validation failed
-                return false;
-            }
-
             // Hash the password
             string hashedPassword = PasswordHasher.HashPassword(password);
 

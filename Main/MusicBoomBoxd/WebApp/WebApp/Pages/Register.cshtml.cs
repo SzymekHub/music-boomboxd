@@ -22,11 +22,21 @@ namespace WebApp.Pages
 
         public IActionResult OnPost()
         {
+
+            // Validate user input (e.g., check for duplicate usernames, password strength, etc.)
+            if (string.IsNullOrWhiteSpace(Input.UserName) || string.IsNullOrWhiteSpace(Input.Password) || string.IsNullOrWhiteSpace(Input.Email))
+            {
+                // Input validation failed
+                return Page();
+            }
+            
+            // Attempt to register the user
+            
+            bool registrationSuccess = _userLogic.RegisterUser(Input.UserName, Input.Password, Input.Email);
+            
             if (ModelState.IsValid)
             {
-                // Attempt to register the user
-                bool registrationSuccess = _userLogic.RegisterUser(Input.UserName, Input.Password, Input.Email);
-
+               
                 if (registrationSuccess)
                 {
                     return RedirectToPage("Index");

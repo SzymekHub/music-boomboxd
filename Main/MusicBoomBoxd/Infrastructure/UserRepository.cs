@@ -27,7 +27,7 @@ namespace Infrastructure
                 {
                     connection.Open();
 
-                    string query = "INSERT INTO [User] (Username, Password, Email) VALUES (@Username, @Password, @Email)";
+                    string query = "INSERT INTO [Users] (Username, Password, Email) VALUES (@Username, @Password, @Email)";
 
 
                     using (SqlCommand command = new SqlCommand(query, connection))
