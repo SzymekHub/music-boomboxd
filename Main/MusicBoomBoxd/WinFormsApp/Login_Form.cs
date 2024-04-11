@@ -1,3 +1,4 @@
+using Logic;
 
 namespace WinFormsApp
 {

@@ -26,7 +26,7 @@ namespace Logic
             return _users;
         }
 
-        public void AddUser(User user)
+        public void AddUser(string username, User user)
         {
             _users.Add(user);
             SaveUsersToCsv();
@@ -81,6 +81,11 @@ namespace Logic
             {
 
             }
+        }
+
+        internal void InsertUser(string username, string hashedPassword, string email)
+        {
+            throw new NotImplementedException();
         }
     }
 }
