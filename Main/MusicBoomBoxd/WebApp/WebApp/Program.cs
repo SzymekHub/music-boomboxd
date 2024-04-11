@@ -26,14 +26,14 @@ namespace WebApp
             builder.Services.AddSingleton<DbConnection>();
 
             // Register UserRepository with the required constructor parameter
-            builder.Services.AddScoped<UserRepository>(serviceProvider =>
+            builder.Services.AddScoped<Infrastructure.UserRepository>(serviceProvider =>
             {
                 // Resolve the connection string and logger from the container
                 var connectionString = serviceProvider.GetRequiredService<string>();
-                var logger = serviceProvider.GetRequiredService<ILogger<UserRepository>>();
+                var logger = serviceProvider.GetRequiredService<ILogger<Infrastructure.UserRepository>>();
 
                 // Pass the connection string and logger to UserRepository constructor
-                return new UserRepository(connectionString, logger);
+                return new Infrastructure.UserRepository(connectionString, logger);
             });
 
             // Register UserLogic as a scoped service
