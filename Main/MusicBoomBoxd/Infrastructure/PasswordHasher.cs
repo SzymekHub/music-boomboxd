@@ -21,12 +21,5 @@ namespace Infrastructure
 
             return hashedPassword;
         }
-
-        public static bool VerifyPassword(string password, string hashedPassword)
-        {
-            string pepperedPassword = password + Pepper;
-
-            return BCrypt.Net.BCrypt.Verify(pepperedPassword, hashedPassword);
-        }
     }
 }

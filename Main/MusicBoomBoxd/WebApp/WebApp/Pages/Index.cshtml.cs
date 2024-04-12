@@ -1,6 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Infrastructure;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Security.Claims;
+using Infrastructure;
 
 namespace WebApp.Pages
 {
@@ -9,30 +15,33 @@ namespace WebApp.Pages
         private readonly DbConnection _dbConnection;
 
         [BindProperty]
-        public string Username { get; set; }
+        public string UserName { get; set; }
 
         [BindProperty]
         public string Password { get; set; }
 
-        public IndexModel(DbConnection dbConnection)
+        public IndexModel()
         {
-            _dbConnection = dbConnection;
+            _dbConnection = new DbConnection();
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
-            //Hardcoded Login credentials.
-            if (Username == "Admin" && Password == "P")
-            { 
+            // Hardcoded Login credentials.
+            if (UserName == "Admin" && Password == "P")
+            {
+                // this code to create authentication cookie with claims here
+                List<Claim> claims = new List<Claim>();
+                claims.Add(new Claim(ClaimTypes.Name, UserName));
+                claims.Add(new Claim("id", "1"));
+
+                //Creation of authetication cookie
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                await HttpContext.SignInAsync(new ClaimsPrincipal(claimsIdentity));
+
                 return RedirectToPage("/HomePage");
             }
-            else if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
-            {
-                if (_dbConnection.AuthenticateUser(Username, Password))
-                {
-                    return RedirectToPage("/HomePage");
-                }
-            }
+
             // Display error message if username or password is empty or incorrect
             ModelState.AddModelError(string.Empty, "Invalid username or password");
             return Page();

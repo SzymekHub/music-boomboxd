@@ -5,36 +5,35 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Infrastructure.DTOs;
+
 
 namespace Infrastructure
 {
     public class UserRepository
     {
-        private readonly string _connectionString = "Server=mssqlstud.fhict.local;Database=dbi540927_musicboom;User Id=dbi540927_musicboom;Password=MusicBoom1234;";
-        private readonly ILogger<UserRepository> _logger; // Add ILogger
+        private readonly DbConnection _dbConnection;
 
-        public UserRepository(string connectionString, ILogger<UserRepository> logger)
+        public UserRepository(DbConnection dbConnection)
         {
-            _connectionString = connectionString;
-            _logger = logger; // Assign logger to the private field
+            _dbConnection = dbConnection;
         }
 
-        public void InsertUser(string username, string password, string email)
+        public void InsertUser(UserDTO user)
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(_connectionString))
+                _dbConnection.OpenConnection();
+
+                using (SqlConnection connection = _dbConnection.GetSqlConnection())
                 {
-                    connection.Open();
-
-                    string query = "INSERT INTO [Users] (Username, Password, Email) VALUES (@Username, @Password, @Email)";
-
+                    string query = "INSERT INTO [User] (Username, Password, Email, Role) VALUES (@Username, @Password, @Email, @Role)";
 
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@Username", username);
-                        command.Parameters.AddWithValue("@Password", password);
-                        command.Parameters.AddWithValue("@Email", email);
+                        command.Parameters.AddWithValue("@Username", user.UserName);
+                        command.Parameters.AddWithValue("@Password", user.Password);
+                        command.Parameters.AddWithValue("@Email", user.Email);
 
                         command.ExecuteNonQuery();
                     }
@@ -42,10 +41,8 @@ namespace Infrastructure
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error inserting user into database: {ex.Message}");
-                throw; // Re-throw the exception to propagate it up the call stack
+                throw new Exception($"Error inserting user into database: {ex.Message}");
             }
         }
-
     }
 }

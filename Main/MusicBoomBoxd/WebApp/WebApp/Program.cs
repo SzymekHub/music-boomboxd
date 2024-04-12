@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting;
 using Logic;
 using Infrastructure;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace WebApp
 {
@@ -12,32 +13,16 @@ namespace WebApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add logging
-            builder.Logging.AddConsole();
-
             // Add services to the container.
             builder.Services.AddRazorPages();
 
-            // Hardcoded connection string
-            string connectionString = "Server=mssqlstud.fhict.local;Database=dbi540927_musicboom;User Id=dbi540927_musicboom;Password=MusicBoom1234;";
-            builder.Services.AddSingleton(connectionString);
-
-            // Register DbConnection as a singleton
-            builder.Services.AddSingleton<DbConnection>();
-
-            // Register UserRepository with the required constructor parameter
-            builder.Services.AddScoped<UserRepository>(serviceProvider =>
-            {
-                // Resolve the connection string and logger from the container
-                var connectionString = serviceProvider.GetRequiredService<string>();
-                var logger = serviceProvider.GetRequiredService<ILogger<UserRepository>>();
-
-                // Pass the connection string and logger to UserRepository constructor
-                return new UserRepository(connectionString, logger);
-            });
-
-            // Register UserLogic as a scoped service
-            builder.Services.AddScoped<UserLogic>();
+            // Tells us how we want to use auth.
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options => 
+                {
+                    options.LoginPath = new PathString("/Index");
+                    options.AccessDeniedPath = new PathString("/Error");
+                });
 
             var app = builder.Build();
 
@@ -52,21 +37,11 @@ namespace WebApp
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            //this tells us that we want to use auth.
+            app.UseAuthentication();
             app.UseAuthorization();
-
+            
             app.MapRazorPages();
-
-            // Call OpenConnection method to ensure database connection is attempted
-            using (var scope = app.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                var loggerFactory = services.GetRequiredService<ILoggerFactory>();
-                var logger = loggerFactory.CreateLogger<Program>();
-
-                var dbConnection = services.GetRequiredService<DbConnection>();
-                dbConnection.OpenConnection(); // Call OpenConnection method
-            }
 
             app.Run();
         }

@@ -1,16 +1,15 @@
 ﻿@page
 @model WebApp.Pages.IndexModel
 @{
-    ViewData["Title"] = "Login";
+    Layout = "_LayoutFormPage";
+    ViewData["Forms"] = "Login";
 }
-
-<link rel="stylesheet" href="~/css/FormPageStyle.css" />
 
 <div class="log-in">
     <form method="post">
         <div class="group">
             <label for="user" class="label">Username</label>
-            <input id="user" type="text" class="input" asp-for="Username">
+            <input id="user" type="text" class="input" asp-for="UserName">
         </div>
         <div class="group">
             <label for="pass" class="label">Password</label>
