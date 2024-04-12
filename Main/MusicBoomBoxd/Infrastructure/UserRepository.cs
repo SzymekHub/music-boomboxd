@@ -4,45 +4,44 @@ using System.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Infrastructure.DTOs;
+using System.Data;
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
 
 
 namespace Infrastructure
 {
     public class UserRepository
     {
-        private readonly DbConnection _dbConnection;
-
-        public UserRepository(DbConnection dbConnection)
+       public bool InsertUser(UserDTO userDTO)
         {
-            _dbConnection = dbConnection;
-        }
-
-        public void InsertUser(UserDTO user)
-        {
-            try
+            using (SqlConnection conn = DbConnection.GetSqlConnection())
+            using (SqlCommand cmd = new SqlCommand()) 
             {
-                _dbConnection.OpenConnection();
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"INSERT INTO [Users] (Username, Password, Email) VALUES (@Username, @Password, @Email)";
 
-                using (SqlConnection connection = _dbConnection.GetSqlConnection())
+                cmd.Parameters.AddWithValue("@Username", userDTO.UserName);
+                cmd.Parameters.AddWithValue("@Password", userDTO.Password);
+                cmd.Parameters.AddWithValue("@Email", userDTO.Email);
+                
+                try
                 {
-                    string query = "INSERT INTO [User] (Username, Password, Email, Role) VALUES (@Username, @Password, @Email, @Role)";
-
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        command.Parameters.AddWithValue("@Username", user.UserName);
-                        command.Parameters.AddWithValue("@Password", user.Password);
-                        command.Parameters.AddWithValue("@Email", user.Email);
-
-                        command.ExecuteNonQuery();
-                    }
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    return true;
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error inserting user into database: {ex.Message}");
+                catch (SqlException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return false;
+                }
+            
             }
         }
+
     }
 }

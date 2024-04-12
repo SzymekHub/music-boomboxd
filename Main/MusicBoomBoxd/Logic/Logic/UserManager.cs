@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Infrastructure;
+using Infrastructure.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +10,7 @@ namespace Logic
 {
     public class UserManager
     {
+        UserRepository userRepository = new UserRepository();
         private List<User> _users;
 
         public UserManager()
@@ -87,6 +90,16 @@ namespace Logic
 
             // Otherwise, find the maximum ID and add 1 to it
             return _users.Max(u => u.UserID) + 1;
+        }
+
+        public bool SendToTheDb(UserDTO newUser)
+        {
+            string HashedPassword = PasswordHasher.HashPassword(newUser.Password);
+
+            newUser.Password = HashedPassword;  
+
+            return userRepository.InsertUser(newUser);
+
         }
 
     }

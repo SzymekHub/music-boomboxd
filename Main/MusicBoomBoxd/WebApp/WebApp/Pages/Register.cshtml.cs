@@ -1,21 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Logic;
-using Infrastructure;
-using Infrastructure.DTOs;
 using WebApp.Models;
+using Infrastructure.DTOs;
 
 namespace WebApp.Pages
 {
     public class RegisterModel : PageModel
     {
-        private readonly UserRepository _userRepository;
-
-        public RegisterModel(UserRepository userRepository)
-        {
-            _userRepository = userRepository;
-        }
-
         [BindProperty]
         public Models.User User { get; set; }
 
@@ -27,38 +19,19 @@ namespace WebApp.Pages
         {
             if (ModelState.IsValid)
             {
-                // Perform input validation
-                if (string.IsNullOrWhiteSpace(User.UserName) || string.IsNullOrWhiteSpace(User.Password) || string.IsNullOrWhiteSpace(User.Email))
-                {
-                    ModelState.AddModelError(string.Empty, "All fields are required.");
-                    return Page();
-                }
+                UserManager userManager = new UserManager();
+                UserDTO newUser = new UserDTO(User.UserName, User.Password, User.Email);
 
-                try
+                if (userManager.SendToTheDb(newUser))
                 {
-                    // Convert User to UserDTO
-                    var userDTO = new Infrastructure.DTOs.UserDTO
-                    {
-                        UserName = User.UserName,
-                        Password = User.Password,
-                        Email = User.Email
-                    };
-
-                    // Attempt to insert user into the database
-                    _userRepository.InsertUser(userDTO);
-
-                    // Redirect to login page after successful registration
-                    return new RedirectToPageResult("Login");
+                    return RedirectToPage("/Index");
                 }
-                catch (Exception ex)
-                {
-                    // Handle any exceptions and add model error
-                    ModelState.AddModelError(string.Empty, $"User registration failed: {ex.Message}");
-                    return Page();
-                }
+                return Page();
             }
-
-            return Page();
+            else
+            { 
+                return Page(); 
+            }
         }
     }
 }

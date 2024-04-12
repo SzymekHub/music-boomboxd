@@ -12,5 +12,11 @@ namespace Infrastructure.DTOs
         public string Password { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
 
+        public UserDTO(string userName, string password, string email)
+        {
+            UserName = userName;
+            Password = password;
+            Email = email;
+        }
     }
 }

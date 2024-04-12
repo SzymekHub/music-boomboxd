@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BCrypt.Net;
 
-namespace Infrastructure
+namespace Logic
 {
     public class PasswordHasher
     {
