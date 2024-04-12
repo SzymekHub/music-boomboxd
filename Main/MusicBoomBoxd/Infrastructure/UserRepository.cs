@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using Microsoft.Extensions.Logging;
-using System.Linq;
-using System.Text;
+﻿using System.Data.SqlClient;
 using Infrastructure.DTOs;
 using System.Data;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
 
 
 namespace Infrastructure
