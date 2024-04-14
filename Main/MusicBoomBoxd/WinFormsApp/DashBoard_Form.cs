@@ -31,7 +31,7 @@ namespace WinFormsApp
 
         private void btnMusic_Click(object sender, EventArgs e)
         {
-            NewMusic_Form music_form = new NewMusic_Form();
+            NewSong_Form music_form = new NewSong_Form();
             music_form.Owner = this;
             this.Visible = false;
             music_form.Show();

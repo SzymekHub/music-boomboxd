@@ -5,6 +5,7 @@ using System.Data;
 
 namespace Infrastructure
 {
+    // This class is responisble for databse operations related to users
     public class UserRepository
     {
        public bool InsertUser(UserDTO userDTO)

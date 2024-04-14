@@ -1,6 +1,6 @@
 ﻿namespace WinFormsApp
 {
-    partial class NewMusic_Form
+    partial class NewSong_Form
     {
         /// <summary>
         ///  Required designer variable.
@@ -29,28 +29,39 @@
         private void InitializeComponent()
         {
             NewMusicPanel = new Panel();
+            SelectedCover = new PictureBox();
+            btnAddPicture = new Button();
+            lblCover = new Label();
+            DatePicker = new DateTimePicker();
             lblRecent = new Label();
             lbRecent = new ListBox();
             CbGenre = new ComboBox();
             BtnAdd = new Button();
-            DatePicker = new DateTimePicker();
             TxtArtist = new TextBox();
             TxtTitle = new TextBox();
             lblDate = new Label();
             lblGenre = new Label();
             lblArtist = new Label();
             lblTtitle = new Label();
+            ssNewSongForm = new StatusStrip();
+            tsslblNewSongForm = new ToolStripStatusLabel();
+            tsslblNewSongFormCSV = new ToolStripStatusLabel();
             NewMusicPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)SelectedCover).BeginInit();
+            ssNewSongForm.SuspendLayout();
             SuspendLayout();
             // 
             // NewMusicPanel
             // 
             NewMusicPanel.BackColor = Color.DarkGray;
+            NewMusicPanel.Controls.Add(SelectedCover);
+            NewMusicPanel.Controls.Add(btnAddPicture);
+            NewMusicPanel.Controls.Add(lblCover);
+            NewMusicPanel.Controls.Add(DatePicker);
             NewMusicPanel.Controls.Add(lblRecent);
             NewMusicPanel.Controls.Add(lbRecent);
             NewMusicPanel.Controls.Add(CbGenre);
             NewMusicPanel.Controls.Add(BtnAdd);
-            NewMusicPanel.Controls.Add(DatePicker);
             NewMusicPanel.Controls.Add(TxtArtist);
             NewMusicPanel.Controls.Add(TxtTitle);
             NewMusicPanel.Controls.Add(lblDate);
@@ -62,11 +73,50 @@
             NewMusicPanel.Size = new Size(718, 373);
             NewMusicPanel.TabIndex = 12;
             // 
+            // SelectedCover
+            // 
+            SelectedCover.Location = new Point(209, 224);
+            SelectedCover.Name = "SelectedCover";
+            SelectedCover.Size = new Size(88, 74);
+            SelectedCover.SizeMode = PictureBoxSizeMode.Zoom;
+            SelectedCover.TabIndex = 34;
+            SelectedCover.TabStop = false;
+            // 
+            // btnAddPicture
+            // 
+            btnAddPicture.BackColor = Color.MediumSlateBlue;
+            btnAddPicture.Location = new Point(303, 228);
+            btnAddPicture.Name = "btnAddPicture";
+            btnAddPicture.Size = new Size(97, 30);
+            btnAddPicture.TabIndex = 32;
+            btnAddPicture.Text = "Add Picture";
+            btnAddPicture.UseVisualStyleBackColor = false;
+            btnAddPicture.Click += btnAddPicture_Click;
+            // 
+            // lblCover
+            // 
+            lblCover.AutoSize = true;
+            lblCover.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblCover.Location = new Point(86, 224);
+            lblCover.Name = "lblCover";
+            lblCover.Size = new Size(117, 33);
+            lblCover.TabIndex = 31;
+            lblCover.Text = "Cover:";
+            // 
+            // DatePicker
+            // 
+            DatePicker.Checked = false;
+            DatePicker.ImeMode = ImeMode.NoControl;
+            DatePicker.Location = new Point(209, 185);
+            DatePicker.Name = "DatePicker";
+            DatePicker.Size = new Size(262, 27);
+            DatePicker.TabIndex = 30;
+            // 
             // lblRecent
             // 
             lblRecent.AutoSize = true;
             lblRecent.Font = new Font("Stencil", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblRecent.Location = new Point(16, 270);
+            lblRecent.Location = new Point(19, 273);
             lblRecent.Name = "lblRecent";
             lblRecent.Size = new Size(157, 24);
             lblRecent.TabIndex = 22;
@@ -82,8 +132,9 @@
             // 
             // CbGenre
             // 
+            CbGenre.DropDownStyle = ComboBoxStyle.DropDownList;
             CbGenre.FormattingEnabled = true;
-            CbGenre.Location = new Point(182, 140);
+            CbGenre.Location = new Point(209, 127);
             CbGenre.Name = "CbGenre";
             CbGenre.Size = new Size(262, 28);
             CbGenre.TabIndex = 20;
@@ -91,7 +142,7 @@
             // BtnAdd
             // 
             BtnAdd.BackColor = Color.MediumSlateBlue;
-            BtnAdd.Location = new Point(526, 96);
+            BtnAdd.Location = new Point(538, 98);
             BtnAdd.Name = "BtnAdd";
             BtnAdd.Size = new Size(127, 57);
             BtnAdd.TabIndex = 19;
@@ -99,24 +150,16 @@
             BtnAdd.UseVisualStyleBackColor = false;
             BtnAdd.Click += BtnAdd_Click;
             // 
-            // DatePicker
-            // 
-            DatePicker.Location = new Point(182, 198);
-            DatePicker.Name = "DatePicker";
-            DatePicker.Size = new Size(262, 27);
-            DatePicker.TabIndex = 18;
-            DatePicker.Value = new DateTime(2024, 3, 22, 0, 42, 26, 0);
-            // 
             // TxtArtist
             // 
-            TxtArtist.Location = new Point(182, 96);
+            TxtArtist.Location = new Point(209, 83);
             TxtArtist.Name = "TxtArtist";
             TxtArtist.Size = new Size(262, 27);
             TxtArtist.TabIndex = 17;
             // 
             // TxtTitle
             // 
-            TxtTitle.Location = new Point(182, 43);
+            TxtTitle.Location = new Point(209, 30);
             TxtTitle.Name = "TxtTitle";
             TxtTitle.Size = new Size(262, 27);
             TxtTitle.TabIndex = 16;
@@ -125,7 +168,7 @@
             // 
             lblDate.AutoSize = true;
             lblDate.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblDate.Location = new Point(71, 192);
+            lblDate.Location = new Point(98, 179);
             lblDate.Name = "lblDate";
             lblDate.Size = new Size(105, 33);
             lblDate.TabIndex = 15;
@@ -135,7 +178,7 @@
             // 
             lblGenre.AutoSize = true;
             lblGenre.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblGenre.Location = new Point(50, 140);
+            lblGenre.Location = new Point(77, 127);
             lblGenre.Name = "lblGenre";
             lblGenre.Size = new Size(126, 33);
             lblGenre.TabIndex = 14;
@@ -145,7 +188,7 @@
             // 
             lblArtist.AutoSize = true;
             lblArtist.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblArtist.Location = new Point(39, 90);
+            lblArtist.Location = new Point(66, 77);
             lblArtist.Name = "lblArtist";
             lblArtist.Size = new Size(137, 33);
             lblArtist.TabIndex = 13;
@@ -155,11 +198,33 @@
             // 
             lblTtitle.AutoSize = true;
             lblTtitle.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTtitle.Location = new Point(62, 37);
+            lblTtitle.Location = new Point(89, 24);
             lblTtitle.Name = "lblTtitle";
             lblTtitle.Size = new Size(114, 33);
             lblTtitle.TabIndex = 12;
             lblTtitle.Text = "Title :";
+            // 
+            // ssNewSongForm
+            // 
+            ssNewSongForm.BackColor = Color.MediumSlateBlue;
+            ssNewSongForm.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            ssNewSongForm.ImageScalingSize = new Size(24, 24);
+            ssNewSongForm.Items.AddRange(new ToolStripItem[] { tsslblNewSongForm, tsslblNewSongFormCSV });
+            ssNewSongForm.Location = new Point(0, 430);
+            ssNewSongForm.Name = "ssNewSongForm";
+            ssNewSongForm.Size = new Size(797, 24);
+            ssNewSongForm.TabIndex = 24;
+            ssNewSongForm.Text = "statusStrip1";
+            // 
+            // tsslblNewSongForm
+            // 
+            tsslblNewSongForm.Name = "tsslblNewSongForm";
+            tsslblNewSongForm.Size = new Size(0, 18);
+            // 
+            // tsslblNewSongFormCSV
+            // 
+            tsslblNewSongFormCSV.Name = "tsslblNewSongFormCSV";
+            tsslblNewSongFormCSV.Size = new Size(0, 18);
             // 
             // NewMusic_Form
             // 
@@ -167,13 +232,18 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.MediumSlateBlue;
             ClientSize = new Size(797, 454);
+            Controls.Add(ssNewSongForm);
             Controls.Add(NewMusicPanel);
             Name = "NewMusic_Form";
             Text = "NewMusicForm";
             FormClosed += NewMusic_Form_FormClosed;
             NewMusicPanel.ResumeLayout(false);
             NewMusicPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)SelectedCover).EndInit();
+            ssNewSongForm.ResumeLayout(false);
+            ssNewSongForm.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -183,12 +253,18 @@
         private ListBox lbRecent;
         private ComboBox CbGenre;
         private Button BtnAdd;
-        private DateTimePicker DatePicker;
         private TextBox TxtArtist;
         private TextBox TxtTitle;
         private Label lblDate;
         private Label lblGenre;
         private Label lblArtist;
         private Label lblTtitle;
+        private DateTimePicker DatePicker;
+        private Label lblCover;
+        private Button btnAddPicture;
+        private PictureBox SelectedCover;
+        private StatusStrip ssNewSongForm;
+        private ToolStripStatusLabel tsslblNewSongForm;
+        private ToolStripStatusLabel tsslblNewSongFormCSV;
     }
 }

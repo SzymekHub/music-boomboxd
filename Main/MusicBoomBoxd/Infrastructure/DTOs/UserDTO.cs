@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.DTOs
 {
+    //This class represents the data structure of a user
     public class UserDTO
     {
         public string UserName {  get; set; } 
