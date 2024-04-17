@@ -30,23 +30,25 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Login_Form));
             LoginPanel = new Panel();
-            lblWrong = new Label();
+            statusStrip1 = new StatusStrip();
+            tsslblLoginForm = new ToolStripStatusLabel();
+            label1 = new Label();
             lblPassword = new Label();
             lblUsername = new Label();
             logoPB = new PictureBox();
             txtPassword = new TextBox();
             txtUsername = new TextBox();
             btnLogin = new Button();
-            label1 = new Label();
             LoginPanel.SuspendLayout();
+            statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)logoPB).BeginInit();
             SuspendLayout();
             // 
             // LoginPanel
             // 
             LoginPanel.BackColor = Color.DarkGray;
+            LoginPanel.Controls.Add(statusStrip1);
             LoginPanel.Controls.Add(label1);
-            LoginPanel.Controls.Add(lblWrong);
             LoginPanel.Controls.Add(lblPassword);
             LoginPanel.Controls.Add(lblUsername);
             LoginPanel.Controls.Add(logoPB);
@@ -58,14 +60,33 @@
             LoginPanel.Size = new Size(735, 383);
             LoginPanel.TabIndex = 1;
             // 
-            // lblWrong
+            // statusStrip1
             // 
-            lblWrong.AutoSize = true;
-            lblWrong.Font = new Font("Tw Cen MT", 10.8F, FontStyle.Italic, GraphicsUnit.Point, 0);
-            lblWrong.Location = new Point(158, 281);
-            lblWrong.Name = "lblWrong";
-            lblWrong.Size = new Size(0, 20);
-            lblWrong.TabIndex = 15;
+            statusStrip1.BackColor = Color.DarkGray;
+            statusStrip1.ImageScalingSize = new Size(20, 20);
+            statusStrip1.Items.AddRange(new ToolStripItem[] { tsslblLoginForm });
+            statusStrip1.Location = new Point(0, 361);
+            statusStrip1.Name = "statusStrip1";
+            statusStrip1.Size = new Size(735, 22);
+            statusStrip1.TabIndex = 2;
+            statusStrip1.Text = "statusStrip1";
+            // 
+            // tsslblLoginForm
+            // 
+            tsslblLoginForm.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            tsslblLoginForm.ForeColor = Color.LavenderBlush;
+            tsslblLoginForm.Name = "tsslblLoginForm";
+            tsslblLoginForm.Size = new Size(0, 16);
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.BackColor = Color.White;
+            label1.Location = new Point(22, 42);
+            label1.Name = "label1";
+            label1.Size = new Size(122, 40);
+            label1.TabIndex = 16;
+            label1.Text = "The login: Admin\r\nPassword: p\r\n";
             // 
             // lblPassword
             // 
@@ -116,23 +137,13 @@
             // 
             btnLogin.BackColor = Color.MediumSlateBlue;
             btnLogin.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnLogin.Location = new Point(566, 309);
+            btnLogin.Location = new Point(573, 293);
             btnLogin.Name = "btnLogin";
             btnLogin.Size = new Size(113, 52);
             btnLogin.TabIndex = 9;
             btnLogin.Text = "Login";
             btnLogin.UseVisualStyleBackColor = false;
             btnLogin.Click += btnLogin_Click;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.BackColor = Color.White;
-            label1.Location = new Point(22, 42);
-            label1.Name = "label1";
-            label1.Size = new Size(122, 40);
-            label1.TabIndex = 16;
-            label1.Text = "The login: Admin\r\nPassword: p\r\n";
             // 
             // Login_Form
             // 
@@ -145,6 +156,8 @@
             Text = "Login Form";
             LoginPanel.ResumeLayout(false);
             LoginPanel.PerformLayout();
+            statusStrip1.ResumeLayout(false);
+            statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)logoPB).EndInit();
             ResumeLayout(false);
         }
@@ -158,7 +171,8 @@
         private TextBox txtPassword;
         private TextBox txtUsername;
         private Button btnLogin;
-        private Label lblWrong;
         private Label label1;
+        private StatusStrip statusStrip1;
+        private ToolStripStatusLabel tsslblLoginForm;
     }
 }

@@ -30,13 +30,11 @@ namespace WinFormsApp
             }
             else if (string.IsNullOrWhiteSpace(enteredUsername) || string.IsNullOrWhiteSpace(enteredPassword)) 
             {
-                lblWrong.Text = "The Username and Password cannot be empty";
-                lblWrong.Visible = true;
+                tsslblLoginForm.Text = "The Username and Password cannot be empty";
             }
             else
             {
-                lblWrong.Text = "Looks like the Username or Password is incorrect";
-                lblWrong.Visible = true;
+                tsslblLoginForm.Text = "Looks like the Username or Password is incorrect";
             }
         }
 
@@ -44,7 +42,6 @@ namespace WinFormsApp
         {
             txtPassword.Clear();
             txtUsername.Clear();
-            lblWrong.Visible = false;
         }
     }
 }

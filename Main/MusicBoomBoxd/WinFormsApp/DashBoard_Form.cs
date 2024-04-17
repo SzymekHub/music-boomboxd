@@ -17,6 +17,7 @@ namespace WinFormsApp
         {
             InitializeComponent();
             lblHello.Text = $"Hello, {adminUsername}";
+            tsslblDashBoardForm.Text = $"Hello, {adminUsername}";
 
             #region Tags
             //Tags

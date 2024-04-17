@@ -67,12 +67,6 @@
             tbSearchSongs = new TextBox();
             lblSongs = new Label();
             tpAlbums = new TabPage();
-            pbAlbums2 = new PictureBox();
-            lblAlbum = new Label();
-            tpReviews = new TabPage();
-            pbReviews2 = new PictureBox();
-            lblReviews = new Label();
-            btnLogOut = new Button();
             plAlbums = new Panel();
             btnDeleteAlbum = new Button();
             btnViewAlbum = new Button();
@@ -83,6 +77,9 @@
             lblSearchAlbums = new Label();
             tbSearchAlbums = new TextBox();
             bntAddAlbum = new Button();
+            pbAlbums2 = new PictureBox();
+            lblAlbum = new Label();
+            tpReviews = new TabPage();
             plReviews = new Panel();
             btnDelteReviews = new Button();
             btnViewReviews = new Button();
@@ -92,6 +89,11 @@
             lblSearchReviews = new Label();
             tbSearchReviews = new TextBox();
             btnWarningReviews = new Button();
+            pbReviews2 = new PictureBox();
+            lblReviews = new Label();
+            btnLogOut = new Button();
+            ssDashBoardForm = new StatusStrip();
+            tsslblDashBoardForm = new ToolStripStatusLabel();
             DashBoardPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pbReviews).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbAlbums).BeginInit();
@@ -108,13 +110,14 @@
             SongsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvSongs).BeginInit();
             tpAlbums.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pbAlbums2).BeginInit();
-            tpReviews.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pbReviews2).BeginInit();
             plAlbums.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvAlbums).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pbAlbums2).BeginInit();
+            tpReviews.SuspendLayout();
             plReviews.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvReviews).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pbReviews2).BeginInit();
+            ssDashBoardForm.SuspendLayout();
             SuspendLayout();
             // 
             // DashBoardPanel
@@ -131,7 +134,7 @@
             DashBoardPanel.Controls.Add(logoPB);
             DashBoardPanel.Location = new Point(12, 48);
             DashBoardPanel.Name = "DashBoardPanel";
-            DashBoardPanel.Size = new Size(249, 573);
+            DashBoardPanel.Size = new Size(249, 568);
             DashBoardPanel.TabIndex = 0;
             // 
             // pbReviews
@@ -262,7 +265,7 @@
             tcDashBoard.Location = new Point(267, 0);
             tcDashBoard.Name = "tcDashBoard";
             tcDashBoard.SelectedIndex = 0;
-            tcDashBoard.Size = new Size(994, 621);
+            tcDashBoard.Size = new Size(994, 616);
             tcDashBoard.TabIndex = 1;
             // 
             // tpUsers
@@ -548,75 +551,9 @@
             tpAlbums.Location = new Point(4, 29);
             tpAlbums.Name = "tpAlbums";
             tpAlbums.Padding = new Padding(3);
-            tpAlbums.Size = new Size(986, 588);
+            tpAlbums.Size = new Size(986, 583);
             tpAlbums.TabIndex = 2;
             tpAlbums.Text = "Albums";
-            // 
-            // pbAlbums2
-            // 
-            pbAlbums2.Image = Properties.Resources.Albums;
-            pbAlbums2.Location = new Point(632, 20);
-            pbAlbums2.Name = "pbAlbums2";
-            pbAlbums2.Size = new Size(65, 57);
-            pbAlbums2.SizeMode = PictureBoxSizeMode.Zoom;
-            pbAlbums2.TabIndex = 23;
-            pbAlbums2.TabStop = false;
-            // 
-            // lblAlbum
-            // 
-            lblAlbum.AutoSize = true;
-            lblAlbum.Font = new Font("Segoe UI", 25.8000011F, FontStyle.Bold);
-            lblAlbum.Location = new Point(420, 17);
-            lblAlbum.Name = "lblAlbum";
-            lblAlbum.Size = new Size(206, 60);
-            lblAlbum.TabIndex = 11;
-            lblAlbum.Text = "ALBUMS";
-            // 
-            // tpReviews
-            // 
-            tpReviews.BackColor = Color.MediumSlateBlue;
-            tpReviews.Controls.Add(plReviews);
-            tpReviews.Controls.Add(pbReviews2);
-            tpReviews.Controls.Add(lblReviews);
-            tpReviews.Location = new Point(4, 29);
-            tpReviews.Name = "tpReviews";
-            tpReviews.Padding = new Padding(3);
-            tpReviews.Size = new Size(986, 588);
-            tpReviews.TabIndex = 3;
-            tpReviews.Text = "Reviews";
-            // 
-            // pbReviews2
-            // 
-            pbReviews2.Image = Properties.Resources.Reviews;
-            pbReviews2.Location = new Point(639, 20);
-            pbReviews2.Name = "pbReviews2";
-            pbReviews2.Size = new Size(65, 57);
-            pbReviews2.SizeMode = PictureBoxSizeMode.Zoom;
-            pbReviews2.TabIndex = 24;
-            pbReviews2.TabStop = false;
-            // 
-            // lblReviews
-            // 
-            lblReviews.AutoSize = true;
-            lblReviews.Font = new Font("Segoe UI", 25.8000011F, FontStyle.Bold);
-            lblReviews.Location = new Point(420, 17);
-            lblReviews.Name = "lblReviews";
-            lblReviews.Size = new Size(213, 60);
-            lblReviews.TabIndex = 11;
-            lblReviews.Text = "REVIEWS";
-            // 
-            // btnLogOut
-            // 
-            btnLogOut.BackColor = Color.MediumSlateBlue;
-            btnLogOut.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold);
-            btnLogOut.Location = new Point(12, 623);
-            btnLogOut.Margin = new Padding(3, 4, 3, 4);
-            btnLogOut.Name = "btnLogOut";
-            btnLogOut.Size = new Size(100, 32);
-            btnLogOut.TabIndex = 18;
-            btnLogOut.Text = "Log Out";
-            btnLogOut.UseVisualStyleBackColor = false;
-            btnLogOut.Click += ButtonLogOut_Click;
             // 
             // plAlbums
             // 
@@ -728,6 +665,39 @@
             bntAddAlbum.Text = "Add Album";
             bntAddAlbum.UseVisualStyleBackColor = false;
             // 
+            // pbAlbums2
+            // 
+            pbAlbums2.Image = Properties.Resources.Albums;
+            pbAlbums2.Location = new Point(632, 20);
+            pbAlbums2.Name = "pbAlbums2";
+            pbAlbums2.Size = new Size(65, 57);
+            pbAlbums2.SizeMode = PictureBoxSizeMode.Zoom;
+            pbAlbums2.TabIndex = 23;
+            pbAlbums2.TabStop = false;
+            // 
+            // lblAlbum
+            // 
+            lblAlbum.AutoSize = true;
+            lblAlbum.Font = new Font("Segoe UI", 25.8000011F, FontStyle.Bold);
+            lblAlbum.Location = new Point(420, 17);
+            lblAlbum.Name = "lblAlbum";
+            lblAlbum.Size = new Size(206, 60);
+            lblAlbum.TabIndex = 11;
+            lblAlbum.Text = "ALBUMS";
+            // 
+            // tpReviews
+            // 
+            tpReviews.BackColor = Color.MediumSlateBlue;
+            tpReviews.Controls.Add(plReviews);
+            tpReviews.Controls.Add(pbReviews2);
+            tpReviews.Controls.Add(lblReviews);
+            tpReviews.Location = new Point(4, 29);
+            tpReviews.Name = "tpReviews";
+            tpReviews.Padding = new Padding(3);
+            tpReviews.Size = new Size(986, 588);
+            tpReviews.TabIndex = 3;
+            tpReviews.Text = "Reviews";
+            // 
             // plReviews
             // 
             plReviews.BackColor = Color.DarkGray;
@@ -826,12 +796,65 @@
             btnWarningReviews.Text = "Warning";
             btnWarningReviews.UseVisualStyleBackColor = false;
             // 
+            // pbReviews2
+            // 
+            pbReviews2.Image = Properties.Resources.Reviews;
+            pbReviews2.Location = new Point(639, 20);
+            pbReviews2.Name = "pbReviews2";
+            pbReviews2.Size = new Size(65, 57);
+            pbReviews2.SizeMode = PictureBoxSizeMode.Zoom;
+            pbReviews2.TabIndex = 24;
+            pbReviews2.TabStop = false;
+            // 
+            // lblReviews
+            // 
+            lblReviews.AutoSize = true;
+            lblReviews.Font = new Font("Segoe UI", 25.8000011F, FontStyle.Bold);
+            lblReviews.Location = new Point(420, 17);
+            lblReviews.Name = "lblReviews";
+            lblReviews.Size = new Size(213, 60);
+            lblReviews.TabIndex = 11;
+            lblReviews.Text = "REVIEWS";
+            // 
+            // btnLogOut
+            // 
+            btnLogOut.BackColor = Color.MediumSlateBlue;
+            btnLogOut.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold);
+            btnLogOut.Location = new Point(12, 613);
+            btnLogOut.Margin = new Padding(3, 4, 3, 4);
+            btnLogOut.Name = "btnLogOut";
+            btnLogOut.Size = new Size(100, 32);
+            btnLogOut.TabIndex = 18;
+            btnLogOut.Text = "Log Out";
+            btnLogOut.UseVisualStyleBackColor = false;
+            btnLogOut.Click += ButtonLogOut_Click;
+            // 
+            // ssDashBoardForm
+            // 
+            ssDashBoardForm.BackColor = Color.MediumSlateBlue;
+            ssDashBoardForm.Dock = DockStyle.None;
+            ssDashBoardForm.ImageScalingSize = new Size(20, 20);
+            ssDashBoardForm.Items.AddRange(new ToolStripItem[] { tsslblDashBoardForm });
+            ssDashBoardForm.Location = new Point(271, 621);
+            ssDashBoardForm.Name = "ssDashBoardForm";
+            ssDashBoardForm.Size = new Size(17, 22);
+            ssDashBoardForm.TabIndex = 19;
+            ssDashBoardForm.Text = "statusStrip1";
+            // 
+            // tsslblDashBoardForm
+            // 
+            tsslblDashBoardForm.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            tsslblDashBoardForm.ForeColor = Color.LavenderBlush;
+            tsslblDashBoardForm.Name = "tsslblDashBoardForm";
+            tsslblDashBoardForm.Size = new Size(0, 18);
+            // 
             // DashBoard_Form
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.MediumSlateBlue;
             ClientSize = new Size(1261, 671);
+            Controls.Add(ssDashBoardForm);
             Controls.Add(btnLogOut);
             Controls.Add(tcDashBoard);
             Controls.Add(DashBoardPanel);
@@ -863,16 +886,18 @@
             ((System.ComponentModel.ISupportInitialize)dgvSongs).EndInit();
             tpAlbums.ResumeLayout(false);
             tpAlbums.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pbAlbums2).EndInit();
-            tpReviews.ResumeLayout(false);
-            tpReviews.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pbReviews2).EndInit();
             plAlbums.ResumeLayout(false);
             plAlbums.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvAlbums).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pbAlbums2).EndInit();
+            tpReviews.ResumeLayout(false);
+            tpReviews.PerformLayout();
             plReviews.ResumeLayout(false);
             plReviews.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvReviews).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pbReviews2).EndInit();
+            ssDashBoardForm.ResumeLayout(false);
+            ssDashBoardForm.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -945,5 +970,7 @@
         private Label lblSearchReviews;
         private TextBox tbSearchReviews;
         private Button btnWarningReviews;
+        private StatusStrip ssDashBoardForm;
+        private ToolStripStatusLabel tsslblDashBoardForm;
     }
 }
