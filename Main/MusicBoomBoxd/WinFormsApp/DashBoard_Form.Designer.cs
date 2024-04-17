@@ -277,7 +277,7 @@
             tpUsers.Location = new Point(4, 29);
             tpUsers.Name = "tpUsers";
             tpUsers.Padding = new Padding(3);
-            tpUsers.Size = new Size(986, 588);
+            tpUsers.Size = new Size(986, 583);
             tpUsers.TabIndex = 0;
             tpUsers.Text = "Users";
             // 
@@ -419,7 +419,7 @@
             tpSongs.Location = new Point(4, 29);
             tpSongs.Name = "tpSongs";
             tpSongs.Padding = new Padding(3);
-            tpSongs.Size = new Size(986, 588);
+            tpSongs.Size = new Size(986, 583);
             tpSongs.TabIndex = 1;
             tpSongs.Text = "Songs";
             // 
@@ -664,6 +664,7 @@
             bntAddAlbum.TabIndex = 16;
             bntAddAlbum.Text = "Add Album";
             bntAddAlbum.UseVisualStyleBackColor = false;
+            bntAddAlbum.Click += bntAddAlbum_Click;
             // 
             // pbAlbums2
             // 
@@ -694,7 +695,7 @@
             tpReviews.Location = new Point(4, 29);
             tpReviews.Name = "tpReviews";
             tpReviews.Padding = new Padding(3);
-            tpReviews.Size = new Size(986, 588);
+            tpReviews.Size = new Size(986, 583);
             tpReviews.TabIndex = 3;
             tpReviews.Text = "Reviews";
             // 
@@ -846,7 +847,7 @@
             tsslblDashBoardForm.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             tsslblDashBoardForm.ForeColor = Color.LavenderBlush;
             tsslblDashBoardForm.Name = "tsslblDashBoardForm";
-            tsslblDashBoardForm.Size = new Size(0, 18);
+            tsslblDashBoardForm.Size = new Size(0, 16);
             // 
             // DashBoard_Form
             // 

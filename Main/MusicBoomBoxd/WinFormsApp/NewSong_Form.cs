@@ -18,24 +18,26 @@ namespace WinFormsApp
             ClearControls();
             LoadRecentSongsFromTheDatabse();
             this.StartPosition = FormStartPosition.CenterScreen;
-            
-            //for the status strip font
-            int red = 211;
-            int green = 0;
-            int blue = 0;
 
-            Color customRed = Color.FromArgb(red, green, blue);
-            ssNewSongForm.ForeColor = customRed;
+            #region might_use
+            //for the status strip font
+            //int red = 211;
+            //int green = 0;
+            //int blue = 0;
+
+            //Color customRed = Color.FromArgb(red, green, blue);
+            //ssNewSongForm.ForeColor = customRed;
+            #endregion
         }
-        
+
         private void ClearControls()
         {
-            TxtTitle.Clear();
-            TxtArtist.Clear();
-            DatePicker.Value = DateTime.Now; 
-            CbGenre.SelectedIndex = 0; 
-            selectedImagePath = null; 
-            SelectedCover.Image = null; 
+            TxtTitleSong.Clear();
+            TxtArtistSong.Clear();
+            DatePickerSong.Value = DateTime.Now;
+            CbGenre.SelectedIndex = 0;
+            selectedImagePath = null;
+            SelectedCoverSong.Image = null;
         }
         public void InitializeComboBox()
         {
@@ -45,14 +47,14 @@ namespace WinFormsApp
         private bool ValidateForm()
         {
             // Checks if the title is provided
-            if (string.IsNullOrEmpty(TxtTitle.Text))
+            if (string.IsNullOrEmpty(TxtTitleSong.Text))
             {
                 tsslblNewSongForm.Text = "Every song needs a title. Please enter one.";
                 return false;
             }
 
             // Checks if the artist is provided
-            if (string.IsNullOrEmpty(TxtArtist.Text))
+            if (string.IsNullOrEmpty(TxtArtistSong.Text))
             {
                 tsslblNewSongForm.Text = "Every song needs an artist. Please enter one.";
                 return false;
@@ -75,15 +77,15 @@ namespace WinFormsApp
             return true;
         }
 
-        private void BtnAdd_Click(object sender, EventArgs e)
+        private void BtnAddSong_Click(object sender, EventArgs e)
         {
 
             if (ValidateForm())
             {
 
-                string title = TxtTitle.Text;
-                string artist = TxtArtist.Text;
-                DateTime releaseDate = DatePicker.Value;
+                string title = TxtTitleSong.Text;
+                string artist = TxtArtistSong.Text;
+                DateTime releaseDate = DatePickerSong.Value;
                 genreType genre = (genreType)CbGenre.SelectedItem;
 
                 // This converts the genre enum to a string to pass it to the SongDTO constructor
@@ -112,7 +114,7 @@ namespace WinFormsApp
             }
         }
 
-        private void btnAddPicture_Click(object sender, EventArgs e)
+        private void btnAddPictureSong_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
@@ -137,7 +139,7 @@ namespace WinFormsApp
                     selectedImagePath = selectedFile;
 
                     // This will load and display the image if needed
-                    SelectedCover.Image = Image.FromFile(selectedImagePath);
+                    SelectedCoverSong.Image = Image.FromFile(selectedImagePath);
                 }
             }
         }
@@ -148,11 +150,11 @@ namespace WinFormsApp
             {
                 List<SongDTO> recentSongs = _songRepository.GetRecentSong(3);
 
-                lbRecent.Items.Clear();
+                lbRecentSong.Items.Clear();
 
                 foreach (SongDTO song in recentSongs)
                 {
-                    lbRecent.Items.Add($"{song.SongTitle}, {song.Artist}, {song.Genre}, {song.ReleaseDate.ToShortDateString()}");
+                    lbRecentSong.Items.Add($"{song.SongTitle}, {song.Artist}, {song.Genre}, {song.ReleaseDate.ToShortDateString()}");
                 }
             }
             catch (Exception ex)

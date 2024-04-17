@@ -116,5 +116,15 @@ namespace WinFormsApp
             music_form.Show();
         }
         #endregion
+
+        #region Albums
+        private void bntAddAlbum_Click(object sender, EventArgs e)
+        {
+            NewAlbum_Form album_form = new NewAlbum_Form();
+            album_form.Owner = this;
+            this.Visible = false;
+            album_form.Show();
+        }
+        #endregion
     }
 }

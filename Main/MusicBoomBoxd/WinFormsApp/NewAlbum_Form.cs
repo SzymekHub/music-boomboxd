@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Infrastructure;
+using Infrastructure.DTOs;
+using Logic;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,9 +15,174 @@ namespace WinFormsApp
 {
     public partial class NewAlbum_Form : Form
     {
+        private const string FilePath = "./NewAlbum.CSV";
+        private string selectedImagePath;
+        private readonly AlbumRepository _albumRepository = new AlbumRepository();
+
+
         public NewAlbum_Form()
         {
             InitializeComponent();
+            InitializeComboBox();
+            ClearControls();
+            LoadRecentAlbumsFromTheDatabse();
+            this.StartPosition = FormStartPosition.CenterScreen;
+        }
+
+        private void ClearControls()
+        {
+            TxtTitleAlbum.Clear();
+            TxtArtistAlbum.Clear();
+            DatePickerAlbum.Value = DateTime.Now;
+            CbGenreAlbum.SelectedIndex = 0;
+            selectedImagePath = null;
+            SelectedCoverAlbum.Image = null;
+        }
+
+        public void InitializeComboBox()
+        {
+            CbGenreAlbum.DataSource = Enum.GetValues(typeof(genreType));
+        }
+
+        private bool ValidateForm()
+        {
+            // Checks if the title is provided
+            if (string.IsNullOrEmpty(TxtTitleAlbum.Text))
+            {
+                tsslblNewAlbumForm.Text = "Every Album needs a title. Please enter one.";
+                return false;
+            }
+
+            // Checks if the artist is provided
+            if (string.IsNullOrEmpty(TxtArtistAlbum.Text))
+            {
+                tsslblNewAlbumForm.Text = "Every Album needs an artist. Please enter one.";
+                return false;
+            }
+
+            // Checks if a genre is selected
+            if (CbGenreAlbum.SelectedItem == null)
+            {
+                tsslblNewAlbumForm.Text = "Please select a genre for the Album.";
+                return false;
+            }
+
+            // Checks if an image is selected
+            if (string.IsNullOrEmpty(selectedImagePath))
+            {
+                tsslblNewAlbumForm.Text = "Please select an album cover image for the Album.";
+                return false;
+            }
+
+            return true;
+        }
+        private void BtnAddAlbum_Click(object sender, EventArgs e)
+        {
+            if (ValidateForm())
+            {
+
+                string title = TxtTitleAlbum.Text;
+                string artist = TxtArtistAlbum.Text;
+                DateTime releaseDate = DatePickerAlbum.Value;
+                genreType genre = (genreType)CbGenreAlbum.SelectedItem;
+                string numberOfSongs = "";
+
+                // This converts the genre enum to a string to pass it to the AlbumDTO constructor
+                string genreString = genre.ToString();
+
+                // This creates a new instance of the AlbumDTO and initializes the proterites with values enterd.
+                AlbumDTO albumDTO = new AlbumDTO(title, artist, releaseDate, genreString, numberOfSongs);
+
+                // Later it is passes to the insertalbum in the SongRepository to add a new album to the database
+                if (_albumRepository.InsertAlbum(albumDTO, selectedImagePath))
+                {
+                    SaveAlbumToCSV(albumDTO);
+
+                    tsslblNewAlbumForm.Text = $"The album has been added successfully!";
+                    LoadRecentAlbumsFromTheDatabse();
+                    ClearControls();
+                }
+                else
+                {
+                    tsslblNewAlbumForm.Text = $"Sorry, failed to add the album.";
+                }
+            }
+            else
+            {
+                ValidateForm();
+            }
+        }
+
+        private void btnAddPictureAlbum_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Image Files (*.jpg, *.png)|*.jpg;*.png|All Files (*.*)|*.*";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.Multiselect = false;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string selectedFile = openFileDialog.FileName;
+
+                    // Checks if the selected file has a valid image extension
+                    string extension = Path.GetExtension(selectedFile);
+                    if (extension != ".jpg" && extension != ".png")
+                    {
+                        tsslblNewAlbumForm.Text = $"Please select an image file with .jpg or .png extension.";
+
+                        return;
+                    }
+
+                    // Stores the selected image path
+                    selectedImagePath = selectedFile;
+
+                    // This will load and display the image if needed
+                    SelectedCoverAlbum.Image = Image.FromFile(selectedImagePath);
+                }
+            }
+        }
+        private void LoadRecentAlbumsFromTheDatabse()
+        {
+            try
+            {
+                List<AlbumDTO> recentAlbums = _albumRepository.GetRecentAlbum(3);
+
+                lbRecentAlbum.Items.Clear();
+
+                foreach (AlbumDTO album in recentAlbums)
+                {
+                    lbRecentAlbum.Items.Add($"{album.AlbumTitle}, {album.Artist}, {album.Genre}, {album.ReleaseDate.ToShortDateString()}");
+                }
+            }
+            catch (Exception ex)
+            {
+                tsslblNewAlbumForm.Text = $"Looks like something went wrong: {ex.Message}";
+            }
+        }
+        private void SaveAlbumToCSV(AlbumDTO album)
+        {
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(FilePath, true))
+                {
+                    // Format the album data and write it to the CSV file
+                    string albumData = $"{album.AlbumTitle},{album.Artist},{album.ReleaseDate},{album.Genre},{selectedImagePath}";
+                    writer.WriteLine(albumData);
+                }
+            }
+            catch (Exception ex)
+            {
+                tsslblNewAlbumFormCSV.Text = $"Failed to save the song to the CSV file: {ex.Message}";
+            }
+        }
+
+        private void NewAlbum_Form_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (Owner != null)
+            {
+                Owner.Visible = true;
+            }
         }
     }
 }
