@@ -59,5 +59,53 @@ namespace WinFormsApp.Properties {
                 resourceCulture = value;
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Users
+        {
+            get
+            {
+                object obj = ResourceManager.GetObject("Users", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+
+        internal static System.Drawing.Bitmap LogoBlue1
+        {
+            get
+            {
+                object obj = ResourceManager.GetObject("LogoBlue1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+
+        internal static System.Drawing.Bitmap Albums
+        {
+            get
+            {
+                object obj = ResourceManager.GetObject("Albums", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+
+        internal static System.Drawing.Bitmap Songs
+        {
+            get
+            {
+                object obj = ResourceManager.GetObject("Songs", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+
+        internal static System.Drawing.Bitmap Reviews
+        {
+            get
+            {
+                object obj = ResourceManager.GetObject("Reviews", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }
