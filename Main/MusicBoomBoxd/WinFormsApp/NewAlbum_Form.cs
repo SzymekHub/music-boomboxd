@@ -85,16 +85,17 @@ namespace WinFormsApp
                 string artist = TxtArtistAlbum.Text;
                 DateTime releaseDate = DatePickerAlbum.Value;
                 genreType genre = (genreType)CbGenreAlbum.SelectedItem;
-                string numberOfSongs = "";
+                // This reads the selected image file into a byte array
+                byte[] albumCoverBytes = File.ReadAllBytes(selectedImagePath);
 
                 // This converts the genre enum to a string to pass it to the AlbumDTO constructor
                 string genreString = genre.ToString();
 
                 // This creates a new instance of the AlbumDTO and initializes the proterites with values enterd.
-                AlbumDTO albumDTO = new AlbumDTO(title, artist, releaseDate, genreString, numberOfSongs);
+                AlbumDTO albumDTO = new AlbumDTO(title, artist, releaseDate, genreString, albumCoverBytes);
 
-                // Later it is passes to the insertalbum in the SongRepository to add a new album to the database
-                if (_albumRepository.InsertAlbum(albumDTO, selectedImagePath))
+                // Call the InsertAlbum method with the album DTO
+                if (_albumRepository.InsertAlbum(albumDTO))
                 {
                     SaveAlbumToCSV(albumDTO);
 
@@ -110,7 +111,7 @@ namespace WinFormsApp
             else
             {
                 ValidateForm();
-            }
+            }   
         }
 
         private void btnAddPictureAlbum_Click(object sender, EventArgs e)

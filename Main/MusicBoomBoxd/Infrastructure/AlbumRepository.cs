@@ -12,14 +12,15 @@ namespace Infrastructure
     public class AlbumRepository
     {
         // This class is responisble for databse operations related to Albums
-        public bool InsertAlbum(AlbumDTO albumDTO, string albumCoverPath)
+        public bool InsertAlbum(AlbumDTO albumDTO)
         {
             using (SqlConnection conn = DbConnection.GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand())
             {
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"INSERT INTO [Album] (Title, Artist, Date, Genre, AlbumCover, NumberOfSongs) VALUES (@Title, @Artist, @ReleaseDate, @Genre, @AlbumCover, @NumberOfSongs)";
+                cmd.CommandText = @"INSERT INTO [Albums] (Title, Artist, Date, Genre, AlbumCover) VALUES (@Title, @Artist, @ReleaseDate, @Genre, @AlbumCover)";
+
 
                 cmd.Parameters.AddWithValue("@Title", albumDTO.AlbumTitle);
 
@@ -33,7 +34,9 @@ namespace Infrastructure
                 string genreString = albumDTO.Genre.ToString();
                 cmd.Parameters.AddWithValue("@Genre", genreString);
 
-                cmd.Parameters.AddWithValue("@AlbumCover", albumCoverPath);
+                ////This converts the albumcover to a byte array to pass it to Database
+                byte[] albumCover = albumDTO.AlbumCover.ToArray();
+                cmd.Parameters.AddWithValue("@AlbumCover", albumCover);
 
                 try
                 {
@@ -58,7 +61,7 @@ namespace Infrastructure
             {
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "SELECT TOP (@Count) Title, Artist, Date, Genre FROM Albums ORDER BY ID DESC";
+                cmd.CommandText = "SELECT TOP (@Count) Title, Artist, Date, Genre, AlbumCover FROM Albums ORDER BY ID DESC";
 
 
                 cmd.Parameters.AddWithValue("@Count", count);
@@ -73,11 +76,9 @@ namespace Infrastructure
                         string artist = reader.GetString(1);
                         DateTime releaseDate = reader.GetDateTime(2);
                         string genre = reader.GetString(3);
-                        string numberOfSongs = reader.GetString(4);
+                        byte[] albumCover = (byte[])reader.GetValue(4);
 
-                        // This creates a new instance of the SongDTO for each retrieved from the database.
-                        // It' also later populated wiht the song's info retreived from the databse and added to the lsit of recent songs.
-                        AlbumDTO album = new AlbumDTO(title, artist, releaseDate, genre, numberOfSongs);
+                        AlbumDTO album = new AlbumDTO(title, artist, releaseDate, genre, albumCover);
                         recentAlbums.Add(album);
                     }
                 }
