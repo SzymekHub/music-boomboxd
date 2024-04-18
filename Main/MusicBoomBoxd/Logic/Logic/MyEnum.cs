@@ -8,10 +8,9 @@ namespace Logic
 {
     public enum userType
     {
-        Professional,
-        Artist,
-        Amateur,
-        All
+        Regular,
+        Critic,
+        Musician
     }
 
     public enum genreType

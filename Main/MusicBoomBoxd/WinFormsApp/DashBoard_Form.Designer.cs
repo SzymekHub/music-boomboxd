@@ -399,6 +399,7 @@
             btnAddUser.TabIndex = 16;
             btnAddUser.Text = "Add User";
             btnAddUser.UseVisualStyleBackColor = false;
+            btnAddUser.Click += btnAddUser_Click;
             // 
             // lblUsers
             // 

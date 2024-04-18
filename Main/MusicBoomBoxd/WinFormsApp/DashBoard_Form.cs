@@ -85,9 +85,9 @@ namespace WinFormsApp
         }
 
 
-        private void btnUsers_Click(object sender, EventArgs e)
+        private void btnAddUser_Click(object sender, EventArgs e)
         {
-            Users_Form users_form = new Users_Form();
+            NewUsers_Form users_form = new NewUsers_Form();
             users_form.Owner = this;
             this.Visible = false;
             users_form.Show();
@@ -126,5 +126,7 @@ namespace WinFormsApp
             album_form.Show();
         }
         #endregion
+
+        
     }
 }
