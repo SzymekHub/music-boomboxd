@@ -43,10 +43,31 @@ namespace WinFormsApp
         }
         public bool ValidateInput()
         {
+            //Validate UserName
+            if (string.IsNullOrWhiteSpace(TxtNameUser.Text))
+            {
+                tsslblNewUserForm.Text = $"Every User needs a name";
+                return false;
+            }
+
+            //Validate User Email
             if (string.IsNullOrWhiteSpace(TxtEmailUser.Text) || !IsValidEmail(TxtEmailUser.Text))
             {
-                //MessageBox.Show("Please enter a valid email address.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                tsslblNewUserForm.Text = "Please enter a valid email address";
+                tsslblNewUserForm.Text = $"Please enter a valid email address";
+                return false;
+            }
+
+            //Validate User Birthday
+            if (dtpUser.Value == DateTime.Now || dtpUser.Value > DateTime.Now)
+            {
+                tsslblNewUserForm.Text = $"Please select a realisitc birthdate";
+                return false;
+            } 
+
+            //Validate favorite Genre
+            if (chklbFavGenre.SelectedItems == null)
+            {
+                tsslblNewUserForm.Text = $"Please select at least one favorite genre";
                 return false;
             }
 
