@@ -33,8 +33,6 @@
             btnAddPictureAlbum = new Button();
             lblCoverAlbum = new Label();
             DatePickerAlbum = new DateTimePicker();
-            lblRecentAlbum = new Label();
-            lbRecentAlbum = new ListBox();
             CbGenreAlbum = new ComboBox();
             BtnAddAlbum = new Button();
             TxtArtistAlbum = new TextBox();
@@ -46,20 +44,21 @@
             ssNewAlbumForm = new StatusStrip();
             tsslblNewAlbumForm = new ToolStripStatusLabel();
             tsslblNewAlbumFormCSV = new ToolStripStatusLabel();
+            pbLogo = new PictureBox();
             NewAlbumPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)SelectedCoverAlbum).BeginInit();
             ssNewAlbumForm.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pbLogo).BeginInit();
             SuspendLayout();
             // 
             // NewAlbumPanel
             // 
             NewAlbumPanel.BackColor = Color.DarkGray;
+            NewAlbumPanel.Controls.Add(pbLogo);
             NewAlbumPanel.Controls.Add(SelectedCoverAlbum);
             NewAlbumPanel.Controls.Add(btnAddPictureAlbum);
             NewAlbumPanel.Controls.Add(lblCoverAlbum);
             NewAlbumPanel.Controls.Add(DatePickerAlbum);
-            NewAlbumPanel.Controls.Add(lblRecentAlbum);
-            NewAlbumPanel.Controls.Add(lbRecentAlbum);
             NewAlbumPanel.Controls.Add(CbGenreAlbum);
             NewAlbumPanel.Controls.Add(BtnAddAlbum);
             NewAlbumPanel.Controls.Add(TxtArtistAlbum);
@@ -75,9 +74,9 @@
             // 
             // SelectedCoverAlbum
             // 
-            SelectedCoverAlbum.Location = new Point(209, 224);
+            SelectedCoverAlbum.Location = new Point(172, 9);
             SelectedCoverAlbum.Name = "SelectedCoverAlbum";
-            SelectedCoverAlbum.Size = new Size(88, 74);
+            SelectedCoverAlbum.Size = new Size(141, 113);
             SelectedCoverAlbum.SizeMode = PictureBoxSizeMode.Zoom;
             SelectedCoverAlbum.TabIndex = 34;
             SelectedCoverAlbum.TabStop = false;
@@ -85,7 +84,7 @@
             // btnAddPictureAlbum
             // 
             btnAddPictureAlbum.BackColor = Color.MediumSlateBlue;
-            btnAddPictureAlbum.Location = new Point(303, 228);
+            btnAddPictureAlbum.Location = new Point(337, 51);
             btnAddPictureAlbum.Name = "btnAddPictureAlbum";
             btnAddPictureAlbum.Size = new Size(97, 30);
             btnAddPictureAlbum.TabIndex = 32;
@@ -97,7 +96,7 @@
             // 
             lblCoverAlbum.AutoSize = true;
             lblCoverAlbum.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblCoverAlbum.Location = new Point(86, 224);
+            lblCoverAlbum.Location = new Point(49, 21);
             lblCoverAlbum.Name = "lblCoverAlbum";
             lblCoverAlbum.Size = new Size(117, 33);
             lblCoverAlbum.TabIndex = 31;
@@ -107,34 +106,16 @@
             // 
             DatePickerAlbum.Checked = false;
             DatePickerAlbum.ImeMode = ImeMode.NoControl;
-            DatePickerAlbum.Location = new Point(209, 185);
+            DatePickerAlbum.Location = new Point(172, 169);
             DatePickerAlbum.Name = "DatePickerAlbum";
             DatePickerAlbum.Size = new Size(262, 27);
             DatePickerAlbum.TabIndex = 30;
-            // 
-            // lblRecentAlbum
-            // 
-            lblRecentAlbum.AutoSize = true;
-            lblRecentAlbum.Font = new Font("Stencil", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblRecentAlbum.Location = new Point(19, 273);
-            lblRecentAlbum.Name = "lblRecentAlbum";
-            lblRecentAlbum.Size = new Size(157, 24);
-            lblRecentAlbum.TabIndex = 22;
-            lblRecentAlbum.Text = "Recent Adds:";
-            // 
-            // lbRecentAlbum
-            // 
-            lbRecentAlbum.FormattingEnabled = true;
-            lbRecentAlbum.Location = new Point(16, 300);
-            lbRecentAlbum.Name = "lbRecentAlbum";
-            lbRecentAlbum.Size = new Size(686, 64);
-            lbRecentAlbum.TabIndex = 21;
             // 
             // CbGenreAlbum
             // 
             CbGenreAlbum.DropDownStyle = ComboBoxStyle.DropDownList;
             CbGenreAlbum.FormattingEnabled = true;
-            CbGenreAlbum.Location = new Point(209, 127);
+            CbGenreAlbum.Location = new Point(172, 272);
             CbGenreAlbum.Name = "CbGenreAlbum";
             CbGenreAlbum.Size = new Size(262, 28);
             CbGenreAlbum.TabIndex = 20;
@@ -142,7 +123,7 @@
             // BtnAddAlbum
             // 
             BtnAddAlbum.BackColor = Color.MediumSlateBlue;
-            BtnAddAlbum.Location = new Point(538, 98);
+            BtnAddAlbum.Location = new Point(540, 169);
             BtnAddAlbum.Name = "BtnAddAlbum";
             BtnAddAlbum.Size = new Size(127, 57);
             BtnAddAlbum.TabIndex = 19;
@@ -152,14 +133,14 @@
             // 
             // TxtArtistAlbum
             // 
-            TxtArtistAlbum.Location = new Point(209, 83);
+            TxtArtistAlbum.Location = new Point(172, 217);
             TxtArtistAlbum.Name = "TxtArtistAlbum";
             TxtArtistAlbum.Size = new Size(262, 27);
             TxtArtistAlbum.TabIndex = 17;
             // 
             // TxtTitleAlbum
             // 
-            TxtTitleAlbum.Location = new Point(209, 30);
+            TxtTitleAlbum.Location = new Point(172, 128);
             TxtTitleAlbum.Name = "TxtTitleAlbum";
             TxtTitleAlbum.Size = new Size(262, 27);
             TxtTitleAlbum.TabIndex = 16;
@@ -168,7 +149,7 @@
             // 
             lblDateAlbum.AutoSize = true;
             lblDateAlbum.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblDateAlbum.Location = new Point(98, 179);
+            lblDateAlbum.Location = new Point(61, 165);
             lblDateAlbum.Name = "lblDateAlbum";
             lblDateAlbum.Size = new Size(105, 33);
             lblDateAlbum.TabIndex = 15;
@@ -178,7 +159,7 @@
             // 
             lblGenreAlbum.AutoSize = true;
             lblGenreAlbum.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblGenreAlbum.Location = new Point(77, 127);
+            lblGenreAlbum.Location = new Point(40, 267);
             lblGenreAlbum.Name = "lblGenreAlbum";
             lblGenreAlbum.Size = new Size(126, 33);
             lblGenreAlbum.TabIndex = 14;
@@ -188,7 +169,7 @@
             // 
             lblArtistAlbum.AutoSize = true;
             lblArtistAlbum.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblArtistAlbum.Location = new Point(66, 77);
+            lblArtistAlbum.Location = new Point(29, 211);
             lblArtistAlbum.Name = "lblArtistAlbum";
             lblArtistAlbum.Size = new Size(137, 33);
             lblArtistAlbum.TabIndex = 13;
@@ -198,7 +179,7 @@
             // 
             lblTtitleAlbum.AutoSize = true;
             lblTtitleAlbum.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTtitleAlbum.Location = new Point(89, 24);
+            lblTtitleAlbum.Location = new Point(52, 122);
             lblTtitleAlbum.Name = "lblTtitleAlbum";
             lblTtitleAlbum.Size = new Size(114, 33);
             lblTtitleAlbum.TabIndex = 12;
@@ -228,6 +209,16 @@
             tsslblNewAlbumFormCSV.Name = "tsslblNewAlbumFormCSV";
             tsslblNewAlbumFormCSV.Size = new Size(0, 16);
             // 
+            // pbLogo
+            // 
+            pbLogo.Image = Properties.Resources.LogoBlue1;
+            pbLogo.Location = new Point(609, 0);
+            pbLogo.Name = "pbLogo";
+            pbLogo.Size = new Size(109, 90);
+            pbLogo.SizeMode = PictureBoxSizeMode.Zoom;
+            pbLogo.TabIndex = 35;
+            pbLogo.TabStop = false;
+            // 
             // NewAlbum_Form
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -244,6 +235,7 @@
             ((System.ComponentModel.ISupportInitialize)SelectedCoverAlbum).EndInit();
             ssNewAlbumForm.ResumeLayout(false);
             ssNewAlbumForm.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pbLogo).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -255,8 +247,6 @@
         private Button btnAddPictureAlbum;
         private Label lblCoverAlbum;
         private DateTimePicker DatePickerAlbum;
-        private Label lblRecentAlbum;
-        private ListBox lbRecentAlbum;
         private ComboBox CbGenreAlbum;
         private Button BtnAddAlbum;
         private TextBox TxtArtistAlbum;
@@ -268,5 +258,6 @@
         private StatusStrip ssNewAlbumForm;
         private ToolStripStatusLabel tsslblNewAlbumForm;
         private ToolStripStatusLabel tsslblNewAlbumFormCSV;
+        private PictureBox pbLogo;
     }
 }

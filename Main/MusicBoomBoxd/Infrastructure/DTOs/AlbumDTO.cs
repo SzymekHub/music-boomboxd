@@ -13,15 +13,19 @@ namespace Infrastructure.DTOs
         public string Artist { get; set; }
         public DateTime ReleaseDate { get; set; }
         public string Genre { get; set; }
-        public byte[] AlbumCover { get; set; }
+        public string AlbumCoverName { get; set; }
+        public byte[] AlbumCoverData { get; set; }
+        public string AlbumCoverContentType { get; set; }
 
-        public AlbumDTO(string albumTitle, string artist, DateTime releaseDate, string genre, byte[] albumCover)
+        public AlbumDTO(string albumTitle, string artist, DateTime releaseDate, string genre, string albumCoverName, byte[] albumCoverData, string albumCoverContentType)
         {
             AlbumTitle = albumTitle;
             Artist = artist;
             ReleaseDate = releaseDate;
             Genre = genre;
-            AlbumCover = albumCover;
+            AlbumCoverName = albumCoverName;
+            AlbumCoverData = albumCoverData;
+            AlbumCoverContentType = albumCoverContentType;
         }
     }
 }

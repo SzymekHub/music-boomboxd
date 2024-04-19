@@ -19,7 +19,9 @@ namespace Infrastructure
             {
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"INSERT INTO [Albums] (Title, Artist, Date, Genre, AlbumCover) VALUES (@Title, @Artist, @ReleaseDate, @Genre, @AlbumCover)";
+                cmd.CommandText = @"INSERT INTO [Albums] (Title, Artist, Date, Genre, AlbumCoverName, AlbumCoverData, AlbumCoverContentType) 
+                                    VALUES (@Title, @Artist, @ReleaseDate, @Genre, @AlbumCoverName, @AlbumCoverData, @AlbumCoverContentType); 
+                                    SELECT SCOPE_IDENTITY();";
 
 
                 cmd.Parameters.AddWithValue("@Title", albumDTO.AlbumTitle);
@@ -34,10 +36,14 @@ namespace Infrastructure
                 string genreString = albumDTO.Genre.ToString();
                 cmd.Parameters.AddWithValue("@Genre", genreString);
 
-                ////This converts the albumcover to a byte array to pass it to Database
-                byte[] albumCover = albumDTO.AlbumCover.ToArray();
-                cmd.Parameters.AddWithValue("@AlbumCover", albumCover);
+                cmd.Parameters.AddWithValue("@AlbumCoverName", albumDTO.AlbumCoverName);
+                cmd.Parameters.AddWithValue("@AlbumCoverData", albumDTO.AlbumCoverData);
+                cmd.Parameters.AddWithValue("@AlbumCoverContentType", albumDTO.AlbumCoverContentType);
 
+                ////This converts the albumcover to a byte array to pass it to Database
+                //byte[] albumCoverData = albumDTO.AlbumCoverData.ToArray();
+                //cmd.Parameters.AddWithValue("@AlbumCoverData", albumCoverData);
+                
                 try
                 {
                     conn.Open();
@@ -61,7 +67,7 @@ namespace Infrastructure
             {
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "SELECT TOP (@Count) Title, Artist, Date, Genre, AlbumCover FROM Albums ORDER BY ID DESC";
+                cmd.CommandText = "SELECT TOP (@Count) Title, Artist, Date, Genre, AlbumCoverName, AlbumCoverData, AlbumCoverContentType FROM Albums ORDER BY ID DESC";
 
 
                 cmd.Parameters.AddWithValue("@Count", count);
@@ -76,9 +82,11 @@ namespace Infrastructure
                         string artist = reader.GetString(1);
                         DateTime releaseDate = reader.GetDateTime(2);
                         string genre = reader.GetString(3);
-                        byte[] albumCover = (byte[])reader.GetValue(4);
+                        string albumCoverName = reader.GetString(4);
+                        byte[] albumCoverData = (byte[])reader.GetValue(5);
+                        string albumCoverContentType = reader.GetString(6);
 
-                        AlbumDTO album = new AlbumDTO(title, artist, releaseDate, genre, albumCover);
+                        AlbumDTO album = new AlbumDTO(title, artist, releaseDate, genre, albumCoverName, albumCoverData, albumCoverContentType);
                         recentAlbums.Add(album);
                     }
                 }

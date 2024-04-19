@@ -9,27 +9,31 @@ namespace Logic
 {
     public class Profiles
     {
-        public int ProfileID {  get; private set; }
-
-        public int UserID { get; private set; }
+        public string UserEmail { get;}
 
         public string Image {  get; private set; }
 
-        public List<Music> FavoriteMusic { get; private set; }
+        public List<Album> FavoriteAlbum{ get; private set; }
 
-        public List<Music> PublishedMusic { get; private set; }
+        public List<Album> PublishedAlbums { get; private set; }
+
+        public List<Song> FavoriteSong { get; private set; }
+
+        public List<Song> PublishedSongs { get; private set; }
 
         public List<Profiles> Following {  get; private set; }
 
-        public Profiles(int profileID, int userID, string image, List<Music> favoriteMusic, List<Music> publishedMusic, List<Profiles> following)
+        public Profiles(string userEmail, string image, List<Album> favoriteAlbum, List<Album> publishedAlbums, List<Song> favoriteSong, List<Song> publishedSongs, List<Profiles> following)
         {
-            ProfileID = profileID;
-            UserID = userID;
+            UserEmail = userEmail;
             Image = image;
-            FavoriteMusic = favoriteMusic;
-            PublishedMusic = publishedMusic;
+            FavoriteAlbum = favoriteAlbum;
+            PublishedAlbums = publishedAlbums;
+            FavoriteSong = favoriteSong;
+            PublishedSongs = publishedSongs;
             Following = following;
         }
+
 
         public void AddFavoriteAlbum(Album album)
         {

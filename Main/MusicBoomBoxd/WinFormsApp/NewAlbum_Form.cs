@@ -25,7 +25,6 @@ namespace WinFormsApp
             InitializeComponent();
             InitializeComboBox();
             ClearControls();
-            LoadRecentAlbumsFromTheDatabse();
             this.StartPosition = FormStartPosition.CenterScreen;
         }
 
@@ -80,27 +79,48 @@ namespace WinFormsApp
         {
             if (ValidateForm())
             {
-
                 string title = TxtTitleAlbum.Text;
                 string artist = TxtArtistAlbum.Text;
                 DateTime releaseDate = DatePickerAlbum.Value;
                 genreType genre = (genreType)CbGenreAlbum.SelectedItem;
+
+                // Get the file name from the selected image path
+                string albumCoverName = Path.GetFileName(selectedImagePath);
+
+                // Get the content type based on the file extension
+                string albumCoverContentType = "";
+                string extension = Path.GetExtension(selectedImagePath);
+                if (extension != null)
+                {
+                    switch (extension.ToLower())
+                    {
+                        case ".jpg":
+                            albumCoverContentType = "image/jpeg";
+                            break;
+                        case ".png":
+                            albumCoverContentType = "image/png";
+                            break;
+                        default:
+                            tsslblNewAlbumForm.Text = $"Wrong format!";
+                            break;
+                    }
+                }
+
                 // This reads the selected image file into a byte array
-                byte[] albumCoverBytes = File.ReadAllBytes(selectedImagePath);
+                byte[] albumCoverData = File.ReadAllBytes(selectedImagePath);
 
                 // This converts the genre enum to a string to pass it to the AlbumDTO constructor
                 string genreString = genre.ToString();
 
-                // This creates a new instance of the AlbumDTO and initializes the proterites with values enterd.
-                AlbumDTO albumDTO = new AlbumDTO(title, artist, releaseDate, genreString, albumCoverBytes);
+                // This creates a new instance of the AlbumDTO and initializes the properties with values entered.
+                AlbumDTO albumDTO = new AlbumDTO(title, artist, releaseDate, genreString, albumCoverName, albumCoverData, albumCoverContentType);
 
-                // Call the InsertAlbum method with the album DTO
+                // This calls the InsertAlbum method with the album DTO
                 if (_albumRepository.InsertAlbum(albumDTO))
                 {
                     SaveAlbumToCSV(albumDTO);
 
                     tsslblNewAlbumForm.Text = $"The album has been added successfully!";
-                    LoadRecentAlbumsFromTheDatabse();
                     ClearControls();
                 }
                 else
@@ -111,7 +131,7 @@ namespace WinFormsApp
             else
             {
                 ValidateForm();
-            }   
+            }
         }
 
         private void btnAddPictureAlbum_Click(object sender, EventArgs e)
@@ -141,24 +161,6 @@ namespace WinFormsApp
                     // This will load and display the image if needed
                     SelectedCoverAlbum.Image = Image.FromFile(selectedImagePath);
                 }
-            }
-        }
-        private void LoadRecentAlbumsFromTheDatabse()
-        {
-            try
-            {
-                List<AlbumDTO> recentAlbums = _albumRepository.GetRecentAlbum(3);
-
-                lbRecentAlbum.Items.Clear();
-
-                foreach (AlbumDTO album in recentAlbums)
-                {
-                    lbRecentAlbum.Items.Add($"{album.AlbumTitle}, {album.Artist}, {album.Genre}, {album.ReleaseDate.ToShortDateString()}");
-                }
-            }
-            catch (Exception ex)
-            {
-                tsslblNewAlbumForm.Text = $"Looks like something went wrong: {ex.Message}";
             }
         }
         private void SaveAlbumToCSV(AlbumDTO album)

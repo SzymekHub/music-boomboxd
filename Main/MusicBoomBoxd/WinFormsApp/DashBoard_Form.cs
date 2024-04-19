@@ -7,15 +7,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Infrastructure.DTOs;
+using Infrastructure;
 using Logic;
 
 namespace WinFormsApp
 {
     public partial class DashBoard_Form : Form
     {
+
+        //for the Album tab
+        AlbumRepository _albumRepository = new AlbumRepository();
+
         public DashBoard_Form(string adminUsername)
         {
             InitializeComponent();
+
+            //This is for the album page
+            SetUpDataGridViewAlbums();
+            PopulateAlbums();
+
             lblHello.Text = $"Hello, {adminUsername}";
             tsslblDashBoardForm.Text = $"Hello, {adminUsername}";
 
@@ -29,6 +40,7 @@ namespace WinFormsApp
             #endregion
 
             this.StartPosition = FormStartPosition.CenterScreen;
+
         }
 
         private void DashBoard_Form_Load(object sender, EventArgs e)
@@ -51,6 +63,7 @@ namespace WinFormsApp
                     }
                 }
             }
+            PopulateDataGridViewWithRecentAlbums();
         }
 
         private void Button_Click(object sender, EventArgs e)
@@ -125,8 +138,59 @@ namespace WinFormsApp
             this.Visible = false;
             album_form.Show();
         }
+
+        private void SetUpDataGridViewAlbums()
+        {
+            dgvAlbums.AutoGenerateColumns = false;
+            dgvAlbums.AllowUserToAddRows = false;
+
+            //Add the DataGridViewCollumns
+            dgvAlbums.Columns.Add("Title", "Title");
+            dgvAlbums.Columns["Title"].DataPropertyName = "Title";
+
+            dgvAlbums.Columns.Add("Artist", "Artist");
+            dgvAlbums.Columns["Artist"].DataPropertyName = "Artist";
+
+            dgvAlbums.Columns.Add("Genre", "Genre");
+            dgvAlbums.Columns["Genre"].DataPropertyName = "Genre";
+
+            dgvAlbums.Columns.Add("Date", "Date");
+            dgvAlbums.Columns["Date"].DataPropertyName = "Date";
+
+            dgvAlbums.Columns.Add("AlbumCoverName", "AlbumCoverName");
+            dgvAlbums.Columns["AlbumCoverName"].DataPropertyName = "AlbumCoverName";
+        }
+
+        private void PopulateAlbums()
+        {
+
+        }
+
+        private void PopulateDataGridViewWithRecentAlbums()
+        {
+            try
+            {
+                List<AlbumDTO> recentAlbums = _albumRepository.GetRecentAlbum(3);
+
+                // Clear existing rows
+                dgvAlbums.Rows.Clear();
+
+                // Add rows for each recent album
+                foreach (AlbumDTO album in recentAlbums)
+                {
+                    dgvAlbums.Rows.Add(album.AlbumTitle, album.Artist, album.Genre, album.ReleaseDate.ToShortDateString(), album.AlbumCoverName);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                tsslblDashBoardForm.Text = $"Looks like something went wrong: {ex.Message}";
+            }
+        }
+
+
         #endregion
 
-        
+
     }
 }
