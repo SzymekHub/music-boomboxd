@@ -17,5 +17,14 @@ namespace Logic
         public int Rating { get; set; }
 
         public DateTime CreationDate { get; set; }
+
+        public Comment(int commentID, int userID, string content, int rating, DateTime creationDate)
+        {
+            CommentID = commentID;
+            UserID = userID;
+            Content = content;
+            Rating = rating;
+            CreationDate = creationDate;
+        }
     }
 }

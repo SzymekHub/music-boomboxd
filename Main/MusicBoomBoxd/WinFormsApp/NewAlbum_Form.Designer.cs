@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             NewAlbumPanel = new Panel();
+            pbLogo = new PictureBox();
             SelectedCoverAlbum = new PictureBox();
             btnAddPictureAlbum = new Button();
             lblCoverAlbum = new Label();
@@ -44,16 +45,17 @@
             ssNewAlbumForm = new StatusStrip();
             tsslblNewAlbumForm = new ToolStripStatusLabel();
             tsslblNewAlbumFormCSV = new ToolStripStatusLabel();
-            pbLogo = new PictureBox();
+            btnCancel = new Button();
             NewAlbumPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pbLogo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)SelectedCoverAlbum).BeginInit();
             ssNewAlbumForm.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pbLogo).BeginInit();
             SuspendLayout();
             // 
             // NewAlbumPanel
             // 
             NewAlbumPanel.BackColor = Color.DarkGray;
+            NewAlbumPanel.Controls.Add(btnCancel);
             NewAlbumPanel.Controls.Add(pbLogo);
             NewAlbumPanel.Controls.Add(SelectedCoverAlbum);
             NewAlbumPanel.Controls.Add(btnAddPictureAlbum);
@@ -71,6 +73,16 @@
             NewAlbumPanel.Name = "NewAlbumPanel";
             NewAlbumPanel.Size = new Size(718, 373);
             NewAlbumPanel.TabIndex = 13;
+            // 
+            // pbLogo
+            // 
+            pbLogo.Image = Properties.Resources.LogoBlue1;
+            pbLogo.Location = new Point(609, 0);
+            pbLogo.Name = "pbLogo";
+            pbLogo.Size = new Size(109, 90);
+            pbLogo.SizeMode = PictureBoxSizeMode.Zoom;
+            pbLogo.TabIndex = 35;
+            pbLogo.TabStop = false;
             // 
             // SelectedCoverAlbum
             // 
@@ -209,15 +221,16 @@
             tsslblNewAlbumFormCSV.Name = "tsslblNewAlbumFormCSV";
             tsslblNewAlbumFormCSV.Size = new Size(0, 16);
             // 
-            // pbLogo
+            // btnCancel
             // 
-            pbLogo.Image = Properties.Resources.LogoBlue1;
-            pbLogo.Location = new Point(609, 0);
-            pbLogo.Name = "pbLogo";
-            pbLogo.Size = new Size(109, 90);
-            pbLogo.SizeMode = PictureBoxSizeMode.Zoom;
-            pbLogo.TabIndex = 35;
-            pbLogo.TabStop = false;
+            btnCancel.BackColor = Color.MediumSlateBlue;
+            btnCancel.Location = new Point(540, 232);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(127, 33);
+            btnCancel.TabIndex = 36;
+            btnCancel.Text = "Cancel";
+            btnCancel.UseVisualStyleBackColor = false;
+            btnCancel.Click += btnCancel_Click;
             // 
             // NewAlbum_Form
             // 
@@ -232,10 +245,10 @@
             FormClosed += NewAlbum_Form_FormClosed;
             NewAlbumPanel.ResumeLayout(false);
             NewAlbumPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pbLogo).EndInit();
             ((System.ComponentModel.ISupportInitialize)SelectedCoverAlbum).EndInit();
             ssNewAlbumForm.ResumeLayout(false);
             ssNewAlbumForm.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pbLogo).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -259,5 +272,6 @@
         private ToolStripStatusLabel tsslblNewAlbumForm;
         private ToolStripStatusLabel tsslblNewAlbumFormCSV;
         private PictureBox pbLogo;
+        private Button btnCancel;
     }
 }
