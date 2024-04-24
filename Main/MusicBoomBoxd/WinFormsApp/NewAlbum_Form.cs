@@ -1,6 +1,7 @@
 ﻿using Infrastructure;
 using Infrastructure.DTOs;
 using Logic;
+using System.IO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,7 +19,7 @@ namespace WinFormsApp
         public Album NewAlbum { get; private set; }
         private Album exisitingAlbum;
         private AlbumManager albumManager;
-        private const string FilePath = "./NewAlbum.CSV";
+        //private const string FilePath = "./NewAlbum.CSV";
         private string selectedImagePath;
 
         public NewAlbum_Form(AlbumManager am, Album album = null, bool view = false)
@@ -82,27 +83,6 @@ namespace WinFormsApp
                 // This reads the selected image file into a byte array
                 byte[] albumCoverData = File.ReadAllBytes(selectedImagePath);
 
-                #region old
-                //// This converts the genre enum to a string to pass it to the AlbumDTO constructor
-                //string genreString = genre.ToString();
-
-                //// This creates a new instance of the AlbumDTO and initializes the properties with values entered.
-                //AlbumDTO albumDTO = new AlbumDTO(title, artist, releaseDate, genreString, albumCoverName, albumCoverData, albumCoverContentType);
-
-                //// This calls the InsertAlbum method with the album DTO
-                //if (_albumRepository.InsertAlbum(albumDTO))
-                //{
-                //    SaveAlbumToCSV(albumDTO);
-
-                //    tsslblNewAlbumForm.Text = $"The album has been added successfully!";
-                //    ClearControls();
-                //}
-                //else
-                //{
-                //    tsslblNewAlbumForm.Text = $"Sorry, failed to add the album.";
-                //}
-                #endregion
-
                 //This creates a new Album Object with the provided details 
                 Album newAlbum = new Album(
                       tbTitleAlbum.Text,
@@ -113,6 +93,7 @@ namespace WinFormsApp
                       albumCoverData,
                       albumCoverContentType
                 );
+
 
                 // Set the NewAlbum property to the newly created album
                 albumManager.UpdateAlbum(newAlbum, exisitingAlbum);
@@ -309,22 +290,22 @@ namespace WinFormsApp
             return true;
         }
 
-        private void SaveAlbumToCSV(AlbumDTO album)
-        {
-            try
-            {
-                using (StreamWriter writer = new StreamWriter(FilePath, true))
-                {
-                    // Format the album data and write it to the CSV file
-                    string albumData = $"{album.AlbumTitle},{album.Artist},{album.ReleaseDate},{album.Genre},{selectedImagePath}";
-                    writer.WriteLine(albumData);
-                }
-            }
-            catch (Exception ex)
-            {
-                tsslblNewAlbumFormCSV.Text = $"Failed to save the song to the CSV file: {ex.Message}";
-            }
-        }
+        //private void SaveAlbumToCSV(AlbumDTO album)
+        //{
+        //    try
+        //    {
+        //        using (StreamWriter writer = new StreamWriter(FilePath, true))
+        //        {
+        //            // Format the album data and write it to the CSV file
+        //            string albumData = $"{album.AlbumTitle},{album.Artist},{album.ReleaseDate},{album.Genre},{selectedImagePath}";
+        //            writer.WriteLine(albumData);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        tsslblNewAlbumFormCSV.Text = $"Failed to save the song to the CSV file: {ex.Message}";
+        //    }
+        //}
 
         public void InitializeComboBox()
         {
