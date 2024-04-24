@@ -8,48 +8,25 @@ namespace Logic
 {
     public class Album
     {
-        public string ID { get; set; }
-        public string AlbumTitle { get; }
+        public string Title { get; }
         public string Artist { get; }
-        public DateTime ReleaseDate { get; set; }
-        public genreType GenreType { get; set; }
-        public List<Review> Reviews { get; set; }
-        public List<Comment> Comments { get; set; }
+        public DateTime Date { get; set; }
+        public genreType Genre { get; set; }
+        public string AlbumCoverName { get; set; }
+        public byte[] AlbumCoverData { get; set; }
+        public string AlbumCoverContentType { get; set; }
 
-        public Album(string albumTitle, string artist, DateTime releaseDate, genreType genreType, List<Review> reviews, List<Comment> comments)
-        {
-            this.ID = GenerateID();
-            this.AlbumTitle = albumTitle;
-            this.Artist = artist;
-            this.ReleaseDate = releaseDate;
-            this.GenreType = genreType;
-            this.Reviews = reviews;
-            this.Comments = comments;
-        }
-        private string GenerateID()
-        {
-            Guid guid = Guid.NewGuid();
-            return guid.ToString();
-        }
 
-        public List<Review> GetReviews()
+        public Album(string title, string artist, DateTime date, genreType genre, string albumCoverName, byte[] albumCoverData, string albumCoverContentType)
         {
-            return Reviews;
-        }
+            Title = title;
+            Artist = artist;
+            Date = date;
+            Genre = genre;
+            AlbumCoverName = albumCoverName;
+            AlbumCoverData = albumCoverData;
+            AlbumCoverContentType = albumCoverContentType;
 
-        public List<Comment> GetComments()
-        {
-            return Comments;
-        }
-
-        public void AddReview(Review review)
-        {
-            Reviews.Add(review);
-        }
-
-        public void AddComment(Comment comment)
-        {
-            Comments.Add(comment);
         }
     }
 }

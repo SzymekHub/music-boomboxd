@@ -37,7 +37,12 @@ namespace WinFormsApp
 
             if (view)
             {
-                //to do later
+                tbTitleAlbum.Enabled = false;
+                DatePickerAlbum.Enabled = false;
+                tbArtistAlbum.Enabled = false;
+                cbGenreAlbum.Enabled = false;
+                btnAddPictureAlbum.Enabled = false;
+                btnAddAlbum.Enabled = false;
             }
         }
 
@@ -52,48 +57,32 @@ namespace WinFormsApp
             //this validates the input data
             if (ValidateForm())
             {
-                Review albumReview = new Review();
+                // This gets the file name from the selected image path
+                string albumCoverName = Path.GetFileName(selectedImagePath);
 
-                Comment albumComment = new Comment();
+                // this gets the content type based on the file extension
+                string albumCoverContentType = "";
+                string extension = Path.GetExtension(selectedImagePath);
+                if (extension != null)
+                {
+                    switch (extension.ToLower())
+                    {
+                        case ".jpg":
+                            albumCoverContentType = "image/jpeg";
+                            break;
+                        case ".png":
+                            albumCoverContentType = "image/png";
+                            break;
+                        default:
+                            tsslblNewAlbumForm.Text = $"Wrong format!";
+                            break;
+                    }
+                }
 
-                Album newAlbum = new Album(
-                      TxtArtistAlbum.Text,
-                      TxtTitleAlbum.Text,
-                      DatePickerAlbum.Value,
-                      CbGenreAlbum.SelectedItem,
-                      albumReview,
-                      albumComment
-                    );
-                //string title = TxtTitleAlbum.Text;
-                //string artist = TxtArtistAlbum.Text;
-                //DateTime releaseDate = DatePickerAlbum.Value;
-                //genreType genre = (genreType)CbGenreAlbum.SelectedItem;
+                // This reads the selected image file into a byte array
+                byte[] albumCoverData = File.ReadAllBytes(selectedImagePath);
 
-                //// Get the file name from the selected image path
-                //string albumCoverName = Path.GetFileName(selectedImagePath);
-
-                //// Get the content type based on the file extension
-                //string albumCoverContentType = "";
-                //string extension = Path.GetExtension(selectedImagePath);
-                //if (extension != null)
-                //{
-                //    switch (extension.ToLower())
-                //    {
-                //        case ".jpg":
-                //            albumCoverContentType = "image/jpeg";
-                //            break;
-                //        case ".png":
-                //            albumCoverContentType = "image/png";
-                //            break;
-                //        default:
-                //            tsslblNewAlbumForm.Text = $"Wrong format!";
-                //            break;
-                //    }
-                //}
-
-                //// This reads the selected image file into a byte array
-                //byte[] albumCoverData = File.ReadAllBytes(selectedImagePath);
-
+                #region old
                 //// This converts the genre enum to a string to pass it to the AlbumDTO constructor
                 //string genreString = genre.ToString();
 
@@ -112,6 +101,25 @@ namespace WinFormsApp
                 //{
                 //    tsslblNewAlbumForm.Text = $"Sorry, failed to add the album.";
                 //}
+                #endregion
+
+                //This creates a new Album Object with the provided details 
+                Album newAlbum = new Album(
+                      tbTitleAlbum.Text,
+                      tbArtistAlbum.Text,
+                      DatePickerAlbum.Value,
+                      (genreType)cbGenreAlbum.SelectedItem,
+                      albumCoverName,
+                      albumCoverData,
+                      albumCoverContentType
+                );
+
+                // Set the NewAlbum property to the newly created album
+                albumManager.UpdateAlbum(newAlbum, exisitingAlbum);
+
+                // Close the form and return DialogResult.OK
+                DialogResult = DialogResult.OK;
+                Close();
             }
         }
 
@@ -145,39 +153,147 @@ namespace WinFormsApp
             }
         }
 
+        private void FillFormWithAlbumDetails(Album album)
+        {
+            tbTitleAlbum.Text = album.Title;
+            tbArtistAlbum.Text = album.Artist;
+            DatePickerAlbum.Value = album.Date;
+            cbGenreAlbum.SelectedItem = album.Genre;
+            //Don't know how to do it for the picture. So please do it 
+        }
+
         private void ClearControls()
         {
-            TxtTitleAlbum.Clear();
-            TxtArtistAlbum.Clear();
+            tbTitleAlbum.Clear();
+            tbArtistAlbum.Clear();
             DatePickerAlbum.Value = DateTime.Now;
-            CbGenreAlbum.SelectedIndex = 0;
+            cbGenreAlbum.SelectedIndex = 0;
             selectedImagePath = null;
             SelectedCoverAlbum.Image = null;
         }
 
-        public void InitializeComboBox()
+        public Album GetNewAlbum()
         {
-            CbGenreAlbum.DataSource = Enum.GetValues(typeof(genreType));
+            if (ValidateForm())
+            {
+                // Get the file name from the selected image path
+                string albumCoverName = Path.GetFileName(selectedImagePath);
+
+                // Get the content type based on the file extension
+                string albumCoverContentType = "";
+                string extension = Path.GetExtension(selectedImagePath);
+                if (extension != null)
+                {
+                    switch (extension.ToLower())
+                    {
+                        case ".jpg":
+                            albumCoverContentType = "image/jpeg";
+                            break;
+                        case ".png":
+                            albumCoverContentType = "image/png";
+                            break;
+                        default:
+                            tsslblNewAlbumForm.Text = $"Wrong format!";
+                            break;
+                    }
+                }
+
+                // This reads the selected image file into a byte array
+                byte[] albumCoverData = File.ReadAllBytes(selectedImagePath);
+
+                // Create and return a new Album object with the provided details
+                return new Album(
+                      tbTitleAlbum.Text,
+                      tbArtistAlbum.Text,
+                      DatePickerAlbum.Value,
+                      (genreType)cbGenreAlbum.SelectedItem,
+                      albumCoverName,
+                      albumCoverData,
+                      albumCoverContentType
+                    );
+            }
+            else
+            {
+                // Return null if validation fails
+                return null;
+            }
         }
 
+        public Album GetUpdatedAlbum()
+        {
+            if (ValidateForm())
+            {
+                // Get the file name from the selected image path
+                string albumCoverName = Path.GetFileName(selectedImagePath);
+
+                // Get the content type based on the file extension
+                string albumCoverContentType = "";
+                string extension = Path.GetExtension(selectedImagePath);
+                if (extension != null)
+                {
+                    switch (extension.ToLower())
+                    {
+                        case ".jpg":
+                            albumCoverContentType = "image/jpeg";
+                            break;
+                        case ".png":
+                            albumCoverContentType = "image/png";
+                            break;
+                        default:
+                            tsslblNewAlbumForm.Text = $"Wrong format!";
+                            break;
+                    }
+                }
+
+                // This reads the selected image file into a byte array
+                byte[] albumCoverData = File.ReadAllBytes(selectedImagePath);
+
+                albumManager.UpdateAlbum(
+                      new Album(    
+                      tbTitleAlbum.Text,
+                      tbArtistAlbum.Text,
+                      DatePickerAlbum.Value,
+                      (genreType)cbGenreAlbum.SelectedItem,
+                      albumCoverName,
+                      albumCoverData,
+                      albumCoverContentType),
+                      exisitingAlbum
+                    );
+
+                return new Album(
+                      tbTitleAlbum.Text,
+                      tbArtistAlbum.Text,
+                      DatePickerAlbum.Value,
+                      (genreType)cbGenreAlbum.SelectedItem,
+                      albumCoverName,
+                      albumCoverData,
+                      albumCoverContentType);
+            }
+            else
+            {
+                // Return null if validation fails
+                return null;
+            }
+        }
+   
         private bool ValidateForm()
         {
             // Checks if the title is provided
-            if (string.IsNullOrEmpty(TxtTitleAlbum.Text))
+            if (string.IsNullOrEmpty(tbTitleAlbum.Text))
             {
                 tsslblNewAlbumForm.Text = "Every Album needs a title. Please enter one.";
                 return false;
             }
 
             // Checks if the artist is provided
-            if (string.IsNullOrEmpty(TxtArtistAlbum.Text))
+            if (string.IsNullOrEmpty(tbArtistAlbum.Text))
             {
                 tsslblNewAlbumForm.Text = "Every Album needs an artist. Please enter one.";
                 return false;
             }
 
             // Checks if a genre is selected
-            if (CbGenreAlbum.SelectedItem == null)
+            if (cbGenreAlbum.SelectedItem == null)
             {
                 tsslblNewAlbumForm.Text = "Please select a genre for the Album.";
                 return false;
@@ -192,7 +308,7 @@ namespace WinFormsApp
 
             return true;
         }
-       
+
         private void SaveAlbumToCSV(AlbumDTO album)
         {
             try
@@ -210,6 +326,11 @@ namespace WinFormsApp
             }
         }
 
+        public void InitializeComboBox()
+        {
+            cbGenreAlbum.DataSource = Enum.GetValues(typeof(genreType));
+        }
+
         private void NewAlbum_Form_FormClosed(object sender, FormClosedEventArgs e)
         {
             if (Owner != null)
@@ -217,5 +338,6 @@ namespace WinFormsApp
                 Owner.Visible = true;
             }
         }
+
     }
 }

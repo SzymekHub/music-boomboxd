@@ -29,15 +29,16 @@
         private void InitializeComponent()
         {
             NewAlbumPanel = new Panel();
+            btnCancel = new Button();
             pbLogo = new PictureBox();
             SelectedCoverAlbum = new PictureBox();
             btnAddPictureAlbum = new Button();
             lblCoverAlbum = new Label();
             DatePickerAlbum = new DateTimePicker();
-            CbGenreAlbum = new ComboBox();
-            BtnAddAlbum = new Button();
-            TxtArtistAlbum = new TextBox();
-            TxtTitleAlbum = new TextBox();
+            cbGenreAlbum = new ComboBox();
+            btnAddAlbum = new Button();
+            tbArtistAlbum = new TextBox();
+            tbTitleAlbum = new TextBox();
             lblDateAlbum = new Label();
             lblGenreAlbum = new Label();
             lblArtistAlbum = new Label();
@@ -45,7 +46,6 @@
             ssNewAlbumForm = new StatusStrip();
             tsslblNewAlbumForm = new ToolStripStatusLabel();
             tsslblNewAlbumFormCSV = new ToolStripStatusLabel();
-            btnCancel = new Button();
             NewAlbumPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pbLogo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)SelectedCoverAlbum).BeginInit();
@@ -61,10 +61,10 @@
             NewAlbumPanel.Controls.Add(btnAddPictureAlbum);
             NewAlbumPanel.Controls.Add(lblCoverAlbum);
             NewAlbumPanel.Controls.Add(DatePickerAlbum);
-            NewAlbumPanel.Controls.Add(CbGenreAlbum);
-            NewAlbumPanel.Controls.Add(BtnAddAlbum);
-            NewAlbumPanel.Controls.Add(TxtArtistAlbum);
-            NewAlbumPanel.Controls.Add(TxtTitleAlbum);
+            NewAlbumPanel.Controls.Add(cbGenreAlbum);
+            NewAlbumPanel.Controls.Add(btnAddAlbum);
+            NewAlbumPanel.Controls.Add(tbArtistAlbum);
+            NewAlbumPanel.Controls.Add(tbTitleAlbum);
             NewAlbumPanel.Controls.Add(lblDateAlbum);
             NewAlbumPanel.Controls.Add(lblGenreAlbum);
             NewAlbumPanel.Controls.Add(lblArtistAlbum);
@@ -73,6 +73,17 @@
             NewAlbumPanel.Name = "NewAlbumPanel";
             NewAlbumPanel.Size = new Size(718, 373);
             NewAlbumPanel.TabIndex = 13;
+            // 
+            // btnCancel
+            // 
+            btnCancel.BackColor = Color.MediumSlateBlue;
+            btnCancel.Location = new Point(540, 232);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(127, 33);
+            btnCancel.TabIndex = 36;
+            btnCancel.Text = "Cancel";
+            btnCancel.UseVisualStyleBackColor = false;
+            btnCancel.Click += btnCancel_Click;
             // 
             // pbLogo
             // 
@@ -123,39 +134,39 @@
             DatePickerAlbum.Size = new Size(262, 27);
             DatePickerAlbum.TabIndex = 30;
             // 
-            // CbGenreAlbum
+            // cbGenreAlbum
             // 
-            CbGenreAlbum.DropDownStyle = ComboBoxStyle.DropDownList;
-            CbGenreAlbum.FormattingEnabled = true;
-            CbGenreAlbum.Location = new Point(172, 272);
-            CbGenreAlbum.Name = "CbGenreAlbum";
-            CbGenreAlbum.Size = new Size(262, 28);
-            CbGenreAlbum.TabIndex = 20;
+            cbGenreAlbum.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbGenreAlbum.FormattingEnabled = true;
+            cbGenreAlbum.Location = new Point(172, 272);
+            cbGenreAlbum.Name = "cbGenreAlbum";
+            cbGenreAlbum.Size = new Size(262, 28);
+            cbGenreAlbum.TabIndex = 20;
             // 
-            // BtnAddAlbum
+            // btnAddAlbum
             // 
-            BtnAddAlbum.BackColor = Color.MediumSlateBlue;
-            BtnAddAlbum.Location = new Point(540, 169);
-            BtnAddAlbum.Name = "BtnAddAlbum";
-            BtnAddAlbum.Size = new Size(127, 57);
-            BtnAddAlbum.TabIndex = 19;
-            BtnAddAlbum.Text = "Add Album";
-            BtnAddAlbum.UseVisualStyleBackColor = false;
-            BtnAddAlbum.Click += BtnAddAlbum_Click;
+            btnAddAlbum.BackColor = Color.MediumSlateBlue;
+            btnAddAlbum.Location = new Point(540, 169);
+            btnAddAlbum.Name = "btnAddAlbum";
+            btnAddAlbum.Size = new Size(127, 57);
+            btnAddAlbum.TabIndex = 19;
+            btnAddAlbum.Text = "Add Album";
+            btnAddAlbum.UseVisualStyleBackColor = false;
+            btnAddAlbum.Click += BtnAddAlbum_Click;
             // 
-            // TxtArtistAlbum
+            // tbArtistAlbum
             // 
-            TxtArtistAlbum.Location = new Point(172, 217);
-            TxtArtistAlbum.Name = "TxtArtistAlbum";
-            TxtArtistAlbum.Size = new Size(262, 27);
-            TxtArtistAlbum.TabIndex = 17;
+            tbArtistAlbum.Location = new Point(172, 217);
+            tbArtistAlbum.Name = "tbArtistAlbum";
+            tbArtistAlbum.Size = new Size(262, 27);
+            tbArtistAlbum.TabIndex = 17;
             // 
-            // TxtTitleAlbum
+            // tbTitleAlbum
             // 
-            TxtTitleAlbum.Location = new Point(172, 128);
-            TxtTitleAlbum.Name = "TxtTitleAlbum";
-            TxtTitleAlbum.Size = new Size(262, 27);
-            TxtTitleAlbum.TabIndex = 16;
+            tbTitleAlbum.Location = new Point(172, 128);
+            tbTitleAlbum.Name = "tbTitleAlbum";
+            tbTitleAlbum.Size = new Size(262, 27);
+            tbTitleAlbum.TabIndex = 16;
             // 
             // lblDateAlbum
             // 
@@ -221,17 +232,6 @@
             tsslblNewAlbumFormCSV.Name = "tsslblNewAlbumFormCSV";
             tsslblNewAlbumFormCSV.Size = new Size(0, 16);
             // 
-            // btnCancel
-            // 
-            btnCancel.BackColor = Color.MediumSlateBlue;
-            btnCancel.Location = new Point(540, 232);
-            btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(127, 33);
-            btnCancel.TabIndex = 36;
-            btnCancel.Text = "Cancel";
-            btnCancel.UseVisualStyleBackColor = false;
-            btnCancel.Click += btnCancel_Click;
-            // 
             // NewAlbum_Form
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -260,10 +260,10 @@
         private Button btnAddPictureAlbum;
         private Label lblCoverAlbum;
         private DateTimePicker DatePickerAlbum;
-        private ComboBox CbGenreAlbum;
-        private Button BtnAddAlbum;
-        private TextBox TxtArtistAlbum;
-        private TextBox TxtTitleAlbum;
+        private ComboBox cbGenreAlbum;
+        private Button btnAddAlbum;
+        private TextBox tbArtistAlbum;
+        private TextBox tbTitleAlbum;
         private Label lblDateAlbum;
         private Label lblGenreAlbum;
         private Label lblArtistAlbum;

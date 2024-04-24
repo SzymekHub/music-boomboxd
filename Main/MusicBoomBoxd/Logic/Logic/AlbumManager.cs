@@ -11,11 +11,37 @@ namespace Logic
     public class AlbumManager
     {
         private List<Album> albums;
-        AlbumRepository _albumRepository = new AlbumRepository();
+        private readonly LoadAlbumsFromDataBase _loadAlbumsFromDataBase;
 
-        public AlbumManager()
+        public AlbumManager(LoadAlbumsFromDataBase loadAlbumsFromDataBase)
         {
             albums = new List<Album>();
+            _loadAlbumsFromDataBase = loadAlbumsFromDataBase;
+        }
+
+        public void LoadAlbumsFromDatabase()
+        {
+            List<AlbumDTO> albumDTOs = _loadAlbumsFromDataBase.LoadAllAlbums();
+            foreach (var albumDTO in albumDTOs)
+            {
+                // This converts AlbumDTO to Album and adds to the albums list
+                Album album = ConvertToAlbum(albumDTO);
+                albums.Add(album);
+            }
+        }
+
+        private Album ConvertToAlbum(AlbumDTO albumDTO)
+        {
+            // This converts AlbumDTO to Album
+            return new Album(
+                albumDTO.AlbumTitle,
+                albumDTO.Artist,
+                albumDTO.ReleaseDate,
+                (genreType)Enum.Parse(typeof(genreType), albumDTO.Genre),
+                albumDTO.AlbumCoverName,
+                albumDTO.AlbumCoverData,
+                albumDTO.AlbumCoverContentType
+            );
         }
 
         public void Add(Album album)

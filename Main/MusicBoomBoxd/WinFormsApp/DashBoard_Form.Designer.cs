@@ -583,6 +583,7 @@
             btnDeleteAlbum.TabIndex = 31;
             btnDeleteAlbum.Text = "Delete";
             btnDeleteAlbum.UseVisualStyleBackColor = false;
+            btnDeleteAlbum.Click += btnDeleteAlbum_Click;
             // 
             // btnViewAlbum
             // 
@@ -594,6 +595,7 @@
             btnViewAlbum.TabIndex = 30;
             btnViewAlbum.Text = "View";
             btnViewAlbum.UseVisualStyleBackColor = false;
+            btnViewAlbum.Click += btnViewAlbum_Click;
             // 
             // btnUpdateAlbum
             // 
@@ -605,6 +607,7 @@
             btnUpdateAlbum.TabIndex = 29;
             btnUpdateAlbum.Text = "Update";
             btnUpdateAlbum.UseVisualStyleBackColor = false;
+            btnUpdateAlbum.Click += btnUpdateAlbum_Click;
             // 
             // cbFilterAlbums
             // 
