@@ -140,6 +140,40 @@ namespace Infrastructure
                 }
             }
         }
+
+        public bool DeleteAlbum(string title, string artist, DateTime releaseDate, string genre)
+        {
+            using (SqlConnection conn = DbConnection.GetSqlConnection())
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"DELETE FROM [Albums] WHERE Title = @Title AND Artist = @Artist AND Date = @ReleaseDate AND Genre = @Genre";
+
+                cmd.Parameters.AddWithValue("@Title", title);
+                cmd.Parameters.AddWithValue("@Artist", artist);
+                // This converts DateTime to string in the format "yyyy-MM-dd HH:mm:ss.fff" so that it works with the database
+                string releaseDateString = releaseDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                cmd.Parameters.AddWithValue("@ReleaseDate", releaseDateString);
+
+                // This converts the genre enum to a string to pass it to Database
+                string genreString = genre.ToString();
+                cmd.Parameters.AddWithValue("@Genre", genreString);
+
+                try
+                {
+                    conn.Open();
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    return rowsAffected > 0;
+                }
+                catch (SqlException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return false;
+                }
+            }
+        }
+
     }
 
 }

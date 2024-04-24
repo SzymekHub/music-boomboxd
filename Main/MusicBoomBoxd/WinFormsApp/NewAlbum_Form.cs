@@ -44,7 +44,6 @@ namespace WinFormsApp
                 cbGenreAlbum.Enabled = false;
                 btnAddPictureAlbum.Enabled = false;
                 btnAddAlbum.Enabled = false;
-                SelectedCoverAlbum.Image = Image.FromFile(selectedImagePath);
             }
         }
 
@@ -97,13 +96,8 @@ namespace WinFormsApp
                 if (exisitingAlbum != null)
                 {
                     albumManager.UpdateAlbum(newAlbum, exisitingAlbum);
-
                 }
-                else
-                {
-                    MessageBox.Show($"Looks like something went worng :( ", "Error", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
-                }
-
+                
                 DialogResult = DialogResult.OK;
                 Close();
             }
@@ -188,7 +182,7 @@ namespace WinFormsApp
                 // This reads the selected image file into a byte array
                 byte[] albumCoverData = File.ReadAllBytes(selectedImagePath);
 
-                // Create and return a new Album object with the provided details
+                // This is a new Album object that returns with the provided details
                 return new Album(
                       tbTitleAlbum.Text,
                       tbArtistAlbum.Text,
@@ -234,31 +228,33 @@ namespace WinFormsApp
 
                 // This reads the selected image file into a byte array
                 byte[] albumCoverData = File.ReadAllBytes(selectedImagePath);
+                
+                // Checks if an existing album is provided
+                if (exisitingAlbum != null)
+                {
+                    // Uses the existing album's date if not modified
+                    DateTime updatedDate = DatePickerAlbum.Value != exisitingAlbum.Date ? DatePickerAlbum.Value : exisitingAlbum.Date;
 
-                albumManager.UpdateAlbum(
-                      new Album(    
-                      tbTitleAlbum.Text,
-                      tbArtistAlbum.Text,
-                      DatePickerAlbum.Value,
-                      (genreType)cbGenreAlbum.SelectedItem,
-                      albumCoverName,
-                      albumCoverData,
-                      albumCoverContentType),
-                      exisitingAlbum
+                    // This is a new Album object that returns with the provided details
+                    return new Album(
+                        tbTitleAlbum.Text,
+                        tbArtistAlbum.Text,
+                        updatedDate,
+                        (genreType)cbGenreAlbum.SelectedItem,
+                        albumCoverName,
+                        albumCoverData,
+                        albumCoverContentType
                     );
-
-                return new Album(
-                      tbTitleAlbum.Text,
-                      tbArtistAlbum.Text,
-                      DatePickerAlbum.Value,
-                      (genreType)cbGenreAlbum.SelectedItem,
-                      albumCoverName,
-                      albumCoverData,
-                      albumCoverContentType);
+                }
+                else
+                {
+                    tsslblNewAlbumForm.Text = "Looks like the existing album is not provided.";
+                    return null;
+                }
             }
             else
             {
-                // Return null if validation fails
+                // Returns null if validation fails
                 return null;
             }
         }

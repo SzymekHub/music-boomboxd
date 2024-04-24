@@ -25,8 +25,9 @@ namespace WinFormsApp
         {
             InitializeComponent();
             //This is for the album page
+            albumManager = am;
+            albumRepository = new AlbumRepository();
             InitializeAlbumManager();
-            // Call SetUpDataGridViewAlbums after ensuring albumManager is not null
             SetUpDataGridViewAlbums();
             PopulateAlbums();
 
@@ -262,10 +263,10 @@ namespace WinFormsApp
         {
             if (dgvAlbums.SelectedRows.Count > 0)
             {
-                // Get the selected album
+                // This gets the selected album
                 Album selectedAlbum = dgvAlbums.SelectedRows[0].DataBoundItem as Album;
 
-                // Open the NewAlbum_Form with the selected albums's information
+                // Opens the NewAlbum_Form with the selected albums's information
                 using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager,selectedAlbum, true))
                 {
                     if (addAlbumForm.ShowDialog() == DialogResult.OK)
@@ -288,21 +289,37 @@ namespace WinFormsApp
 
         private void btnDeleteAlbum_Click(object sender, EventArgs e)
         {
-            // Check if a row is selected
+            // This chekcs if a row is selected
             if (dgvAlbums.SelectedRows.Count > 0)
             {
                 // Get the selected album
                 Album selectedAlbum = dgvAlbums.SelectedRows[0].DataBoundItem as Album;
 
-                // Remove the selected album from the AlbumManager
+                // This removes the selected album from the AlbumManager
                 albumManager.Remove(selectedAlbum);
 
-                // Update the DataGridView
+                // This updates the DataGridView
                 dgvAlbums.DataSource = albumManager.GetArray();
+                
+                // This remvoes the album from the database
+                RemoveAlbumFromDatabase(selectedAlbum);
             }
             else
             {
                 tsslblDashBoardForm.Text = "Please select an Album to delete.";
+            }
+        }
+        private void RemoveAlbumFromDatabase(Album album)
+        {
+            bool success = albumRepository.DeleteAlbum(album.Title, album.Artist, album.Date, album.Genre.ToString());
+
+            if (success)
+            {
+                tsslblDashBoardForm.Text = " The album has been deleted successfully";
+            }
+            else
+            {
+                tsslblDashBoardForm.Text = "Something went wrong when tryig to delete this album";
             }
         }
 
