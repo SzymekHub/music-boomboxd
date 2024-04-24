@@ -34,6 +34,8 @@ namespace WinFormsApp
             if (exisitingAlbum != null)
             {
                 FillFormWithAlbumDetails(exisitingAlbum);
+                //This will load and display the album cover
+                DisplayAlbumCover(exisitingAlbum.AlbumCoverData);
             }
 
             if (view)
@@ -140,7 +142,14 @@ namespace WinFormsApp
             tbArtistAlbum.Text = album.Artist;
             DatePickerAlbum.Value = album.Date;
             cbGenreAlbum.SelectedItem = album.Genre;
-            //Don't know how to do it for the picture. So please do it 
+        }
+
+        private void DisplayAlbumCover(byte[] albumCoverData)
+        {
+            using (MemoryStream ms = new MemoryStream(albumCoverData))
+            {
+                SelectedCoverAlbum.Image = Image.FromStream(ms);
+            }
         }
 
         private void ClearControls()
