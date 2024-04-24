@@ -3,53 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Logic
 {
     public class Song
     {
-        public string ID { get; set; }
-        public string SongTitle { get; set; }
+        public string Title { get; set; }
         public string Artist { get; set; }
-        public DateTime ReleaseDate { get; set; }
-        public genreType GenreType { get; set; }
-        public List<Review> Reviews { get; set; }
-        public List<Comment> Comments { get; set; }
+        public DateTime Date { get; set; }
+        public genreType Genre { get; set; }
+        public string SongCoverName { get; set; }
+        public byte[] SongCoverData { get; set; }
+        public string SongCoverContentType { get; set; }
 
-        public Song(string songTitle, string artist, DateTime releaseDate, genreType genreType, List<Review> reviews, List<Comment> comments)
+        public Song(string title, string artist, DateTime date, genreType genre, string songCoverName, byte[] songCoverData, string songCoverContentType)
         {
-            ID = GenerateID();
-            SongTitle = songTitle;
+            Title = title;
             Artist = artist;
-            ReleaseDate = releaseDate;
-            GenreType = genreType;
-            Reviews = reviews;
-            Comments = comments;
-        }
-        private string GenerateID()
-        {
-            Guid guid = Guid.NewGuid();
-            return guid.ToString();
-        }
-
-        public List<Review> GetReviews()
-        {
-            return Reviews;
-        }
-
-        public List<Comment> GetComments()
-        {
-            return Comments;
-        }
-
-        public void AddReview(Review review)
-        {
-            Reviews.Add(review);
-        }
-
-        public void AddComment(Comment comment)
-        {
-            Comments.Add(comment);
+            Date = date;
+            Genre = genre;
+            SongCoverName = songCoverName;
+            SongCoverData = songCoverData;
+            SongCoverContentType = songCoverContentType;
         }
 
     }

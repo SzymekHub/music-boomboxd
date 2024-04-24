@@ -37,9 +37,11 @@ namespace Infrastructure
                 cmd.Parameters.AddWithValue("@Genre", genreString);
 
                 cmd.Parameters.AddWithValue("@AlbumCoverName", albumDTO.AlbumCoverName);
+
                 //This converts the albumcover to a byte array to pass it to Database
                 byte[] albumCoverData = albumDTO.AlbumCoverData.ToArray();
                 cmd.Parameters.AddWithValue("@AlbumCoverData", albumCoverData); 
+
                 cmd.Parameters.AddWithValue("@AlbumCoverContentType", albumDTO.AlbumCoverContentType);
 
                 

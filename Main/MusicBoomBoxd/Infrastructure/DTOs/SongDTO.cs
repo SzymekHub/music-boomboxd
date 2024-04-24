@@ -12,14 +12,20 @@ namespace Infrastructure.DTOs
         public string SongTitle { get; set; }
         public string Artist { get; set; }
         public DateTime ReleaseDate { get; set; }
-        public string Genre {  get; set; }
+        public string Genre { get; set; }
+        public string SongCoverName { get; set; }
+        public byte[] SongCoverData { get; set; }
+        public string SongCoverContentType { get; set; }
 
-        public SongDTO(string songTitle, string artist, DateTime releaseDate, string genre)
+        public SongDTO(string songTitle, string artist, DateTime releaseDate, string genre, string songCoverName, byte[] songCoverData, string songCoverContentType)
         {
             SongTitle = songTitle;
             Artist = artist;
             ReleaseDate = releaseDate;
             Genre = genre;
+            SongCoverName = songCoverName;
+            SongCoverData = songCoverData;
+            SongCoverContentType = songCoverContentType;
         }
     }
 }

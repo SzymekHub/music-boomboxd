@@ -21,7 +21,12 @@ namespace WinFormsApp
         private static AlbumRepository albumRepository;
         private static List<Album> albumsList = new List<Album>();
 
-        public DashBoard_Form(string adminUsername, AlbumManager am)
+        //For the Song tab
+        private static SongManager songManager;
+        private static SongRepository songRepository;
+        private static List<Song> songList = new List<Song>();
+
+        public DashBoard_Form(string adminUsername, AlbumManager am, SongManager sm)
         {
             InitializeComponent();
             //This is for the album page
@@ -30,6 +35,13 @@ namespace WinFormsApp
             InitializeAlbumManager();
             SetUpDataGridViewAlbums();
             PopulateAlbums();
+
+            //This is for the song page
+            songManager = sm;
+            songRepository = new SongRepository();
+            InitializeSongManager();
+            SetUpDataGridViewSongs();
+            PopulateSongs();
 
             lblHello.Text = $"Hello, {adminUsername}";
             tsslblDashBoardForm.Text = $"Hello, {adminUsername}";
@@ -64,6 +76,11 @@ namespace WinFormsApp
             // Populate DataGridView with albums
             dgvAlbums.DataSource = albumManager.GetArray();
             
+        }
+
+        private void InitializeSongManager()
+        {
+           
         }
 
         private void DashBoard_Form_Load(object sender, EventArgs e)

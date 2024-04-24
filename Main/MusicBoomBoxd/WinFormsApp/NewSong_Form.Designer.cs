@@ -33,12 +33,10 @@
             btnAddPictureSong = new Button();
             lblCoverSong = new Label();
             DatePickerSong = new DateTimePicker();
-            lblRecentSong = new Label();
-            lbRecentSong = new ListBox();
-            CbGenre = new ComboBox();
+            cbGenre = new ComboBox();
             BtnAddSong = new Button();
-            TxtArtistSong = new TextBox();
-            TxtTitleSong = new TextBox();
+            tbArtistSong = new TextBox();
+            tbTitleSong = new TextBox();
             lblDateSong = new Label();
             lblGenreSong = new Label();
             lblArtistSong = new Label();
@@ -46,24 +44,27 @@
             ssNewSongForm = new StatusStrip();
             tsslblNewSongForm = new ToolStripStatusLabel();
             tsslblNewSongFormCSV = new ToolStripStatusLabel();
+            pbLogo = new PictureBox();
+            btnCancel = new Button();
             NewSongPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)SelectedCoverSong).BeginInit();
             ssNewSongForm.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pbLogo).BeginInit();
             SuspendLayout();
             // 
             // NewSongPanel
             // 
             NewSongPanel.BackColor = Color.DarkGray;
+            NewSongPanel.Controls.Add(btnCancel);
+            NewSongPanel.Controls.Add(pbLogo);
             NewSongPanel.Controls.Add(SelectedCoverSong);
             NewSongPanel.Controls.Add(btnAddPictureSong);
             NewSongPanel.Controls.Add(lblCoverSong);
             NewSongPanel.Controls.Add(DatePickerSong);
-            NewSongPanel.Controls.Add(lblRecentSong);
-            NewSongPanel.Controls.Add(lbRecentSong);
-            NewSongPanel.Controls.Add(CbGenre);
+            NewSongPanel.Controls.Add(cbGenre);
             NewSongPanel.Controls.Add(BtnAddSong);
-            NewSongPanel.Controls.Add(TxtArtistSong);
-            NewSongPanel.Controls.Add(TxtTitleSong);
+            NewSongPanel.Controls.Add(tbArtistSong);
+            NewSongPanel.Controls.Add(tbTitleSong);
             NewSongPanel.Controls.Add(lblDateSong);
             NewSongPanel.Controls.Add(lblGenreSong);
             NewSongPanel.Controls.Add(lblArtistSong);
@@ -75,9 +76,9 @@
             // 
             // SelectedCoverSong
             // 
-            SelectedCoverSong.Location = new Point(209, 224);
+            SelectedCoverSong.Location = new Point(172, 9);
             SelectedCoverSong.Name = "SelectedCoverSong";
-            SelectedCoverSong.Size = new Size(88, 74);
+            SelectedCoverSong.Size = new Size(141, 113);
             SelectedCoverSong.SizeMode = PictureBoxSizeMode.Zoom;
             SelectedCoverSong.TabIndex = 34;
             SelectedCoverSong.TabStop = false;
@@ -85,7 +86,7 @@
             // btnAddPictureSong
             // 
             btnAddPictureSong.BackColor = Color.MediumSlateBlue;
-            btnAddPictureSong.Location = new Point(303, 228);
+            btnAddPictureSong.Location = new Point(337, 51);
             btnAddPictureSong.Name = "btnAddPictureSong";
             btnAddPictureSong.Size = new Size(97, 30);
             btnAddPictureSong.TabIndex = 32;
@@ -97,7 +98,7 @@
             // 
             lblCoverSong.AutoSize = true;
             lblCoverSong.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblCoverSong.Location = new Point(86, 224);
+            lblCoverSong.Location = new Point(49, 21);
             lblCoverSong.Name = "lblCoverSong";
             lblCoverSong.Size = new Size(117, 33);
             lblCoverSong.TabIndex = 31;
@@ -107,42 +108,24 @@
             // 
             DatePickerSong.Checked = false;
             DatePickerSong.ImeMode = ImeMode.NoControl;
-            DatePickerSong.Location = new Point(209, 185);
+            DatePickerSong.Location = new Point(172, 169);
             DatePickerSong.Name = "DatePickerSong";
             DatePickerSong.Size = new Size(262, 27);
             DatePickerSong.TabIndex = 30;
             // 
-            // lblRecentSong
+            // cbGenre
             // 
-            lblRecentSong.AutoSize = true;
-            lblRecentSong.Font = new Font("Stencil", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblRecentSong.Location = new Point(19, 273);
-            lblRecentSong.Name = "lblRecentSong";
-            lblRecentSong.Size = new Size(157, 24);
-            lblRecentSong.TabIndex = 22;
-            lblRecentSong.Text = "Recent Adds:";
-            // 
-            // lbRecentSong
-            // 
-            lbRecentSong.FormattingEnabled = true;
-            lbRecentSong.Location = new Point(16, 300);
-            lbRecentSong.Name = "lbRecentSong";
-            lbRecentSong.Size = new Size(686, 64);
-            lbRecentSong.TabIndex = 21;
-            // 
-            // CbGenre
-            // 
-            CbGenre.DropDownStyle = ComboBoxStyle.DropDownList;
-            CbGenre.FormattingEnabled = true;
-            CbGenre.Location = new Point(209, 127);
-            CbGenre.Name = "CbGenre";
-            CbGenre.Size = new Size(262, 28);
-            CbGenre.TabIndex = 20;
+            cbGenre.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbGenre.FormattingEnabled = true;
+            cbGenre.Location = new Point(172, 272);
+            cbGenre.Name = "cbGenre";
+            cbGenre.Size = new Size(262, 28);
+            cbGenre.TabIndex = 20;
             // 
             // BtnAddSong
             // 
             BtnAddSong.BackColor = Color.MediumSlateBlue;
-            BtnAddSong.Location = new Point(538, 98);
+            BtnAddSong.Location = new Point(540, 169);
             BtnAddSong.Name = "BtnAddSong";
             BtnAddSong.Size = new Size(127, 57);
             BtnAddSong.TabIndex = 19;
@@ -150,25 +133,25 @@
             BtnAddSong.UseVisualStyleBackColor = false;
             BtnAddSong.Click += BtnAddSong_Click;
             // 
-            // TxtArtistSong
+            // tbArtistSong
             // 
-            TxtArtistSong.Location = new Point(209, 83);
-            TxtArtistSong.Name = "TxtArtistSong";
-            TxtArtistSong.Size = new Size(262, 27);
-            TxtArtistSong.TabIndex = 17;
+            tbArtistSong.Location = new Point(172, 217);
+            tbArtistSong.Name = "tbArtistSong";
+            tbArtistSong.Size = new Size(262, 27);
+            tbArtistSong.TabIndex = 17;
             // 
-            // TxtTitleSong
+            // tbTitleSong
             // 
-            TxtTitleSong.Location = new Point(209, 30);
-            TxtTitleSong.Name = "TxtTitleSong";
-            TxtTitleSong.Size = new Size(262, 27);
-            TxtTitleSong.TabIndex = 16;
+            tbTitleSong.Location = new Point(172, 128);
+            tbTitleSong.Name = "tbTitleSong";
+            tbTitleSong.Size = new Size(262, 27);
+            tbTitleSong.TabIndex = 16;
             // 
             // lblDateSong
             // 
             lblDateSong.AutoSize = true;
             lblDateSong.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblDateSong.Location = new Point(98, 179);
+            lblDateSong.Location = new Point(61, 165);
             lblDateSong.Name = "lblDateSong";
             lblDateSong.Size = new Size(105, 33);
             lblDateSong.TabIndex = 15;
@@ -178,7 +161,7 @@
             // 
             lblGenreSong.AutoSize = true;
             lblGenreSong.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblGenreSong.Location = new Point(77, 127);
+            lblGenreSong.Location = new Point(40, 267);
             lblGenreSong.Name = "lblGenreSong";
             lblGenreSong.Size = new Size(126, 33);
             lblGenreSong.TabIndex = 14;
@@ -188,7 +171,7 @@
             // 
             lblArtistSong.AutoSize = true;
             lblArtistSong.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblArtistSong.Location = new Point(66, 77);
+            lblArtistSong.Location = new Point(29, 211);
             lblArtistSong.Name = "lblArtistSong";
             lblArtistSong.Size = new Size(137, 33);
             lblArtistSong.TabIndex = 13;
@@ -198,7 +181,7 @@
             // 
             lblTtitleSong.AutoSize = true;
             lblTtitleSong.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTtitleSong.Location = new Point(89, 24);
+            lblTtitleSong.Location = new Point(52, 122);
             lblTtitleSong.Name = "lblTtitleSong";
             lblTtitleSong.Size = new Size(114, 33);
             lblTtitleSong.TabIndex = 12;
@@ -210,9 +193,9 @@
             ssNewSongForm.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             ssNewSongForm.ImageScalingSize = new Size(24, 24);
             ssNewSongForm.Items.AddRange(new ToolStripItem[] { tsslblNewSongForm, tsslblNewSongFormCSV });
-            ssNewSongForm.Location = new Point(0, 430);
+            ssNewSongForm.Location = new Point(0, 432);
             ssNewSongForm.Name = "ssNewSongForm";
-            ssNewSongForm.Size = new Size(797, 24);
+            ssNewSongForm.Size = new Size(797, 22);
             ssNewSongForm.TabIndex = 24;
             ssNewSongForm.Text = "statusStrip1";
             // 
@@ -220,13 +203,34 @@
             // 
             tsslblNewSongForm.ActiveLinkColor = Color.LavenderBlush;
             tsslblNewSongForm.Name = "tsslblNewSongForm";
-            tsslblNewSongForm.Size = new Size(0, 18);
+            tsslblNewSongForm.Size = new Size(0, 16);
             // 
             // tsslblNewSongFormCSV
             // 
             tsslblNewSongFormCSV.ActiveLinkColor = Color.LavenderBlush;
             tsslblNewSongFormCSV.Name = "tsslblNewSongFormCSV";
-            tsslblNewSongFormCSV.Size = new Size(0, 18);
+            tsslblNewSongFormCSV.Size = new Size(0, 16);
+            // 
+            // pbLogo
+            // 
+            pbLogo.Image = Properties.Resources.LogoBlue1;
+            pbLogo.Location = new Point(609, 0);
+            pbLogo.Name = "pbLogo";
+            pbLogo.Size = new Size(109, 90);
+            pbLogo.SizeMode = PictureBoxSizeMode.Zoom;
+            pbLogo.TabIndex = 36;
+            pbLogo.TabStop = false;
+            // 
+            // btnCancel
+            // 
+            btnCancel.BackColor = Color.MediumSlateBlue;
+            btnCancel.Location = new Point(540, 232);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(127, 33);
+            btnCancel.TabIndex = 37;
+            btnCancel.Text = "Cancel";
+            btnCancel.UseVisualStyleBackColor = false;
+            btnCancel.Click += btnCancel_Click;
             // 
             // NewSong_Form
             // 
@@ -244,6 +248,7 @@
             ((System.ComponentModel.ISupportInitialize)SelectedCoverSong).EndInit();
             ssNewSongForm.ResumeLayout(false);
             ssNewSongForm.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pbLogo).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -251,12 +256,10 @@
         #endregion
 
         private Panel NewSongPanel;
-        private Label lblRecentSong;
-        private ListBox lbRecentSong;
-        private ComboBox CbGenre;
+        private ComboBox cbGenre;
         private Button BtnAddSong;
-        private TextBox TxtArtistSong;
-        private TextBox TxtTitleSong;
+        private TextBox tbArtistSong;
+        private TextBox tbTitleSong;
         private Label lblDateSong;
         private Label lblGenreSong;
         private Label lblArtistSong;
@@ -268,5 +271,7 @@
         private StatusStrip ssNewSongForm;
         private ToolStripStatusLabel tsslblNewSongForm;
         private ToolStripStatusLabel tsslblNewSongFormCSV;
+        private PictureBox pbLogo;
+        private Button btnCancel;
     }
 }
