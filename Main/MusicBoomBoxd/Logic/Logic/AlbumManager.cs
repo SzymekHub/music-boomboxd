@@ -54,7 +54,7 @@ namespace Logic
             // Parse the genre string back to the enum type
             if (Enum.TryParse(typeof(genreType), genreString, out object genre))
             {
-                // Create an AlbumDTO object
+                // this converts Album to AlbumDTO
                 AlbumDTO albumDTO = new AlbumDTO(
                     album.Title,
                     album.Artist,
@@ -67,6 +67,7 @@ namespace Logic
 
                 // This calls the InsertAlbum method with the album DTO
                 _albumRepository.InsertAlbum(albumDTO);
+                // This adds the albumt to the List<Album>
                 albums.Add(album);
             }
         }
@@ -83,14 +84,42 @@ namespace Logic
 
         public void UpdateAlbum(Album newAlbum, Album oldAlbum)
         {
-            int index = albums.FindIndex(alb => alb == oldAlbum);
-            if (index != -1)
+            // These are AlbumDTO objects for the new and old albums
+            AlbumDTO newAlbumDTO = new AlbumDTO(
+                newAlbum.Title,
+                newAlbum.Artist,
+                newAlbum.Date,
+                newAlbum.Genre.ToString(),
+                newAlbum.AlbumCoverName,
+                newAlbum.AlbumCoverData,
+                newAlbum.AlbumCoverContentType
+            );
+
+            AlbumDTO oldAlbumDTO = new AlbumDTO(
+                oldAlbum.Title,
+                oldAlbum.Artist,
+                oldAlbum.Date,
+                oldAlbum.Genre.ToString(),
+                oldAlbum.AlbumCoverName,
+                oldAlbum.AlbumCoverData,
+                oldAlbum.AlbumCoverContentType
+            );
+
+            // This calls the repository method to update the album
+            bool success = _albumRepository.UpdateAlbum(newAlbumDTO, oldAlbumDTO);
+
+            if (success)
             {
-                albums[index] = newAlbum;
+                // If the update was successful, this updates the album in the list
+                int index = albums.FindIndex(a => a == oldAlbum);
+                if (index != -1)
+                {
+                    albums[index] = newAlbum;
+                }
             }
             else
             {
-                Console.WriteLine("Something went wrong when updating the album");
+                Console.WriteLine("Looks like something went wrong when updating the album in the database :(");
             }
         }
     }

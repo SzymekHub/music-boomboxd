@@ -65,8 +65,6 @@ namespace WinFormsApp
             
         }
 
-
-
         private void DashBoard_Form_Load(object sender, EventArgs e)
         {
             tcDashBoard.ItemSize = new Size(0, 1);

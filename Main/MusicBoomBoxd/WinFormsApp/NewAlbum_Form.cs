@@ -44,6 +44,7 @@ namespace WinFormsApp
                 cbGenreAlbum.Enabled = false;
                 btnAddPictureAlbum.Enabled = false;
                 btnAddAlbum.Enabled = false;
+                SelectedCoverAlbum.Image = Image.FromFile(selectedImagePath);
             }
         }
 
@@ -55,13 +56,12 @@ namespace WinFormsApp
 
         private void BtnAddAlbum_Click(object sender, EventArgs e)
         {
-            //this validates the input data
             if (ValidateForm())
             {
                 // This gets the file name from the selected image path
                 string albumCoverName = Path.GetFileName(selectedImagePath);
 
-                // this gets the content type based on the file extension
+                // This gets the content type based on the file extension
                 string albumCoverContentType = "";
                 string extension = Path.GetExtension(selectedImagePath);
                 if (extension != null)
@@ -94,15 +94,21 @@ namespace WinFormsApp
                       albumCoverContentType
                 );
 
+                if (exisitingAlbum != null)
+                {
+                    albumManager.UpdateAlbum(newAlbum, exisitingAlbum);
 
-                // Set the NewAlbum property to the newly created album
-                albumManager.UpdateAlbum(newAlbum, exisitingAlbum);
+                }
+                else
+                {
+                    MessageBox.Show($"Looks like something went worng :( ", "Error", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                }
 
-                // Close the form and return DialogResult.OK
                 DialogResult = DialogResult.OK;
                 Close();
             }
         }
+
 
         private void btnAddPictureAlbum_Click(object sender, EventArgs e)
         {
@@ -128,7 +134,7 @@ namespace WinFormsApp
                     // Stores the selected image path
                     selectedImagePath = selectedFile;
 
-                    // This will load and display the image if needed
+                    // This will load and display the image
                     SelectedCoverAlbum.Image = Image.FromFile(selectedImagePath);
                 }
             }

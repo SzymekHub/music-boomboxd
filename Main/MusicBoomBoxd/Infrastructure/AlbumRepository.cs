@@ -93,5 +93,53 @@ namespace Infrastructure
             }
             return recentAlbums;
         }
+
+        public bool UpdateAlbum(AlbumDTO newAlbumDTO, AlbumDTO oldAlbumDTO)
+        {
+            using (SqlConnection conn = DbConnection.GetSqlConnection())
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"UPDATE [Albums] SET Title = @Title, Artist = @Artist, Date = @ReleaseDate, Genre = @Genre, AlbumCoverName = @AlbumCoverName, AlbumCoverData = @AlbumCoverData, AlbumCoverContentType = @AlbumCoverContentType
+                                WHERE Title = @OldTitle AND Artist = @OldArtist AND Date = @OldReleaseDate AND Genre = @OldGenre";
+
+                cmd.Parameters.AddWithValue("@Title", newAlbumDTO.AlbumTitle);
+                cmd.Parameters.AddWithValue("@Artist", newAlbumDTO.Artist);
+
+                // This converts DateTime to string in the format "yyyy-MM-dd HH:mm:ss.fff" so that it works with the databse
+                string releaseDateString = newAlbumDTO.ReleaseDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                cmd.Parameters.AddWithValue("@ReleaseDate", releaseDateString);
+
+                // This converts the genre enum to a string to pass it to Database
+                string genreString = newAlbumDTO.Genre.ToString();
+                cmd.Parameters.AddWithValue("@Genre", genreString);
+                cmd.Parameters.AddWithValue("@AlbumCoverName", newAlbumDTO.AlbumCoverName);
+
+                //This converts the albumcover to a byte array to pass it to Database
+                byte[] albumCoverData = newAlbumDTO.AlbumCoverData.ToArray();
+                cmd.Parameters.AddWithValue("@AlbumCoverData", albumCoverData);
+                cmd.Parameters.AddWithValue("@AlbumCoverContentType", newAlbumDTO.AlbumCoverContentType);
+
+                // Parameters for old album to find it in the database
+                cmd.Parameters.AddWithValue("@OldTitle", oldAlbumDTO.AlbumTitle);
+                cmd.Parameters.AddWithValue("@OldArtist", oldAlbumDTO.Artist);
+                cmd.Parameters.AddWithValue("@OldReleaseDate", oldAlbumDTO.ReleaseDate);
+                cmd.Parameters.AddWithValue("@OldGenre", oldAlbumDTO.Genre.ToString());
+
+                try
+                {
+                    conn.Open();
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    return rowsAffected > 0;
+                }
+                catch (SqlException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return false;
+                }
+            }
+        }
     }
+
 }
