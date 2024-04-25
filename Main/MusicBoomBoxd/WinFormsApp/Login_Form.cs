@@ -8,6 +8,7 @@ namespace WinFormsApp
         private const string AdminPassword = "p";
         private static AlbumManager albumManager;
         private static SongManager songManager;
+        private static UserManager userManager;
 
 
         public Login_Form()
@@ -24,7 +25,7 @@ namespace WinFormsApp
 
             if (enteredUsername == AdminUsername && enteredPassword == AdminPassword)
             {
-                DashBoard_Form dash_form = new DashBoard_Form(AdminUsername, albumManager, songManager);
+                DashBoard_Form dash_form = new DashBoard_Form(AdminUsername, albumManager, songManager, userManager);
                 dash_form.Owner = this;
                 dash_form.Text = "Hello" + AdminUsername;
                 this.Visible = false;

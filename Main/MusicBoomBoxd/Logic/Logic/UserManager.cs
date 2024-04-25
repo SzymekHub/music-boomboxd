@@ -10,13 +10,71 @@ namespace Logic
 {
     public class UserManager
     {
-        UserRepository userRepository = new UserRepository();
         private List<User> _users;
+        private readonly UserRepository _userRepository;
+        private readonly LoadUsersFromDataBase _loadUsersFromDataBase;
 
-        public UserManager()
+        public UserManager(LoadUsersFromDataBase loadUsersFromDataBase)
         {
-            // Initialize an empty list of users
             _users = new List<User>();
+            _loadUsersFromDataBase = loadUsersFromDataBase;
+            _userRepository = new UserRepository();
+        }
+
+        public void LoadUsersFromDataBase()
+        {
+            List<UserDTO> userDTOs = _loadUsersFromDataBase.LoadAllUsers();
+            foreach (var userDTO in userDTOs)
+            {
+                //This converts UserDTO to Users and adds to the songs list
+                User user = ConvertToUser(userDTO);
+                _users.Add(user);
+            }
+        }
+
+        private User ConvertToUser(UserDTO userDTO)
+        {
+            //this converts UserDto to users
+            return new User(
+                userDTO.UserName,
+                userDTO.Password,
+                userDTO.Email,
+                (userType)Enum.Parse(typeof(userType), userDTO.UserType),
+                userDTO.Birthday,
+                (genreType)Enum.Parse(typeof(genreType), userDTO.FavGenre),
+                userDTO.ProfilePictureName,
+                userDTO.ProfilePictureData,
+                userDTO.ProfilePictureContentType
+                );
+        }
+
+        public void Add(User user)
+        {
+            //Converts the genre enum to a string 
+            string genreString = user.FavGenre.ToString();
+            
+            //Converts the user enum to a string 
+            string userString = user.UserType.ToString();
+
+            if (Enum.TryParse(typeof(genreType), genreString, out object genre) && Enum.TryParse(typeof(userType), userString, out object usertype))
+            {
+                // this converts User to UserDTO
+                UserDTO userDTO = new UserDTO(
+                        user.UserName,
+                        user.Password,
+                        user.Email,
+                        userString,
+                        user.Birthday,
+                        genreString,
+                        user.ProfilePictureName,
+                        user.ProfilePictureData,
+                        user.ProfilePictureContentType
+                    );
+
+                SendToTheDb(userDTO);
+                // Add the user to the list of users
+                _users.Add(user);
+            }
         }
 
         public User[] GetArray()
@@ -24,72 +82,54 @@ namespace Logic
             return _users.ToArray();
         }
 
-        // Method to add a new user
-        public void AddUser(User user)
+        public bool Remove(User user)
         {
-            // Assign a unique ID to the user
-            user.UserID = GenerateUniqueId();
-
-            // Add the user to the list of users
-            _users.Add(user);
+            return _users.Remove(user);
         }
 
         // Method to update an existing user
-        public void UpdateUser(User user)
+        public void UpdateUser(User newUser, User oldUser)
         {
-            // Find the user in the list by ID
-            User existingUser = _users.FirstOrDefault(u => u.UserID == user.UserID);
+            //These are UserDTO object for the new and old users
+            UserDTO newUserDTO = new UserDTO(
+                    newUser.UserName,
+                    newUser.Password,
+                    newUser.Email,
+                    newUser.UserType.ToString(),
+                    newUser.Birthday,
+                    newUser.FavGenre.ToString(),
+                    newUser.ProfilePictureName,
+                    newUser.ProfilePictureData,
+                    newUser.ProfilePictureContentType
+                );
 
-            if (existingUser != null)
+            UserDTO oldUserDTO = new UserDTO(
+                    oldUser.UserName,
+                    oldUser.Password,
+                    oldUser.Email,
+                    oldUser.UserType.ToString(),
+                    oldUser.Birthday,
+                    oldUser.FavGenre.ToString(),
+                    oldUser.ProfilePictureName,
+                    oldUser.ProfilePictureData,
+                    oldUser.ProfilePictureContentType
+                );
+
+            //This calls the repository method to update the User
+            bool success = _userRepository.UpdateUser(newUserDTO, oldUserDTO);
+            
+            if (success)
             {
-                // Update user details
-                existingUser.UserName = user.UserName;
-                existingUser.Email = user.Email;
+                int index = _users.FindIndex(u => u == oldUser);
+                if (index != 1)
+                {
+                    _users[index] = newUser;
+                }
             }
             else
             {
-                throw new ArgumentException("User not found");
+                Console.WriteLine("Looks like something went wrong when updating the User in the database :(");
             }
-        }
-
-        // Method to delete a user
-        public void DeleteUser(int userId)
-        {
-            // Find and remove the user from the list by ID
-            User userToRemove = _users.FirstOrDefault(u => u.UserID == userId);
-
-            if (userToRemove != null)
-            {
-                _users.Remove(userToRemove);
-            }
-            else
-            {
-                throw new ArgumentException("User not found");
-            }
-        }
-
-        public List<User> GetAllUsers()
-        {
-            return _users;
-        }
-
-        // Method to search for users by username or email
-        public List<User> SearchUsers(string searchText)
-        {
-            return _users.Where(u => u.UserName.Contains(searchText) || u.Email.Contains(searchText)).ToList();
-        }
-
-        // Method to generate a unique ID for new users
-        private int GenerateUniqueId()
-        {
-            // If there are no users, return 1 as the first ID
-            if (_users.Count == 0)
-            {
-                return 1;
-            }
-
-            // Otherwise, find the maximum ID and add 1 to it
-            return _users.Max(u => u.UserID) + 1;
         }
 
         public bool SendToTheDb(UserDTO newUser)
@@ -98,7 +138,7 @@ namespace Logic
 
             newUser.Password = HashedPassword;  
 
-            return userRepository.InsertUser(newUser);
+            return _userRepository.InsertUser(newUser);
 
         }
 

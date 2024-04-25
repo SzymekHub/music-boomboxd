@@ -14,44 +14,270 @@ namespace WinFormsApp
 {
     public partial class NewUsers_Form : Form
     {
-        private List<User> allUsers;
+        public User NewUser { get; private set; }
+        private User exisitingUser;
+        private UserManager userManager;
+        private string selectedImagePath;
 
-        public NewUsers_Form()
+        public NewUsers_Form(UserManager um, User user = null, bool view = false)
         {
+            userManager = um;
             InitializeComponent();
-            chklbFavGenre.DataSource = (Enum.GetValues(typeof(genreType)));
-            CbUserType.DataSource = (Enum.GetValues(typeof(userType)));
+            InitializeComboBox();
+            ClearControls();
             this.StartPosition = FormStartPosition.CenterScreen;
+
+            if (exisitingUser != null)
+            {
+                FillFormWithUserDetails(exisitingUser);
+                //This will load and display the User profile picture
+                DisplayProfilePicture(exisitingUser.ProfilePictureData);
+            }
+
+            if (view)
+            {
+                tbNameUser.Enabled = false;
+                tbPassword.Enabled = false;
+                tbEmailUser.Enabled = false;
+                dtpUser.Enabled = false;
+                cbUserType.Enabled = false;
+                chklbFavGenre.Enabled = false;
+                btnAddPictureAlbum.Enabled = false;
+                btnAddUser.Enabled = false;
+            }
         }
 
-        private void Users_Form_FormClosed(object sender, FormClosedEventArgs e)
+        private void btnCancel_Click(object sender, EventArgs e)
         {
-            Owner.Visible = true;
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
         }
-
         private void BtnAddUser_Click(object sender, EventArgs e)
         {
             if (ValidateInput())
             {
+                //This gets the file name from the selected image path
+                string profilePictureName = Path.GetFileName(selectedImagePath);
+                //This gets the content type based on the file extension
+                string profilePictureContentType = "";
+                string extension = Path.GetExtension(selectedImagePath);
+                if (extension != null)
+                {
+                    switch (extension.ToLower())
+                    {
+                        case ".jpg":
+                            profilePictureContentType = "image/jpeg";
+                            break;
+                        case ".png":
+                            profilePictureContentType = "image/png";
+                            break;
+                        default:
+                            tsslblNewUserForm.Text = $"Wrong format!";
+                            break;
+                    }
+                }
 
+                //This reads the selected image file into a byte array
+                byte[] profilePictureData = File.ReadAllBytes(selectedImagePath);
+
+                //This creates a new User Object with the provided details
+                User newUser = new User(
+                    tbNameUser.Text,
+                    tbPassword.Text,
+                    tbEmailUser.Text,
+                    (userType)cbUserType.SelectedItem,
+                    dtpUser.Value,
+                    (genreType)chklbFavGenre.SelectedItem,
+                    profilePictureName,
+                    profilePictureData,
+                    profilePictureContentType
+                    );
+
+                if (exisitingUser != null)
+                {
+                    userManager.UpdateUser(newUser, exisitingUser);
+                }
+                //userManager.Add(newUser);
+
+                DialogResult = DialogResult.OK;
+                Close();
             }
         }
 
         private void btnAddPictureAlbum_Click(object sender, EventArgs e)
         {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Image Files (*.jpg, *.png)|*.jpg;*.png|All Files (*.*)|*.*";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.Multiselect = false;
 
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string selectedFile = openFileDialog.FileName;
+
+                    // Checks if the selected file has a valid image extension
+                    string extension = Path.GetExtension(selectedFile);
+                    if (extension != ".jpg" && extension != ".png")
+                    {
+                        tsslblNewUserForm.Text = $"Please select an image file with .jpg or .png extension.";
+
+                        return;
+                    }
+
+                    // Stores the selected image path
+                    selectedImagePath = selectedFile;
+
+                    // This will load and display the image if needed
+                    SelectedProfileUser.Image = Image.FromFile(selectedImagePath);
+                }
+            }
+        }
+        private void FillFormWithUserDetails(User user)
+        {
+            tbNameUser.Text = user.UserName;
+            tbEmailUser.Text = user.Email;
+            tbPassword.Text = user.Password;
+            cbUserType.SelectedItem = user.UserType;
+            dtpUser.Value = user.Birthday;
+            chklbFavGenre.SelectedItem = user.FavGenre;
+        }
+        private void DisplayProfilePicture(byte[] profilePictureData)
+        {
+            using (MemoryStream ms = new MemoryStream(profilePictureData))
+            {
+                SelectedProfileUser.Image = Image.FromStream(ms);
+            }
+        }
+
+        private void ClearControls()
+        {
+            tbNameUser.Clear();
+            tbEmailUser.Clear();
+            tbPassword.Clear();
+            cbUserType.SelectedIndex = 0;
+            dtpUser.Value = DateTime.Now;
+            chklbFavGenre.SelectedIndex = 0;
+            selectedImagePath = null;
+            SelectedProfileUser.Image = null;
+        }
+
+        public User GetNewUser()
+        {
+            if (ValidateInput())
+            {
+                //Gets the file name form the selected image path
+                string profilePictureName = Path.GetFileName(selectedImagePath);
+
+                //Gets the content type based on the file extension
+                string profilePictureContentType = "";
+                string extension = Path.GetExtension(selectedImagePath);
+                if (extension != null)
+                {
+                    switch (extension.ToLower())
+                    {
+                        case ".jpg":
+                            profilePictureContentType = "image/jpeg";
+                            break;
+                        case ".png":
+                            profilePictureContentType = "image/png";
+                            break;
+                        default:
+                            tsslblNewUserForm.Text = $"Wrong format!";
+                            break;
+                    }
+                }
+
+                // This reads the selected image file into a byte array
+                byte[] profilePictureData = File.ReadAllBytes(selectedImagePath);
+
+                // This is a new User object that returns with the provided details
+                return new User(
+                     tbNameUser.Text,
+                     tbPassword.Text,
+                     tbEmailUser.Text,
+                     (userType)cbUserType.SelectedItem,
+                     dtpUser.Value,
+                     (genreType)chklbFavGenre.SelectedItem,
+                     profilePictureName,
+                     profilePictureData,
+                     profilePictureContentType
+                    );
+            }
+            else
+            {
+                // Return null if validation fails
+                return null;
+            }
+        }
+
+        public User GetUpdatedUser()
+        {
+            if (ValidateInput())
+            {
+                // Get the file name from the selected image path
+                string profilePictureName = Path.GetFileName(selectedImagePath);
+
+                // Get the content type based on the file extension
+                string profilePictureContentType = "";
+                string extension = Path.GetExtension(selectedImagePath);
+                if (extension != null)
+                {
+                    switch (extension.ToLower())
+                    {
+                        case ".jpg":
+                            profilePictureContentType = "image/jpeg";
+                            break;
+                        case ".png":
+                            profilePictureContentType = "image/png";
+                            break;
+                        default:
+                            tsslblNewUserForm.Text = $"Wrong format!";
+                            break;
+                    }
+                }
+
+                // This reads the selected image file into a byte array
+                byte[] profilePictureData = File.ReadAllBytes(selectedImagePath);
+
+                //Checks if an existing User is provided
+                if (exisitingUser != null)
+                {
+                    return new User(
+                         tbNameUser.Text,
+                         tbPassword.Text,
+                         tbEmailUser.Text,
+                         (userType)cbUserType.SelectedItem,
+                         dtpUser.Value,
+                         (genreType)chklbFavGenre.SelectedItem,
+                         profilePictureName,
+                         profilePictureData,
+                         profilePictureContentType
+                        );
+                }
+                else
+                {
+                    tsslblNewUserForm.Text = "Looks like the existing song is not provided.";
+                    return null; 
+                }
+            }
+            else
+            {
+                // Returns null if validation fails
+                return null;
+            }
         }
         public bool ValidateInput()
         {
             //Validate UserName
-            if (string.IsNullOrWhiteSpace(TxtNameUser.Text))
+            if (string.IsNullOrWhiteSpace(tbNameUser.Text))
             {
                 tsslblNewUserForm.Text = $"Every User needs a name";
                 return false;
             }
 
             //Validate User Email
-            if (string.IsNullOrWhiteSpace(TxtEmailUser.Text) || !IsValidEmail(TxtEmailUser.Text))
+            if (string.IsNullOrWhiteSpace(tbEmailUser.Text) || !IsValidEmail(tbEmailUser.Text))
             {
                 tsslblNewUserForm.Text = $"Please enter a valid email address";
                 return false;
@@ -62,7 +288,7 @@ namespace WinFormsApp
             {
                 tsslblNewUserForm.Text = $"Please select a realisitc birthdate";
                 return false;
-            } 
+            }
 
             //Validate favorite Genre
             if (chklbFavGenre.SelectedItems == null)
@@ -74,6 +300,14 @@ namespace WinFormsApp
             // All validation passes, return true
             return true;
         }
+
+        public void InitializeComboBox()
+        {
+            chklbFavGenre.DataSource = (Enum.GetValues(typeof(genreType)));
+
+            cbUserType.DataSource = (Enum.GetValues(typeof(userType)));
+        }
+
         private bool IsValidEmail(string email)
         {
             try
@@ -86,5 +320,14 @@ namespace WinFormsApp
                 return false;
             }
         }
+
+        private void Users_Form_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (Owner != null)
+            {
+                Owner.Visible = true;
+            }
+        }
+
     }
 }

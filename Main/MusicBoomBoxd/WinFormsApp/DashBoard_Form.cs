@@ -15,6 +15,10 @@ namespace WinFormsApp
 {
     public partial class DashBoard_Form : Form
     {
+        //for the User tab
+        private static UserManager userManager;
+        private static UserRepository userRepository;
+        private static List<User> userList = new List<User>();
 
         //for the Album tab
         private static AlbumManager albumManager;
@@ -26,9 +30,16 @@ namespace WinFormsApp
         private static SongRepository songRepository;
         private static List<Song> songList = new List<Song>();
 
-        public DashBoard_Form(string adminUsername, AlbumManager am, SongManager sm)
+        public DashBoard_Form(string adminUsername, AlbumManager am, SongManager sm, UserManager um)
         {
             InitializeComponent();
+            //This is for the user page
+            userManager = um;
+            userRepository = new UserRepository();
+            InitializeUserManager();
+            SetUpDataGridViewUsers();
+            PopulateUsers();
+
             //This is for the album page
             albumManager = am;
             albumRepository = new AlbumRepository();
@@ -57,6 +68,18 @@ namespace WinFormsApp
 
             this.StartPosition = FormStartPosition.CenterScreen;
 
+        }
+
+        private void InitializeUserManager()
+        {
+            // Create an instance of LoadUsersFromDataBase with the UserRepository instance
+            LoadUsersFromDataBase loadUsersFromDataBase = new LoadUsersFromDataBase(userRepository);
+
+            // If userManager is null, create a new instance with the loadUsersFromDataBase instance
+            userManager = new UserManager(loadUsersFromDataBase);
+
+            // Load users from the database
+            userManager.LoadUsersFromDataBase();
         }
 
         private void InitializeAlbumManager()
@@ -150,12 +173,169 @@ namespace WinFormsApp
         }
 
         #region Users
+        private void SetUpDataGridViewUsers()
+        {
+            // Clear existing columns
+            dgvUsers.Columns.Clear();
+
+            // Set DataGridView properties
+            dgvUsers.AutoGenerateColumns = false;
+            dgvUsers.AllowUserToAddRows = false;
+
+            // Add the DataGridView Columns if they don't already exist
+            if (dgvUsers.Columns["UserName"] == null)
+            {
+                dgvUsers.Columns.Add("UserName", "UserName");
+                dgvUsers.Columns["UserName"].DataPropertyName = "UserName";
+            }
+
+            if (dgvUsers.Columns["Email"] == null)
+            {
+                dgvUsers.Columns.Add("Email", "Email");
+                dgvUsers.Columns["Email"].DataPropertyName = "Email";
+            }
+
+            if (dgvUsers.Columns["UserType"] == null)
+            {
+                dgvUsers.Columns.Add("UserType", "UserType");
+                dgvUsers.Columns["UserType"].DataPropertyName = "UserType";
+            }
+
+            if (dgvUsers.Columns["Birthday"] == null)
+            {
+                dgvUsers.Columns.Add("Birthday", "Birthday");
+                dgvUsers.Columns["Birthday"].DataPropertyName = "Birthday";
+            }
+
+            if (dgvUsers.Columns["ProfilePictureName"] == null)
+            {
+                dgvUsers.Columns.Add("ProfilePictureName", "ProfilePictureName");
+                dgvUsers.Columns["ProfilePictureName"].DataPropertyName = "ProfilePictureName";
+            }
+
+            // Bind the list of Users from UserManager to the DataGridView
+            dgvUsers.DataSource = userManager.GetArray();
+        }
+
+        private void PopulateUsers()
+        {
+            //This will populate the form with exisiting users
+            dgvUsers.DataSource = userManager.GetArray();
+        }
+
         private void btnAddUser_Click(object sender, EventArgs e)
         {
-            NewUsers_Form users_form = new NewUsers_Form();
-            users_form.Owner = this;
-            this.Visible = false;
-            users_form.Show();
+            // Open the NewUsers_Form
+            using (NewUsers_Form addUsersForm = new NewUsers_Form(userManager))
+            {
+                // Show the addUsersForm
+                if (addUsersForm.ShowDialog() == DialogResult.OK)
+                {
+                    // Get the newly created User from the addUsersForm
+                    User newUser = addUsersForm.GetNewUser();
+
+                    // Check if a new User was created
+                    if (newUser != null)
+                    {
+                        // Add the new user to the UserManager
+                        userManager.Add(newUser);
+
+                        // Update the DataGridView
+                        dgvUsers.DataSource = userManager.GetArray();
+                    }
+                }
+            }
+        }
+        private void btnUpdateUser_Click(object sender, EventArgs e)
+        {
+            if (dgvUsers.SelectedRows.Count > 0)
+            {
+                // Get the selected User
+                User selectedUser = dgvUsers.SelectedRows[0].DataBoundItem as User;
+
+                // Open the NewUser_Form with the selected Users's information
+                using (NewUsers_Form addUserForm = new NewUsers_Form(userManager, selectedUser))
+                {
+                    if (addUserForm.ShowDialog() == DialogResult.OK)
+                    {
+                        // Update the User with the modified information
+                        User updatedUser = addUserForm.GetUpdatedUser();
+                        if (updatedUser != null)
+                        {
+                            userManager.UpdateUser(updatedUser, selectedUser);
+                            dgvUsers.DataSource = userManager.GetArray();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                tsslblDashBoardForm.Text = "Please select an User to update.";
+            }
+        }
+
+        private void btnViewUser_Click(object sender, EventArgs e)
+        {
+            if (dgvUsers.SelectedRows.Count > 0)
+            {
+                // This gets the selected User
+                User selectedUser = dgvUsers.SelectedRows[0].DataBoundItem as User;
+
+                // Opens the NewUser_Form with the selected Users's information
+                using (NewUsers_Form addUserForm = new NewUsers_Form(userManager, selectedUser, true))
+                {
+                    if (addUserForm.ShowDialog() == DialogResult.OK)
+                    {
+                        // Update the User with the modified information
+                        User updatedUser = addUserForm.GetUpdatedUser();
+                        if (updatedUser != null)
+                        {
+                            userManager.UpdateUser(updatedUser, selectedUser);
+                            dgvUsers.DataSource = userManager.GetArray();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                tsslblDashBoardForm.Text = "Please select an user to view.";
+            }
+        }
+
+        private void btnDeleteUser_Click(object sender, EventArgs e)
+        {
+            // This chekcs if a row is selected
+            if (dgvUsers.SelectedRows.Count > 0)
+            {
+                // Get the selected User
+                User selectedUser = dgvUsers.SelectedRows[0].DataBoundItem as User;
+
+                // This removes the selected user from the userManager
+                userManager.Remove(selectedUser);
+
+                // This updates the DataGridView
+                dgvUsers.DataSource = userManager.GetArray();
+
+                // This remvoes the user from the database
+                RemoveUserFromDatabase(selectedUser);
+            }
+            else
+            {
+                tsslblDashBoardForm.Text = "Please select an User to delete.";
+            }
+        }
+        private void RemoveUserFromDatabase(User user)
+        {
+            bool success = userRepository.DeleteUser(user.UserName, user.Password, user.Email, user.UserType.ToString(), user.Birthday, user.FavGenre.ToString());
+
+            if (success)
+            {
+                tsslblDashBoardForm.Text = "The user has been deleted successfully";
+            }
+            else
+            {
+                tsslblDashBoardForm.Text = "Something went wrong when tryig to delete this user";
+            }
         }
 
         #endregion

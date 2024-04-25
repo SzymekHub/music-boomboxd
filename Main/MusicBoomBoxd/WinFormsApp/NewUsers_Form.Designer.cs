@@ -29,22 +29,25 @@
         private void InitializeComponent()
         {
             NewUserPanel = new Panel();
+            btnCancel = new Button();
             chklbFavGenre = new CheckedListBox();
             dtpUser = new DateTimePicker();
-            label1 = new Label();
+            lblBirthday = new Label();
             lblFavGenre = new Label();
             SelectedProfileUser = new PictureBox();
             btnAddPictureAlbum = new Button();
             lblProfilePicUser = new Label();
-            CbUserType = new ComboBox();
-            BtnAddUser = new Button();
-            TxtEmailUser = new TextBox();
-            TxtNameUser = new TextBox();
+            cbUserType = new ComboBox();
+            btnAddUser = new Button();
+            tbEmailUser = new TextBox();
+            tbNameUser = new TextBox();
             lblUserType = new Label();
             lblEmailUser = new Label();
             lblNameUser = new Label();
             ssNewUserForm = new StatusStrip();
             tsslblNewUserForm = new ToolStripStatusLabel();
+            lblPassword = new Label();
+            tbPassword = new TextBox();
             NewUserPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)SelectedProfileUser).BeginInit();
             ssNewUserForm.SuspendLayout();
@@ -53,17 +56,20 @@
             // NewUserPanel
             // 
             NewUserPanel.BackColor = Color.DarkGray;
+            NewUserPanel.Controls.Add(tbPassword);
+            NewUserPanel.Controls.Add(lblPassword);
+            NewUserPanel.Controls.Add(btnCancel);
             NewUserPanel.Controls.Add(chklbFavGenre);
             NewUserPanel.Controls.Add(dtpUser);
-            NewUserPanel.Controls.Add(label1);
+            NewUserPanel.Controls.Add(lblBirthday);
             NewUserPanel.Controls.Add(lblFavGenre);
             NewUserPanel.Controls.Add(SelectedProfileUser);
             NewUserPanel.Controls.Add(btnAddPictureAlbum);
             NewUserPanel.Controls.Add(lblProfilePicUser);
-            NewUserPanel.Controls.Add(CbUserType);
-            NewUserPanel.Controls.Add(BtnAddUser);
-            NewUserPanel.Controls.Add(TxtEmailUser);
-            NewUserPanel.Controls.Add(TxtNameUser);
+            NewUserPanel.Controls.Add(cbUserType);
+            NewUserPanel.Controls.Add(btnAddUser);
+            NewUserPanel.Controls.Add(tbEmailUser);
+            NewUserPanel.Controls.Add(tbNameUser);
             NewUserPanel.Controls.Add(lblUserType);
             NewUserPanel.Controls.Add(lblEmailUser);
             NewUserPanel.Controls.Add(lblNameUser);
@@ -72,36 +78,47 @@
             NewUserPanel.Size = new Size(718, 373);
             NewUserPanel.TabIndex = 14;
             // 
+            // btnCancel
+            // 
+            btnCancel.BackColor = Color.MediumSlateBlue;
+            btnCancel.Location = new Point(564, 203);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(127, 34);
+            btnCancel.TabIndex = 41;
+            btnCancel.Text = "Cancel";
+            btnCancel.UseVisualStyleBackColor = false;
+            btnCancel.Click += btnCancel_Click;
+            // 
             // chklbFavGenre
             // 
             chklbFavGenre.FormattingEnabled = true;
-            chklbFavGenre.Location = new Point(253, 265);
+            chklbFavGenre.Location = new Point(256, 290);
             chklbFavGenre.Name = "chklbFavGenre";
-            chklbFavGenre.Size = new Size(264, 92);
+            chklbFavGenre.Size = new Size(264, 70);
             chklbFavGenre.TabIndex = 40;
             // 
             // dtpUser
             // 
-            dtpUser.Location = new Point(254, 223);
+            dtpUser.Location = new Point(256, 248);
             dtpUser.Name = "dtpUser";
-            dtpUser.Size = new Size(263, 27);
+            dtpUser.Size = new Size(264, 27);
             dtpUser.TabIndex = 39;
             // 
-            // label1
+            // lblBirthday
             // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(70, 219);
-            label1.Name = "label1";
-            label1.Size = new Size(181, 33);
-            label1.TabIndex = 38;
-            label1.Text = "Birthday :";
+            lblBirthday.AutoSize = true;
+            lblBirthday.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblBirthday.Location = new Point(73, 244);
+            lblBirthday.Name = "lblBirthday";
+            lblBirthday.Size = new Size(181, 33);
+            lblBirthday.TabIndex = 38;
+            lblBirthday.Text = "Birthday :";
             // 
             // lblFavGenre
             // 
             lblFavGenre.AutoSize = true;
             lblFavGenre.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblFavGenre.Location = new Point(63, 265);
+            lblFavGenre.Location = new Point(66, 290);
             lblFavGenre.Name = "lblFavGenre";
             lblFavGenre.Size = new Size(187, 33);
             lblFavGenre.TabIndex = 36;
@@ -109,9 +126,9 @@
             // 
             // SelectedProfileUser
             // 
-            SelectedProfileUser.Location = new Point(257, 32);
+            SelectedProfileUser.Location = new Point(259, 7);
             SelectedProfileUser.Name = "SelectedProfileUser";
-            SelectedProfileUser.Size = new Size(64, 53);
+            SelectedProfileUser.Size = new Size(82, 78);
             SelectedProfileUser.SizeMode = PictureBoxSizeMode.Zoom;
             SelectedProfileUser.TabIndex = 34;
             SelectedProfileUser.TabStop = false;
@@ -119,7 +136,7 @@
             // btnAddPictureAlbum
             // 
             btnAddPictureAlbum.BackColor = Color.MediumSlateBlue;
-            btnAddPictureAlbum.Location = new Point(348, 36);
+            btnAddPictureAlbum.Location = new Point(396, 34);
             btnAddPictureAlbum.Name = "btnAddPictureAlbum";
             btnAddPictureAlbum.Size = new Size(97, 30);
             btnAddPictureAlbum.TabIndex = 32;
@@ -131,51 +148,51 @@
             // 
             lblProfilePicUser.AutoSize = true;
             lblProfilePicUser.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblProfilePicUser.Location = new Point(49, 32);
+            lblProfilePicUser.Location = new Point(51, 30);
             lblProfilePicUser.Name = "lblProfilePicUser";
             lblProfilePicUser.Size = new Size(202, 33);
             lblProfilePicUser.TabIndex = 31;
             lblProfilePicUser.Text = "Profile Pic:";
             // 
-            // CbUserType
+            // cbUserType
             // 
-            CbUserType.DropDownStyle = ComboBoxStyle.DropDownList;
-            CbUserType.FormattingEnabled = true;
-            CbUserType.Location = new Point(254, 172);
-            CbUserType.Name = "CbUserType";
-            CbUserType.Size = new Size(262, 28);
-            CbUserType.TabIndex = 20;
+            cbUserType.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbUserType.FormattingEnabled = true;
+            cbUserType.Location = new Point(256, 202);
+            cbUserType.Name = "cbUserType";
+            cbUserType.Size = new Size(264, 28);
+            cbUserType.TabIndex = 20;
             // 
-            // BtnAddUser
+            // btnAddUser
             // 
-            BtnAddUser.BackColor = Color.MediumSlateBlue;
-            BtnAddUser.Location = new Point(575, 30);
-            BtnAddUser.Name = "BtnAddUser";
-            BtnAddUser.Size = new Size(127, 57);
-            BtnAddUser.TabIndex = 19;
-            BtnAddUser.Text = "Add User";
-            BtnAddUser.UseVisualStyleBackColor = false;
-            BtnAddUser.Click += BtnAddUser_Click;
+            btnAddUser.BackColor = Color.MediumSlateBlue;
+            btnAddUser.Location = new Point(564, 140);
+            btnAddUser.Name = "btnAddUser";
+            btnAddUser.Size = new Size(127, 57);
+            btnAddUser.TabIndex = 19;
+            btnAddUser.Text = "Add User";
+            btnAddUser.UseVisualStyleBackColor = false;
+            btnAddUser.Click += BtnAddUser_Click;
             // 
-            // TxtEmailUser
+            // tbEmailUser
             // 
-            TxtEmailUser.Location = new Point(254, 130);
-            TxtEmailUser.Name = "TxtEmailUser";
-            TxtEmailUser.Size = new Size(262, 27);
-            TxtEmailUser.TabIndex = 17;
+            tbEmailUser.Location = new Point(256, 130);
+            tbEmailUser.Name = "tbEmailUser";
+            tbEmailUser.Size = new Size(264, 27);
+            tbEmailUser.TabIndex = 17;
             // 
-            // TxtNameUser
+            // tbNameUser
             // 
-            TxtNameUser.Location = new Point(254, 91);
-            TxtNameUser.Name = "TxtNameUser";
-            TxtNameUser.Size = new Size(262, 27);
-            TxtNameUser.TabIndex = 16;
+            tbNameUser.Location = new Point(256, 91);
+            tbNameUser.Name = "tbNameUser";
+            tbNameUser.Size = new Size(264, 27);
+            tbNameUser.TabIndex = 16;
             // 
             // lblUserType
             // 
             lblUserType.AutoSize = true;
             lblUserType.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblUserType.Location = new Point(65, 166);
+            lblUserType.Location = new Point(66, 197);
             lblUserType.Name = "lblUserType";
             lblUserType.Size = new Size(188, 33);
             lblUserType.TabIndex = 14;
@@ -185,7 +202,7 @@
             // 
             lblEmailUser.AutoSize = true;
             lblEmailUser.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblEmailUser.Location = new Point(132, 124);
+            lblEmailUser.Location = new Point(133, 124);
             lblEmailUser.Name = "lblEmailUser";
             lblEmailUser.Size = new Size(119, 33);
             lblEmailUser.TabIndex = 13;
@@ -195,7 +212,7 @@
             // 
             lblNameUser.AutoSize = true;
             lblNameUser.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblNameUser.Location = new Point(65, 91);
+            lblNameUser.Location = new Point(66, 91);
             lblNameUser.Name = "lblNameUser";
             lblNameUser.Size = new Size(186, 33);
             lblNameUser.TabIndex = 12;
@@ -219,6 +236,23 @@
             tsslblNewUserForm.ForeColor = Color.LavenderBlush;
             tsslblNewUserForm.Name = "tsslblNewUserForm";
             tsslblNewUserForm.Size = new Size(0, 16);
+            // 
+            // lblPassword
+            // 
+            lblPassword.AutoSize = true;
+            lblPassword.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblPassword.Location = new Point(65, 157);
+            lblPassword.Name = "lblPassword";
+            lblPassword.Size = new Size(187, 33);
+            lblPassword.TabIndex = 42;
+            lblPassword.Text = "Password :";
+            // 
+            // tbPassword
+            // 
+            tbPassword.Location = new Point(256, 163);
+            tbPassword.Name = "tbPassword";
+            tbPassword.Size = new Size(264, 27);
+            tbPassword.TabIndex = 43;
             // 
             // NewUsers_Form
             // 
@@ -246,18 +280,21 @@
         private PictureBox SelectedProfileUser;
         private Button btnAddPictureAlbum;
         private Label lblProfilePicUser;
-        private ComboBox CbUserType;
-        private Button BtnAddUser;
-        private TextBox TxtEmailUser;
-        private TextBox TxtNameUser;
+        private ComboBox cbUserType;
+        private Button btnAddUser;
+        private TextBox tbEmailUser;
+        private TextBox tbNameUser;
         private Label lblUserType;
         private Label lblEmailUser;
         private Label lblNameUser;
         private Label lblFavGenre;
         private CheckedListBox chklbFavGenre;
         private DateTimePicker dtpUser;
-        private Label label1;
+        private Label lblBirthday;
         private StatusStrip ssNewUserForm;
         private ToolStripStatusLabel tsslblNewUserForm;
+        private Button btnCancel;
+        private TextBox tbPassword;
+        private Label lblPassword;
     }
 }

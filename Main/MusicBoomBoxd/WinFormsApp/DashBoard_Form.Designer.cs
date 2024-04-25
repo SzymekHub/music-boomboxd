@@ -335,6 +335,7 @@
             btnDeleteUser.TabIndex = 31;
             btnDeleteUser.Text = "Delete";
             btnDeleteUser.UseVisualStyleBackColor = false;
+            btnDeleteUser.Click += btnDeleteUser_Click;
             // 
             // btnViewUser
             // 
@@ -346,6 +347,7 @@
             btnViewUser.TabIndex = 30;
             btnViewUser.Text = "View";
             btnViewUser.UseVisualStyleBackColor = false;
+            btnViewUser.Click += btnViewUser_Click;
             // 
             // btnUpdateUser
             // 
@@ -357,6 +359,7 @@
             btnUpdateUser.TabIndex = 29;
             btnUpdateUser.Text = "Update";
             btnUpdateUser.UseVisualStyleBackColor = false;
+            btnUpdateUser.Click += btnUpdateUser_Click;
             // 
             // lblFilterUser
             // 
