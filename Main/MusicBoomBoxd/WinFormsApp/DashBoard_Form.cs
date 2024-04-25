@@ -61,9 +61,6 @@ namespace WinFormsApp
 
         private void InitializeAlbumManager()
         {
-            // Create an instance of AlbumRepository
-            AlbumRepository albumRepository = new AlbumRepository();
-
             // Create an instance of LoadAlbumsFromDataBase with the AlbumRepository instance
             LoadAlbumsFromDataBase loadAlbumsFromDataBase = new LoadAlbumsFromDataBase(albumRepository);
 
@@ -72,15 +69,18 @@ namespace WinFormsApp
 
             // Load albums from the database
             albumManager.LoadAlbumsFromDatabase();
-
-            // Populate DataGridView with albums
-            dgvAlbums.DataSource = albumManager.GetArray();
-            
         }
 
         private void InitializeSongManager()
         {
-           
+            // Create an instance of LoadSongsFromDataBase with the SongRepository instance
+            LoadSongsFromDataBase loadSongsFromDataBase = new LoadSongsFromDataBase(songRepository);
+
+            // If SongManager is null, create a new instance with the LoadSongFromDataBase instance
+            songManager = new SongManager(loadSongsFromDataBase);
+
+            // Load songs from the database
+            songManager.LoadSongsFromDataBase();
         }
 
         private void DashBoard_Form_Load(object sender, EventArgs e)
@@ -104,12 +104,6 @@ namespace WinFormsApp
                 }
             }
         }
-
-        private void DashBoard_Form_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            Owner.Visible = true;
-        }
-
 
         private void Button_Click(object sender, EventArgs e)
         {
@@ -150,6 +144,10 @@ namespace WinFormsApp
             }
             this.Close();
         }
+        private void DashBoard_Form_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Owner.Visible = true;
+        }
 
         #region Users
         private void btnAddUser_Click(object sender, EventArgs e)
@@ -163,13 +161,171 @@ namespace WinFormsApp
         #endregion
 
         #region Songs
+        private void SetUpDataGridViewSongs()
+        {
+            // Clear existing columns
+            dgvAlbums.Columns.Clear();
+
+            // Set DataGridView properties
+            dgvSongs.AutoGenerateColumns = false;
+            dgvSongs.AllowUserToAddRows = false;
+
+            // Add the DataGridView Columns if they don't already exist
+            if (dgvSongs.Columns["Title"] == null)
+            {
+                dgvSongs.Columns.Add("Title", "Title");
+                dgvSongs.Columns["Title"].DataPropertyName = "Title";
+            }
+
+            if (dgvSongs.Columns["Artist"] == null)
+            {
+                dgvSongs.Columns.Add("Artist", "Artist");
+                dgvSongs.Columns["Artist"].DataPropertyName = "Artist";
+            }
+
+            if (dgvSongs.Columns["Genre"] == null)
+            {
+                dgvSongs.Columns.Add("Genre", "Genre");
+                dgvSongs.Columns["Genre"].DataPropertyName = "Genre";
+            }
+
+            if (dgvSongs.Columns["Date"] == null)
+            {
+                dgvSongs.Columns.Add("Date", "Date");
+                dgvSongs.Columns["Date"].DataPropertyName = "Date";
+            }
+
+            if (dgvSongs.Columns["SongCoverName"] == null)
+            {
+                dgvSongs.Columns.Add("SongCoverName", "SongCoverName");
+                dgvSongs.Columns["SongCoverName"].DataPropertyName = "SongCoverName";
+            }
+
+            // Bind the list of Songs from SongManager to the DataGridView
+            dgvSongs.DataSource = songManager.GetArray();
+        }
+
+        private void PopulateSongs()
+        {
+            //This will populate the form with exisiting Songs
+            dgvSongs.DataSource = songManager.GetArray();
+        }
+
         private void btnAddSong_Click(object sender, EventArgs e)
         {
-            NewSong_Form music_form = new NewSong_Form();
-            music_form.Owner = this;
-            this.Visible = false;
-            music_form.Show();
+            // Open the NewSong_Form
+            using (NewSong_Form addSongForm = new NewSong_Form(songManager))
+            {
+                // Show the addSongForm
+                if (addSongForm.ShowDialog() == DialogResult.OK)
+                {
+                    // Get the newly created Song from the addSongForm
+                    Song newSong = addSongForm.GetNewSong();
+
+                    // Check if a new Song was created
+                    if (newSong != null)
+                    {
+                        // Add the new employee to the SongManager
+                        songManager.Add(newSong);
+
+                        // Update the DataGridView
+                        dgvSongs.DataSource = songManager.GetArray();
+                    }
+                }
+            }
         }
+        private void btnUpdateSong_Click(object sender, EventArgs e)
+        {
+            if (dgvSongs.SelectedRows.Count > 0)
+            {
+                // Get the selected Song
+                Song selectedSong = dgvSongs.SelectedRows[0].DataBoundItem as Song;
+
+                // Open the NewSong_Form with the selected Songs's information
+                using (NewSong_Form addSongForm = new NewSong_Form(songManager, selectedSong))
+                {
+                    if (addSongForm.ShowDialog() == DialogResult.OK)
+                    {
+                        // Update the Song with the modified information
+                        Song updatedSong = addSongForm.GetUpdatedSong();
+                        if (updatedSong != null)
+                        {
+                            songManager.UpdateSong(updatedSong, selectedSong);
+                            dgvSongs.DataSource = songManager.GetArray();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                tsslblDashBoardForm.Text = "Please select an Song to update.";
+            }
+        }
+
+        private void btnViewSong_Click(object sender, EventArgs e)
+        {
+            if (dgvSongs.SelectedRows.Count > 0)
+            {
+                // This gets the selected Song
+                Song selectedSong = dgvSongs.SelectedRows[0].DataBoundItem as Song;
+
+                // Opens the NewSong_Form with the selected Songs's information
+                using (NewSong_Form addSongForm = new NewSong_Form(songManager, selectedSong, true))
+                {
+                    if (addSongForm.ShowDialog() == DialogResult.OK)
+                    {
+                        // Update the Song with the modified information
+                        Song updatedSong = addSongForm.GetUpdatedSong();
+                        if (updatedSong != null)
+                        {
+                            songManager.UpdateSong(updatedSong, selectedSong);
+                            dgvSongs.DataSource = songManager.GetArray();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                tsslblDashBoardForm.Text = "Please select an Song to view.";
+            }
+        }
+
+        private void btnDeleteSong_Click(object sender, EventArgs e)
+        {
+            // This chekcs if a row is selected
+            if (dgvSongs.SelectedRows.Count > 0)
+            {
+                // Get the selected Song
+                Song selectedSong = dgvSongs.SelectedRows[0].DataBoundItem as Song;
+
+                // This removes the selected song from the SongManager
+                songManager.Remove(selectedSong);
+
+                // This updates the DataGridView
+                dgvSongs.DataSource = songManager.GetArray();
+
+                // This remvoes the song from the database
+                RemoveSongFromDatabase(selectedSong);
+            }
+            else
+            {
+                tsslblDashBoardForm.Text = "Please select an Song to delete.";
+            }
+        }
+        private void RemoveSongFromDatabase(Song song)
+        {
+            bool success = songRepository.DeleteSong(song.Title, song.Artist, song.Date, song.Genre.ToString());
+
+            if (success)
+            {
+                tsslblDashBoardForm.Text = " The song has been deleted successfully";
+            }
+            else
+            {
+                tsslblDashBoardForm.Text = "Something went wrong when tryig to delete this song";
+            }
+        }
+
         #endregion
 
         #region Albums

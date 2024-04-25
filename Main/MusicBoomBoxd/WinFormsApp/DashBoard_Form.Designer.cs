@@ -461,6 +461,7 @@
             btnDelete.TabIndex = 31;
             btnDelete.Text = "Delete";
             btnDelete.UseVisualStyleBackColor = false;
+            btnDelete.Click += btnDeleteSong_Click;
             // 
             // btnView
             // 
@@ -472,6 +473,7 @@
             btnView.TabIndex = 30;
             btnView.Text = "View";
             btnView.UseVisualStyleBackColor = false;
+            btnView.Click += btnViewSong_Click;
             // 
             // btnUpdateSong
             // 
@@ -483,6 +485,7 @@
             btnUpdateSong.TabIndex = 29;
             btnUpdateSong.Text = "Update";
             btnUpdateSong.UseVisualStyleBackColor = false;
+            btnUpdateSong.Click += btnUpdateSong_Click;
             // 
             // cbFilterSongs
             // 
