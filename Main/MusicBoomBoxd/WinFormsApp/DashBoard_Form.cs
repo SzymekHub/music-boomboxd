@@ -164,7 +164,7 @@ namespace WinFormsApp
         private void SetUpDataGridViewSongs()
         {
             // Clear existing columns
-            dgvAlbums.Columns.Clear();
+            dgvSongs.Columns.Clear();
 
             // Set DataGridView properties
             dgvSongs.AutoGenerateColumns = false;

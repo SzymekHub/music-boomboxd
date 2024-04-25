@@ -44,8 +44,6 @@ namespace Infrastructure
 
                 cmd.Parameters.AddWithValue("@AlbumCoverContentType", albumDTO.AlbumCoverContentType);
 
-                
-
                 try
                 {
                     conn.Open();
