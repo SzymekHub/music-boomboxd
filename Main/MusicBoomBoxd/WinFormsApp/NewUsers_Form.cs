@@ -1,14 +1,6 @@
-﻿using Logic;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+﻿using Infrastructure;
+using Infrastructure.DTOs;
+using Logic;
 
 namespace WinFormsApp
 {
@@ -24,6 +16,7 @@ namespace WinFormsApp
             userManager = um;
             InitializeComponent();
             InitializeComboBox();
+            exisitingUser = user;
             ClearControls();
             this.StartPosition = FormStartPosition.CenterScreen;
 
@@ -37,7 +30,7 @@ namespace WinFormsApp
             if (view)
             {
                 tbNameUser.Enabled = false;
-                tbPassword.Enabled = false;
+                tbPassword.Visible = false;
                 tbEmailUser.Enabled = false;
                 dtpUser.Enabled = false;
                 cbUserType.Enabled = false;
@@ -136,6 +129,7 @@ namespace WinFormsApp
         private void FillFormWithUserDetails(User user)
         {
             tbNameUser.Text = user.UserName;
+            tbPassword.Visible = false;
             tbEmailUser.Text = user.Email;
             tbPassword.Text = user.Password;
             cbUserType.SelectedItem = user.UserType;
