@@ -10,25 +10,25 @@ namespace Logic
 {
     public class AlbumManager
     {
-        private List<Album> albums;
+        private List<Album> _albums;
         private readonly AlbumRepository _albumRepository;
-        private readonly LoadAlbums _loadAlbumsFromDataBase;
+        private readonly LoadAlbums _loadAlbums;
 
-        public AlbumManager(LoadAlbums loadAlbumsFromDataBase)
+        public AlbumManager(LoadAlbums loadAlbums)
         {
-            albums = new List<Album>();
-            _loadAlbumsFromDataBase = loadAlbumsFromDataBase;
+           _albums = new List<Album>();
+            _loadAlbums = loadAlbums;
             _albumRepository = new AlbumRepository();
         }
 
         public void LoadAlbumsFromDatabase()
         {
-            List<AlbumDTO> albumDTOs = _loadAlbumsFromDataBase.LoadAllAlbums();
+            List<AlbumDTO> albumDTOs = _loadAlbums.LoadAllAlbums();
             foreach (var albumDTO in albumDTOs)
             {
                 // This converts AlbumDTO to Album and adds to the albums list
                 Album album = ConvertToAlbum(albumDTO);
-                albums.Add(album);
+                _albums.Add(album);
             }
         }
 
@@ -68,18 +68,18 @@ namespace Logic
                 // This calls the InsertAlbum method with the album DTO
                 _albumRepository.InsertAlbum(albumDTO);
                 // This adds the albumt to the List<Album>
-                albums.Add(album);
+                _albums.Add(album);
             }
         }
 
         public Album[] GetArray()
         {
-            return albums.ToArray();
+            return _albums.ToArray();
         }
 
         public bool Remove(Album album)
         {
-            return albums.Remove(album);
+            return _albums.Remove(album);
         }
 
         public void UpdateAlbum(Album newAlbum, Album oldAlbum)
@@ -111,10 +111,10 @@ namespace Logic
             if (success)
             {
                 // If the update was successful, this updates the album in the list
-                int index = albums.FindIndex(a => a == oldAlbum);
+                int index = _albums.FindIndex(a => a == oldAlbum);
                 if (index != -1)
                 {
-                    albums[index] = newAlbum;
+                    _albums[index] = newAlbum;
                 }
             }
             else

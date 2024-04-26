@@ -72,11 +72,11 @@ namespace WinFormsApp
 
         private void InitializeUserManager()
         {
-            // Create an instance of LoadUsersFromDataBase with the UserRepository instance
-            LoadUsers loadUsersFromDataBase = new LoadUsers(userRepository);
+            // Create an instance of LoadUsers with the UserRepository instance
+            LoadUsers loadUsers = new LoadUsers(userRepository);
 
-            // If userManager is null, create a new instance with the loadUsersFromDataBase instance
-            userManager = new UserManager(loadUsersFromDataBase);
+            // If userManager is null, create a new instance with the loadUsers instance
+            userManager = new UserManager(loadUsers);
 
             // Load users from the database
             userManager.LoadUsersFromDataBase();
@@ -84,11 +84,11 @@ namespace WinFormsApp
 
         private void InitializeAlbumManager()
         {
-            // Create an instance of LoadAlbumsFromDataBase with the AlbumRepository instance
-            LoadAlbums loadAlbumsFromDataBase = new LoadAlbums(albumRepository);
+            // Create an instance of LoadAlbums with the AlbumRepository instance
+            LoadAlbums loadAlbums = new LoadAlbums(albumRepository);
 
-            // If albumManager is null, create a new instance with the LoadAlbumsFromDataBase instance
-            albumManager = new AlbumManager(loadAlbumsFromDataBase);
+            // If albumManager is null, create a new instance with the LoadAlbums instance
+            albumManager = new AlbumManager(loadAlbums);
 
             // Load albums from the database
             albumManager.LoadAlbumsFromDatabase();
@@ -96,11 +96,11 @@ namespace WinFormsApp
 
         private void InitializeSongManager()
         {
-            // Create an instance of LoadSongsFromDataBase with the SongRepository instance
-            LoadSongs loadSongsFromDataBase = new LoadSongs(songRepository);
+            // Create an instance of LoadSongs with the SongRepository instance
+            LoadSongs loadSongs = new LoadSongs(songRepository);
 
-            // If SongManager is null, create a new instance with the LoadSongFromDataBase instance
-            songManager = new SongManager(loadSongsFromDataBase);
+            // If SongManager is null, create a new instance with the LoadSong instance
+            songManager = new SongManager(loadSongs);
 
             // Load songs from the database
             songManager.LoadSongsFromDataBase();

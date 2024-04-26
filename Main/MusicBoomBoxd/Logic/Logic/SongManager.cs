@@ -12,18 +12,18 @@ namespace Logic
     {
         private List<Song> _songs;
         private readonly SongRepository _songRepository;
-        private readonly LoadSongs _loadSongsFromDataBase;
+        private readonly LoadSongs _loadSongs;
 
-        public SongManager(LoadSongs loadSongsFromDataBase)
+        public SongManager(LoadSongs loadSongs)
         {
             _songs = new List<Song>();
-            _loadSongsFromDataBase = loadSongsFromDataBase;
+            _loadSongs = loadSongs;
             _songRepository = new SongRepository();
         }
 
         public void LoadSongsFromDataBase()
         {
-            List<SongDTO> songDTOs = _loadSongsFromDataBase.LoadAllSongs();
+            List<SongDTO> songDTOs = _loadSongs.LoadAllSongs();
             foreach (var songDTO in songDTOs)
             {
                 //This converts SongDTO to Songs and adds to the songs list
