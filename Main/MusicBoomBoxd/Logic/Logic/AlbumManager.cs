@@ -12,9 +12,9 @@ namespace Logic
     {
         private List<Album> albums;
         private readonly AlbumRepository _albumRepository;
-        private readonly LoadAlbumsFromDataBase _loadAlbumsFromDataBase;
+        private readonly LoadAlbums _loadAlbumsFromDataBase;
 
-        public AlbumManager(LoadAlbumsFromDataBase loadAlbumsFromDataBase)
+        public AlbumManager(LoadAlbums loadAlbumsFromDataBase)
         {
             albums = new List<Album>();
             _loadAlbumsFromDataBase = loadAlbumsFromDataBase;

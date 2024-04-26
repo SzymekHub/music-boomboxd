@@ -12,9 +12,9 @@ namespace Logic
     {
         private List<Song> _songs;
         private readonly SongRepository _songRepository;
-        private readonly LoadSongsFromDataBase _loadSongsFromDataBase;
+        private readonly LoadSongs _loadSongsFromDataBase;
 
-        public SongManager(LoadSongsFromDataBase loadSongsFromDataBase)
+        public SongManager(LoadSongs loadSongsFromDataBase)
         {
             _songs = new List<Song>();
             _loadSongsFromDataBase = loadSongsFromDataBase;

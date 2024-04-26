@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Logic
 {
-    public class LoadSongsFromDataBase
+    public class LoadSongs
     {
         private readonly SongRepository _songRepository;
 
-        public LoadSongsFromDataBase(SongRepository songRepository)
+        public LoadSongs(SongRepository songRepository)
         {
             _songRepository = songRepository;
         }

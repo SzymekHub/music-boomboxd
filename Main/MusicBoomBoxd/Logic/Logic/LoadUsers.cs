@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Logic
 {
-    public class LoadUsersFromDataBase
+    public class LoadUsers
     {
         private readonly UserRepository _userRepository;
 
-        public LoadUsersFromDataBase(UserRepository userRepository)
+        public LoadUsers(UserRepository userRepository)
         {
             _userRepository = userRepository;
         }

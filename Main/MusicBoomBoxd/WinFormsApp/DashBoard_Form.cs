@@ -73,7 +73,7 @@ namespace WinFormsApp
         private void InitializeUserManager()
         {
             // Create an instance of LoadUsersFromDataBase with the UserRepository instance
-            LoadUsersFromDataBase loadUsersFromDataBase = new LoadUsersFromDataBase(userRepository);
+            LoadUsers loadUsersFromDataBase = new LoadUsers(userRepository);
 
             // If userManager is null, create a new instance with the loadUsersFromDataBase instance
             userManager = new UserManager(loadUsersFromDataBase);
@@ -85,7 +85,7 @@ namespace WinFormsApp
         private void InitializeAlbumManager()
         {
             // Create an instance of LoadAlbumsFromDataBase with the AlbumRepository instance
-            LoadAlbumsFromDataBase loadAlbumsFromDataBase = new LoadAlbumsFromDataBase(albumRepository);
+            LoadAlbums loadAlbumsFromDataBase = new LoadAlbums(albumRepository);
 
             // If albumManager is null, create a new instance with the LoadAlbumsFromDataBase instance
             albumManager = new AlbumManager(loadAlbumsFromDataBase);
@@ -97,7 +97,7 @@ namespace WinFormsApp
         private void InitializeSongManager()
         {
             // Create an instance of LoadSongsFromDataBase with the SongRepository instance
-            LoadSongsFromDataBase loadSongsFromDataBase = new LoadSongsFromDataBase(songRepository);
+            LoadSongs loadSongsFromDataBase = new LoadSongs(songRepository);
 
             // If SongManager is null, create a new instance with the LoadSongFromDataBase instance
             songManager = new SongManager(loadSongsFromDataBase);

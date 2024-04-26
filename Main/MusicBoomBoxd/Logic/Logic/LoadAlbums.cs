@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Logic
 {
-    public class LoadAlbumsFromDataBase
+    public class LoadAlbums
     {
         private readonly AlbumRepository _albumRepository;
 
-        public LoadAlbumsFromDataBase(AlbumRepository albumRepository)
+        public LoadAlbums(AlbumRepository albumRepository)
         {
             _albumRepository = albumRepository;
         }

@@ -12,9 +12,9 @@ namespace Logic
     {
         private List<User> _users;
         private readonly UserRepository _userRepository;
-        private readonly LoadUsersFromDataBase _loadUsersFromDataBase;
+        private readonly LoadUsers _loadUsersFromDataBase;
 
-        public UserManager(LoadUsersFromDataBase loadUsersFromDataBase)
+        public UserManager(LoadUsers loadUsersFromDataBase)
         {
             _users = new List<User>();
             _loadUsersFromDataBase = loadUsersFromDataBase;
