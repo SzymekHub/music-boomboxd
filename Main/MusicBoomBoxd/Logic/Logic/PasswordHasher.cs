@@ -21,5 +21,14 @@ namespace Logic
 
             return hashedPassword;
         }
+
+        public static bool VerifyPassword(string password, string hashedPassword)
+        {
+            // Concatenates pepper with the password
+            string pepperedPassword = password + Pepper;
+
+            // Uses BCrypt.Net's Verify method to verify the password
+            return BCrypt.Net.BCrypt.Verify(pepperedPassword, hashedPassword);
+        }
     }
 }

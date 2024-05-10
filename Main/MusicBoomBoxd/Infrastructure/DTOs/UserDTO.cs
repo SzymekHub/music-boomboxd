@@ -31,5 +31,13 @@ namespace Infrastructure.DTOs
             ProfilePictureData = profilePictureData;
             ProfilePictureContentType = profilePictureContentType;
         }
+
+        public UserDTO(string userName, string password, string email, string userType)
+        {
+            UserName = userName;
+            Password = password;
+            Email = email;
+            UserType = userType;
+        }
     }
 }

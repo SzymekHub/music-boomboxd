@@ -7,42 +7,51 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Security.Claims;
 using Infrastructure;
+using Logic;
 
 namespace WebApp.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly DbConnection _dbConnection;
+        private readonly UserRepository _userRepository;
+        public IndexModel(UserRepository userRepository)
+        {
+            _userRepository = userRepository;
+        }
 
         [BindProperty]
-        public string UserName { get; set; }
+        public string Username { get; set; }
 
         [BindProperty]
         public string Password { get; set; }
 
-        public IndexModel()
-        {
-            _dbConnection = new DbConnection();
-        }
-
         public async Task<IActionResult> OnPostAsync()
         {
-            // Hardcoded Login credentials.
-            if (UserName == "Admin" && Password == "P")
+            var userDTO = _userRepository.GetUserByUsername(Username);
+
+            if (userDTO != null && PasswordHasher.VerifyPassword(Password, userDTO.Password))
             {
-                // this code to create authentication cookie with claims here
-                List<Claim> claims = new List<Claim>();
-                claims.Add(new Claim(ClaimTypes.Name, UserName));
-                claims.Add(new Claim("id", "1"));
+                var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, Username),
+            new Claim(ClaimTypes.Email, userDTO.Email.ToString()), // Use ClaimTypes.Email for email claim
+            // Add other claims as needed
+        };
 
-                //Creation of authetication cookie
+                // Create authentication cookie
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                await HttpContext.SignInAsync(new ClaimsPrincipal(claimsIdentity));
+                var authProperties = new AuthenticationProperties
+                {
+                    // Customize authentication properties if needed
+                };
 
-                return RedirectToPage("/HomePage");
+                await HttpContext.SignInAsync(new ClaimsPrincipal(claimsIdentity), authProperties);
+
+                // Redirect to the profile page after successful login
+                return RedirectToPage("/Profile");
             }
 
-            // Display error message if username or password is empty or incorrect
+            // Display error message if username or password is incorrect
             ModelState.AddModelError(string.Empty, "Invalid username or password");
             return Page();
         }
