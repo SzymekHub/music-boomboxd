@@ -13,55 +13,51 @@ namespace WebApp.Pages
     {
         private readonly UserManager _userManager;
         private readonly UserRepository _userRepository;
-
-
-        // Added a property for handling file upload
-        [BindProperty]
-        public IFormFile ProfilePicture { get; set; }
+        private readonly IWebHostEnvironment _environment;
 
         // Binds the User object
         [BindProperty]
         public Models.User User { get; set; }
 
-        public RegisterModel(UserManager userManager, UserRepository userRepository)
+        // Added a property for handling file upload
+        [BindProperty]
+        public IFormFile ProfilePicture { get; set; }
+
+        public RegisterModel(IWebHostEnvironment environment)
         {
-            _userManager = userManager;
-            _userRepository = userRepository;
+            _environment = environment;
         }
 
         public void OnGet()
         {
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
-            if (ModelState.IsValid)
-            {
-                // Check if a profile picture is uploaded
-                if (ProfilePicture != null && ProfilePicture.Length > 0)
-                {
-                    // Convert profile picture to byte array
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        ProfilePicture.CopyTo(memoryStream);
-                        User.ProfilePictureData = memoryStream.ToArray();
-                        User.ProfilePictureContentType = ProfilePicture.ContentType;
-                        User.ProfilePictureName = ProfilePicture.FileName;
-                    }
-                }
-
-                UserDTO newUser = new UserDTO(User.UserName, User.Password, User.Email, User.UserType, User.Birthday, User.FavGenre, User.ProfilePictureName, User.ProfilePictureData, User.ProfilePictureContentType);
-
-                if (_userManager.SendToTheDb(newUser))
-                {
-                    return RedirectToPage("/Index");
-                }
-                return Page();
-            }
-            else
+            if (!ModelState.IsValid)
             {
                 return Page();
             }
+
+            // Handles file upload
+            if (ProfilePicture != null)
+            {
+                string filePath = Path.Combine(_environment.WebRootPath, "img", ProfilePicture.FileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await ProfilePicture.CopyToAsync(fileStream);
+                }
+
+                User.ProfilePictureContentType = filePath;
+            }
+            //saves user to the Database
+            UserDTO newUser = new UserDTO(User.UserName, User.Password, User.Email, User.UserType, User.Birthday, User.FavGenre, User.ProfilePictureName, User.ProfilePictureData, User.ProfilePictureContentType);
+
+            if (_userManager.SendToTheDb(newUser))
+            {
+                return RedirectToPage("/Index");
+            }
+            return Page();
         }
     }
 }
