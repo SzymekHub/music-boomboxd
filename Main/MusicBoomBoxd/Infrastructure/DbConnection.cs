@@ -4,9 +4,9 @@ namespace Infrastructure
 {
     public class DbConnection
     {
-        private static string _connectionString = "Server=mssqlstud.fhict.local;Database=dbi540927_musicboom;User Id=dbi540927_musicboom;Password=MusicBoom1234;";
+        private readonly string _connectionString = "Server=mssqlstud.fhict.local;Database=dbi540927_musicboom;User Id=dbi540927_musicboom;Password=MusicBoom1234;";
 
-        public static SqlConnection GetSqlConnection()
+        protected SqlConnection GetSqlConnection()
         {
             SqlConnection conn = new SqlConnection(_connectionString);
             return conn;

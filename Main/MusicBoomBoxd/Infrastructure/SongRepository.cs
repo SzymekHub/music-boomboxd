@@ -5,11 +5,11 @@ using System.Data;
 namespace Infrastructure
 {
     // This class is responisble for databse operations related to songs
-    public class SongRepository
+    public class SongRepository : DbConnection
     {
         public bool InsertSong(SongDTO songDTO)
         {
-            using (SqlConnection conn = DbConnection.GetSqlConnection())
+            using (SqlConnection conn = GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand())
             {
                 cmd.Connection = conn;
@@ -56,7 +56,7 @@ namespace Infrastructure
         {
             List<SongDTO> recentSongs = new List<SongDTO>();
 
-            using (SqlConnection conn = DbConnection.GetSqlConnection())
+            using (SqlConnection conn = GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand())
             {
                 cmd.Connection = conn;
@@ -90,7 +90,7 @@ namespace Infrastructure
 
         public bool UpdateSong(SongDTO newSongDTO, SongDTO oldSongDTO)
         {
-            using (SqlConnection conn = DbConnection.GetSqlConnection())
+            using (SqlConnection conn = GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand())
             {
                 cmd.Connection = conn;
@@ -137,7 +137,7 @@ namespace Infrastructure
 
         public bool DeleteSong(string title, string artist, DateTime releaseDate, string genre)
         {
-            using (SqlConnection conn = DbConnection.GetSqlConnection())
+            using (SqlConnection conn = GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand())
             {
                 cmd.Connection = conn;

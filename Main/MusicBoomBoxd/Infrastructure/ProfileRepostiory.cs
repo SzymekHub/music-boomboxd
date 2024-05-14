@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Infrastructure
 {
-    public class ProfileRepostiory
+    public class ProfileRepostiory : DbConnection
     {
         public bool InsertProfile(ProfileDTO profileDTO)
         {
-            using (SqlConnection conn = DbConnection.GetSqlConnection())
+            using (SqlConnection conn = GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand())
             {
                 cmd.Connection = conn;
@@ -41,7 +41,7 @@ namespace Infrastructure
 
         public ProfileDTO GetProfileByEmail(string email)
         {
-            using (SqlConnection conn = DbConnection.GetSqlConnection())
+            using (SqlConnection conn = GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand())
             {
                 cmd.Connection = conn;
@@ -69,7 +69,7 @@ namespace Infrastructure
 
         public bool UpdateProfile(ProfileDTO updatedProfileDTO)
         {
-            using (SqlConnection conn = DbConnection.GetSqlConnection())
+            using (SqlConnection conn = GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand())
             {
                 cmd.Connection = conn;

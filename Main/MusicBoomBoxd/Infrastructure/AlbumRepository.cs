@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Infrastructure
 {
-    public class AlbumRepository
+    public class AlbumRepository : DbConnection
     {
         // This class is responisble for databse operations related to Albums
         public bool InsertAlbum(AlbumDTO albumDTO)
         {
-            using (SqlConnection conn = DbConnection.GetSqlConnection())
+            using (SqlConnection conn = GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand())
             {
                 cmd.Connection = conn;
@@ -62,7 +62,7 @@ namespace Infrastructure
         {
             List<AlbumDTO> recentAlbums = new List<AlbumDTO>();
 
-            using (SqlConnection conn = DbConnection.GetSqlConnection())
+            using (SqlConnection conn = GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand())
             {
                 cmd.Connection = conn;
@@ -96,7 +96,7 @@ namespace Infrastructure
 
         public bool UpdateAlbum(AlbumDTO newAlbumDTO, AlbumDTO oldAlbumDTO)
         {
-            using (SqlConnection conn = DbConnection.GetSqlConnection())
+            using (SqlConnection conn = GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand())
             {
                 cmd.Connection = conn;
@@ -143,7 +143,7 @@ namespace Infrastructure
 
         public bool DeleteAlbum(string title, string artist, DateTime releaseDate, string genre)
         {
-            using (SqlConnection conn = DbConnection.GetSqlConnection())
+            using (SqlConnection conn = GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand())
             {
                 cmd.Connection = conn;

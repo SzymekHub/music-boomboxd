@@ -5,11 +5,11 @@ using System.Data;
 namespace Infrastructure
 {
     // This class is responisble for databse operations related to users
-    public class UserRepository
+    public class UserRepository : DbConnection
     {
         public bool InsertUser(UserDTO userDTO)
         {
-            using (SqlConnection conn = DbConnection.GetSqlConnection())
+            using (SqlConnection conn = GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand()) 
             {
                 cmd.Connection = conn;
@@ -74,7 +74,7 @@ namespace Infrastructure
         {
             List<UserDTO> recentUsers = new List<UserDTO>();
 
-            using (SqlConnection conn = DbConnection.GetSqlConnection())
+            using (SqlConnection conn = GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand())
             {
                 cmd.Connection = conn;
@@ -110,7 +110,7 @@ namespace Infrastructure
 
         public UserDTO GetUserByUsername(string username)
         {
-            using (SqlConnection conn = DbConnection.GetSqlConnection())
+            using (SqlConnection conn = GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand())
             {
                 cmd.Connection = conn;
@@ -144,7 +144,7 @@ namespace Infrastructure
 
         private int GetProfileIdByUserId(int userId)
         {
-            using (SqlConnection conn = DbConnection.GetSqlConnection())
+            using (SqlConnection conn = GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand())
             {
                 cmd.Connection = conn;
@@ -162,7 +162,7 @@ namespace Infrastructure
 
         private void UpdateUserWithProfileId(int userId, int profileId)
         {
-            using (SqlConnection conn = DbConnection.GetSqlConnection())
+            using (SqlConnection conn = GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand())
             {
                 cmd.Connection = conn;
@@ -179,7 +179,7 @@ namespace Infrastructure
 
         public bool UpdateUser(UserDTO newUserDTO, UserDTO oldUserDTO)
         {
-            using (SqlConnection conn = DbConnection.GetSqlConnection())
+            using (SqlConnection conn = GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand())
             {
                 cmd.Connection = conn;
@@ -235,7 +235,7 @@ namespace Infrastructure
 
         public bool DeleteUser(string userName, string password, string email, string userType, DateTime birthday, string favGenre)
         {
-            using (SqlConnection conn = DbConnection.GetSqlConnection())
+            using (SqlConnection conn = GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand())
             {
                 cmd.Connection = conn;
