@@ -8,8 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddSingleton<UserRepository>();
-builder.Services.AddSingleton<ProfileRepostiory>();
-builder.Services.AddSingleton<ProfileManager>();
 builder.Services.AddSingleton<LoadUsers>();
 builder.Services.AddSingleton<UserManager>();
 builder.Services.AddRazorPages();

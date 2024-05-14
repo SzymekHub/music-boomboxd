@@ -47,19 +47,6 @@ namespace Infrastructure
                 try
                 {
                     conn.Open();
-                    int userId = Convert.ToInt32(cmd.ExecuteScalar());
-
-                    // Create a profile for the user
-                    ProfileDTO profileDTO = new ProfileDTO(userId, userDTO.UserName, userDTO.Email, "Default Bio");
-                    ProfileRepostiory profileRepository = new ProfileRepostiory();
-                    profileRepository.InsertProfile(profileDTO);
-
-                    // Retrieve the ProfileId after inserting the profile
-                    int profileId = GetProfileIdByUserId(userId);
-
-                    // Update the ProfileId in the User table
-                    UpdateUserWithProfileId(userId, profileId);
-
                     return true;
                 }
                 catch (SqlException ex)
