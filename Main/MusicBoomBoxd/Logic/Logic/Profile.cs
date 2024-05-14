@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Logic
 {
-    public class Profiles
+    public class Profile
     {
         public int UserId { get; set; }
 

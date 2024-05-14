@@ -1,6 +1,6 @@
 ﻿@page
 @using Infrastructure
-@model WebApp.Pages.RegisterModel
+@model WebApp.Models.User
 @{
     Layout = "_LayoutFormPage";
     ViewData["Forms"] = "Register";
@@ -9,70 +9,48 @@
 <div class="register">
 <h2 class="h2"> Welcome new User!</h2>
 <div class="centered-container">
-        <form id="Register" method="post" enctype="multipart/form-data">
-            <div asp-validation-summary="All" class="text-danger"></div>
-
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
             <div class="form-group">
-                <label for="ProfilePicture" class="label">Profile Picture:<sup>*</sup></label>
-                <input type="file" id="ProfilePicture" name="ProfilePicture" class="form-control-file">
+                <label asp-for="UserName"></label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
-
-        <div class="form-group">
-            <label for="user" class="label" asp-for="User.UserName">Username</label>
-            <span asp-validation-for="User.UserName" style="color:red"></span>
-            <input id="user" type="text" class="input" asp-for="User.UserName">
-        </div>
-        <div class="form-group">
-            <label for="pass" class="label" asp-for="User.Password">Password</label>
-            <span asp-validation-for="User.Password" style="color:red"></span>
-            <input id="pass" type="password" class="input" asp-for="User.Password">
-        </div>
-        <div class="form-group">
-            <label for="pass" class="label" asp-for="User.Email">Email</label>
-            <span asp-validation-for="User.Email" style="color:red"></span>
-            <input id="pass" type="text" class="input" asp-for="User.Email">
-        </div>
-
-        <div class="form-group">
-            <label for="userType" class="label" asp-for="User.UserType">User Type</label>
-            <select id="userType" class="input" asp-for="User.UserType">
-                <option value="Regular">Regular</option>
-                <option value="Critic">Critic</option>
-                <option value="Musician">Musician</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="birthday" class="label" asp-for="User.Birthday">Birthday</label>
-            <input id="birthday" type="date" class="input" asp-for="User.Birthday">
-        </div>
-
-        <div class="form-group">
-            <label for="genre" class="label" asp-for="User.FavGenre">Favorite Genre</label>
-            <select id="genre" class="input" asp-for="User.FavGenre">
-                <option value="Rock">Rock</option>
-                <option value="Reggae">Reggae</option>
-                <option value="Metal">Metal</option>
-                <option value="Rap">Rap</option>
-                <option value="Blues">Blues</option>
-                <option value="HipHop">HipHop</option>
-                <option value="Pop">Pop</option>
-                <option value="ClassicalMusic">ClassicalMusic</option>
-                <option value="Disco">Disco</option>
-                <option value="Folk">Folk</option>
-                <option value="Country">Country</option>
-                <option value="Techno">Techno</option>
-            </select>
-        </div>
-
-            <div class="button-container">
-                <button type="submit" class="button" value="Register">Register</button>
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-    </form>
+            <div class="form-group">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserType"></label>
+                <input asp-for="UserType" class="form-control" />
+                <span asp-validation-for="UserType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Birthday"></label>
+                <input asp-for="Birthday" type="date" class="form-control" />
+                <span asp-validation-for="Birthday" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FavGenre"></label>
+                <input asp-for="FavGenre" class="form-control" />
+                <span asp-validation-for="FavGenre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProfilePictureName"></label>
+                <input asp-for="ProfilePictureName" type="file" class="form-control" />
+                <span asp-validation-for="ProfilePictureName" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </form>
     <a class="login" asp-area="" asp-page="/Index">Already a Member?</a>
 </div>
 
 @section Scripts
 {
-    <partial name="_ValidationScriptsPartial" />
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

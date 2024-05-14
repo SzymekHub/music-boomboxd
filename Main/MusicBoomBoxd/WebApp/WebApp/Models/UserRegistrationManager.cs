@@ -12,13 +12,8 @@ namespace WebApp.Models
             _userManager = userManager;
         }
 
-        public bool RegisterNewUser(User user, Profiles profiles)
+        public bool RegisterNewUser(User user)
         {
-            var newProfile = new ProfileDTO(
-                    profiles.ID,
-                    profiles.Bio
-                );
-
             // Convert Models.User to UserDTO
             var newUser = new UserDTO(
                 user.UserName,
@@ -33,7 +28,7 @@ namespace WebApp.Models
             );
 
             // Send user registration request to UserManager
-            return _userManager.SendToTheDb(newProfile, newUser);
+            return _userManager.SendToTheDb(newUser);
         }
     }
 }

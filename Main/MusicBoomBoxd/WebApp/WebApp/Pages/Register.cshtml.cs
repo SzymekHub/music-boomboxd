@@ -22,7 +22,6 @@ namespace WebApp.Pages
         // Binds the User object
         [BindProperty]
         public Models.User User { get; set; }
-        public Models.Profile profile { get; set; }
 
         public RegisterModel(UserManager userManager, UserRepository userRepository)
         {
@@ -51,10 +50,9 @@ namespace WebApp.Pages
                     }
                 }
 
-                ProfileDTO newProfile = new ProfileDTO(Profiles.);
                 UserDTO newUser = new UserDTO(User.UserName, User.Password, User.Email, User.UserType, User.Birthday, User.FavGenre, User.ProfilePictureName, User.ProfilePictureData, User.ProfilePictureContentType);
 
-                if (_userManager.SendToTheDb(newProfile,newUser))
+                if (_userManager.SendToTheDb(newUser))
                 {
                     return RedirectToPage("/Index");
                 }
