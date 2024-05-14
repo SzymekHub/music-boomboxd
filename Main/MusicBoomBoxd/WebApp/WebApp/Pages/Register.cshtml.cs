@@ -5,13 +5,15 @@ using WebApp.Models;
 using Infrastructure.DTOs;
 using Infrastructure;
 using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace WebApp.Pages
 {
     public class RegisterModel : PageModel
     {
-        private static UserManager userManager;
-        private static UserRepository userRepository;
+        private readonly UserManager _userManager;
+        private readonly UserRepository _userRepository;
+
 
         // Added a property for handling file upload
         [BindProperty]
@@ -20,11 +22,12 @@ namespace WebApp.Pages
         // Binds the User object
         [BindProperty]
         public Models.User User { get; set; }
+        public Models.Profile profile { get; set; }
 
-        public RegisterModel()
+        public RegisterModel(UserManager userManager, UserRepository userRepository)
         {
-            LoadUsers loadUsers = new LoadUsers(userRepository);
-            userManager = new UserManager(loadUsers);
+            _userManager = userManager;
+            _userRepository = userRepository;
         }
 
         public void OnGet()
@@ -48,9 +51,10 @@ namespace WebApp.Pages
                     }
                 }
 
-                UserDTO newUser = new UserDTO(User.UserName, User.Password, User.Email, "Regular_User");
+                ProfileDTO newProfile = new ProfileDTO(Profiles.);
+                UserDTO newUser = new UserDTO(User.UserName, User.Password, User.Email, User.UserType, User.Birthday, User.FavGenre, User.ProfilePictureName, User.ProfilePictureData, User.ProfilePictureContentType);
 
-                if (userManager.SendToTheDb(newUser))
+                if (_userManager.SendToTheDb(newProfile,newUser))
                 {
                     return RedirectToPage("/Index");
                 }

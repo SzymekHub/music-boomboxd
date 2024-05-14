@@ -23,6 +23,8 @@ namespace WinFormsApp
             string enteredUsername = txtUsername.Text;
             string enteredPassword = txtPassword.Text;
 
+            
+
             if (enteredUsername == AdminUsername && enteredPassword == AdminPassword)
             {
                 DashBoard_Form dash_form = new DashBoard_Form(AdminUsername, albumManager, songManager, userManager);

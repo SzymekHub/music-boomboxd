@@ -32,11 +32,11 @@ namespace WebApp.Pages
             if (userDTO != null && PasswordHasher.VerifyPassword(Password, userDTO.Password))
             {
                 var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, Username),
-            new Claim(ClaimTypes.Email, userDTO.Email.ToString()), // Use ClaimTypes.Email for email claim
-            // Add other claims as needed
-        };
+                {
+                    new Claim(ClaimTypes.Name, Username),
+                    new Claim(ClaimTypes.Email, userDTO.Email.ToString()), // Use ClaimTypes.Email for email claim
+                    // Add other claims as needed
+                };
 
                 // Create authentication cookie
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
