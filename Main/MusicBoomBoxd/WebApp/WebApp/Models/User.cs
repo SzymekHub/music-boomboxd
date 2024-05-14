@@ -34,9 +34,6 @@ namespace WebApp.Models
         [Required(ErrorMessage = "Profile Picture Content Type is required")]
         public string ProfilePictureContentType { get; set; }
 
-        // Parameterless constructor
-        public User() { }
-
         public User(string userName, string password, string email, string userType, DateTime birthday, string favGenre, string profilePictureName, byte[] profilePictureData, string profilePictureContentType)
         {
             UserName = userName;
