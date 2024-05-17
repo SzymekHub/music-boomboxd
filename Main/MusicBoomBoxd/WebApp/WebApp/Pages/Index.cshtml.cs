@@ -25,6 +25,8 @@ namespace WebApp.Pages
         [BindProperty]
         public string Password { get; set; }
 
+        // i want ui to handle rules. And logic to validate. Introduce a class manager that validates user  
+
         public async Task<IActionResult> OnPostAsync()
         {
             var userDTO = _userRepository.GetUserByUsername(Username);

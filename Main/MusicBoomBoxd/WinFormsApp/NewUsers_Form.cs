@@ -263,6 +263,8 @@ namespace WinFormsApp
         }
         public bool ValidateInput()
         {
+            //Try implementing validation in the classes and then call them here. Validator class that helps check the data validation. List of validation.
+
             //Validate UserName
             if (string.IsNullOrWhiteSpace(tbNameUser.Text))
             {

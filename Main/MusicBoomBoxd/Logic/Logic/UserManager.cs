@@ -19,6 +19,8 @@ namespace Logic
             _users = new List<User>();
             _loadUsers = loadUsers;
             _userRepository = new UserRepository();
+
+            // inject the repository and use userRepistory as an interface and inject it as well. Get rid of Load stuff.
         }
 
         public void LoadUsersFromDataBase()
@@ -46,6 +48,8 @@ namespace Logic
                 userDTO.ProfilePictureData,
                 userDTO.ProfilePictureContentType
                 );
+
+            //try and use a tryparse
         }
 
         public void Add(User user)

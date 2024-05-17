@@ -52,7 +52,9 @@ namespace WebApp.Pages
             }
             //saves user to the Database
             UserDTO newUser = new UserDTO(User.UserName, User.Password, User.Email, User.UserType, User.Birthday, User.FavGenre, User.ProfilePictureName, User.ProfilePictureData, User.ProfilePictureContentType);
-
+            
+            // validate if user already exists.It could go wrong
+            // Change the naming for more functionaity 
             if (_userManager.SendToTheDb(newUser))
             {
                 return RedirectToPage("/Index");
