@@ -34,7 +34,7 @@ namespace WinFormsApp
                 tbEmailUser.Enabled = false;
                 dtpUser.Enabled = false;
                 cbUserType.Enabled = false;
-                chklbFavGenre.Enabled = false;
+                cbFavGenre.Enabled = false;
                 btnAddPictureAlbum.Enabled = false;
                 btnAddUser.Enabled = false;
             }
@@ -80,7 +80,7 @@ namespace WinFormsApp
                     tbEmailUser.Text,
                     (userType)cbUserType.SelectedItem,
                     dtpUser.Value,
-                    (genreType)chklbFavGenre.SelectedItem,
+                    (genreType)cbFavGenre.SelectedItem,
                     profilePictureName,
                     profilePictureData,
                     profilePictureContentType
@@ -134,7 +134,7 @@ namespace WinFormsApp
             tbPassword.Text = user.Password;
             cbUserType.SelectedItem = user.UserType;
             dtpUser.Value = user.Birthday;
-            chklbFavGenre.SelectedItem = user.FavGenre;
+            cbFavGenre.SelectedItem = user.FavGenre;
         }
         private void DisplayProfilePicture(byte[] profilePictureData)
         {
@@ -151,7 +151,7 @@ namespace WinFormsApp
             tbPassword.Clear();
             cbUserType.SelectedIndex = 0;
             dtpUser.Value = DateTime.Now;
-            chklbFavGenre.SelectedIndex = 0;
+            cbFavGenre.SelectedIndex = 0;
             selectedImagePath = null;
             SelectedProfileUser.Image = null;
         }
@@ -192,7 +192,7 @@ namespace WinFormsApp
                      tbEmailUser.Text,
                      (userType)cbUserType.SelectedItem,
                      dtpUser.Value,
-                     (genreType)chklbFavGenre.SelectedItem,
+                     (genreType)cbFavGenre.SelectedItem,
                      profilePictureName,
                      profilePictureData,
                      profilePictureContentType
@@ -243,7 +243,7 @@ namespace WinFormsApp
                          tbEmailUser.Text,
                          (userType)cbUserType.SelectedItem,
                          dtpUser.Value,
-                         (genreType)chklbFavGenre.SelectedItem,
+                         (genreType)cbFavGenre.SelectedItem,
                          profilePictureName,
                          profilePictureData,
                          profilePictureContentType
@@ -285,7 +285,7 @@ namespace WinFormsApp
             }
 
             //Validate favorite Genre
-            if (chklbFavGenre.SelectedItems == null)
+            if (cbFavGenre.SelectedItem == null)
             {
                 tsslblNewUserForm.Text = $"Please select at least one favorite genre";
                 return false;
@@ -297,7 +297,7 @@ namespace WinFormsApp
 
         public void InitializeComboBox()
         {
-            chklbFavGenre.DataSource = (Enum.GetValues(typeof(genreType)));
+            cbFavGenre.DataSource = (Enum.GetValues(typeof(genreType)));
 
             cbUserType.DataSource = (Enum.GetValues(typeof(userType)));
         }

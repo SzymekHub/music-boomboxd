@@ -29,8 +29,9 @@
         private void InitializeComponent()
         {
             NewUserPanel = new Panel();
+            tbPassword = new TextBox();
+            lblPassword = new Label();
             btnCancel = new Button();
-            chklbFavGenre = new CheckedListBox();
             dtpUser = new DateTimePicker();
             lblBirthday = new Label();
             lblFavGenre = new Label();
@@ -46,8 +47,7 @@
             lblNameUser = new Label();
             ssNewUserForm = new StatusStrip();
             tsslblNewUserForm = new ToolStripStatusLabel();
-            lblPassword = new Label();
-            tbPassword = new TextBox();
+            cbFavGenre = new ComboBox();
             NewUserPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)SelectedProfileUser).BeginInit();
             ssNewUserForm.SuspendLayout();
@@ -56,10 +56,10 @@
             // NewUserPanel
             // 
             NewUserPanel.BackColor = Color.DarkGray;
+            NewUserPanel.Controls.Add(cbFavGenre);
             NewUserPanel.Controls.Add(tbPassword);
             NewUserPanel.Controls.Add(lblPassword);
             NewUserPanel.Controls.Add(btnCancel);
-            NewUserPanel.Controls.Add(chklbFavGenre);
             NewUserPanel.Controls.Add(dtpUser);
             NewUserPanel.Controls.Add(lblBirthday);
             NewUserPanel.Controls.Add(lblFavGenre);
@@ -78,6 +78,23 @@
             NewUserPanel.Size = new Size(718, 373);
             NewUserPanel.TabIndex = 14;
             // 
+            // tbPassword
+            // 
+            tbPassword.Location = new Point(256, 163);
+            tbPassword.Name = "tbPassword";
+            tbPassword.Size = new Size(264, 27);
+            tbPassword.TabIndex = 43;
+            // 
+            // lblPassword
+            // 
+            lblPassword.AutoSize = true;
+            lblPassword.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblPassword.Location = new Point(65, 157);
+            lblPassword.Name = "lblPassword";
+            lblPassword.Size = new Size(187, 33);
+            lblPassword.TabIndex = 42;
+            lblPassword.Text = "Password :";
+            // 
             // btnCancel
             // 
             btnCancel.BackColor = Color.MediumSlateBlue;
@@ -88,14 +105,6 @@
             btnCancel.Text = "Cancel";
             btnCancel.UseVisualStyleBackColor = false;
             btnCancel.Click += btnCancel_Click;
-            // 
-            // chklbFavGenre
-            // 
-            chklbFavGenre.FormattingEnabled = true;
-            chklbFavGenre.Location = new Point(256, 290);
-            chklbFavGenre.Name = "chklbFavGenre";
-            chklbFavGenre.Size = new Size(264, 70);
-            chklbFavGenre.TabIndex = 40;
             // 
             // dtpUser
             // 
@@ -237,22 +246,13 @@
             tsslblNewUserForm.Name = "tsslblNewUserForm";
             tsslblNewUserForm.Size = new Size(0, 16);
             // 
-            // lblPassword
+            // cbFavGenre
             // 
-            lblPassword.AutoSize = true;
-            lblPassword.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblPassword.Location = new Point(65, 157);
-            lblPassword.Name = "lblPassword";
-            lblPassword.Size = new Size(187, 33);
-            lblPassword.TabIndex = 42;
-            lblPassword.Text = "Password :";
-            // 
-            // tbPassword
-            // 
-            tbPassword.Location = new Point(256, 163);
-            tbPassword.Name = "tbPassword";
-            tbPassword.Size = new Size(264, 27);
-            tbPassword.TabIndex = 43;
+            cbFavGenre.FormattingEnabled = true;
+            cbFavGenre.Location = new Point(256, 290);
+            cbFavGenre.Name = "cbFavGenre";
+            cbFavGenre.Size = new Size(264, 28);
+            cbFavGenre.TabIndex = 44;
             // 
             // NewUsers_Form
             // 
@@ -288,7 +288,6 @@
         private Label lblEmailUser;
         private Label lblNameUser;
         private Label lblFavGenre;
-        private CheckedListBox chklbFavGenre;
         private DateTimePicker dtpUser;
         private Label lblBirthday;
         private StatusStrip ssNewUserForm;
@@ -296,5 +295,6 @@
         private Button btnCancel;
         private TextBox tbPassword;
         private Label lblPassword;
+        private ComboBox cbFavGenre;
     }
 }

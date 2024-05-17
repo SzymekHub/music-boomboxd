@@ -2,6 +2,7 @@
 using Infrastructure.DTOs;
 using System.Data;
 
+
 namespace Infrastructure
 {
     // This class is responisble for databse operations related to users
@@ -10,7 +11,7 @@ namespace Infrastructure
         public bool InsertUser(UserDTO userDTO)
         {
             using (SqlConnection conn = GetSqlConnection())
-            using (SqlCommand cmd = new SqlCommand()) 
+            using (SqlCommand cmd = new SqlCommand())
             {
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
@@ -21,7 +22,7 @@ namespace Infrastructure
                 cmd.Parameters.AddWithValue("@Username", userDTO.UserName);
 
                 cmd.Parameters.AddWithValue("@Password", userDTO.Password);
-                
+
                 cmd.Parameters.AddWithValue("@Email", userDTO.Email);
 
                 //This converts the user enum to a string to pass it to the databse
@@ -44,9 +45,11 @@ namespace Infrastructure
 
                 cmd.Parameters.AddWithValue("@ProfilePictureContentType", userDTO.ProfilePictureContentType);
 
+
                 try
                 {
                     conn.Open();
+                    cmd.ExecuteNonQuery();
                     return true;
                 }
                 catch (SqlException ex)
@@ -54,6 +57,7 @@ namespace Infrastructure
                     Console.WriteLine(ex.Message);
                     return false;
                 }
+
             }
         }
 
@@ -95,75 +99,6 @@ namespace Infrastructure
             return recentUsers;
         }
 
-        public UserDTO GetUserByUsername(string username)
-        {
-            using (SqlConnection conn = GetSqlConnection())
-            using (SqlCommand cmd = new SqlCommand())
-            {
-                cmd.Connection = conn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "SELECT Username, Password, Email, UserType FROM [Users] WHERE Username = @Username";
-
-                cmd.Parameters.AddWithValue("@Username", username);
-
-                conn.Open();
-
-                using (SqlDataReader reader = cmd.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        string fetchedUsername = reader.GetString(0);
-                        string password = reader.GetString(1);
-                        string email = reader.GetString(2);
-                        string userType = reader.GetString(3);
-                        DateTime birthday = reader.GetDateTime(4);
-                        string favGenre = reader.GetString(5);
-                        string profilePictureName = reader.GetString(6);
-                        byte[] profilePictureData = (byte[])reader.GetValue(7);
-                        string profilePictureContentType = reader.GetString(8);
-
-                        return new UserDTO(fetchedUsername, password, email, userType, birthday, favGenre, profilePictureName, profilePictureData, profilePictureContentType);
-                    }
-                }
-            }
-            return null; // User not found
-        }
-
-        private int GetProfileIdByUserId(int userId)
-        {
-            using (SqlConnection conn = GetSqlConnection())
-            using (SqlCommand cmd = new SqlCommand())
-            {
-                cmd.Connection = conn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT Id FROM [Profile] WHERE UserId = @UserId";
-
-                cmd.Parameters.AddWithValue("@UserId", userId);
-
-                conn.Open();
-
-                int profileId = Convert.ToInt32(cmd.ExecuteScalar());
-                return profileId;
-            }
-        }
-
-        private void UpdateUserWithProfileId(int userId, int profileId)
-        {
-            using (SqlConnection conn = GetSqlConnection())
-            using (SqlCommand cmd = new SqlCommand())
-            {
-                cmd.Connection = conn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE [Users] SET ProfileId = @ProfileId WHERE Id = @UserId";
-
-                cmd.Parameters.AddWithValue("@ProfileId", profileId);
-                cmd.Parameters.AddWithValue("@UserId", userId);
-
-                conn.Open();
-                cmd.ExecuteNonQuery();
-            }
-        }
-
         public bool UpdateUser(UserDTO newUserDTO, UserDTO oldUserDTO)
         {
             using (SqlConnection conn = GetSqlConnection())
@@ -173,7 +108,7 @@ namespace Infrastructure
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = @"UPDATE [Users] SET Username = @Username, Password = @Password, Email = @Email, UserType = @UserType, Birthday = @Birthday, FavGenre = @FavGenre, ProfilePictureName = @ProfilePictureName, ProfilePictureData = @ProfilePictureData, ProfilePictureContentType = @ProfilePictureContentType
                                 WHERE Username = @OldUsername AND Password = @OldPassword AND Email = @OldEmail AND UserType = @OldUserType AND Birthday = @OldBirthday AND FavGenre = @OldFavGenre";
-                 
+
                 cmd.Parameters.AddWithValue("@Username", newUserDTO.UserName);
                 cmd.Parameters.AddWithValue("@Password", newUserDTO.Password);
                 cmd.Parameters.AddWithValue("@Email", newUserDTO.Email);
