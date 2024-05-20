@@ -35,20 +35,21 @@ namespace WinFormsApp
         {
             InitializeComponent();
 
-            //This is for the user page
-            userManager = um;
+            // Assign parameters to fields
+            userManager = um ?? throw new ArgumentNullException(nameof(um)); // Throw exception if um is null
+            albumManager = am ?? throw new ArgumentNullException(nameof(am));
+            songManager = sm ?? throw new ArgumentNullException(nameof(sm));
+
+            // Setup and populate the UI
             SetUpDataGridViewUsers();
             PopulateUsers();
 
-            //This is for the album page
-            albumManager = am;
+            // Setup other managers and UI elements
             albumRepository = new AlbumRepository();
             InitializeAlbumManager();
             SetUpDataGridViewAlbums();
             PopulateAlbums();
 
-            //This is for the song page
-            songManager = sm;
             songRepository = new SongRepository();
             InitializeSongManager();
             SetUpDataGridViewSongs();
@@ -58,7 +59,7 @@ namespace WinFormsApp
             tsslblDashBoardForm.Text = $"Hello, {adminUsername}";
 
             #region Tags
-            //Tags
+            // Tags
             btnReviews.Tag = "Reviews";
             btnUsers.Tag = "Users";
             btnSongs.Tag = "Songs";
@@ -164,25 +165,31 @@ namespace WinFormsApp
         #region Users
         private void SetUpDataGridViewUsers()
         {
+            if (userManager == null)
+            {
+                MessageBox.Show("UserManager is not initialized.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             // Set DataGridView properties
             dgvUsers.AutoGenerateColumns = false;
             dgvUsers.AllowUserToAddRows = false;
-            
+
             dgvUsers.Columns.Add("UserName", "UserName");
             dgvUsers.Columns["UserName"].DataPropertyName = "UserName";
-            
+
             dgvUsers.Columns.Add("Email", "Email");
             dgvUsers.Columns["Email"].DataPropertyName = "Email";
-            
+
             dgvUsers.Columns.Add("UserType", "UserType");
             dgvUsers.Columns["UserType"].DataPropertyName = "UserType";
-            
+
             dgvUsers.Columns.Add("Birthday", "Birthday");
             dgvUsers.Columns["Birthday"].DataPropertyName = "Birthday";
-            
+
             dgvUsers.Columns.Add("ProfilePictureName", "ProfilePictureName");
             dgvUsers.Columns["ProfilePictureName"].DataPropertyName = "ProfilePictureName";
-            
+
             // Bind the list of Users from UserManager to the DataGridView
             dgvUsers.DataSource = userManager.GetArray();
         }
@@ -232,7 +239,7 @@ namespace WinFormsApp
                         User updatedUser = addUserForm.GetUpdatedUser();
                         if (updatedUser != null)
                         {
-                            userManager.UpdateUser(updatedUser, selectedUser);
+                            userManager.Update(updatedUser, selectedUser);
                             dgvUsers.DataSource = userManager.GetArray();
                         }
                     }
@@ -260,7 +267,7 @@ namespace WinFormsApp
                         User updatedUser = addUserForm.GetUpdatedUser();
                         if (updatedUser != null)
                         {
-                            userManager.UpdateUser(updatedUser, selectedUser);
+                            userManager.Update(updatedUser, selectedUser);
                             dgvUsers.DataSource = userManager.GetArray();
                         }
                     }

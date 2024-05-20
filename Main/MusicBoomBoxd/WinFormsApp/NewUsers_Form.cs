@@ -16,8 +16,8 @@ namespace WinFormsApp
             userManager = um;
             InitializeComponent();
             InitializeComboBox();
-            ClearControls();
             exisitingUser = user;
+            ClearControls();
             this.StartPosition = FormStartPosition.CenterScreen;
 
             if (exisitingUser != null)
@@ -45,6 +45,36 @@ namespace WinFormsApp
             this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
+        private void btnAddPictureAlbum_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Image Files (*.jpg, *.png)|*.jpg;*.png|All Files (*.*)|*.*";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.Multiselect = false;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string selectedFile = openFileDialog.FileName;
+
+                    // Checks if the selected file has a valid image extension
+                    string extension = Path.GetExtension(selectedFile);
+                    if (extension != ".jpg" && extension != ".png")
+                    {
+                        tsslblNewUserForm.Text = $"Please select an image file with .jpg or .png extension.";
+
+                        return;
+                    }
+
+                    // Stores the selected image path
+                    selectedImagePath = selectedFile;
+
+                    // This will load and display the image if needed
+                    SelectedProfileUser.Image = Image.FromFile(selectedImagePath);
+                }
+            }
+        }
+
         private void BtnAddUser_Click(object sender, EventArgs e)
         {
             if (ValidateInput())
@@ -87,7 +117,7 @@ namespace WinFormsApp
                     profilePictureContentType
                     );
 
-                Result result = userManager.UpdateUser(newUser, exisitingUser);
+                Result result = userManager.Update(newUser, exisitingUser);
 
                 if (result.Success)
                 {
@@ -101,35 +131,6 @@ namespace WinFormsApp
             }
         }
 
-        private void btnAddPictureAlbum_Click(object sender, EventArgs e)
-        {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
-            {
-                openFileDialog.Filter = "Image Files (*.jpg, *.png)|*.jpg;*.png|All Files (*.*)|*.*";
-                openFileDialog.FilterIndex = 1;
-                openFileDialog.Multiselect = false;
-
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    string selectedFile = openFileDialog.FileName;
-
-                    // Checks if the selected file has a valid image extension
-                    string extension = Path.GetExtension(selectedFile);
-                    if (extension != ".jpg" && extension != ".png")
-                    {
-                        tsslblNewUserForm.Text = $"Please select an image file with .jpg or .png extension.";
-
-                        return;
-                    }
-
-                    // Stores the selected image path
-                    selectedImagePath = selectedFile;
-
-                    // This will load and display the image if needed
-                    SelectedProfileUser.Image = Image.FromFile(selectedImagePath);
-                }
-            }
-        }
         private void FillFormWithUserDetails(User user)
         {
             tbNameUser.Text = user.UserName;
@@ -239,26 +240,30 @@ namespace WinFormsApp
                 // This reads the selected image file into a byte array
                 byte[] profilePictureData = File.ReadAllBytes(selectedImagePath);
 
-                //Checks if an existing User is provided
-                if (exisitingUser != null)
-                {
-                    return new User(
-                         tbNameUser.Text,
-                         tbPassword.Text,
-                         tbEmailUser.Text,
-                         (userType)cbUserType.SelectedItem,
-                         dtpUser.Value,
-                         (genreType)cbFavGenre.SelectedItem,
-                         profilePictureName,
-                         profilePictureData,
-                         profilePictureContentType
-                        );
-                }
-                else
-                {
-                    tsslblNewUserForm.Text = "Looks like the existing song is not provided.";
-                    return null; 
-                }
+                userManager.Update(
+                    new User(
+                        tbNameUser.Text,
+                        tbPassword.Text,
+                        tbEmailUser.Text,
+                        (userType)cbUserType.SelectedItem,
+                        dtpUser.Value,
+                        (genreType)cbFavGenre.SelectedItem,
+                        profilePictureName,
+                        profilePictureData,
+                        profilePictureContentType),
+                        exisitingUser
+                    );
+                return new User(
+                        tbNameUser.Text,
+                        tbPassword.Text,
+                        tbEmailUser.Text,
+                        (userType)cbUserType.SelectedItem,
+                        dtpUser.Value,
+                        (genreType)cbFavGenre.SelectedItem,
+                        profilePictureName,
+                        profilePictureData,
+                        profilePictureContentType);
+                
             }
             else
             {
@@ -301,14 +306,6 @@ namespace WinFormsApp
             // All validation passes, return true
             return true;
         }
-
-        public void InitializeComboBox()
-        {
-            cbFavGenre.DataSource = (Enum.GetValues(typeof(genreType)));
-
-            cbUserType.DataSource = (Enum.GetValues(typeof(userType)));
-        }
-
         private bool IsValidEmail(string email)
         {
             try
@@ -320,6 +317,14 @@ namespace WinFormsApp
             {
                 return false;
             }
+        }
+
+        public void InitializeComboBox()
+        {
+            //populates the favorite genre combo box
+            cbFavGenre.DataSource = (Enum.GetValues(typeof(genreType)));
+            //populates the user type combo box
+            cbUserType.DataSource = (Enum.GetValues(typeof(userType)));
         }
 
         private void Users_Form_FormClosed(object sender, FormClosedEventArgs e)

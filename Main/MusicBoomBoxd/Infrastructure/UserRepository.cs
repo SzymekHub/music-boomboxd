@@ -83,7 +83,7 @@ namespace Infrastructure
             }
         }
 
-        public List<UserDTO> GetRecentUsers(int count)
+        public List<UserDTO> GetRecentUser(int count)
         {
             List<UserDTO> recentUsers = new List<UserDTO>();
 
@@ -131,7 +131,7 @@ namespace Infrastructure
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = @"UPDATE [User] SET Username = @Username, Password = @Password, Email = @Email, UserType = @UserType, Birthday = @Birthday, FavGenre = @FavGenre, ProfilePictureName = @ProfilePictureName, ProfilePictureData = @ProfilePictureData, ProfilePictureContentType = @ProfilePictureContentType
-                                WHERE Username = @OldUsername AND Password = @OldPassword AND Email = @OldEmail AND UserType = @OldUserType AND Birthday = @OldBirthday AND FavGenre = @OldFavGenre";
+                                WHERE Username = @OldUsername AND Password = @OldPassword AND Email = @OldEmail AND UserType = @OldUserType AND Birthday = @OldBirthday AND FavGenre = @OldFavGenre AND ProfilePictureName = @OldProfilePictureName AND ProfilePictureData = @OldProfilePictureData AND  ProfilePictureContentType = @OldProfilePictureContentType";
 
                 cmd.Parameters.AddWithValue("@Username", newUserDTO.UserName);
                 cmd.Parameters.AddWithValue("@Password", newUserDTO.Password);
@@ -164,6 +164,9 @@ namespace Infrastructure
                 cmd.Parameters.AddWithValue("@OldUserType", oldUserDTO.UserType.ToString());
                 cmd.Parameters.AddWithValue("@OldBirthday", oldUserDTO.Birthday.ToString("yyyy-MM-dd HH:mm:ss.fff"));
                 cmd.Parameters.AddWithValue("@OldFavGenre", oldUserDTO.FavGenre.ToString());
+                cmd.Parameters.AddWithValue("@OldProfilePictureName", oldUserDTO.ProfilePictureName);
+                cmd.Parameters.AddWithValue("@OldProfilePictureData", oldUserDTO.ProfilePictureData.ToArray());
+                cmd.Parameters.AddWithValue("@OldProfilePictureContentType", oldUserDTO.ProfilePictureContentType);
 
                 try
                 {

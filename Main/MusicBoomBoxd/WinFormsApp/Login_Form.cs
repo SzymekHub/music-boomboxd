@@ -15,15 +15,12 @@ namespace WinFormsApp
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
-
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
             string enteredUsername = txtUsername.Text;
             string enteredPassword = txtPassword.Text;
-
-            
 
             if (enteredUsername == AdminUsername && enteredPassword == AdminPassword)
             {

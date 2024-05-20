@@ -6,7 +6,7 @@ namespace Infrastructure.Interfaces
     {
         Result InsertUser(UserDTO userDTO);
 
-        List<UserDTO> GetRecentUsers(int count);
+        List<UserDTO> GetRecentUser(int count);
 
         Result UpdateUser(UserDTO newUserDTO, UserDTO oldUserDTO);
 

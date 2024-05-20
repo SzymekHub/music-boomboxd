@@ -26,11 +26,11 @@ namespace Logic
 
         public void LoadUsersFromDataBase()
         {
-            List<UserDTO> userDTOs = _userRepository.GetRecentUsers(1000);
+            List<UserDTO> userDTOs = _userRepository.GetRecentUser(1000);
             _users.Clear();
             foreach (var userDTO in userDTOs)
             {
-                //This converts UserDTO to Users and adds to the songs list
+                //This converts UserDTO to Users and adds to the users list
                 User user = ConvertToUser(userDTO);
                 _users.Add(user);
             }
@@ -40,11 +40,20 @@ namespace Logic
         {
             UserDTO userDTO = ConvertToUserDTO(user);
             
-            // Adds the user to the list of users
             _users.Add(user);
 
-            return SendToTheDb(userDTO);
+            Result resultfailed = new Result { Success = false, Message = "" };
 
+            Result resultUser = SendToTheDb(userDTO);
+            
+            if (resultfailed.Success == false) 
+            {
+                return resultfailed;
+            }
+            else
+            {
+                return resultUser;
+            }
         }
         
         public bool Remove(User user)
@@ -59,18 +68,19 @@ namespace Logic
         }
 
         // Method to update an existing user
-        public Result UpdateUser(User newUser, User oldUser)
+        public Result Update(User newUser, User oldUser)
         {
             UserDTO newUserDTO = ConvertToUserDTO(newUser);
 
             UserDTO oldUserDTO = ConvertToUserDTO(oldUser);
 
+            //This calls the repository method to update the User
             Result resultupdate = _userRepository.UpdateUser(newUserDTO, oldUserDTO);
 
             if (resultupdate.Success)
             {
                 LoadUsersFromDataBase();
-                int index = _users.FindIndex(user => user == oldUser);
+                int index = _users.FindIndex(ur => ur == oldUser);
 
                 if (index != -1)
                 {
@@ -98,6 +108,7 @@ namespace Logic
         {
             //Converts the user role enum to a string
             userType user = (userType)Enum.Parse(typeof(userType), newUserDTO.UserType);
+
             //Converts the genre enum to a string 
             genreType genre = (genreType)Enum.Parse(typeof(genreType), newUserDTO.FavGenre);
 
@@ -122,16 +133,16 @@ namespace Logic
         {
             // this converts User to UserDTO
             return new UserDTO(
-                    user.UserID,
-                    user.UserName,
-                    user.Password,
-                    user.Email,
-                    user.UserType.ToString(),
-                    user.Birthday,
-                    user.FavGenre.ToString(),
-                    user.ProfilePictureName,
-                    user.ProfilePictureData,
-                    user.ProfilePictureContentType
+                user.UserID,
+                user.UserName,
+                user.Password,
+                user.Email,
+                user.UserType.ToString(),
+                user.Birthday,
+                user.FavGenre.ToString(),
+                user.ProfilePictureName,
+                user.ProfilePictureData,
+                user.ProfilePictureContentType
                 );
         }
     }
