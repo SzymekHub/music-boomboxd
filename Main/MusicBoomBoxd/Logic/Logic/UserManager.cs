@@ -1,5 +1,6 @@
 ﻿using Infrastructure;
 using Infrastructure.DTOs;
+using Infrastructure.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,20 +13,21 @@ namespace Logic
     {
         private List<User> _users;
         private readonly UserRepository _userRepository;
-        private readonly LoadUsers _loadUsers;
+        private readonly IUserRepository _iuserRepostiory;
 
-        public UserManager(LoadUsers loadUsers)
+        public UserManager(UserRepository userRep, IUserRepository iuserRep)
         {
             _users = new List<User>();
-            _loadUsers = loadUsers;
-            _userRepository = new UserRepository();
+            _userRepository = userRep;
+            _iuserRepostiory = iuserRep;
 
             // inject the repository and use userRepistory as an interface and inject it as well. Get rid of Load stuff.
         }
 
         public void LoadUsersFromDataBase()
         {
-            List<UserDTO> userDTOs = _loadUsers.LoadAllUsers();
+            List<UserDTO> userDTOs = _userRepository.GetRecentUsers(1000);
+            _users.Clear();
             foreach (var userDTO in userDTOs)
             {
                 //This converts UserDTO to Users and adds to the songs list
@@ -34,51 +36,21 @@ namespace Logic
             }
         }
 
-        private User ConvertToUser(UserDTO userDTO)
+        public Result Add(User user)
         {
-            //this converts UserDto to users
-            return new User(
-                userDTO.UserName,
-                userDTO.Password,
-                userDTO.Email,
-                (userType)Enum.Parse(typeof(userType), userDTO.UserType),
-                userDTO.Birthday,
-                (genreType)Enum.Parse(typeof(genreType), userDTO.FavGenre),
-                userDTO.ProfilePictureName,
-                userDTO.ProfilePictureData,
-                userDTO.ProfilePictureContentType
-                );
-
-            //try and use a tryparse
-        }
-
-        public void Add(User user)
-        {
-            //Converts the genre enum to a string 
-            string genreString = user.FavGenre.ToString();
+            UserDTO userDTO = ConvertToUserDTO(user);
             
-            //Converts the user enum to a string 
-            string userString = user.UserType.ToString();
+            // Adds the user to the list of users
+            _users.Add(user);
 
-            if (Enum.TryParse(typeof(genreType), genreString, out object genre) && Enum.TryParse(typeof(userType), userString, out object usertype))
-            {
-                // this converts User to UserDTO
-                UserDTO userDTO = new UserDTO(
-                        user.UserName,
-                        user.Password,
-                        user.Email,
-                        userString,
-                        user.Birthday,
-                        genreString,
-                        user.ProfilePictureName,
-                        user.ProfilePictureData,
-                        user.ProfilePictureContentType
-                    );
+            return SendToTheDb(userDTO);
 
-                SendToTheDb(userDTO);
-                // Add the user to the list of users
-                _users.Add(user);
-            }
+        }
+        
+        public bool Remove(User user)
+        {
+            _userRepository.DeleteUser(ConvertToUserDTO(user));
+            return _users.Remove(user);
         }
 
         public User[] GetArray()
@@ -86,57 +58,34 @@ namespace Logic
             return _users.ToArray();
         }
 
-        public bool Remove(User user)
-        {
-            return _users.Remove(user);
-        }
-
         // Method to update an existing user
-        public void UpdateUser(User newUser, User oldUser)
+        public Result UpdateUser(User newUser, User oldUser)
         {
-            //These are UserDTO object for the new and old users
-            UserDTO newUserDTO = new UserDTO(
-                    newUser.UserName,
-                    newUser.Password,
-                    newUser.Email,
-                    newUser.UserType.ToString(),
-                    newUser.Birthday,
-                    newUser.FavGenre.ToString(),
-                    newUser.ProfilePictureName,
-                    newUser.ProfilePictureData,
-                    newUser.ProfilePictureContentType
-                );
+            UserDTO newUserDTO = ConvertToUserDTO(newUser);
 
-            UserDTO oldUserDTO = new UserDTO(
-                    oldUser.UserName,
-                    oldUser.Password,
-                    oldUser.Email,
-                    oldUser.UserType.ToString(),
-                    oldUser.Birthday,
-                    oldUser.FavGenre.ToString(),
-                    oldUser.ProfilePictureName,
-                    oldUser.ProfilePictureData,
-                    oldUser.ProfilePictureContentType
-                );
+            UserDTO oldUserDTO = ConvertToUserDTO(oldUser);
 
-            //This calls the repository method to update the User
-            bool success = _userRepository.UpdateUser(newUserDTO, oldUserDTO);
-            
-            if (success)
+            Result resultupdate = _userRepository.UpdateUser(newUserDTO, oldUserDTO);
+
+            if (resultupdate.Success)
             {
-                int index = _users.FindIndex(u => u == oldUser);
-                if (index != 1)
+                LoadUsersFromDataBase();
+                int index = _users.FindIndex(user => user == oldUser);
+
+                if (index != -1)
                 {
                     _users[index] = newUser;
                 }
             }
             else
             {
-                Console.WriteLine("Looks like something went wrong when updating the User in the database :(");
+                Console.WriteLine("Something went wrong when updating the user");
             }
+
+            return resultupdate;
         }
 
-        public bool SendToTheDb(UserDTO newUser)
+        public Result SendToTheDb(UserDTO newUser)
         {
             string HashedPassword = PasswordHasher.HashPassword(newUser.Password);
 
@@ -145,6 +94,45 @@ namespace Logic
             return _userRepository.InsertUser(newUser);
 
         }
+        public User ConvertToUser(UserDTO newUserDTO)
+        {
+            //Converts the user role enum to a string
+            userType user = (userType)Enum.Parse(typeof(userType), newUserDTO.UserType);
+            //Converts the genre enum to a string 
+            genreType genre = (genreType)Enum.Parse(typeof(genreType), newUserDTO.FavGenre);
 
+            //this converts UserDto to users
+            return new User(
+                newUserDTO.UserID,
+                newUserDTO.UserName,
+                newUserDTO.Password,
+                newUserDTO.Email,
+                user,
+                newUserDTO.Birthday,
+                genre,
+                newUserDTO.ProfilePictureName,
+                newUserDTO.ProfilePictureData,
+                newUserDTO.ProfilePictureContentType
+                );
+
+            //try and use a tryparse
+        }
+
+        public UserDTO ConvertToUserDTO(User user)
+        {
+            // this converts User to UserDTO
+            return new UserDTO(
+                    user.UserID,
+                    user.UserName,
+                    user.Password,
+                    user.Email,
+                    user.UserType.ToString(),
+                    user.Birthday,
+                    user.FavGenre.ToString(),
+                    user.ProfilePictureName,
+                    user.ProfilePictureData,
+                    user.ProfilePictureContentType
+                );
+        }
     }
 }

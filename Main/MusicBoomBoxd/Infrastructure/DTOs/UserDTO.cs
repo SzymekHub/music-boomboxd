@@ -9,6 +9,7 @@ namespace Infrastructure.DTOs
     //This class represents the data structure of a user
     public class UserDTO
     {
+        public int UserID { get; set; }
         public string UserName {  get; set; } 
         public string Password { get; set; }
         public string Email { get; set; }
@@ -19,8 +20,9 @@ namespace Infrastructure.DTOs
         public byte[] ProfilePictureData { get; set; }
         public string ProfilePictureContentType { get; set; }
 
-        public UserDTO(string userName, string password, string email, string userType, DateTime birthday, string favGenre, string profilePictureName, byte[] profilePictureData, string profilePictureContentType)
+        public UserDTO(int userID, string userName, string password, string email, string userType, DateTime birthday, string favGenre, string profilePictureName, byte[] profilePictureData, string profilePictureContentType)
         {
+            UserID = userID;
             UserName = userName;
             Password = password;
             Email = email;

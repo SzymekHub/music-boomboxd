@@ -10,14 +10,15 @@ using System.Windows.Forms;
 using Infrastructure.DTOs;
 using Infrastructure;
 using Logic;
+using Infrastructure.Interfaces;
 
 namespace WinFormsApp
 {
-    public partial class DashBoard_Form : Form
+    public partial class DashBoard_Form : Form 
     {
+        
         //for the User tab
         private static UserManager userManager;
-        private static UserRepository userRepository;
         private static List<User> userList = new List<User>();
 
         //for the Album tab
@@ -30,13 +31,12 @@ namespace WinFormsApp
         private static SongRepository songRepository;
         private static List<Song> songList = new List<Song>();
 
-        public DashBoard_Form(string adminUsername, AlbumManager am, SongManager sm, UserManager um)
+        public DashBoard_Form(string adminUsername, UserManager um, AlbumManager am, SongManager sm)
         {
             InitializeComponent();
+
             //This is for the user page
             userManager = um;
-            userRepository = new UserRepository();
-            InitializeUserManager();
             SetUpDataGridViewUsers();
             PopulateUsers();
 
@@ -68,18 +68,6 @@ namespace WinFormsApp
 
             this.StartPosition = FormStartPosition.CenterScreen;
 
-        }
-
-        private void InitializeUserManager()
-        {
-            // Create an instance of LoadUsers with the UserRepository instance
-            LoadUsers loadUsers = new LoadUsers(userRepository);
-
-            // If userManager is null, create a new instance with the loadUsers instance
-            userManager = new UserManager(loadUsers);
-
-            // Load users from the database
-            userManager.LoadUsersFromDataBase();
         }
 
         private void InitializeAlbumManager()
@@ -128,6 +116,11 @@ namespace WinFormsApp
             }
         }
 
+        private void DashBoard_Form_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Owner.Visible = true;
+        }
+
         private void Button_Click(object sender, EventArgs e)
         {
             Button clickedButton = sender as Button;
@@ -167,52 +160,29 @@ namespace WinFormsApp
             }
             this.Close();
         }
-        private void DashBoard_Form_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            Owner.Visible = true;
-        }
 
         #region Users
         private void SetUpDataGridViewUsers()
         {
-            // Clear existing columns
-            dgvUsers.Columns.Clear();
-
             // Set DataGridView properties
             dgvUsers.AutoGenerateColumns = false;
             dgvUsers.AllowUserToAddRows = false;
-
-            // Add the DataGridView Columns if they don't already exist
-            if (dgvUsers.Columns["UserName"] == null)
-            {
-                dgvUsers.Columns.Add("UserName", "UserName");
-                dgvUsers.Columns["UserName"].DataPropertyName = "UserName";
-            }
-
-            if (dgvUsers.Columns["Email"] == null)
-            {
-                dgvUsers.Columns.Add("Email", "Email");
-                dgvUsers.Columns["Email"].DataPropertyName = "Email";
-            }
-
-            if (dgvUsers.Columns["UserType"] == null)
-            {
-                dgvUsers.Columns.Add("UserType", "UserType");
-                dgvUsers.Columns["UserType"].DataPropertyName = "UserType";
-            }
-
-            if (dgvUsers.Columns["Birthday"] == null)
-            {
-                dgvUsers.Columns.Add("Birthday", "Birthday");
-                dgvUsers.Columns["Birthday"].DataPropertyName = "Birthday";
-            }
-
-            if (dgvUsers.Columns["ProfilePictureName"] == null)
-            {
-                dgvUsers.Columns.Add("ProfilePictureName", "ProfilePictureName");
-                dgvUsers.Columns["ProfilePictureName"].DataPropertyName = "ProfilePictureName";
-            }
-
+            
+            dgvUsers.Columns.Add("UserName", "UserName");
+            dgvUsers.Columns["UserName"].DataPropertyName = "UserName";
+            
+            dgvUsers.Columns.Add("Email", "Email");
+            dgvUsers.Columns["Email"].DataPropertyName = "Email";
+            
+            dgvUsers.Columns.Add("UserType", "UserType");
+            dgvUsers.Columns["UserType"].DataPropertyName = "UserType";
+            
+            dgvUsers.Columns.Add("Birthday", "Birthday");
+            dgvUsers.Columns["Birthday"].DataPropertyName = "Birthday";
+            
+            dgvUsers.Columns.Add("ProfilePictureName", "ProfilePictureName");
+            dgvUsers.Columns["ProfilePictureName"].DataPropertyName = "ProfilePictureName";
+            
             // Bind the list of Users from UserManager to the DataGridView
             dgvUsers.DataSource = userManager.GetArray();
         }
@@ -310,31 +280,21 @@ namespace WinFormsApp
                 // Get the selected User
                 User selectedUser = dgvUsers.SelectedRows[0].DataBoundItem as User;
 
-                // This removes the selected user from the userManager
-                userManager.Remove(selectedUser);
+                DialogResult result = MessageBox.Show("Are you sure you want to delte this user?", "Delete User", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                
+                if (result == DialogResult.OK)
+                {
+                    // This removes the selected user from the userManager
+                    userManager.Remove(selectedUser);
 
-                // This updates the DataGridView
-                dgvUsers.DataSource = userManager.GetArray();
-
-                // This remvoes the user from the database
-                RemoveUserFromDatabase(selectedUser);
+                    // This updates the DataGridView
+                    dgvUsers.DataSource = userManager.GetArray();
+                }
+                
             }
             else
             {
                 tsslblDashBoardForm.Text = "Please select an User to delete.";
-            }
-        }
-        private void RemoveUserFromDatabase(User user)
-        {
-            bool success = userRepository.DeleteUser(user.UserName, user.Password, user.Email, user.UserType.ToString(), user.Birthday, user.FavGenre.ToString());
-
-            if (success)
-            {
-                tsslblDashBoardForm.Text = "The user has been deleted successfully";
-            }
-            else
-            {
-                tsslblDashBoardForm.Text = "Something went wrong when tryig to delete this user";
             }
         }
 

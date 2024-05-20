@@ -16,8 +16,8 @@ namespace WinFormsApp
             userManager = um;
             InitializeComponent();
             InitializeComboBox();
-            exisitingUser = user;
             ClearControls();
+            exisitingUser = user;
             this.StartPosition = FormStartPosition.CenterScreen;
 
             if (exisitingUser != null)
@@ -75,6 +75,7 @@ namespace WinFormsApp
 
                 //This creates a new User Object with the provided details
                 User newUser = new User(
+                    exisitingUser.UserID,
                     tbNameUser.Text,
                     tbPassword.Text,
                     tbEmailUser.Text,
@@ -86,14 +87,17 @@ namespace WinFormsApp
                     profilePictureContentType
                     );
 
-                if (exisitingUser != null)
-                {
-                    userManager.UpdateUser(newUser, exisitingUser);
-                }
-                //userManager.Add(newUser);
+                Result result = userManager.UpdateUser(newUser, exisitingUser);
 
-                DialogResult = DialogResult.OK;
-                Close();
+                if (result.Success)
+                {
+                    DialogResult = DialogResult.OK;
+                    Close();
+                }
+                else
+                {
+                    tsslblNewUserForm.Text = result.Message;
+                }
             }
         }
 
@@ -136,6 +140,7 @@ namespace WinFormsApp
             dtpUser.Value = user.Birthday;
             cbFavGenre.SelectedItem = user.FavGenre;
         }
+
         private void DisplayProfilePicture(byte[] profilePictureData)
         {
             using (MemoryStream ms = new MemoryStream(profilePictureData))

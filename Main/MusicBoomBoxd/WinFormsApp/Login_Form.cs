@@ -27,7 +27,7 @@ namespace WinFormsApp
 
             if (enteredUsername == AdminUsername && enteredPassword == AdminPassword)
             {
-                DashBoard_Form dash_form = new DashBoard_Form(AdminUsername, albumManager, songManager, userManager);
+                DashBoard_Form dash_form = new DashBoard_Form(AdminUsername, userManager, albumManager, songManager);
                 dash_form.Owner = this;
                 dash_form.Text = "Hello" + AdminUsername;
                 this.Visible = false;
