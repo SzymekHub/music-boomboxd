@@ -35,21 +35,20 @@ namespace WinFormsApp
         {
             InitializeComponent();
 
-            // Assign parameters to fields
-            userManager = um ?? throw new ArgumentNullException(nameof(um)); // Throw exception if um is null
-            albumManager = am ?? throw new ArgumentNullException(nameof(am));
-            songManager = sm ?? throw new ArgumentNullException(nameof(sm));
-
-            // Setup and populate the UI
+            //This is for the user page
+            userManager = um;
             SetUpDataGridViewUsers();
             PopulateUsers();
 
-            // Setup other managers and UI elements
+            //This is for the album page
+            albumManager = am;
             albumRepository = new AlbumRepository();
             InitializeAlbumManager();
             SetUpDataGridViewAlbums();
             PopulateAlbums();
 
+            //This is for the song page
+            songManager = sm;
             songRepository = new SongRepository();
             InitializeSongManager();
             SetUpDataGridViewSongs();
@@ -59,7 +58,7 @@ namespace WinFormsApp
             tsslblDashBoardForm.Text = $"Hello, {adminUsername}";
 
             #region Tags
-            // Tags
+            //Tags
             btnReviews.Tag = "Reviews";
             btnUsers.Tag = "Users";
             btnSongs.Tag = "Songs";
@@ -70,6 +69,7 @@ namespace WinFormsApp
             this.StartPosition = FormStartPosition.CenterScreen;
 
         }
+
 
         private void InitializeAlbumManager()
         {
@@ -165,12 +165,6 @@ namespace WinFormsApp
         #region Users
         private void SetUpDataGridViewUsers()
         {
-            if (userManager == null)
-            {
-                MessageBox.Show("UserManager is not initialized.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
             // Set DataGridView properties
             dgvUsers.AutoGenerateColumns = false;
             dgvUsers.AllowUserToAddRows = false;

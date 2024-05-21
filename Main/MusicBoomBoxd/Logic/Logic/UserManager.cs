@@ -26,7 +26,7 @@ namespace Logic
 
         public void LoadUsersFromDataBase()
         {
-            List<UserDTO> userDTOs = _userRepository.GetRecentUser(1000);
+            List<UserDTO> userDTOs = _userRepository.GetRecentUser(int.MaxValue);
             _users.Clear();
             foreach (var userDTO in userDTOs)
             {
