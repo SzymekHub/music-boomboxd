@@ -1,5 +1,4 @@
 ﻿using Infrastructure;
-using Infrastructure.DTOs;
 using Logic;
 
 namespace WinFormsApp
@@ -9,7 +8,6 @@ namespace WinFormsApp
         public Album NewAlbum { get; private set; }
         private Album exisitingAlbum;
         private AlbumManager albumManager;
-        //private const string FilePath = "./NewAlbum.CSV";
         private string selectedImagePath;
 
         public NewAlbum_Form(AlbumManager am, Album album = null, bool view = false)
@@ -44,6 +42,35 @@ namespace WinFormsApp
             this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
+        private void btnAddPictureAlbum_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Image Files (*.jpg, *.png)|*.jpg;*.png|All Files (*.*)|*.*";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.Multiselect = false;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string selectedFile = openFileDialog.FileName;
+
+                    // Checks if the selected file has a valid image extension
+                    string extension = Path.GetExtension(selectedFile);
+                    if (extension != ".jpg" && extension != ".png")
+                    {
+                        tsslblNewAlbumForm.Text = $"Please select an image file with .jpg or .png extension.";
+
+                        return;
+                    }
+
+                    // Stores the selected image path
+                    selectedImagePath = selectedFile;
+
+                    // This will load and display the image
+                    SelectedCoverAlbum.Image = Image.FromFile(selectedImagePath);
+                }
+            }
+        }
 
         private void BtnAddAlbum_Click(object sender, EventArgs e)
         {
@@ -76,6 +103,7 @@ namespace WinFormsApp
 
                 //This creates a new Album Object with the provided details 
                 Album newAlbum = new Album(
+                      exisitingAlbum.AlbumID,
                       tbTitleAlbum.Text,
                       tbArtistAlbum.Text,
                       DatePickerAlbum.Value,
@@ -85,44 +113,18 @@ namespace WinFormsApp
                       albumCoverContentType
                 );
 
-                if (exisitingAlbum != null)
+                Result result = albumManager.Update(newAlbum, exisitingAlbum);
+
+                if (result.Success)
                 {
-                    albumManager.UpdateAlbum(newAlbum, exisitingAlbum);
+                    DialogResult = DialogResult.OK;
+                    Close();
+                }
+                else
+                {
+                    tsslblNewAlbumForm.Text = result.Message;
                 }
                 
-                DialogResult = DialogResult.OK;
-                Close();
-            }
-        }
-
-
-        private void btnAddPictureAlbum_Click(object sender, EventArgs e)
-        {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
-            {
-                openFileDialog.Filter = "Image Files (*.jpg, *.png)|*.jpg;*.png|All Files (*.*)|*.*";
-                openFileDialog.FilterIndex = 1;
-                openFileDialog.Multiselect = false;
-
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    string selectedFile = openFileDialog.FileName;
-
-                    // Checks if the selected file has a valid image extension
-                    string extension = Path.GetExtension(selectedFile);
-                    if (extension != ".jpg" && extension != ".png")
-                    {
-                        tsslblNewAlbumForm.Text = $"Please select an image file with .jpg or .png extension.";
-
-                        return;
-                    }
-
-                    // Stores the selected image path
-                    selectedImagePath = selectedFile;
-
-                    // This will load and display the image
-                    SelectedCoverAlbum.Image = Image.FromFile(selectedImagePath);
-                }
             }
         }
 
@@ -227,29 +229,26 @@ namespace WinFormsApp
 
                 // This reads the selected image file into a byte array
                 byte[] albumCoverData = File.ReadAllBytes(selectedImagePath);
-                
-                // Checks if an existing album is provided
-                if (exisitingAlbum != null)
-                {
-                    // Uses the existing album's date if not modified
-                    DateTime updatedDate = DatePickerAlbum.Value != exisitingAlbum.Date ? DatePickerAlbum.Value : exisitingAlbum.Date;
 
-                    // This is a new Album object that returns with the provided details
-                    return new Album(
+                albumManager.Update(
+                    new Album(
                         tbTitleAlbum.Text,
                         tbArtistAlbum.Text,
-                        updatedDate,
+                        DatePickerAlbum.Value,
                         (genreType)cbGenreAlbum.SelectedItem,
                         albumCoverName,
                         albumCoverData,
-                        albumCoverContentType
+                        albumCoverContentType),
+                        exisitingAlbum
                     );
-                }
-                else
-                {
-                    tsslblNewAlbumForm.Text = "Looks like the existing album is not provided.";
-                    return null;
-                }
+                return new Album(
+                        tbTitleAlbum.Text,
+                        tbArtistAlbum.Text,
+                        DatePickerAlbum.Value,
+                        (genreType)cbGenreAlbum.SelectedItem,
+                        albumCoverName,
+                        albumCoverData,
+                        albumCoverContentType);
             }
             else
             {
@@ -290,23 +289,6 @@ namespace WinFormsApp
 
             return true;
         }
-
-        //private void SaveAlbumToCSV(AlbumDTO album)
-        //{
-        //    try
-        //    {
-        //        using (StreamWriter writer = new StreamWriter(FilePath, true))
-        //        {
-        //            // Format the album data and write it to the CSV file
-        //            string albumData = $"{album.AlbumTitle},{album.Artist},{album.ReleaseDate},{album.Genre},{selectedImagePath}";
-        //            writer.WriteLine(albumData);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        tsslblNewAlbumFormCSV.Text = $"Failed to save the song to the CSV file: {ex.Message}";
-        //    }
-        //}
 
         public void InitializeComboBox()
         {

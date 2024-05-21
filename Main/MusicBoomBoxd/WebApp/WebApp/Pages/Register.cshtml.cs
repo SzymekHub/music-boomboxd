@@ -55,7 +55,7 @@ namespace WebApp.Pages
             
             // validate if user already exists.It could go wrong
             // Change the naming for more functionaity 
-            if (_userManager.SendToTheDb(newUser))
+            if (_userManager.SendUserToTheDb(newUser))
             {
                 return RedirectToPage("/Index");
             }

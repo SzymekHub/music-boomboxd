@@ -61,7 +61,7 @@ namespace Infrastructure
             {
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "SELECT TOP (@Count) Title, Artist, Date, Genre, SongCoverName, SongCoverData, SongCoverContentType FROM Songs ORDER BY ID DESC";
+                cmd.CommandText = "SELECT TOP (@Count) Title, Artist, Date, Genre, SongCoverName, SongCoverData, SongCoverContentType FROM Song ORDER BY ID DESC";
 
 
                 cmd.Parameters.AddWithValue("@Count", count);

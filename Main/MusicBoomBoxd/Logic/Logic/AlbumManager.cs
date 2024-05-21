@@ -4,20 +4,23 @@ namespace Logic
 {
     public class AlbumManager
     {
-        private List<Album> _albums;
+        public List<Album> _albums;
         private readonly AlbumRepository _albumRepository;
-        private readonly
+        private readonly IAlbumRepository _ialbumRepository;
 
-        public AlbumManager(LoadAlbums loadAlbums)
+        public AlbumManager(AlbumRepository albumRep, IAlbumRepository ialbumRep)
         {
-           _albums = new List<Album>();
-            _loadAlbums = loadAlbums;
-            _albumRepository = new AlbumRepository();
+            _albums = new List<Album>();
+            _albumRepository = albumRep;
+            _ialbumRepository = ialbumRep;
         }
 
         public void LoadAlbumsFromDatabase()
         {
-            List<AlbumDTO> albumDTOs = _loadAlbums.LoadAllAlbums();
+            List<AlbumDTO> albumDTOs = _albumRepository.GetRecentAlbum(1000);
+            
+            _albums.Clear();
+            
             foreach (var albumDTO in albumDTOs)
             {
                 // This converts AlbumDTO to Album and adds to the albums list
@@ -26,44 +29,30 @@ namespace Logic
             }
         }
 
-        private Album ConvertToAlbum(AlbumDTO albumDTO)
+        public Result Add(Album album)
         {
-            // This converts AlbumDTO to Album
-            return new Album(
-                albumDTO.AlbumTitle,
-                albumDTO.Artist,
-                albumDTO.ReleaseDate,
-                (genreType)Enum.Parse(typeof(genreType), albumDTO.Genre),
-                albumDTO.AlbumCoverName,
-                albumDTO.AlbumCoverData,
-                albumDTO.AlbumCoverContentType
-            );
+            AlbumDTO albumDTO = ConvertToAlbumDTO(album);
+
+            _albums.Add(album);
+
+            Result resultfailed = new Result { Success = false, Message = "" };
+
+            Result resultAlbum = SendAlbumToTheDb(albumDTO);
+
+            if (resultfailed.Success == false)
+            {
+                return resultfailed;
+            }
+            else
+            {
+                return resultAlbum;
+            }
         }
 
-        public void Add(Album album)
+        public bool Remove(Album album)
         {
-            // Convert the genre enum to a string
-            string genreString = album.Genre.ToString();
-
-            // Parse the genre string back to the enum type
-            if (Enum.TryParse(typeof(genreType), genreString, out object genre))
-            {
-                // this converts Album to AlbumDTO
-                AlbumDTO albumDTO = new AlbumDTO(
-                    album.Title,
-                    album.Artist,
-                    album.Date,
-                    genreString,
-                    album.AlbumCoverName,
-                    album.AlbumCoverData,
-                    album.AlbumCoverContentType
-                );
-
-                // This calls the InsertAlbum method with the album DTO
-                _albumRepository.InsertAlbum(albumDTO);
-                // This adds the albumt to the List<Album>
-                _albums.Add(album);
-            }
+            _albumRepository.DeleteAlbum(ConvertToAlbumDTO(album));
+            return _albums.Remove(album);
         }
 
         public Album[] GetArray()
@@ -71,41 +60,21 @@ namespace Logic
             return _albums.ToArray();
         }
 
-        public bool Remove(Album album)
+        public Result Update(Album newAlbum, Album oldAlbum)
         {
-            return _albums.Remove(album);
-        }
+            AlbumDTO newAlbumDTO = ConvertToAlbumDTO(newAlbum);
 
-        public void UpdateAlbum(Album newAlbum, Album oldAlbum)
-        {
-            // These are AlbumDTO objects for the new and old albums
-            AlbumDTO newAlbumDTO = new AlbumDTO(
-                newAlbum.Title,
-                newAlbum.Artist,
-                newAlbum.Date,
-                newAlbum.Genre.ToString(),
-                newAlbum.AlbumCoverName,
-                newAlbum.AlbumCoverData,
-                newAlbum.AlbumCoverContentType
-            );
-
-            AlbumDTO oldAlbumDTO = new AlbumDTO(
-                oldAlbum.Title,
-                oldAlbum.Artist,
-                oldAlbum.Date,
-                oldAlbum.Genre.ToString(),
-                oldAlbum.AlbumCoverName,
-                oldAlbum.AlbumCoverData,
-                oldAlbum.AlbumCoverContentType
-            );
+            AlbumDTO oldAlbumDTO = ConvertToAlbumDTO(oldAlbum);
 
             // This calls the repository method to update the album
-            bool success = _albumRepository.UpdateAlbum(newAlbumDTO, oldAlbumDTO);
+            Result resultupdate = _albumRepository.UpdateAlbum(newAlbumDTO, oldAlbumDTO);
 
-            if (success)
+            if (resultupdate.Success)
             {
+                LoadAlbumsFromDatabase();
                 // If the update was successful, this updates the album in the list
                 int index = _albums.FindIndex(a => a == oldAlbum);
+
                 if (index != -1)
                 {
                     _albums[index] = newAlbum;
@@ -115,6 +84,45 @@ namespace Logic
             {
                 Console.WriteLine("Looks like something went wrong when updating the album in the database :(");
             }
+
+            return resultupdate;
+        }
+
+        public Result SendAlbumToTheDb(AlbumDTO newAlbum)
+        {
+            return _albumRepository.InsertAlbum(newAlbum);
+        }
+
+        private Album ConvertToAlbum(AlbumDTO newAlbumDTO)
+        {
+            genreType genre = (genreType)Enum.Parse(typeof(genreType), newAlbumDTO.Genre);
+
+            // This converts AlbumDTO to Album
+            return new Album(
+                newAlbumDTO.AlbumID,
+                newAlbumDTO.AlbumTitle,
+                newAlbumDTO.Artist,
+                newAlbumDTO.ReleaseDate,
+                genre,
+                newAlbumDTO.AlbumCoverName,
+                newAlbumDTO.AlbumCoverData,
+                newAlbumDTO.AlbumCoverContentType
+            );
+        }
+
+        public AlbumDTO ConvertToAlbumDTO(Album album)
+        {
+            // this converts Album to AlbumDTO
+            return new AlbumDTO(
+                album.AlbumID,
+                album.Title,
+                album.Artist,
+                album.Date,
+                album.Genre.ToString(),
+                album.AlbumCoverName,
+                album.AlbumCoverData,
+                album.AlbumCoverContentType
+            );
         }
     }
 }

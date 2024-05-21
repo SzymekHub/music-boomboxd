@@ -8,19 +8,33 @@ namespace WinFormsApp
         private const string AdminUsername = "Admin";
         private const string AdminPassword = "p";
         public UserManager userManager { get; }
-        private static AlbumManager albumManager;
+        public AlbumManager albumManager { get; }
+
         private static SongManager songManager;
+
+        
         
 
         public Login_Form()
         {
             InitializeComponent();
-
+            //For users
+            #region Users
             UserRepository userRep = new UserRepository();
             IUserRepository IuserRep = userRep;
 
             userManager = new UserManager(userRep, IuserRep);
             userManager.LoadUsersFromDataBase();
+            #endregion
+
+            //For Albums
+            #region Albums
+            AlbumRepository albumRep = new AlbumRepository();
+            IAlbumRepository IalbumRep = albumRep;
+
+            albumManager =  new AlbumManager(albumRep, IalbumRep);
+            albumManager.LoadAlbumsFromDatabase();
+            #endregion
 
             this.StartPosition = FormStartPosition.CenterScreen;
         }

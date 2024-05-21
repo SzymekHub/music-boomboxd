@@ -37,7 +37,7 @@ namespace Logic
 
             Result resultfailed = new Result { Success = false, Message = "" };
 
-            Result resultUser = SendToTheDb(userDTO);
+            Result resultUser = SendUserToTheDb(userDTO);
             
             if (resultfailed.Success == false) 
             {
@@ -88,7 +88,7 @@ namespace Logic
             return resultupdate;
         }
 
-        public Result SendToTheDb(UserDTO newUser)
+        public Result SendUserToTheDb(UserDTO newUser)
         {
             string HashedPassword = PasswordHasher.HashPassword(newUser.Password);
 

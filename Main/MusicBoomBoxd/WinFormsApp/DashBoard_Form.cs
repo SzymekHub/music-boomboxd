@@ -13,7 +13,6 @@ namespace WinFormsApp
 
         //for the Album tab
         private static AlbumManager albumManager;
-        private static AlbumRepository albumRepository;
         private static List<Album> albumsList = new List<Album>();
 
         //For the Song tab
@@ -32,8 +31,6 @@ namespace WinFormsApp
 
             //This is for the album page
             albumManager = am;
-            albumRepository = new AlbumRepository();
-            InitializeAlbumManager();
             SetUpDataGridViewAlbums();
             PopulateAlbums();
 
@@ -58,19 +55,6 @@ namespace WinFormsApp
 
             this.StartPosition = FormStartPosition.CenterScreen;
 
-        }
-
-
-        private void InitializeAlbumManager()
-        {
-            // Create an instance of LoadAlbums with the AlbumRepository instance
-            LoadAlbums loadAlbums = new LoadAlbums(albumRepository);
-
-            // If albumManager is null, create a new instance with the LoadAlbums instance
-            albumManager = new AlbumManager(loadAlbums);
-
-            // Load albums from the database
-            albumManager.LoadAlbumsFromDatabase();
         }
 
         private void InitializeSongManager()
@@ -159,20 +143,20 @@ namespace WinFormsApp
             dgvUsers.AutoGenerateColumns = false;
             dgvUsers.AllowUserToAddRows = false;
 
-            dgvUsers.Columns.Add("Username", "Username");
-            dgvUsers.Columns["Username"].DataPropertyName = "Username";
+                dgvUsers.Columns.Add("Username", "Username");
+                dgvUsers.Columns["Username"].DataPropertyName = "Username";
 
-            dgvUsers.Columns.Add("Email", "Email");
-            dgvUsers.Columns["Email"].DataPropertyName = "Email";
+                dgvUsers.Columns.Add("Email", "Email");
+                dgvUsers.Columns["Email"].DataPropertyName = "Email";
 
-            dgvUsers.Columns.Add("UserType", "UserType");
-            dgvUsers.Columns["UserType"].DataPropertyName = "UserType";
+                dgvUsers.Columns.Add("UserType", "UserType");
+                dgvUsers.Columns["UserType"].DataPropertyName = "UserType";
 
-            dgvUsers.Columns.Add("Birthday", "Birthday");
-            dgvUsers.Columns["Birthday"].DataPropertyName = "Birthday";
+                dgvUsers.Columns.Add("Birthday", "Birthday");
+                dgvUsers.Columns["Birthday"].DataPropertyName = "Birthday";
 
-            dgvUsers.Columns.Add("ProfilePictureName", "ProfilePictureName");
-            dgvUsers.Columns["ProfilePictureName"].DataPropertyName = "ProfilePictureName";
+                dgvUsers.Columns.Add("ProfilePictureName", "ProfilePictureName");
+                dgvUsers.Columns["ProfilePictureName"].DataPropertyName = "ProfilePictureName";
 
             // Bind the list of Users from UserManager to the DataGridView
             dgvUsers.DataSource = userManager.GetArray();
@@ -294,44 +278,25 @@ namespace WinFormsApp
         #region Songs
         private void SetUpDataGridViewSongs()
         {
-            // Clear existing columns
-            dgvSongs.Columns.Clear();
-
             // Set DataGridView properties
             dgvSongs.AutoGenerateColumns = false;
             dgvSongs.AllowUserToAddRows = false;
 
-            // Add the DataGridView Columns if they don't already exist
-            if (dgvSongs.Columns["Title"] == null)
-            {
                 dgvSongs.Columns.Add("Title", "Title");
                 dgvSongs.Columns["Title"].DataPropertyName = "Title";
-            }
-
-            if (dgvSongs.Columns["Artist"] == null)
-            {
+            
                 dgvSongs.Columns.Add("Artist", "Artist");
                 dgvSongs.Columns["Artist"].DataPropertyName = "Artist";
-            }
-
-            if (dgvSongs.Columns["Genre"] == null)
-            {
+            
                 dgvSongs.Columns.Add("Genre", "Genre");
                 dgvSongs.Columns["Genre"].DataPropertyName = "Genre";
-            }
-
-            if (dgvSongs.Columns["Date"] == null)
-            {
+            
                 dgvSongs.Columns.Add("Date", "Date");
                 dgvSongs.Columns["Date"].DataPropertyName = "Date";
-            }
-
-            if (dgvSongs.Columns["SongCoverName"] == null)
-            {
+            
                 dgvSongs.Columns.Add("SongCoverName", "SongCoverName");
                 dgvSongs.Columns["SongCoverName"].DataPropertyName = "SongCoverName";
-            }
-
+            
             // Bind the list of Songs from SongManager to the DataGridView
             dgvSongs.DataSource = songManager.GetArray();
         }
@@ -429,78 +394,47 @@ namespace WinFormsApp
                 // Get the selected Song
                 Song selectedSong = dgvSongs.SelectedRows[0].DataBoundItem as Song;
 
-                // This removes the selected song from the SongManager
-                songManager.Remove(selectedSong);
+                DialogResult result = MessageBox.Show("Are you sure you want to delte this Song?", "Delete Song", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 
-                // This updates the DataGridView
-                dgvSongs.DataSource = songManager.GetArray();
+                if (result == DialogResult.OK)
+                {
+                    // This removes the selected song from the userManager
+                    songManager.Remove(selectedSong);
 
-                // This remvoes the song from the database
-                RemoveSongFromDatabase(selectedSong);
+                    // This updates the DataGridView
+                    dgvSongs.DataSource = songManager.GetArray();
+                }
             }
             else
             {
                 tsslblDashBoardForm.Text = "Please select an Song to delete.";
             }
         }
-        private void RemoveSongFromDatabase(Song song)
-        {
-            bool success = songRepository.DeleteSong(song.Title, song.Artist, song.Date, song.Genre.ToString());
-
-            if (success)
-            {
-                tsslblDashBoardForm.Text = " The song has been deleted successfully";
-            }
-            else
-            {
-                tsslblDashBoardForm.Text = "Something went wrong when tryig to delete this song";
-            }
-        }
-
         #endregion
 
         #region Albums
 
         private void SetUpDataGridViewAlbums()
         {
-            // Clear existing columns
-            dgvAlbums.Columns.Clear();
-
             // Set DataGridView properties
             dgvAlbums.AutoGenerateColumns = false;
             dgvAlbums.AllowUserToAddRows = false;
 
-            // Add the DataGridView Columns if they don't already exist
-            if (dgvAlbums.Columns["Title"] == null)
-            {
                 dgvAlbums.Columns.Add("Title", "Title");
                 dgvAlbums.Columns["Title"].DataPropertyName = "Title";
-            }
-
-            if (dgvAlbums.Columns["Artist"] == null)
-            {
+            
                 dgvAlbums.Columns.Add("Artist", "Artist");
                 dgvAlbums.Columns["Artist"].DataPropertyName = "Artist";
-            }
-
-            if (dgvAlbums.Columns["Genre"] == null)
-            {
+            
                 dgvAlbums.Columns.Add("Genre", "Genre");
                 dgvAlbums.Columns["Genre"].DataPropertyName = "Genre";
-            }
-
-            if (dgvAlbums.Columns["Date"] == null)
-            {
+            
                 dgvAlbums.Columns.Add("Date", "Date");
                 dgvAlbums.Columns["Date"].DataPropertyName = "Date";
-            }
-
-            if (dgvAlbums.Columns["AlbumCoverName"] == null)
-            {
+            
                 dgvAlbums.Columns.Add("AlbumCoverName", "AlbumCoverName");
                 dgvAlbums.Columns["AlbumCoverName"].DataPropertyName = "AlbumCoverName";
-            }
-
+            
             // Bind the list of albums from albumManager to the DataGridView
             dgvAlbums.DataSource = albumManager.GetArray();
         }
@@ -551,7 +485,7 @@ namespace WinFormsApp
                         Album updatedAlbum = addAlbumForm.GetUpdatedAlbum();
                         if (updatedAlbum != null)
                         {
-                            albumManager.UpdateAlbum(updatedAlbum, selectedAlbum);
+                            albumManager.Update(updatedAlbum, selectedAlbum);
                             dgvAlbums.DataSource = albumManager.GetArray();
                         }
                     }
@@ -579,7 +513,7 @@ namespace WinFormsApp
                         Album updatedAlbum = addAlbumForm.GetUpdatedAlbum();
                         if (updatedAlbum != null)
                         {
-                            albumManager.UpdateAlbum(updatedAlbum, selectedAlbum);
+                            albumManager.Update(updatedAlbum, selectedAlbum);
                             dgvAlbums.DataSource = albumManager.GetArray();
                         }
                     }
@@ -599,34 +533,22 @@ namespace WinFormsApp
                 // Get the selected album
                 Album selectedAlbum = dgvAlbums.SelectedRows[0].DataBoundItem as Album;
 
-                // This removes the selected album from the AlbumManager
-                albumManager.Remove(selectedAlbum);
+                DialogResult result = MessageBox.Show("Are you sure you want to delte this Album?", "Delete Album", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 
-                // This updates the DataGridView
-                dgvAlbums.DataSource = albumManager.GetArray();
-                
-                // This remvoes the album from the database
-                RemoveAlbumFromDatabase(selectedAlbum);
+                if (result == DialogResult.OK)
+                {
+                    // This removes the selected Album from the AlbumManager
+                    albumManager.Remove(selectedAlbum);
+
+                    // This updates the DataGridView
+                    dgvAlbums.DataSource = albumManager.GetArray();
+                }
             }
             else
             {
                 tsslblDashBoardForm.Text = "Please select an Album to delete.";
             }
         }
-        private void RemoveAlbumFromDatabase(Album album)
-        {
-            bool success = albumRepository.DeleteAlbum(album.Title, album.Artist, album.Date, album.Genre.ToString());
-
-            if (success)
-            {
-                tsslblDashBoardForm.Text = " The album has been deleted successfully";
-            }
-            else
-            {
-                tsslblDashBoardForm.Text = "Something went wrong when tryig to delete this album";
-            }
-        }
-
         #endregion
     }
 }

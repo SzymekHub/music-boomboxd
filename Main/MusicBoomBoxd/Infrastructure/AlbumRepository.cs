@@ -3,7 +3,7 @@ using System.Data;
 
 namespace Infrastructure
 {
-    public class AlbumRepository : DbConnection
+    public class AlbumRepository : DbConnection, IAlbumRepository
     {
         // This class is responisble for databse operations related to Albums
         public Result InsertAlbum(AlbumDTO albumDTO)
@@ -47,7 +47,7 @@ namespace Infrastructure
 
                 //This converts the albumcover to a byte array to pass it to Database
                 byte[] albumCoverData = albumDTO.AlbumCoverData.ToArray();
-                cmd.Parameters.AddWithValue("@AlbumCoverData", albumCoverData); 
+                cmd.Parameters.AddWithValue("@AlbumCoverData", albumCoverData);
 
                 cmd.Parameters.AddWithValue("@AlbumCoverContentType", albumDTO.AlbumCoverContentType);
 
@@ -83,7 +83,7 @@ namespace Infrastructure
             {
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "SELECT TOP (@Count) AlbumID, Title, Artist, Date, Genre, AlbumCoverName, AlbumCoverData, AlbumCoverContentType" +
+                cmd.CommandText = "SELECT TOP (@Count) AlbumID, Title, Artist, Date, Genre, AlbumCoverName, AlbumCoverData, AlbumCoverContentType " +
                                   "FROM [Album] WHERE Active = 1 ORDER BY AlbumID DESC";
 
 
@@ -180,26 +180,35 @@ namespace Infrastructure
                 cmd.CommandText = @"UPDATE [Album] SET Active = 0
                                     WHERE AlbumID = @AlbumID AND Title = @Title AND Artist = @Artist AND Date = @ReleaseDate AND Genre = @Genre";
 
-                cmd.Parameters.AddWithValue("@Title", title);
-                cmd.Parameters.AddWithValue("@Artist", artist);
+                cmd.Parameters.AddWithValue("@AlbumID", albumDTO.AlbumID);
+                cmd.Parameters.AddWithValue("@Title", albumDTO.AlbumTitle);
+                cmd.Parameters.AddWithValue("@Artist", albumDTO.Artist);
                 // This converts DateTime to string in the format "yyyy-MM-dd HH:mm:ss.fff" so that it works with the database
-                string releaseDateString = releaseDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                string releaseDateString = albumDTO.ReleaseDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
                 cmd.Parameters.AddWithValue("@ReleaseDate", releaseDateString);
 
                 // This converts the genre enum to a string to pass it to Database
-                string genreString = genre.ToString();
+                string genreString = albumDTO.Genre.ToString();
                 cmd.Parameters.AddWithValue("@Genre", genreString);
 
                 try
                 {
                     conn.Open();
-                    int rowsAffected = cmd.ExecuteNonQuery();
-                    return rowsAffected > 0;
+                    var result = cmd.ExecuteScalar();
+                    int newEmployeeId;
+                    if (int.TryParse(result?.ToString(), out newEmployeeId))
+                    {
+                        return new Result { Success = true, Message = "Album deleted successfully." };
+                    }
+                    return new Result { Success = false, Message = "Failed to retrieve Album ID." };
                 }
                 catch (SqlException ex)
                 {
-                    Console.WriteLine(ex.Message);
-                    return false;
+                    return new Result { Success = false, Message = $"SQL Exception: {ex.Message}" };
+                }
+                catch (Exception ex)
+                {
+                    return new Result { Success = false, Message = $"Exception: {ex.Message}" };
                 }
             }
         }
