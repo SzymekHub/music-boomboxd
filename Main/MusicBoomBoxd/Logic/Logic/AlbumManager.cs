@@ -93,7 +93,7 @@ namespace Logic
             return _albumRepository.InsertAlbum(newAlbum);
         }
 
-        private Album ConvertToAlbum(AlbumDTO newAlbumDTO)
+        public Album ConvertToAlbum(AlbumDTO newAlbumDTO)
         {
             genreType genre = (genreType)Enum.Parse(typeof(genreType), newAlbumDTO.Genre);
 

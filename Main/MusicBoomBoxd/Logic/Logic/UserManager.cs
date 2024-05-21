@@ -20,7 +20,9 @@ namespace Logic
         public void LoadUsersFromDataBase()
         {
             List<UserDTO> userDTOs = _userRepository.GetRecentUser(1000);
+
             _users.Clear();
+            
             foreach (var userDTO in userDTOs)
             {
                 //This converts UserDTO to Users and adds to the users list
@@ -52,6 +54,7 @@ namespace Logic
         public bool Remove(User user)
         {
             _userRepository.DeleteUser(ConvertToUserDTO(user));
+
             return _users.Remove(user);
         }
 

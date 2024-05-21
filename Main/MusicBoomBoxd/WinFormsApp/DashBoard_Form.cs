@@ -17,7 +17,6 @@ namespace WinFormsApp
 
         //For the Song tab
         private static SongManager songManager;
-        private static SongRepository songRepository;
         private static List<Song> songList = new List<Song>();
 
         public DashBoard_Form(string adminUsername, UserManager um, AlbumManager am, SongManager sm)
@@ -36,8 +35,6 @@ namespace WinFormsApp
 
             //This is for the song page
             songManager = sm;
-            songRepository = new SongRepository();
-            InitializeSongManager();
             SetUpDataGridViewSongs();
             PopulateSongs();
 
@@ -55,18 +52,6 @@ namespace WinFormsApp
 
             this.StartPosition = FormStartPosition.CenterScreen;
 
-        }
-
-        private void InitializeSongManager()
-        {
-            // Create an instance of LoadSongs with the SongRepository instance
-            LoadSongs loadSongs = new LoadSongs(songRepository);
-
-            // If SongManager is null, create a new instance with the LoadSong instance
-            songManager = new SongManager(loadSongs);
-
-            // Load songs from the database
-            songManager.LoadSongsFromDataBase();
         }
 
         private void DashBoard_Form_Load(object sender, EventArgs e)
@@ -346,7 +331,7 @@ namespace WinFormsApp
                         Song updatedSong = addSongForm.GetUpdatedSong();
                         if (updatedSong != null)
                         {
-                            songManager.UpdateSong(updatedSong, selectedSong);
+                            songManager.Update(updatedSong, selectedSong);
                             dgvSongs.DataSource = songManager.GetArray();
                         }
                     }
@@ -374,7 +359,7 @@ namespace WinFormsApp
                         Song updatedSong = addSongForm.GetUpdatedSong();
                         if (updatedSong != null)
                         {
-                            songManager.UpdateSong(updatedSong, selectedSong);
+                            songManager.Update(updatedSong, selectedSong);
                             dgvSongs.DataSource = songManager.GetArray();
                         }
                     }

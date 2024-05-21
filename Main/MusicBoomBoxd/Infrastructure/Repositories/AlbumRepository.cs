@@ -195,8 +195,8 @@ namespace Infrastructure
                 {
                     conn.Open();
                     var result = cmd.ExecuteScalar();
-                    int newEmployeeId;
-                    if (int.TryParse(result?.ToString(), out newEmployeeId))
+                    int newAlbumID;
+                    if (int.TryParse(result?.ToString(), out newAlbumID))
                     {
                         return new Result { Success = true, Message = "Album deleted successfully." };
                     }

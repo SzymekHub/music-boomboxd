@@ -9,11 +9,7 @@ namespace WinFormsApp
         private const string AdminPassword = "p";
         public UserManager userManager { get; }
         public AlbumManager albumManager { get; }
-
-        private static SongManager songManager;
-
-        
-        
+        public SongManager songManager { get; }
 
         public Login_Form()
         {
@@ -34,6 +30,15 @@ namespace WinFormsApp
 
             albumManager =  new AlbumManager(albumRep, IalbumRep);
             albumManager.LoadAlbumsFromDatabase();
+            #endregion
+
+            //For Songs
+            #region Songs
+            SongRepository songRep = new SongRepository();
+            ISongRepository IsongRep = songRep;
+
+            songManager = new SongManager(songRep, IsongRep);
+            songManager.LoadSongsFromDataBase();
             #endregion
 
             this.StartPosition = FormStartPosition.CenterScreen;

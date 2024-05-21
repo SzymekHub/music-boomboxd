@@ -1,29 +1,26 @@
 ﻿using Infrastructure;
-using Infrastructure.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Logic
 {
     public class SongManager
     {
-        private List<Song> _songs;
+        public List<Song> _songs;
         private readonly SongRepository _songRepository;
-        private readonly LoadSongs _loadSongs;
+        private readonly ISongRepository _isongRepository;
 
-        public SongManager(LoadSongs loadSongs)
+        public SongManager(SongRepository songRep, ISongRepository isongRep)
         {
             _songs = new List<Song>();
-            _loadSongs = loadSongs;
-            _songRepository = new SongRepository();
+            _songRepository = songRep;
+            _isongRepository = isongRep;
         }
 
         public void LoadSongsFromDataBase()
         {
-            List<SongDTO> songDTOs = _loadSongs.LoadAllSongs();
+            List<SongDTO> songDTOs = _songRepository.GetRecentSong(1000);
+            
+            _songs.Clear();
+
             foreach (var songDTO in songDTOs)
             {
                 //This converts SongDTO to Songs and adds to the songs list
@@ -31,87 +28,54 @@ namespace Logic
                 _songs.Add(song);
             }
         }
-        
-        private Song ConvertToSong(SongDTO songDTO)
-        {
-            //this converts SongDTO to songs
-            return new Song(
-                songDTO.SongTitle,
-                songDTO.Artist,
-                songDTO.ReleaseDate,
-                (genreType)Enum.Parse(typeof(genreType), songDTO.Genre),
-                songDTO.SongCoverName,
-                songDTO.SongCoverData,
-                songDTO.SongCoverContentType
-                );
-        }
 
-        public void Add(Song song)
+        public Result Add(Song song)
         {
-            // Convert the genre enum to a string
-            string genreString = song.Genre.ToString();
+            SongDTO songDTO = ConvertToSongDTO(song);
 
-            // Parse the genre string back to the enum type
-            if (Enum.TryParse(typeof(genreType), genreString, out object genre))
+            _songs.Add(song);
+
+            Result resultfailed = new Result { Success = false, Message = "" };
+            
+            Result resultSong = SendSongToTheDb(songDTO);
+
+            if (resultfailed.Success == false)
             {
-                // this converts Song to SongDTO
-                SongDTO songDTO = new SongDTO(
-                    song.Title,
-                    song.Artist,
-                    song.Date,
-                    genreString,
-                    song.SongCoverName,
-                    song.SongCoverData,
-                    song.SongCoverContentType
-                );
-
-                // This calls the InsertSong method with the songDTO
-                _songRepository.InsertSong(songDTO);
-                // This adds the song to the List<Song>
-                _songs.Add(song);
+                return resultfailed;
+            }
+            else
+            {
+                return resultSong;
             }
         }
 
+        public bool Remove(Song song)
+        {
+            _songRepository.DeleteSong(ConvertToSongDTO(song));
+
+            return _songs.Remove(song);
+        }
         public Song[] GetArray()
         {
             return _songs.ToArray();
         }
 
-        public bool Remove(Song song)
+        public Result Update(Song newSong, Song oldSong)
         {
-            return _songs.Remove(song);
-        }
+            SongDTO newSongDTO = ConvertToSongDTO(newSong);
 
-        public void UpdateSong(Song newSong, Song oldSong)
-        {
-            // These are SongDTO objects for the new and old songs
-            SongDTO newSongDTO = new SongDTO(
-                newSong.Title,
-                newSong.Artist,
-                newSong.Date,
-                newSong.Genre.ToString(),
-                newSong.SongCoverName,
-                newSong.SongCoverData,
-                newSong.SongCoverContentType
-            );
-
-            SongDTO oldSongDTO = new SongDTO(
-                oldSong.Title,
-                oldSong.Artist,
-                oldSong.Date,
-                oldSong.Genre.ToString(),
-                oldSong.SongCoverName,
-                oldSong.SongCoverData,
-                oldSong.SongCoverContentType
-            );
-
+            SongDTO oldSongDTO = ConvertToSongDTO(oldSong);
+            
             // This calls the repository method to update the Song
-            bool success = _songRepository.UpdateSong(newSongDTO, oldSongDTO);
+            Result resultUpdate = _songRepository.UpdateSong(newSongDTO, oldSongDTO);
 
-            if (success)
+            if (resultUpdate.Success)
             {
+                LoadSongsFromDataBase();
+
                 // If the update was successful, this updates the Song in the list
                 int index = _songs.FindIndex(a => a == oldSong);
+
                 if (index != -1)
                 {
                     _songs[index] = newSong;
@@ -121,6 +85,47 @@ namespace Logic
             {
                 Console.WriteLine("Looks like something went wrong when updating the Song in the database :(");
             }
+
+            return resultUpdate;
+        }
+
+        public Result SendSongToTheDb(SongDTO newSong)
+        {
+            return _songRepository.InsertSong(newSong);
+        }
+
+
+        public Song ConvertToSong(SongDTO newsongDTO)
+        {
+            //Converts the genre enum to a string 
+            genreType genre = (genreType)Enum.Parse(typeof(genreType), newsongDTO.Genre);
+
+            //this converts SongDTO to songs
+            return new Song(
+                newsongDTO.SongID,
+                newsongDTO.SongTitle,
+                newsongDTO.Artist,
+                newsongDTO.ReleaseDate,
+                genre,
+                newsongDTO.SongCoverName,
+                newsongDTO.SongCoverData,
+                newsongDTO.SongCoverContentType
+                );
+        }
+
+        public SongDTO ConvertToSongDTO(Song song)
+        {
+            // this converts Song to SongDTO
+            return new SongDTO(
+                song.SongID,
+                song.Title,
+                song.Artist,
+                song.Date,
+                song.Genre.ToString(),
+                song.SongCoverName,
+                song.SongCoverData,
+                song.SongCoverContentType
+            );
         }
     }
 }
