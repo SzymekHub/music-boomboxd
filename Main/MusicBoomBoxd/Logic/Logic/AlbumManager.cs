@@ -1,10 +1,4 @@
-﻿using Infrastructure.DTOs;
-using Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Infrastructure;
 
 namespace Logic
 {
@@ -12,7 +6,7 @@ namespace Logic
     {
         private List<Album> _albums;
         private readonly AlbumRepository _albumRepository;
-        private readonly LoadAlbums _loadAlbums;
+        private readonly
 
         public AlbumManager(LoadAlbums loadAlbums)
         {

@@ -1,5 +1,4 @@
-﻿
-namespace Infrastructure
+﻿namespace Infrastructure
 {
     //This class represents the data structure of a user
     public class UserDTO
