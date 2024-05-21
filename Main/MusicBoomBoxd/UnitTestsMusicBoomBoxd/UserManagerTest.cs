@@ -10,13 +10,14 @@ namespace UnitTestsMusicBoomBoxd
         [TestMethod]
         public void AddUser_WhenValidUserProvided_Should_Add_User_To_The_List_And_Datbase()
         {
-            //Arrange
-            var mockUserRepository = new Mock<UserRepository>();
-            var mockLoadUsers = new Mock<LoadUsers>(mockUserRepository.Object);
+            // Arrange
+            var mockUserRepository = new Mock<IUserRepository>();
+            var userRepository = new UserRepository(); // Assuming this is the correct usage
 
-            UserManager userManager = new UserManager(mockLoadUsers.Object);
-            
-            User user = new User("testuser", "password", "test@example.com", userType.Regular, DateTime.Now, genreType.Metal, "ProfilePicTest", new byte[] {1,1,1,1}, "JPG");
+            // Provide both parameters required by the UserManager constructor
+            UserManager userManager = new UserManager(userRepository, mockUserRepository.Object);
+
+            User user = new User("testuser", "password", "test@example.com", userType.Regular, DateTime.Now, genreType.Metal, "ProfilePicTest", new byte[] { 1, 1, 1, 1 }, "JPG");
 
             // Act
             userManager.Add(user);
