@@ -1,18 +1,20 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Infrastructure;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
+using WebApp.Pages.Models;
 using Infrastructure;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Logic;
 
 namespace WebApp.Pages
 {
     public class IndexModel : PageModel
     {
+        [BindProperty]
+        public LoginUser LoginUser { get; set; }
+
         private readonly UserRepository _userRepository;
         public IndexModel(UserRepository userRepository)
         {
@@ -27,7 +29,7 @@ namespace WebApp.Pages
 
         // i want ui to handle rules. And logic to validate. Introduce a class manager that validates user  
 
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnPostLogin()
         {
             var userDTO = _userRepository.GetUserByUsername(Username);
 
