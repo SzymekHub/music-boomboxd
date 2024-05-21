@@ -1,6 +1,4 @@
-﻿using Infrastructure.DTOs;
-
-namespace Infrastructure.Interfaces
+﻿namespace Infrastructure
 {
     public interface IUserRepository
     {

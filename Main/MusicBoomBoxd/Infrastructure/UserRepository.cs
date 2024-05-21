@@ -1,7 +1,5 @@
-﻿using System.Data.SqlClient;
-using Infrastructure.DTOs;
+﻿using Microsoft.Data.SqlClient;
 using System.Data;
-using Infrastructure.Interfaces;
 
 
 namespace Infrastructure
@@ -32,7 +30,7 @@ namespace Infrastructure
                                     SELECT SCOPE_IDENTITY()";
                 }
                 
-                cmd.Parameters.AddWithValue("@Username", userDTO.UserName);
+                cmd.Parameters.AddWithValue("@Username", userDTO.Username);
 
                 cmd.Parameters.AddWithValue("@Password", userDTO.Password);
 
@@ -93,7 +91,7 @@ namespace Infrastructure
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "SELECT TOP (@Count) UserID, Username, Password, Email, UserType, Birthday, FavGenre, ProfilePictureName, ProfilePictureData, ProfilePictureContentType " +
-                                  "FROM User WHERE Active = 1 ORDER BY UserID DESC";
+                                  "FROM [User] WHERE Active = 1 ORDER BY UserID DESC";
 
 
                 cmd.Parameters.AddWithValue("@Count", count);
@@ -133,7 +131,7 @@ namespace Infrastructure
                 cmd.CommandText = @"UPDATE [User] SET Username = @Username, Password = @Password, Email = @Email, UserType = @UserType, Birthday = @Birthday, FavGenre = @FavGenre, ProfilePictureName = @ProfilePictureName, ProfilePictureData = @ProfilePictureData, ProfilePictureContentType = @ProfilePictureContentType
                                 WHERE Username = @OldUsername AND Password = @OldPassword AND Email = @OldEmail AND UserType = @OldUserType AND Birthday = @OldBirthday AND FavGenre = @OldFavGenre AND ProfilePictureName = @OldProfilePictureName AND ProfilePictureData = @OldProfilePictureData AND  ProfilePictureContentType = @OldProfilePictureContentType";
 
-                cmd.Parameters.AddWithValue("@Username", newUserDTO.UserName);
+                cmd.Parameters.AddWithValue("@Username", newUserDTO.Username);
                 cmd.Parameters.AddWithValue("@Password", newUserDTO.Password);
                 cmd.Parameters.AddWithValue("@Email", newUserDTO.Email);
 
@@ -158,7 +156,7 @@ namespace Infrastructure
                 cmd.Parameters.AddWithValue("@ProfilePictureContentType", newUserDTO.ProfilePictureContentType);
 
                 // Parameters for old Song to find it in the database
-                cmd.Parameters.AddWithValue("@OldUsername", oldUserDTO.UserName);
+                cmd.Parameters.AddWithValue("@OldUsername", oldUserDTO.Username);
                 cmd.Parameters.AddWithValue("@OldPassword", oldUserDTO.Password);
                 cmd.Parameters.AddWithValue("@OldEmail", oldUserDTO.Email);
                 cmd.Parameters.AddWithValue("@OldUserType", oldUserDTO.UserType.ToString());
@@ -201,7 +199,7 @@ namespace Infrastructure
                                     WHERE UserID = @UserID AND Username = @Username AND Email = @Email ";
 
                 cmd.Parameters.AddWithValue("@UserID", userDTO.UserID);
-                cmd.Parameters.AddWithValue("@Username", userDTO.UserName);
+                cmd.Parameters.AddWithValue("@Username", userDTO.Username);
                 cmd.Parameters.AddWithValue("@Email", userDTO.Email);
 
                 try

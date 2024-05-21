@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Infrastructure.DTOs;
-using Infrastructure;
+﻿using Infrastructure;
 using Logic;
-using Infrastructure.Interfaces;
+
 
 namespace WinFormsApp
 {
@@ -169,8 +159,8 @@ namespace WinFormsApp
             dgvUsers.AutoGenerateColumns = false;
             dgvUsers.AllowUserToAddRows = false;
 
-            dgvUsers.Columns.Add("UserName", "UserName");
-            dgvUsers.Columns["UserName"].DataPropertyName = "UserName";
+            dgvUsers.Columns.Add("Username", "Username");
+            dgvUsers.Columns["Username"].DataPropertyName = "Username";
 
             dgvUsers.Columns.Add("Email", "Email");
             dgvUsers.Columns["Email"].DataPropertyName = "Email";

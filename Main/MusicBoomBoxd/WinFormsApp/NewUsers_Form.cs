@@ -1,5 +1,4 @@
 ﻿using Infrastructure;
-using Infrastructure.DTOs;
 using Logic;
 
 namespace WinFormsApp
@@ -133,7 +132,7 @@ namespace WinFormsApp
 
         private void FillFormWithUserDetails(User user)
         {
-            tbNameUser.Text = user.UserName;
+            tbNameUser.Text = user.Username;
             tbPassword.Visible = false;
             tbEmailUser.Text = user.Email;
             tbPassword.Text = user.Password;

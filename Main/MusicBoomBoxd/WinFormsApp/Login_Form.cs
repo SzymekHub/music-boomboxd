@@ -1,3 +1,4 @@
+using Infrastructure;
 using Logic;
 
 namespace WinFormsApp
@@ -6,14 +7,21 @@ namespace WinFormsApp
     {
         private const string AdminUsername = "Admin";
         private const string AdminPassword = "p";
+        public UserManager userManager { get; }
         private static AlbumManager albumManager;
         private static SongManager songManager;
-        private static UserManager userManager;
-
+        
 
         public Login_Form()
         {
             InitializeComponent();
+
+            UserRepository userRep = new UserRepository();
+            IUserRepository IuserRep = userRep;
+
+            userManager = new UserManager(userRep, IuserRep);
+            userManager.LoadUsersFromDataBase();
+
             this.StartPosition = FormStartPosition.CenterScreen;
         }
 

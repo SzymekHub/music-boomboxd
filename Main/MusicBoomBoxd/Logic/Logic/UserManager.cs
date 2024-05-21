@@ -1,17 +1,10 @@
 ﻿using Infrastructure;
-using Infrastructure.DTOs;
-using Infrastructure.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Logic
 {
     public class UserManager
     {
-        private List<User> _users;
+        public List<User> _users;
         private readonly UserRepository _userRepository;
         private readonly IUserRepository _iuserRepostiory;
 
@@ -26,7 +19,7 @@ namespace Logic
 
         public void LoadUsersFromDataBase()
         {
-            List<UserDTO> userDTOs = _userRepository.GetRecentUser(int.MaxValue);
+            List<UserDTO> userDTOs = _userRepository.GetRecentUser(1000);
             _users.Clear();
             foreach (var userDTO in userDTOs)
             {
@@ -107,7 +100,7 @@ namespace Logic
         public User ConvertToUser(UserDTO newUserDTO)
         {
             //Converts the user role enum to a string
-            userType user = (userType)Enum.Parse(typeof(userType), newUserDTO.UserType);
+            userType type = (userType)Enum.Parse(typeof(userType), newUserDTO.UserType);
 
             //Converts the genre enum to a string 
             genreType genre = (genreType)Enum.Parse(typeof(genreType), newUserDTO.FavGenre);
@@ -115,10 +108,10 @@ namespace Logic
             //this converts UserDto to users
             return new User(
                 newUserDTO.UserID,
-                newUserDTO.UserName,
+                newUserDTO.Username,
                 newUserDTO.Password,
                 newUserDTO.Email,
-                user,
+                type,
                 newUserDTO.Birthday,
                 genre,
                 newUserDTO.ProfilePictureName,
@@ -134,7 +127,7 @@ namespace Logic
             // this converts User to UserDTO
             return new UserDTO(
                 user.UserID,
-                user.UserName,
+                user.Username,
                 user.Password,
                 user.Email,
                 user.UserType.ToString(),
