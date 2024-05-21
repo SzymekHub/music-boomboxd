@@ -8,15 +8,21 @@
 <div class="log-in">
     <form method="post">
         <div class="group">
-            <label for="user" class="label">Username</label>
-            <input id="user" type="text" class="input" asp-for="Username">
+            <label asp-for="LoginUser.Email">Email: </label>
+            <span asp-validation-for="LoginUser.Email" style="color:red"></span>
+            <br />
+            <input asp-for="LoginUser.Email" />
+            <br />
         </div>
         <div class="group">
-            <label for="pass" class="label">Password</label>
-            <input id="pass" type="password" class="input" asp-for="Password" data-type="password">
+            <label asp-for="LoginUser.Password">Password: </label>
+            <span asp-validation-for="LoginUser.Password" style="color:red"></span>
+            <br />
+            <input asp-for="LoginUser.Password" type="password" />
+            <br />
         </div>
         <div class="group">
-            <input id="check" type="checkbox" class="check">
+            <input type="checkbox" class="check">
             <label for="check"><span class="icon"></span> Keep me Logged in</label>
         </div>
         <div class="group">

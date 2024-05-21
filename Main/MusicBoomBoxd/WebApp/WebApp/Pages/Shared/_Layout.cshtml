@@ -34,13 +34,18 @@
                 </ul>
                 <div class="Thank-You-Container">
                     <p>Thank you for checking out my website!</p>
+                &copy; 2024 - ZooBaazar - <a asp-area="" asp-page="/Privacy">Privacy</a>
                 </div>
                 <ul class="right-links-footer">
                     <li><a href="#">Report a bug</a></li>
                 </ul>
             </div>
     </div>
-   
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

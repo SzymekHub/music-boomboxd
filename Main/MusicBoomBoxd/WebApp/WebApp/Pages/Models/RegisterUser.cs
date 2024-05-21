@@ -1,14 +1,15 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebApp.Models
+namespace WebApp.Pages.Models
 {
-    public class User
+    public class RegisterUser
     {
         [Required(ErrorMessage = "Username is required")]
-        public string UserName { get; set; }
+        [MinLength(5, ErrorMessage = "Username is too short")]
+        public string Name { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
+        [RegularExpression("^[\\w\\-\\.]+@([\\w-]+\\.)+[\\w-]{2,}$", ErrorMessage = "Email invalid")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Password is required")]
@@ -33,24 +34,5 @@ namespace WebApp.Models
 
         [Required(ErrorMessage = "Profile Picture Content Type is required")]
         public string ProfilePictureContentType { get; set; }
-
-        // Parameterless constructor. This is necessary for model binding.
-        public User() 
-        {
-            
-        }
-
-        public User(string userName, string password, string email, string userType, DateTime birthday, string favGenre, string profilePictureName, byte[] profilePictureData, string profilePictureContentType)
-        {
-            UserName = userName;
-            Password = password;
-            Email = email;
-            UserType = userType;
-            Birthday = birthday;
-            FavGenre = favGenre;
-            ProfilePictureName = profilePictureName;
-            ProfilePictureData = profilePictureData;
-            ProfilePictureContentType = profilePictureContentType;
-        }
     }
 }

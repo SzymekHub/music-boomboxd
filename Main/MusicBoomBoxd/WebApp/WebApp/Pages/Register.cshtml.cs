@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Logic;
-using WebApp.Models;
 using Infrastructure;
-using Microsoft.AspNetCore.Http;
-using System.IO;
+using WebApp.Pages.Models;
 
 namespace WebApp.Pages
 {
@@ -16,7 +14,7 @@ namespace WebApp.Pages
 
         // Binds the User object
         [BindProperty]
-        public Models.User User { get; set; }
+        public LoginUser User { get; set; }
 
         // Added a property for handling file upload
         [BindProperty]
@@ -54,6 +52,7 @@ namespace WebApp.Pages
             
             // validate if user already exists.It could go wrong
             // Change the naming for more functionaity 
+
             if (_userManager.SendUserToTheDb(newUser))
             {
                 return RedirectToPage("/Index");
