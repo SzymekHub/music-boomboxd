@@ -1,5 +1,6 @@
 using Infrastructure;
 using Logic;
+using System.Collections.Generic;
 
 namespace WinFormsApp
 {
@@ -10,6 +11,9 @@ namespace WinFormsApp
         public UserManager userManager { get; }
         public AlbumManager albumManager { get; }
         public SongManager songManager { get; }
+
+        private List<Artist> artistList;
+
 
         public Login_Form()
         {
@@ -51,7 +55,7 @@ namespace WinFormsApp
 
             if (enteredUsername == AdminUsername && enteredPassword == AdminPassword)
             {
-                DashBoard_Form dash_form = new DashBoard_Form(AdminUsername, userManager, albumManager, songManager);
+                DashBoard_Form dash_form = new DashBoard_Form(AdminUsername, userManager, albumManager, songManager, artistList);
                 dash_form.Owner = this;
                 dash_form.Text = "Hello" + AdminUsername;
                 this.Visible = false;

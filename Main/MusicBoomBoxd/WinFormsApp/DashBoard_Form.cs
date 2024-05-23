@@ -10,6 +10,8 @@ namespace WinFormsApp
         //for the User tab
         private static UserManager userManager;
         private static List<User> userList = new List<User>();
+        private List<Artist> artists;
+
 
         //for the Album tab
         private static AlbumManager albumManager;
@@ -19,7 +21,7 @@ namespace WinFormsApp
         private static SongManager songManager;
         private static List<Song> songList = new List<Song>();
 
-        public DashBoard_Form(string adminUsername, UserManager um, AlbumManager am, SongManager sm)
+        public DashBoard_Form(string adminUsername, UserManager um, AlbumManager am, SongManager sm, List<Artist> artistList)
         {
             InitializeComponent();
 
@@ -30,6 +32,7 @@ namespace WinFormsApp
 
             //This is for the album page
             albumManager = am;
+            artists = artistList;
             SetUpDataGridViewAlbums();
             PopulateAlbums();
 
@@ -51,7 +54,7 @@ namespace WinFormsApp
             #endregion
 
             this.StartPosition = FormStartPosition.CenterScreen;
-
+            this.artists = artists;
         }
 
         private void DashBoard_Form_Load(object sender, EventArgs e)
@@ -420,7 +423,7 @@ namespace WinFormsApp
         private void bntAddAlbum_Click(object sender, EventArgs e)
         {
             // Open the NewAlbum_Form
-            using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager))
+            using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, artists))
             {
                 // Show the addAlbumForm
                 if (addAlbumForm.ShowDialog() == DialogResult.OK)
@@ -441,9 +444,8 @@ namespace WinFormsApp
             {
                 // Get the selected album
                 Album selectedAlbum = dgvAlbums.SelectedRows[0].DataBoundItem as Album;
-
                 // Open the NewAlbum_Form with the selected albums's information
-                using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, selectedAlbum))
+                using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, artists, selectedAlbum))
                 {
                     if (addAlbumForm.ShowDialog() == DialogResult.OK)
                     {
@@ -471,17 +473,17 @@ namespace WinFormsApp
                 Album selectedAlbum = dgvAlbums.SelectedRows[0].DataBoundItem as Album;
 
                 // Opens the NewAlbum_Form with the selected albums's information
-                using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, selectedAlbum, true))
+                using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, artists, selectedAlbum, true))
                 {
                     if (addAlbumForm.ShowDialog() == DialogResult.OK)
-                    {
+                {
                         // Update the album with the modified information
                         Album updatedAlbum = addAlbumForm.GetUpdatedAlbum();
                         if (updatedAlbum != null)
-                        {
+                    {
                             albumManager.Update(updatedAlbum, selectedAlbum);
                             dgvAlbums.DataSource = albumManager.GetArray();
-                        }
+                    }
                     }
                 }
             }

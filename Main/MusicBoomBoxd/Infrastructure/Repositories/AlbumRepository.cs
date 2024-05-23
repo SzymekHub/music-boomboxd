@@ -15,25 +15,21 @@ namespace Infrastructure
                 cmd.CommandType = CommandType.Text;
                 if (albumDTO.AlbumID != 0)
                 {
-                    cmd.Connection = conn;
-                    cmd.CommandType = CommandType.Text;
                     cmd.CommandText = @"SET IDENTITY_INSERT [Album] ON
-                                    INSERT INTO [Album] (AlbumID, Title, Artist, Date, Genre, AlbumCoverName, AlbumCoverData, AlbumCoverContentType) 
-                                    VALUES (@AlbumID, @Title, @Artist, @ReleaseDate, @Genre, @AlbumCoverName, @AlbumCoverData, @AlbumCoverContentType); 
-                                    SELECT SCOPE_IDENTITY();";
+                                        INSERT INTO [Album] (AlbumID, ArtistID, Title, Date, Genre, AlbumCoverName, AlbumCoverData, AlbumCoverContentType) 
+                                        VALUES (@AlbumID, @ArtistID, @Title, @ReleaseDate, @Genre, @AlbumCoverName, @AlbumCoverData, @AlbumCoverContentType); 
+                                        SELECT SCOPE_IDENTITY();";
 
                     cmd.Parameters.AddWithValue("@AlbumID", albumDTO.AlbumID);
                 }
                 else
                 {
-                    cmd.CommandText = @"INSERT INTO [Album] (Title, Artist, Date, Genre, AlbumCoverName, AlbumCoverData, AlbumCoverContentType) 
-                                    VALUES (@Title, @Artist, @ReleaseDate, @Genre, @AlbumCoverName, @AlbumCoverData, @AlbumCoverContentType); 
-                                    SELECT SCOPE_IDENTITY();";
+                    cmd.CommandText = @"INSERT INTO [Album] (ArtistID, Title, Date, Genre, AlbumCoverName, AlbumCoverData, AlbumCoverContentType) 
+                                        VALUES (@ArtistID, @Title, @ReleaseDate, @Genre, @AlbumCoverName, @AlbumCoverData, @AlbumCoverContentType); 
+                                        SELECT SCOPE_IDENTITY();";
                 }
 
                 cmd.Parameters.AddWithValue("@Title", albumDTO.AlbumTitle);
-
-                cmd.Parameters.AddWithValue("@Artist", albumDTO.Artist);
 
                 // This converts DateTime to string in the format "yyyy-MM-dd HH:mm:ss.fff" so that it works with the databse
                 string releaseDateString = albumDTO.ReleaseDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
@@ -83,32 +79,43 @@ namespace Infrastructure
             {
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "SELECT TOP (@Count) AlbumID, Title, Artist, Date, Genre, AlbumCoverName, AlbumCoverData, AlbumCoverContentType " +
-                                  "FROM [Album] WHERE Active = 1 ORDER BY AlbumID DESC";
+                cmd.CommandText = @"SELECT TOP (@Count) AlbumID, ArtistID, Title, Date, Genre, AlbumCoverName, AlbumCoverData, AlbumCoverContentType 
+                                    FROM [Album] WHERE Active = 1 ORDER BY AlbumID DESC";
 
 
                 cmd.Parameters.AddWithValue("@Count", count);
-
-                conn.Open();
-
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                try
                 {
-                    while (reader.Read())
-                    {
-                        int albumID = reader.GetInt32(0);
-                        string title = reader.GetString(1);
-                        string artist = reader.GetString(2);
-                        DateTime releaseDate = reader.GetDateTime(3);
-                        string genre = reader.GetString(4);
-                        string albumCoverName = reader.GetString(5);
-                        byte[] albumCoverData = (byte[])reader.GetValue(6);
-                        string albumCoverContentType = reader.GetString(7);
+                    conn.Open();
 
-                        AlbumDTO album = new AlbumDTO(albumID, title, artist, releaseDate, genre, albumCoverName, albumCoverData, albumCoverContentType);
-                        recentAlbums.Add(album);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int albumID = reader.GetInt32(0);
+                            int artistID = reader.GetInt32(1);
+                            string title = reader.GetString(2);
+                            DateTime releaseDate = reader.GetDateTime(3);
+                            string genre = reader.GetString(4);
+                            string albumCoverName = reader.GetString(5);
+                            byte[] albumCoverData = (byte[])reader.GetValue(6);
+                            string albumCoverContentType = reader.GetString(7);
+
+                            AlbumDTO album = new AlbumDTO(albumID, artistID, title, releaseDate, genre, albumCoverName, albumCoverData, albumCoverContentType);
+                            recentAlbums.Add(album);
+                        }
                     }
                 }
+                catch (SqlException ex)
+                {
+                    throw new Exception($"SQL Exception: {ex.Message}", ex);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Exception: {ex.Message}", ex);
+                }
             }
+
             return recentAlbums;
         }
 
@@ -119,11 +126,10 @@ namespace Infrastructure
             {
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE [Album] SET Title = @Title, Artist = @Artist, Date = @ReleaseDate, Genre = @Genre, AlbumCoverName = @AlbumCoverName, AlbumCoverData = @AlbumCoverData, AlbumCoverContentType = @AlbumCoverContentType
-                                WHERE Title = @OldTitle AND Artist = @OldArtist AND Date = @OldReleaseDate AND Genre = @OldGenre AND AlbumCoverName = @OldAlbumCoverName AND AlbumCoverData = @OldAlbumCoverData AND AlbumCoverContentType = @OldAlbumCoverContentType ";
+                cmd.CommandText = @"UPDATE [Album] SET Title = @Title, Date = @ReleaseDate, Genre = @Genre, AlbumCoverName = @AlbumCoverName, AlbumCoverData = @AlbumCoverData, AlbumCoverContentType = @AlbumCoverContentType
+                                  WHERE AlbumID = @AlbumID";
 
                 cmd.Parameters.AddWithValue("@Title", newAlbumDTO.AlbumTitle);
-                cmd.Parameters.AddWithValue("@Artist", newAlbumDTO.Artist);
 
                 // This converts DateTime to string in the format "yyyy-MM-dd HH:mm:ss.fff" so that it works with the databse
                 string releaseDateString = newAlbumDTO.ReleaseDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
@@ -138,15 +144,15 @@ namespace Infrastructure
                 byte[] albumCoverData = newAlbumDTO.AlbumCoverData.ToArray();
                 cmd.Parameters.AddWithValue("@AlbumCoverData", albumCoverData);
                 cmd.Parameters.AddWithValue("@AlbumCoverContentType", newAlbumDTO.AlbumCoverContentType);
+                cmd.Parameters.AddWithValue("@AlbumID", newAlbumDTO.AlbumID);
 
-                // Parameters for old album to find it in the database
-                cmd.Parameters.AddWithValue("@OldTitle", oldAlbumDTO.AlbumTitle);
-                cmd.Parameters.AddWithValue("@OldArtist", oldAlbumDTO.Artist);
-                cmd.Parameters.AddWithValue("@OldReleaseDate", oldAlbumDTO.ReleaseDate);
-                cmd.Parameters.AddWithValue("@OldGenre", oldAlbumDTO.Genre.ToString());
-                cmd.Parameters.AddWithValue("@OldAlbumCoverName", oldAlbumDTO.AlbumCoverName);
-                cmd.Parameters.AddWithValue("@OldAlbumCoverData", oldAlbumDTO.AlbumCoverData.ToArray());
-                cmd.Parameters.AddWithValue("@OldAlbumCoverContentType", oldAlbumDTO.AlbumCoverContentType);
+                //// Parameters for old album to find it in the database
+                //cmd.Parameters.AddWithValue("@OldTitle", oldAlbumDTO.AlbumTitle);
+                //cmd.Parameters.AddWithValue("@OldReleaseDate", oldAlbumDTO.ReleaseDate);
+                //cmd.Parameters.AddWithValue("@OldGenre", oldAlbumDTO.Genre.ToString());
+                //cmd.Parameters.AddWithValue("@OldAlbumCoverName", oldAlbumDTO.AlbumCoverName);
+                //cmd.Parameters.AddWithValue("@OldAlbumCoverData", oldAlbumDTO.AlbumCoverData.ToArray());
+                //cmd.Parameters.AddWithValue("@OldAlbumCoverContentType", oldAlbumDTO.AlbumCoverContentType);
 
                 try
                 {
@@ -177,30 +183,19 @@ namespace Infrastructure
             {
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE [Album] SET Active = 0
-                                    WHERE AlbumID = @AlbumID AND Title = @Title AND Artist = @Artist AND Date = @ReleaseDate AND Genre = @Genre";
+                cmd.CommandText = @"UPDATE [Album] SET Active = 0 
+                                    WHERE AlbumID = @AlbumID";
 
                 cmd.Parameters.AddWithValue("@AlbumID", albumDTO.AlbumID);
-                cmd.Parameters.AddWithValue("@Title", albumDTO.AlbumTitle);
-                cmd.Parameters.AddWithValue("@Artist", albumDTO.Artist);
-                // This converts DateTime to string in the format "yyyy-MM-dd HH:mm:ss.fff" so that it works with the database
-                string releaseDateString = albumDTO.ReleaseDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                cmd.Parameters.AddWithValue("@ReleaseDate", releaseDateString);
-
-                // This converts the genre enum to a string to pass it to Database
-                string genreString = albumDTO.Genre.ToString();
-                cmd.Parameters.AddWithValue("@Genre", genreString);
-
                 try
                 {
                     conn.Open();
-                    var result = cmd.ExecuteScalar();
-                    int newAlbumID;
-                    if (int.TryParse(result?.ToString(), out newAlbumID))
+                    int result = cmd.ExecuteNonQuery();
+                    if (result > 0)
                     {
                         return new Result { Success = true, Message = "Album deleted successfully." };
                     }
-                    return new Result { Success = false, Message = "Failed to retrieve Album ID." };
+                    return new Result { Success = false, Message = "Failed to delete album." };
                 }
                 catch (SqlException ex)
                 {

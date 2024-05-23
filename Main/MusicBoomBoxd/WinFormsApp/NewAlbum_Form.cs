@@ -6,31 +6,32 @@ namespace WinFormsApp
     public partial class NewAlbum_Form : Form
     {
         public Album NewAlbum { get; private set; }
-        private Album exisitingAlbum;
+        private Album existingAlbum;
         private AlbumManager albumManager;
+        private List<Artist> artists;
         private string selectedImagePath;
 
-        public NewAlbum_Form(AlbumManager am, Album album = null, bool view = false)
+        public NewAlbum_Form(AlbumManager am, List<Artist> artistList, Album album = null, bool view = false)
         {
             albumManager = am;
+            artists = artistList;
             InitializeComponent();
             InitializeComboBox();
-            exisitingAlbum = album;
+            existingAlbum = album;
             ClearControls();
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            if (exisitingAlbum != null)
+            if (existingAlbum != null)
             {
-                FillFormWithAlbumDetails(exisitingAlbum);
-                //This will load and display the album cover
-                DisplayAlbumCover(exisitingAlbum.AlbumCoverData);
+                FillFormWithAlbumDetails(existingAlbum);
+                DisplayAlbumCover(existingAlbum.AlbumCoverData);
             }
 
             if (view)
             {
                 tbTitleAlbum.Enabled = false;
                 DatePickerAlbum.Enabled = false;
-                tbArtistAlbum.Enabled = false;
+                cbArtistAlbum.Enabled = false;
                 cbGenreAlbum.Enabled = false;
                 btnAddPictureAlbum.Enabled = false;
                 btnAddAlbum.Enabled = false;
@@ -42,6 +43,7 @@ namespace WinFormsApp
             this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
+
         private void btnAddPictureAlbum_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
@@ -98,22 +100,38 @@ namespace WinFormsApp
                     }
                 }
 
+                Artist selectedArtist = cbArtistAlbum.SelectedItem as Artist;
+
                 // This reads the selected image file into a byte array
                 byte[] albumCoverData = File.ReadAllBytes(selectedImagePath);
 
-                //This creates a new Album Object with the provided details 
-                Album newAlbum = new Album(
-                      exisitingAlbum.AlbumID,
-                      tbTitleAlbum.Text,
-                      tbArtistAlbum.Text,
-                      DatePickerAlbum.Value,
-                      (genreType)cbGenreAlbum.SelectedItem,
-                      albumCoverName,
-                      albumCoverData,
-                      albumCoverContentType
-                );
+                if (existingAlbum == null)
+                {
+                    NewAlbum = new Album(
+                        selectedArtist.ArtistID,
+                        tbTitleAlbum.Text,
+                        DatePickerAlbum.Value,
+                        (genreType)cbGenreAlbum.SelectedItem,
+                        albumCoverName,
+                        albumCoverData,
+                        albumCoverContentType
+                    );
+                }
+                else
+                {
+                    NewAlbum = new Album(
+                        existingAlbum.AlbumID,
+                        selectedArtist.ArtistID,
+                        tbTitleAlbum.Text,
+                        DatePickerAlbum.Value,
+                        (genreType)cbGenreAlbum.SelectedItem,
+                        albumCoverName,
+                        albumCoverData,
+                        albumCoverContentType
+                    );
+                }
 
-                Result result = albumManager.Update(newAlbum, exisitingAlbum);
+                Result result = albumManager.Update(NewAlbum, existingAlbum);
 
                 if (result.Success)
                 {
@@ -124,14 +142,13 @@ namespace WinFormsApp
                 {
                     tsslblNewAlbumForm.Text = result.Message;
                 }
-                
             }
         }
 
         private void FillFormWithAlbumDetails(Album album)
         {
             tbTitleAlbum.Text = album.Title;
-            tbArtistAlbum.Text = album.Artist;
+            cbArtistAlbum.SelectedItem = artists.FirstOrDefault(a => a.ArtistID == album.ArtistID);
             DatePickerAlbum.Value = album.Date;
             cbGenreAlbum.SelectedItem = album.Genre;
         }
@@ -147,7 +164,7 @@ namespace WinFormsApp
         private void ClearControls()
         {
             tbTitleAlbum.Clear();
-            tbArtistAlbum.Clear();
+            cbArtistAlbum.SelectedIndex = 0;
             DatePickerAlbum.Value = DateTime.Now;
             cbGenreAlbum.SelectedIndex = 0;
             selectedImagePath = null;
@@ -185,8 +202,8 @@ namespace WinFormsApp
 
                 // This is a new Album object that returns with the provided details
                 return new Album(
+                      ((Artist)cbArtistAlbum.SelectedItem).ArtistID,
                       tbTitleAlbum.Text,
-                      tbArtistAlbum.Text,
                       DatePickerAlbum.Value,
                       (genreType)cbGenreAlbum.SelectedItem,
                       albumCoverName,
@@ -232,18 +249,20 @@ namespace WinFormsApp
 
                 albumManager.Update(
                     new Album(
+                        existingAlbum.AlbumID,
+                        ((Artist)cbArtistAlbum.SelectedItem).ArtistID,
                         tbTitleAlbum.Text,
-                        tbArtistAlbum.Text,
                         DatePickerAlbum.Value,
                         (genreType)cbGenreAlbum.SelectedItem,
                         albumCoverName,
                         albumCoverData,
                         albumCoverContentType),
-                        exisitingAlbum
+                        existingAlbum
                     );
                 return new Album(
+                        existingAlbum.AlbumID,
+                        ((Artist)cbArtistAlbum.SelectedItem).ArtistID,
                         tbTitleAlbum.Text,
-                        tbArtistAlbum.Text,
                         DatePickerAlbum.Value,
                         (genreType)cbGenreAlbum.SelectedItem,
                         albumCoverName,
@@ -267,9 +286,9 @@ namespace WinFormsApp
             }
 
             // Checks if the artist is provided
-            if (string.IsNullOrEmpty(tbArtistAlbum.Text))
+            if (cbArtistAlbum.SelectedItem == null)
             {
-                tsslblNewAlbumForm.Text = "Every Album needs an artist. Please enter one.";
+                tsslblNewAlbumForm.Text = "Every Album needs an artist. Please select one.";
                 return false;
             }
 
@@ -293,6 +312,7 @@ namespace WinFormsApp
         public void InitializeComboBox()
         {
             cbGenreAlbum.DataSource = Enum.GetValues(typeof(genreType));
+            //cbArtistAlbum.DataSource = Enum.GetValues(typeof(genreType));
         }
 
         private void NewAlbum_Form_FormClosed(object sender, FormClosedEventArgs e)

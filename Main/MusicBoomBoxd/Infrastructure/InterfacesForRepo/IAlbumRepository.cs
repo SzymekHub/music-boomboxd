@@ -2,9 +2,12 @@
 {
     public interface IAlbumRepository
     {
-        Result DeleteAlbum(AlbumDTO albumDTO);
-        List<AlbumDTO> GetRecentAlbum(int count);
         Result InsertAlbum(AlbumDTO albumDTO);
+
+        List<AlbumDTO> GetRecentAlbum(int count);
+
         Result UpdateAlbum(AlbumDTO newAlbumDTO, AlbumDTO oldAlbumDTO);
+
+        Result DeleteAlbum(AlbumDTO albumDTO);
     }
 }
