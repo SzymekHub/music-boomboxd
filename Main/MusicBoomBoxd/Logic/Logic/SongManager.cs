@@ -89,24 +89,6 @@ namespace Logic
             }
         }
 
-
-        private void btnAddUser_Click(object sender, EventArgs e)
-        {
-            // Open the NewUsers_Form
-            using (NewUsers_Form addUsersForm = new NewUsers_Form(userManager))
-            {
-                // Show the addUsersForm
-                if (addUsersForm.ShowDialog() == DialogResult.OK)
-                {   // Add the new user to the UserManager
-                    userManager.LoadUsersFromDataBase();
-
-                    // Update the DataGridView
-                    dgvUsers.DataSource = userManager.GetArray();
-
-                }
-            }
-        }
-
         public Result SendSongToTheDb(SongDTO newSong)
         {
             return _songRepository.InsertSong(newSong);

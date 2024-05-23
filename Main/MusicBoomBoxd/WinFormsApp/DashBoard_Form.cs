@@ -293,18 +293,12 @@ namespace WinFormsApp
                 // Show the addSongForm
                 if (addSongForm.ShowDialog() == DialogResult.OK)
                 {
-                    // Get the newly created Song from the addSongForm
-                    Song newSong = addSongForm.GetNewSong();
+                    // Add the new employee to the SongManager
+                    songManager.LoadSongsFromDataBase();
 
-                    // Check if a new Song was created
-                    if (newSong != null)
-                    {
-                        // Add the new employee to the SongManager
-                        songManager.Add(newSong);
+                    // Update the DataGridView
+                    dgvSongs.DataSource = songManager.GetArray();
 
-                        // Update the DataGridView
-                        dgvSongs.DataSource = songManager.GetArray();
-                    }
                 }
             }
         }
@@ -431,18 +425,12 @@ namespace WinFormsApp
                 // Show the addAlbumForm
                 if (addAlbumForm.ShowDialog() == DialogResult.OK)
                 {
-                    // Get the newly created album from the addAlbumForm
-                    Album newAlbum = addAlbumForm.GetNewAlbum();
+                    // Add the new employee to the albumManager
+                    albumManager.LoadAlbumsFromDatabase();
 
-                    // Check if a new album was created
-                    if (newAlbum != null)
-                    {
-                        // Add the new employee to the albumManager
-                        albumManager.Add(newAlbum);
+                    // Update the DataGridView
+                    dgvAlbums.DataSource = albumManager.GetArray();
 
-                        // Update the DataGridView
-                        dgvAlbums.DataSource = albumManager.GetArray();
-                    }
                 }
             }
         }
