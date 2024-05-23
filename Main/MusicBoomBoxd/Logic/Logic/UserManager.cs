@@ -37,18 +37,10 @@ namespace Logic
             
             _users.Add(user);
 
-            Result resultfailed = new Result { Success = false, Message = "" };
-
             Result resultUser = SendUserToTheDb(userDTO);
             
-            if (resultfailed.Success == false) 
-            {
-                return resultfailed;
-            }
-            else
-            {
-                return resultUser;
-            }
+            return resultUser;
+            
         }
         
         public bool Remove(User user)
@@ -67,28 +59,35 @@ namespace Logic
         public Result Update(User newUser, User oldUser)
         {
             UserDTO newUserDTO = ConvertToUserDTO(newUser);
-
-            UserDTO oldUserDTO = ConvertToUserDTO(oldUser);
-
-            //This calls the repository method to update the User
-            Result resultupdate = _userRepository.UpdateUser(newUserDTO, oldUserDTO);
-
-            if (resultupdate.Success)
+            if (oldUser == null)
             {
-                LoadUsersFromDataBase();
-                int index = _users.FindIndex(ur => ur == oldUser);
-
-                if (index != -1)
-                {
-                    _users[index] = newUser;
-                }
+                Result resultAdd = Add(newUser);
+                return resultAdd;
             }
             else
             {
-                Console.WriteLine("Something went wrong when updating the user");
-            }
+                UserDTO oldUserDTO = ConvertToUserDTO(oldUser);
 
-            return resultupdate;
+                //This calls the repository method to update the User
+                Result resultupdate = _userRepository.UpdateUser(newUserDTO, oldUserDTO);
+
+                if (resultupdate.Success)
+                {
+                    LoadUsersFromDataBase();
+                    int index = _users.FindIndex(ur => ur == oldUser);
+
+                    if (index != -1)
+                    {
+                        _users[index] = newUser;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Something went wrong when updating the user");
+                }
+
+                return resultupdate;
+            }
         }
 
         public Result SendUserToTheDb(UserDTO newUser)

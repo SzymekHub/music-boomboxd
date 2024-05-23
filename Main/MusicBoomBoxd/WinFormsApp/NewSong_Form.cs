@@ -113,8 +113,24 @@ namespace WinFormsApp
                 // This reads the selected image file into a byte array
                 byte[] songCoverData = File.ReadAllBytes(selectedImagePath);
 
-                //This creates a new Song Object with the provided details 
-                Song newSong = new Song(
+                Song newSong = null;
+                if (exisitingSong == null)
+                {
+                    //This creates a new Song Object with the provided details 
+                    newSong = new Song(
+                      tbTitleSong.Text,
+                      tbArtistSong.Text,
+                      DatePickerSong.Value,
+                      (genreType)cbGenre.SelectedItem,
+                      songCoverName,
+                      songCoverData,
+                      songCoverContentType
+                    );
+                }
+                else if (exisitingSong != null)
+                {
+                    //This creates a new Song Object with the provided details 
+                    newSong = new Song(
                       exisitingSong.SongID,
                       tbTitleSong.Text,
                       tbArtistSong.Text,
@@ -123,9 +139,11 @@ namespace WinFormsApp
                       songCoverName,
                       songCoverData,
                       songCoverContentType
-                );
+                    );
+                }
 
                 Result result = songManager.Update(newSong, exisitingSong);
+
                 if (result.Success)
                 {
                     DialogResult = DialogResult.OK;

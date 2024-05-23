@@ -18,7 +18,7 @@ namespace Logic
         public void LoadSongsFromDataBase()
         {
             List<SongDTO> songDTOs = _songRepository.GetRecentSong(1000);
-            
+
             _songs.Clear();
 
             foreach (var songDTO in songDTOs)
@@ -35,18 +35,10 @@ namespace Logic
 
             _songs.Add(song);
 
-            Result resultfailed = new Result { Success = false, Message = "" };
-            
             Result resultSong = SendSongToTheDb(songDTO);
 
-            if (resultfailed.Success == false)
-            {
-                return resultfailed;
-            }
-            else
-            {
-                return resultSong;
-            }
+            return resultSong;
+
         }
 
         public bool Remove(Song song)
@@ -64,29 +56,55 @@ namespace Logic
         {
             SongDTO newSongDTO = ConvertToSongDTO(newSong);
 
-            SongDTO oldSongDTO = ConvertToSongDTO(oldSong);
-            
-            // This calls the repository method to update the Song
-            Result resultUpdate = _songRepository.UpdateSong(newSongDTO, oldSongDTO);
-
-            if (resultUpdate.Success)
+            if (oldSong == null)
             {
-                LoadSongsFromDataBase();
-
-                // If the update was successful, this updates the Song in the list
-                int index = _songs.FindIndex(a => a == oldSong);
-
-                if (index != -1)
-                {
-                    _songs[index] = newSong;
-                }
+                Result resultAdd = Add(newSong);
+                return resultAdd;
             }
             else
             {
-                Console.WriteLine("Looks like something went wrong when updating the Song in the database :(");
-            }
+                SongDTO oldSongDTO = ConvertToSongDTO(oldSong);
 
-            return resultUpdate;
+                // This calls the repository method to update the Song
+                Result resultUpdate = _songRepository.UpdateSong(newSongDTO, oldSongDTO);
+
+                if (resultUpdate.Success)
+                {
+                    LoadSongsFromDataBase();
+
+                    // If the update was successful, this updates the Song in the list
+                    int index = _songs.FindIndex(a => a == oldSong);
+
+                    if (index != -1)
+                    {
+                        _songs[index] = newSong;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Looks like something went wrong when updating the Song in the database :(");
+                }
+
+                return resultUpdate;
+            }
+        }
+
+
+        private void btnAddUser_Click(object sender, EventArgs e)
+        {
+            // Open the NewUsers_Form
+            using (NewUsers_Form addUsersForm = new NewUsers_Form(userManager))
+            {
+                // Show the addUsersForm
+                if (addUsersForm.ShowDialog() == DialogResult.OK)
+                {   // Add the new user to the UserManager
+                    userManager.LoadUsersFromDataBase();
+
+                    // Update the DataGridView
+                    dgvUsers.DataSource = userManager.GetArray();
+
+                }
+            }
         }
 
         public Result SendSongToTheDb(SongDTO newSong)

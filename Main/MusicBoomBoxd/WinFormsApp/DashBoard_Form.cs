@@ -4,9 +4,9 @@ using Logic;
 
 namespace WinFormsApp
 {
-    public partial class DashBoard_Form : Form 
+    public partial class DashBoard_Form : Form
     {
-        
+
         //for the User tab
         private static UserManager userManager;
         private static List<User> userList = new List<User>();
@@ -128,20 +128,20 @@ namespace WinFormsApp
             dgvUsers.AutoGenerateColumns = false;
             dgvUsers.AllowUserToAddRows = false;
 
-                dgvUsers.Columns.Add("Username", "Username");
-                dgvUsers.Columns["Username"].DataPropertyName = "Username";
+            dgvUsers.Columns.Add("Username", "Username");
+            dgvUsers.Columns["Username"].DataPropertyName = "Username";
 
-                dgvUsers.Columns.Add("Email", "Email");
-                dgvUsers.Columns["Email"].DataPropertyName = "Email";
+            dgvUsers.Columns.Add("Email", "Email");
+            dgvUsers.Columns["Email"].DataPropertyName = "Email";
 
-                dgvUsers.Columns.Add("UserType", "UserType");
-                dgvUsers.Columns["UserType"].DataPropertyName = "UserType";
+            dgvUsers.Columns.Add("UserType", "UserType");
+            dgvUsers.Columns["UserType"].DataPropertyName = "UserType";
 
-                dgvUsers.Columns.Add("Birthday", "Birthday");
-                dgvUsers.Columns["Birthday"].DataPropertyName = "Birthday";
+            dgvUsers.Columns.Add("Birthday", "Birthday");
+            dgvUsers.Columns["Birthday"].DataPropertyName = "Birthday";
 
-                dgvUsers.Columns.Add("ProfilePictureName", "ProfilePictureName");
-                dgvUsers.Columns["ProfilePictureName"].DataPropertyName = "ProfilePictureName";
+            dgvUsers.Columns.Add("ProfilePictureName", "ProfilePictureName");
+            dgvUsers.Columns["ProfilePictureName"].DataPropertyName = "ProfilePictureName";
 
             // Bind the list of Users from UserManager to the DataGridView
             dgvUsers.DataSource = userManager.GetArray();
@@ -160,19 +160,12 @@ namespace WinFormsApp
             {
                 // Show the addUsersForm
                 if (addUsersForm.ShowDialog() == DialogResult.OK)
-                {
-                    // Get the newly created User from the addUsersForm
-                    User newUser = addUsersForm.GetNewUser();
+                {   // Add the new user to the UserManager
+                    userManager.LoadUsersFromDataBase();
 
-                    // Check if a new User was created
-                    if (newUser != null)
-                    {
-                        // Add the new user to the UserManager
-                        userManager.Add(newUser);
+                    // Update the DataGridView
+                    dgvUsers.DataSource = userManager.GetArray();
 
-                        // Update the DataGridView
-                        dgvUsers.DataSource = userManager.GetArray();
-                    }
                 }
             }
         }
@@ -241,7 +234,7 @@ namespace WinFormsApp
                 User selectedUser = dgvUsers.SelectedRows[0].DataBoundItem as User;
 
                 DialogResult result = MessageBox.Show("Are you sure you want to delte this user?", "Delete User", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-                
+
                 if (result == DialogResult.OK)
                 {
                     // This removes the selected user from the userManager
@@ -250,7 +243,7 @@ namespace WinFormsApp
                     // This updates the DataGridView
                     dgvUsers.DataSource = userManager.GetArray();
                 }
-                
+
             }
             else
             {
@@ -267,21 +260,21 @@ namespace WinFormsApp
             dgvSongs.AutoGenerateColumns = false;
             dgvSongs.AllowUserToAddRows = false;
 
-                dgvSongs.Columns.Add("Title", "Title");
-                dgvSongs.Columns["Title"].DataPropertyName = "Title";
-            
-                dgvSongs.Columns.Add("Artist", "Artist");
-                dgvSongs.Columns["Artist"].DataPropertyName = "Artist";
-            
-                dgvSongs.Columns.Add("Genre", "Genre");
-                dgvSongs.Columns["Genre"].DataPropertyName = "Genre";
-            
-                dgvSongs.Columns.Add("Date", "Date");
-                dgvSongs.Columns["Date"].DataPropertyName = "Date";
-            
-                dgvSongs.Columns.Add("SongCoverName", "SongCoverName");
-                dgvSongs.Columns["SongCoverName"].DataPropertyName = "SongCoverName";
-            
+            dgvSongs.Columns.Add("Title", "Title");
+            dgvSongs.Columns["Title"].DataPropertyName = "Title";
+
+            dgvSongs.Columns.Add("Artist", "Artist");
+            dgvSongs.Columns["Artist"].DataPropertyName = "Artist";
+
+            dgvSongs.Columns.Add("Genre", "Genre");
+            dgvSongs.Columns["Genre"].DataPropertyName = "Genre";
+
+            dgvSongs.Columns.Add("Date", "Date");
+            dgvSongs.Columns["Date"].DataPropertyName = "Date";
+
+            dgvSongs.Columns.Add("SongCoverName", "SongCoverName");
+            dgvSongs.Columns["SongCoverName"].DataPropertyName = "SongCoverName";
+
             // Bind the list of Songs from SongManager to the DataGridView
             dgvSongs.DataSource = songManager.GetArray();
         }
@@ -405,21 +398,21 @@ namespace WinFormsApp
             dgvAlbums.AutoGenerateColumns = false;
             dgvAlbums.AllowUserToAddRows = false;
 
-                dgvAlbums.Columns.Add("Title", "Title");
-                dgvAlbums.Columns["Title"].DataPropertyName = "Title";
-            
-                dgvAlbums.Columns.Add("Artist", "Artist");
-                dgvAlbums.Columns["Artist"].DataPropertyName = "Artist";
-            
-                dgvAlbums.Columns.Add("Genre", "Genre");
-                dgvAlbums.Columns["Genre"].DataPropertyName = "Genre";
-            
-                dgvAlbums.Columns.Add("Date", "Date");
-                dgvAlbums.Columns["Date"].DataPropertyName = "Date";
-            
-                dgvAlbums.Columns.Add("AlbumCoverName", "AlbumCoverName");
-                dgvAlbums.Columns["AlbumCoverName"].DataPropertyName = "AlbumCoverName";
-            
+            dgvAlbums.Columns.Add("Title", "Title");
+            dgvAlbums.Columns["Title"].DataPropertyName = "Title";
+
+            dgvAlbums.Columns.Add("Artist", "Artist");
+            dgvAlbums.Columns["Artist"].DataPropertyName = "Artist";
+
+            dgvAlbums.Columns.Add("Genre", "Genre");
+            dgvAlbums.Columns["Genre"].DataPropertyName = "Genre";
+
+            dgvAlbums.Columns.Add("Date", "Date");
+            dgvAlbums.Columns["Date"].DataPropertyName = "Date";
+
+            dgvAlbums.Columns.Add("AlbumCoverName", "AlbumCoverName");
+            dgvAlbums.Columns["AlbumCoverName"].DataPropertyName = "AlbumCoverName";
+
             // Bind the list of albums from albumManager to the DataGridView
             dgvAlbums.DataSource = albumManager.GetArray();
         }
@@ -462,7 +455,7 @@ namespace WinFormsApp
                 Album selectedAlbum = dgvAlbums.SelectedRows[0].DataBoundItem as Album;
 
                 // Open the NewAlbum_Form with the selected albums's information
-                using (NewAlbum_Form addAlbumForm = new NewAlbum_Form( albumManager, selectedAlbum))
+                using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, selectedAlbum))
                 {
                     if (addAlbumForm.ShowDialog() == DialogResult.OK)
                     {
@@ -490,7 +483,7 @@ namespace WinFormsApp
                 Album selectedAlbum = dgvAlbums.SelectedRows[0].DataBoundItem as Album;
 
                 // Opens the NewAlbum_Form with the selected albums's information
-                using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager,selectedAlbum, true))
+                using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, selectedAlbum, true))
                 {
                     if (addAlbumForm.ShowDialog() == DialogResult.OK)
                     {

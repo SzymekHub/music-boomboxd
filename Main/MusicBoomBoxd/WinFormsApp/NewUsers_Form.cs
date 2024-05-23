@@ -102,19 +102,40 @@ namespace WinFormsApp
                 //This reads the selected image file into a byte array
                 byte[] profilePictureData = File.ReadAllBytes(selectedImagePath);
 
-                //This creates a new User Object with the provided details
-                User newUser = new User(
-                    exisitingUser.UserID,
-                    tbNameUser.Text,
-                    tbPassword.Text,
-                    tbEmailUser.Text,
-                    (userType)cbUserType.SelectedItem,
-                    dtpUser.Value,
-                    (genreType)cbFavGenre.SelectedItem,
-                    profilePictureName,
-                    profilePictureData,
-                    profilePictureContentType
-                    );
+                User newUser = null;
+
+                if (exisitingUser == null)
+                {
+                    //This creates a new User Object with the provided details
+                     newUser = new User(
+                        tbNameUser.Text,
+                        tbPassword.Text,
+                        tbEmailUser.Text,
+                        (userType)cbUserType.SelectedItem,
+                        dtpUser.Value,
+                        (genreType)cbFavGenre.SelectedItem,
+                        profilePictureName,
+                        profilePictureData,
+                        profilePictureContentType
+                        );
+                }
+                else if (exisitingUser != null)
+                {
+                    //This creates a new User Object with the provided details
+                    newUser = new User(
+                        exisitingUser.UserID,
+                        tbNameUser.Text,
+                        tbPassword.Text,
+                        tbEmailUser.Text,
+                        (userType)cbUserType.SelectedItem,
+                        dtpUser.Value,
+                        (genreType)cbFavGenre.SelectedItem,
+                        profilePictureName,
+                        profilePictureData,
+                        profilePictureContentType
+                        );
+                }
+                
 
                 Result result = userManager.Update(newUser, exisitingUser);
 

@@ -125,6 +125,7 @@
             txtPassword.PasswordChar = '*';
             txtPassword.Size = new Size(189, 27);
             txtPassword.TabIndex = 11;
+            txtPassword.Text = "p";
             // 
             // txtUsername
             // 
@@ -132,6 +133,7 @@
             txtUsername.Name = "txtUsername";
             txtUsername.Size = new Size(189, 27);
             txtUsername.TabIndex = 10;
+            txtUsername.Text = "Admin";
             // 
             // btnLogin
             // 
