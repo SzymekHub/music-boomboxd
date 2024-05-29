@@ -2,7 +2,7 @@
 {
     public class ArtistDTO
     {
-        public int ArtistID { get; }
+        public int ArtistID { get; set; }
         public string Name { get; set; }
         public string ArtistPictureName { get; set; }
         public byte[] ArtistPictureData { get; set; }

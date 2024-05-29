@@ -5,44 +5,59 @@ namespace Logic
 {
     public class ArtistManager
     {
-        private readonly ArtistRepository artistRepository;
+        public readonly IArtistRepository _artistsRepository;
 
-        public ArtistManager(ArtistRepository repository)
+        public ArtistManager(IArtistRepository iArtRep)
         {
-            artistRepository = repository;
+            _artistsRepository = iArtRep;
         }
 
-        public Result AddArtist(Artist artist)
-        {
-            ArtistDTO artistDTO = ConvertToArtistDTO(artist);
-            return artistRepository.InsertArtist(artistDTO);
-        }
+        //cmd.Connection = conn;
+        //cmd.CommandType = CommandType.Text;
+        //cmd.CommandText = @"INSERT INTO [Artist] (ArtistID, Name, ArtistPictureName, ArtistPictureData, ArtistPictureContentType) 
+        //                    VALUES (@ArtistID, @Name, @ArtistPictureName, @ArtistPictureData, @ArtistPictureContentType); 
+        //                    SELECT SCOPE_IDENTITY();";
 
-        public Result UpdateArtist(Artist newArtist, Artist oldArtist)
-        {
-            ArtistDTO newArtistDTO = ConvertToArtistDTO(newArtist);
-            ArtistDTO oldArtistDTO = ConvertToArtistDTO(oldArtist);
-            return artistRepository.UpdateArtist(newArtistDTO, oldArtistDTO);
-        }
+        //cmd.Parameters.AddWithValue("@Name", artistDTO.Name);
+        //cmd.Parameters.AddWithValue("@ArtistPictureName", artistDTO.ArtistPictureName);
+        //cmd.Parameters.AddWithValue("@ArtistPictureData", artistDTO.ArtistPictureData);
+        //cmd.Parameters.AddWithValue("@ArtistPictureContentType", artistDTO.ArtistPictureContentType);
 
-        public Result DeleteArtist(Artist artist)
-        {
-            ArtistDTO artistDTO = ConvertToArtistDTO(artist);
-            return artistRepository.DeleteArtist(artistDTO);
-        }
 
-        public List<Artist> GetAllArtists()
+        public List<Artist> LoadArtistFromDB()
         {
-            List<ArtistDTO> artistDTOs = artistRepository.GetAllArtists();
-            List<Artist> artists = new List<Artist>();
+            List<Artist> artists = new();
 
-            foreach (var dto in artistDTOs)
+            List<ArtistDTO> artistDTOs = _artistsRepository.GetAllArtists();
+
+            foreach (var artistDTO in artistDTOs)
             {
-                Artist artist = ConvertToArtist(dto);
+                Artist artist = ConvertToArtist(artistDTO);
                 artists.Add(artist);
             }
-
             return artists;
+        }
+
+        public Result Add(Artist artist)
+        {
+            ArtistDTO artistDTO = ConvertToArtistDTO(artist);
+
+            Result resultArtist = _artistsRepository.InsertArtist(artistDTO);
+
+            return resultArtist;
+        }
+        public Result Delete(Artist artist)
+        {
+            return _artistsRepository.DeleteArtist(ConvertToArtistDTO(artist));
+        }
+
+        public Result Update(Artist newArtist)
+        {
+            ArtistDTO artistDTO = ConvertToArtistDTO(newArtist);
+
+            Result resultUpdate = _artistsRepository.UpdateArtist(artistDTO);
+
+            return resultUpdate;
         }
 
         private ArtistDTO ConvertToArtistDTO(Artist artist)

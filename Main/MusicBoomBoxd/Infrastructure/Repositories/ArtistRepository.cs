@@ -4,7 +4,7 @@ using System.Data;
 
 namespace Infrastructure
 {
-    public class ArtistRepository : DbConnection, IArtistRepository, IArtistRepository
+    public class ArtistRepository : DbConnection, IArtistRepository
     {
         public Result InsertArtist(ArtistDTO artistDTO)
         {
@@ -13,9 +13,21 @@ namespace Infrastructure
             {
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"INSERT INTO [Artist] (Name, ArtistPictureName, ArtistPictureData, ArtistPictureContentType) 
+                if (artistDTO.ArtistID != 0)
+                {
+                    cmd.CommandText = @"SET IDENTITY_INSERT [Artist] ON
+                                    INSERT INTO [Artist] (ArtistID, Name, ArtistPictureName, ArtistPictureData, ArtistPictureContentType) 
+                                    VALUES (@ArtistID, @Name, @ArtistPictureName, @ArtistPictureData, @ArtistPictureContentType); 
+                                    SELECT SCOPE_IDENTITY();";
+
+                    cmd.Parameters.AddWithValue("@ArtistID", artistDTO.ArtistID);
+                }
+                else
+                {
+                    cmd.CommandText = @"INSERT INTO [Artist] (Name, ArtistPictureName, ArtistPictureData, ArtistPictureContentType) 
                                     VALUES (@Name, @ArtistPictureName, @ArtistPictureData, @ArtistPictureContentType); 
                                     SELECT SCOPE_IDENTITY();";
+                }
 
                 cmd.Parameters.AddWithValue("@Name", artistDTO.Name);
                 cmd.Parameters.AddWithValue("@ArtistPictureName", artistDTO.ArtistPictureName);
@@ -26,12 +38,13 @@ namespace Infrastructure
                 {
                     conn.Open();
                     var result = cmd.ExecuteScalar();
-                    if (int.TryParse(result?.ToString(), out int newArtistID))
+                    int newArtistID;
+                    if (int.TryParse(result?.ToString(), out newArtistID))
                     {
                         artistDTO.ArtistID = newArtistID;
                         return new Result { Success = true, Message = "Artist inserted successfully." };
                     }
-                    return new Result { Success = false, Message = "Failed to retrieve new artist ID." };
+                    return new Result { Success = false, Message = "Failed to retrieve new Artist ID." };
                 }
                 catch (SqlException ex)
                 {
@@ -44,16 +57,20 @@ namespace Infrastructure
             }
         }
 
-        public List<ArtistDTO> GetAllArtists()
+        public List<ArtistDTO> GetAllArtists(int count)
         {
-            List<ArtistDTO> artists = new List<ArtistDTO>();
+            List<ArtistDTO> recentArtists = new List<ArtistDTO>();
 
             using (SqlConnection conn = GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand())
             {
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "SELECT ArtistID, Name, ArtistPictureName, ArtistPictureData, ArtistPictureContentType FROM [Artist]";
+                cmd.CommandText = "SELECT TOP (@count) ArtistID, Name, ArtistPictureName, ArtistPictureData, ArtistPictureContentType " +
+                                  "FROM [Artist]" +
+                                  "ORDER BY ArtistID DESC";
+
+                cmd.Parameters.AddWithValue("@Count", count);
 
                 try
                 {
