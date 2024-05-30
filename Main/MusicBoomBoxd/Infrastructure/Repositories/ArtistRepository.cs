@@ -31,7 +31,9 @@ namespace Infrastructure
 
                 cmd.Parameters.AddWithValue("@Name", artistDTO.Name);
                 cmd.Parameters.AddWithValue("@ArtistPictureName", artistDTO.ArtistPictureName);
-                cmd.Parameters.AddWithValue("@ArtistPictureData", artistDTO.ArtistPictureData);
+                //This converts the albumcover to a byte array to pass it to Database
+                byte[] artistPicData = artistDTO.ArtistPictureData.ToArray();
+                cmd.Parameters.AddWithValue("@ArtistPictureData", artistPicData);
                 cmd.Parameters.AddWithValue("@ArtistPictureContentType", artistDTO.ArtistPictureContentType);
 
                 try
@@ -66,9 +68,8 @@ namespace Infrastructure
             {
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "SELECT TOP (@count) ArtistID, Name, ArtistPictureName, ArtistPictureData, ArtistPictureContentType " +
-                                  "FROM [Artist]" +
-                                  "ORDER BY ArtistID DESC";
+                cmd.CommandText = "SELECT TOP (@Count) ArtistID, Name, ArtistPictureName, ArtistPictureData, ArtistPictureContentType " +
+                                  "FROM [Artist] WHERE Active = 1 ORDER BY ArtistID DESC";
 
                 cmd.Parameters.AddWithValue("@Count", count);
 
@@ -86,7 +87,7 @@ namespace Infrastructure
                             string artistPictureContentType = reader.GetString(4);
 
                             ArtistDTO artist = new ArtistDTO(artistID, name, artistPictureName, artistPictureData, artistPictureContentType);
-                            artists.Add(artist);
+                            recentArtists.Add(artist);
                         }
                     }
                 }
@@ -102,15 +103,50 @@ namespace Infrastructure
                 }
             }
 
-            return artists;
+            return recentArtists;
         }
 
-        public Result UpdateArtist(ArtistDTO newArtistDTO, ArtistDTO oldArtistDTO)
+        public Result UpdateArtist(ArtistDTO artistDTO)
         {
             using (SqlConnection conn = GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand())
             {
-                // Your update logic here
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"UPDATE [Artist] SET Name = @Name, ArtistPictureName = @ArtistPictureName, ArtistPictureData = @ArtistPictureData, ArtistPictureContentType = @ArtistPictureContentType
+                                WHERE ArtistID = @ArtistID";
+
+
+                cmd.Parameters.AddWithValue("@ArtistID", artistDTO.ArtistID);
+
+                cmd.Parameters.AddWithValue("@Name", artistDTO.Name);
+                cmd.Parameters.AddWithValue("@ArtistPictureName", artistDTO.ArtistPictureName);
+                
+                //This converts the albumcover to a byte array to pass it to Database
+                byte[] artistPicData = artistDTO.ArtistPictureData.ToArray();
+                cmd.Parameters.AddWithValue("@ArtistPictureData", artistPicData);
+                cmd.Parameters.AddWithValue("@ArtistPictureContentType", artistDTO.ArtistPictureContentType);
+
+
+                try
+                {
+                    conn.Open();
+                    var result = cmd.ExecuteNonQuery();
+                    if (result > 0)
+                    {
+                        return new Result { Success = true, Message = "Artist updated successfully." };
+                    }
+
+                    return new Result { Success = false, Message = "Failed to retrieve Artist ID." };
+                }
+                catch (SqlException ex)
+                {
+                    return new Result { Success = false, Message = $"SQL Exception: {ex.Message}" };
+                }
+                catch (Exception ex)
+                {
+                    return new Result { Success = false, Message = $"Exception: {ex.Message}" };
+                }
             }
         }
 
@@ -119,7 +155,33 @@ namespace Infrastructure
             using (SqlConnection conn = GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand())
             {
-                // Your delete logic here
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"UPDATE [Artist] SET Active = 0 
+                                    WHERE ArtistID = @ArtistID AND Name = @Name ";
+
+                cmd.Parameters.AddWithValue("@ArtistID", artistDTO.ArtistID);
+                cmd.Parameters.AddWithValue("@Name", artistDTO.Name);
+
+                try
+                {
+                    conn.Open();
+                    var result = cmd.ExecuteScalar();
+                    int newAnimalID;
+                    if (int.TryParse(result?.ToString(), out newAnimalID))
+                    {
+                        return new Result { Success = true, Message = "Artist deleted successfully." };
+                    }
+                    return new Result { Success = false, Message = "Failed to retrieve Artist ID." };
+                }
+                catch (SqlException ex)
+                {
+                    return new Result { Success = false, Message = $"SQL Exception: {ex.Message}" };
+                }
+                catch (Exception ex)
+                {
+                    return new Result { Success = false, Message = $"Exception: {ex.Message}" };
+                }
             }
         }
     }

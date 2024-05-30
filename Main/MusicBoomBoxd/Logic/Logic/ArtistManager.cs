@@ -12,23 +12,11 @@ namespace Logic
             _artistsRepository = iArtRep;
         }
 
-        //cmd.Connection = conn;
-        //cmd.CommandType = CommandType.Text;
-        //cmd.CommandText = @"INSERT INTO [Artist] (ArtistID, Name, ArtistPictureName, ArtistPictureData, ArtistPictureContentType) 
-        //                    VALUES (@ArtistID, @Name, @ArtistPictureName, @ArtistPictureData, @ArtistPictureContentType); 
-        //                    SELECT SCOPE_IDENTITY();";
-
-        //cmd.Parameters.AddWithValue("@Name", artistDTO.Name);
-        //cmd.Parameters.AddWithValue("@ArtistPictureName", artistDTO.ArtistPictureName);
-        //cmd.Parameters.AddWithValue("@ArtistPictureData", artistDTO.ArtistPictureData);
-        //cmd.Parameters.AddWithValue("@ArtistPictureContentType", artistDTO.ArtistPictureContentType);
-
-
         public List<Artist> LoadArtistFromDB()
         {
             List<Artist> artists = new();
 
-            List<ArtistDTO> artistDTOs = _artistsRepository.GetAllArtists();
+            List<ArtistDTO> artistDTOs = _artistsRepository.GetAllArtists(1000);
 
             foreach (var artistDTO in artistDTOs)
             {

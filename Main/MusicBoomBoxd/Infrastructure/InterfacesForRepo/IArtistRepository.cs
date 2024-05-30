@@ -4,7 +4,12 @@ namespace Infrastructure
 {
     public interface IArtistRepository
     {
-        List<ArtistDTO> GetAllArtists();
         Result InsertArtist(ArtistDTO artistDTO);
+
+        List<ArtistDTO> GetAllArtists(int count);
+
+        Result UpdateArtist(ArtistDTO artistDTO);
+
+        Result DeleteArtist(ArtistDTO artistDTO);
     }
 }
