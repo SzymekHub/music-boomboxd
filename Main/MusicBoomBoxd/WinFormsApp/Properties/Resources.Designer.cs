@@ -72,6 +72,15 @@ namespace WinFormsApp.Properties {
             }
         }
 
+        internal static System.Drawing.Bitmap Artists
+        {
+            get
+            {
+                object obj = ResourceManager.GetObject("Artists", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+
         internal static System.Drawing.Bitmap LogoBlue1
         {
             get

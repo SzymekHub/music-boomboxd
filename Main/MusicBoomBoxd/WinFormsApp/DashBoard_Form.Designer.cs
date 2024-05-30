@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             DashBoardPanel = new Panel();
+            pbArtists1 = new PictureBox();
+            btnArtists = new Button();
             pbReviews = new PictureBox();
             pbAlbums = new PictureBox();
             pbSongs = new PictureBox();
@@ -91,10 +93,24 @@
             btnWarningReviews = new Button();
             pbReviews2 = new PictureBox();
             lblReviews = new Label();
+            tpArtists = new TabPage();
+            pbArtists2 = new PictureBox();
+            plArtists = new Panel();
+            btnUpdateArtist = new Button();
+            btnDeleteArtist = new Button();
+            btnViewArtist = new Button();
+            cbFilterArtists = new ComboBox();
+            lblFilterArtists = new Label();
+            dgvArtists = new DataGridView();
+            lblSearchArtist = new Label();
+            tbSearchArtist = new TextBox();
+            btnAddArtist = new Button();
+            lblArtists = new Label();
             btnLogOut = new Button();
             ssDashBoardForm = new StatusStrip();
             tsslblDashBoardForm = new ToolStripStatusLabel();
             DashBoardPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pbArtists1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbReviews).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbAlbums).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbSongs).BeginInit();
@@ -117,12 +133,18 @@
             plReviews.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvReviews).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbReviews2).BeginInit();
+            tpArtists.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pbArtists2).BeginInit();
+            plArtists.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvArtists).BeginInit();
             ssDashBoardForm.SuspendLayout();
             SuspendLayout();
             // 
             // DashBoardPanel
             // 
             DashBoardPanel.BackColor = Color.DarkGray;
+            DashBoardPanel.Controls.Add(pbArtists1);
+            DashBoardPanel.Controls.Add(btnArtists);
             DashBoardPanel.Controls.Add(pbReviews);
             DashBoardPanel.Controls.Add(pbAlbums);
             DashBoardPanel.Controls.Add(pbSongs);
@@ -137,10 +159,32 @@
             DashBoardPanel.Size = new Size(249, 568);
             DashBoardPanel.TabIndex = 0;
             // 
+            // pbArtists1
+            // 
+            pbArtists1.Image = Properties.Resources.Artists;
+            pbArtists1.Location = new Point(172, 200);
+            pbArtists1.Name = "pbArtists1";
+            pbArtists1.Size = new Size(65, 57);
+            pbArtists1.SizeMode = PictureBoxSizeMode.Zoom;
+            pbArtists1.TabIndex = 30;
+            pbArtists1.TabStop = false;
+            // 
+            // btnArtists
+            // 
+            btnArtists.BackColor = Color.MediumSlateBlue;
+            btnArtists.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnArtists.Location = new Point(13, 200);
+            btnArtists.Name = "btnArtists";
+            btnArtists.Size = new Size(126, 57);
+            btnArtists.TabIndex = 24;
+            btnArtists.Text = "Artists";
+            btnArtists.UseVisualStyleBackColor = false;
+            btnArtists.Click += Button_Click;
+            // 
             // pbReviews
             // 
             pbReviews.Image = Properties.Resources.Reviews;
-            pbReviews.Location = new Point(172, 365);
+            pbReviews.Location = new Point(172, 450);
             pbReviews.Name = "pbReviews";
             pbReviews.Size = new Size(65, 57);
             pbReviews.SizeMode = PictureBoxSizeMode.Zoom;
@@ -150,7 +194,7 @@
             // pbAlbums
             // 
             pbAlbums.Image = Properties.Resources.Albums;
-            pbAlbums.Location = new Point(172, 282);
+            pbAlbums.Location = new Point(172, 365);
             pbAlbums.Name = "pbAlbums";
             pbAlbums.Size = new Size(65, 57);
             pbAlbums.SizeMode = PictureBoxSizeMode.Zoom;
@@ -160,7 +204,7 @@
             // pbSongs
             // 
             pbSongs.Image = Properties.Resources.Songs;
-            pbSongs.Location = new Point(172, 200);
+            pbSongs.Location = new Point(172, 282);
             pbSongs.Name = "pbSongs";
             pbSongs.Size = new Size(65, 57);
             pbSongs.SizeMode = PictureBoxSizeMode.Zoom;
@@ -181,7 +225,7 @@
             // 
             btnAlbums.BackColor = Color.MediumSlateBlue;
             btnAlbums.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnAlbums.Location = new Point(13, 282);
+            btnAlbums.Location = new Point(13, 365);
             btnAlbums.Name = "btnAlbums";
             btnAlbums.Size = new Size(126, 57);
             btnAlbums.TabIndex = 19;
@@ -193,7 +237,7 @@
             // 
             btnSongs.BackColor = Color.MediumSlateBlue;
             btnSongs.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnSongs.Location = new Point(13, 200);
+            btnSongs.Location = new Point(13, 282);
             btnSongs.Name = "btnSongs";
             btnSongs.Size = new Size(126, 57);
             btnSongs.TabIndex = 18;
@@ -205,7 +249,7 @@
             // 
             btnReviews.BackColor = Color.MediumSlateBlue;
             btnReviews.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnReviews.Location = new Point(13, 365);
+            btnReviews.Location = new Point(13, 450);
             btnReviews.Name = "btnReviews";
             btnReviews.Size = new Size(126, 57);
             btnReviews.TabIndex = 17;
@@ -262,6 +306,7 @@
             tcDashBoard.Controls.Add(tpSongs);
             tcDashBoard.Controls.Add(tpAlbums);
             tcDashBoard.Controls.Add(tpReviews);
+            tcDashBoard.Controls.Add(tpArtists);
             tcDashBoard.Location = new Point(267, 0);
             tcDashBoard.Name = "tcDashBoard";
             tcDashBoard.SelectedIndex = 0;
@@ -827,6 +872,153 @@
             lblReviews.TabIndex = 11;
             lblReviews.Text = "REVIEWS";
             // 
+            // tpArtists
+            // 
+            tpArtists.BackColor = Color.MediumSlateBlue;
+            tpArtists.Controls.Add(pbArtists2);
+            tpArtists.Controls.Add(plArtists);
+            tpArtists.Controls.Add(lblArtists);
+            tpArtists.Location = new Point(4, 29);
+            tpArtists.Name = "tpArtists";
+            tpArtists.Padding = new Padding(3);
+            tpArtists.Size = new Size(986, 583);
+            tpArtists.TabIndex = 4;
+            tpArtists.Text = "Artists";
+            // 
+            // pbArtists2
+            // 
+            pbArtists2.Image = Properties.Resources.Artists;
+            pbArtists2.Location = new Point(629, 20);
+            pbArtists2.Name = "pbArtists2";
+            pbArtists2.Size = new Size(65, 57);
+            pbArtists2.SizeMode = PictureBoxSizeMode.Zoom;
+            pbArtists2.TabIndex = 29;
+            pbArtists2.TabStop = false;
+            // 
+            // plArtists
+            // 
+            plArtists.BackColor = Color.DarkGray;
+            plArtists.Controls.Add(btnUpdateArtist);
+            plArtists.Controls.Add(btnDeleteArtist);
+            plArtists.Controls.Add(btnViewArtist);
+            plArtists.Controls.Add(cbFilterArtists);
+            plArtists.Controls.Add(lblFilterArtists);
+            plArtists.Controls.Add(dgvArtists);
+            plArtists.Controls.Add(lblSearchArtist);
+            plArtists.Controls.Add(tbSearchArtist);
+            plArtists.Controls.Add(btnAddArtist);
+            plArtists.Location = new Point(34, 94);
+            plArtists.Name = "plArtists";
+            plArtists.Size = new Size(912, 471);
+            plArtists.TabIndex = 28;
+            // 
+            // btnUpdateArtist
+            // 
+            btnUpdateArtist.BackColor = Color.MediumSlateBlue;
+            btnUpdateArtist.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnUpdateArtist.Location = new Point(747, 196);
+            btnUpdateArtist.Name = "btnUpdateArtist";
+            btnUpdateArtist.Size = new Size(137, 49);
+            btnUpdateArtist.TabIndex = 32;
+            btnUpdateArtist.Text = "Update";
+            btnUpdateArtist.UseVisualStyleBackColor = false;
+            btnUpdateArtist.Click += btnUpdateArtist_Click;
+            // 
+            // btnDeleteArtist
+            // 
+            btnDeleteArtist.BackColor = Color.MediumSlateBlue;
+            btnDeleteArtist.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnDeleteArtist.Location = new Point(747, 339);
+            btnDeleteArtist.Name = "btnDeleteArtist";
+            btnDeleteArtist.Size = new Size(137, 49);
+            btnDeleteArtist.TabIndex = 31;
+            btnDeleteArtist.Text = "Delete";
+            btnDeleteArtist.UseVisualStyleBackColor = false;
+            btnDeleteArtist.Click += btnDeleteArtist_Click;
+            // 
+            // btnViewArtist
+            // 
+            btnViewArtist.BackColor = Color.MediumSlateBlue;
+            btnViewArtist.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnViewArtist.Location = new Point(747, 269);
+            btnViewArtist.Name = "btnViewArtist";
+            btnViewArtist.Size = new Size(137, 49);
+            btnViewArtist.TabIndex = 30;
+            btnViewArtist.Text = "View";
+            btnViewArtist.UseVisualStyleBackColor = false;
+            btnViewArtist.Click += btnViewArtist_Click;
+            // 
+            // cbFilterArtists
+            // 
+            cbFilterArtists.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbFilterArtists.FormattingEnabled = true;
+            cbFilterArtists.Location = new Point(484, 35);
+            cbFilterArtists.Name = "cbFilterArtists";
+            cbFilterArtists.Size = new Size(239, 28);
+            cbFilterArtists.TabIndex = 28;
+            // 
+            // lblFilterArtists
+            // 
+            lblFilterArtists.AutoSize = true;
+            lblFilterArtists.Font = new Font("Segoe UI", 12F);
+            lblFilterArtists.Location = new Point(418, 34);
+            lblFilterArtists.Name = "lblFilterArtists";
+            lblFilterArtists.Size = new Size(60, 28);
+            lblFilterArtists.TabIndex = 27;
+            lblFilterArtists.Text = "Filter:";
+            // 
+            // dgvArtists
+            // 
+            dgvArtists.BackgroundColor = SystemColors.Window;
+            dgvArtists.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvArtists.Location = new Point(24, 86);
+            dgvArtists.Margin = new Padding(3, 4, 3, 4);
+            dgvArtists.Name = "dgvArtists";
+            dgvArtists.RowHeadersWidth = 51;
+            dgvArtists.Size = new Size(699, 363);
+            dgvArtists.TabIndex = 26;
+            // 
+            // lblSearchArtist
+            // 
+            lblSearchArtist.AutoSize = true;
+            lblSearchArtist.Font = new Font("Segoe UI", 12F);
+            lblSearchArtist.Location = new Point(24, 31);
+            lblSearchArtist.Name = "lblSearchArtist";
+            lblSearchArtist.Size = new Size(79, 28);
+            lblSearchArtist.TabIndex = 24;
+            lblSearchArtist.Text = "Search: ";
+            // 
+            // tbSearchArtist
+            // 
+            tbSearchArtist.BackColor = Color.WhiteSmoke;
+            tbSearchArtist.Location = new Point(111, 35);
+            tbSearchArtist.Margin = new Padding(5, 4, 5, 4);
+            tbSearchArtist.Name = "tbSearchArtist";
+            tbSearchArtist.Size = new Size(299, 27);
+            tbSearchArtist.TabIndex = 25;
+            // 
+            // btnAddArtist
+            // 
+            btnAddArtist.BackColor = Color.MediumSlateBlue;
+            btnAddArtist.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold);
+            btnAddArtist.Location = new Point(747, 125);
+            btnAddArtist.Name = "btnAddArtist";
+            btnAddArtist.Size = new Size(137, 49);
+            btnAddArtist.TabIndex = 16;
+            btnAddArtist.Text = "Add Artist";
+            btnAddArtist.UseVisualStyleBackColor = false;
+            btnAddArtist.Click += btnAddArtist_Click;
+            // 
+            // lblArtists
+            // 
+            lblArtists.AutoSize = true;
+            lblArtists.Font = new Font("Segoe UI", 25.8000011F, FontStyle.Bold);
+            lblArtists.Location = new Point(423, 17);
+            lblArtists.Name = "lblArtists";
+            lblArtists.Size = new Size(200, 60);
+            lblArtists.TabIndex = 26;
+            lblArtists.Text = "ARTISTS";
+            // 
             // btnLogOut
             // 
             btnLogOut.BackColor = Color.MediumSlateBlue;
@@ -877,6 +1069,7 @@
             FormClosed += DashBoard_Form_FormClosed;
             Load += DashBoard_Form_Load;
             DashBoardPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)pbArtists1).EndInit();
             ((System.ComponentModel.ISupportInitialize)pbReviews).EndInit();
             ((System.ComponentModel.ISupportInitialize)pbAlbums).EndInit();
             ((System.ComponentModel.ISupportInitialize)pbSongs).EndInit();
@@ -907,6 +1100,12 @@
             plReviews.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvReviews).EndInit();
             ((System.ComponentModel.ISupportInitialize)pbReviews2).EndInit();
+            tpArtists.ResumeLayout(false);
+            tpArtists.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pbArtists2).EndInit();
+            plArtists.ResumeLayout(false);
+            plArtists.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvArtists).EndInit();
             ssDashBoardForm.ResumeLayout(false);
             ssDashBoardForm.PerformLayout();
             ResumeLayout(false);
@@ -950,7 +1149,7 @@
         private Label lblFilterUser;
         private DataGridView dgvUsers;
         private Label lblSearchUser;
-        private TextBox textBox1;
+        private TextBox tbSearchArtist;
         private Button btnAddUser;
         private ComboBox CbUsers;
         private TextBox txtSearch;
@@ -983,5 +1182,19 @@
         private Button btnWarningReviews;
         private StatusStrip ssDashBoardForm;
         private ToolStripStatusLabel tsslblDashBoardForm;
+        private TabPage tpArtists;
+        private Panel plArtists;
+        private Button btnDeleteArtist;
+        private Button btnViewArtist;
+        private ComboBox cbFilterArtists;
+        private Label lblFilterArtists;
+        private DataGridView dgvArtists;
+        private Label lblSearchArtist;
+        private Button btnAddArtist;
+        private Label lblArtists;
+        private Button btnUpdateArtist;
+        private PictureBox pbArtists2;
+        private Button btnArtists;
+        private PictureBox pbArtists1;
     }
 }

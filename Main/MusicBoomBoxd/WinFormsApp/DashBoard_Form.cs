@@ -57,6 +57,7 @@ namespace WinFormsApp
             //Tags
             btnReviews.Tag = "Reviews";
             btnUsers.Tag = "Users";
+            btnArtists.Tag = "Artists";
             btnSongs.Tag = "Songs";
             btnAlbums.Tag = "Albums";
             btnLogOut.Tag = "LogOut";
@@ -113,6 +114,9 @@ namespace WinFormsApp
                         break;
                     case "Reviews":
                         targetIndex = 3;
+                        break;
+                    case "Artists":
+                        targetIndex = 4;
                         break;
                 }
 
@@ -266,7 +270,125 @@ namespace WinFormsApp
         #endregion
 
         #region Artists
+        private void SetUpDataGridViewArtist()
+        {
+            // Set DataGridView properties
+            dgvArtists.AutoGenerateColumns = false;
+            dgvArtists.AllowUserToAddRows = false;
 
+            dgvArtists.Columns.Add("Name", "Name");
+            dgvArtists.Columns["Name"].DataPropertyName = "Name";
+
+            dgvArtists.Columns.Add("ArtistPictureName", "ArtistPictureName");
+            dgvArtists.Columns["ArtistPictureName"].DataPropertyName = "ArtistPictureName";
+
+            // Bind the list of Users from UserManager to the DataGridView
+            dgvArtists.DataSource = artistManager.LoadArtistFromDB();
+        }
+
+        private void PopulateArtist()
+        {
+            //This will populate the form with exisiting users
+            dgvArtists.DataSource = artistManager.LoadArtistFromDB();
+        }
+
+        private void btnAddArtist_Click(object sender, EventArgs e)
+        {
+            // Open the NewUsers_Form
+            using (NewArtist_Form addArtistForm = new NewArtist_Form(artistManager))
+            {
+                // Show the addUsersForm
+                if (addArtistForm.ShowDialog() == DialogResult.OK)
+                {   // Add the new user to the UserManager
+                    artistManager.LoadArtistFromDB();
+
+                    // Update the DataGridView
+                    dgvArtists.DataSource = artistManager.LoadArtistFromDB();
+
+                }
+            }
+        }
+        private void btnUpdateArtist_Click(object sender, EventArgs e)
+        {
+            if (dgvArtists.SelectedRows.Count > 0)
+            {
+                // Get the selected User
+                Artist selectedArtist = dgvArtists.SelectedRows[0].DataBoundItem as Artist;
+
+                // Open the NewUser_Form with the selected Users's information
+                using (NewArtist_Form addArtistForm = new NewArtist_Form(artistManager, selectedArtist))
+                {
+                    if (addArtistForm.ShowDialog() == DialogResult.OK)
+                    {
+                        // Update the User with the modified information
+                        Artist updatedArtist = addArtistForm.GetUpdatedArtist();
+                        if (updatedArtist != null)
+                        {
+                            artistManager.Update(updatedArtist);
+                            dgvArtists.DataSource = artistManager.LoadArtistFromDB();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                tsslblDashBoardForm.Text = "Please select an Artist to update.";
+            }
+        }
+
+        private void btnViewArtist_Click(object sender, EventArgs e)
+        {
+            if (dgvArtists.SelectedRows.Count > 0)
+            {
+                // This gets the selected User
+                Artist selectedArtist = dgvArtists.SelectedRows[0].DataBoundItem as Artist;
+
+                // Opens the NewUser_Form with the selected Users's information
+                using (NewArtist_Form addArtistForm = new NewArtist_Form(artistManager, selectedArtist, true))
+                {
+                    if (addArtistForm.ShowDialog() == DialogResult.OK)
+                    {
+                        // Update the User with the modified information
+                        Artist updatedArtist = addArtistForm.GetUpdatedArtist();
+                        if (updatedArtist != null)
+                        {
+                            artistManager.Update(updatedArtist);
+                            dgvArtists.DataSource = artistManager.LoadArtistFromDB();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                tsslblDashBoardForm.Text = "Please select an Artist to view.";
+            }
+        }
+
+        private void btnDeleteArtist_Click(object sender, EventArgs e)
+        {
+            // This chekcs if a row is selected
+            if (dgvArtists.SelectedRows.Count > 0)
+            {
+                // Get the selected User
+                Artist selectedArtist = dgvArtists.SelectedRows[0].DataBoundItem as Artist;
+
+                DialogResult result = MessageBox.Show("Are you sure you want to delte this artist?", "Delete Artist", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+
+                if (result == DialogResult.OK)
+                {
+                    // This removes the selected user from the userManager
+                    artistManager.Delete(selectedArtist);
+
+                    // This updates the DataGridView
+                    dgvArtists.DataSource = artistManager.LoadArtistFromDB();
+                }
+
+            }
+            else
+            {
+                tsslblDashBoardForm.Text = "Please select an Artist to delete.";
+            }
+        }
         #endregion
 
         #region Songs
