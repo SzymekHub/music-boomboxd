@@ -6,15 +6,12 @@ namespace WinFormsApp
 {
     public partial class Login_Form : Form
     {
-        private const string AdminUsername = "Admin";
-        private const string AdminPassword = "p";
-        public UserManager userManager { get; }
-        public AlbumManager albumManager { get; }
-        public SongManager songManager { get; }
-
-        public ArtistManager artistManager { get; } 
-
-        private List<Artist> artistList;
+        private readonly UserRepository userRep;
+        private readonly UserManager userManager;
+        private readonly AlbumManager albumManager;
+        private readonly SongManager songManager;
+        private readonly ArtistManager artistManager;
+        private readonly List<Artist> artistList;
 
 
         public Login_Form()
@@ -22,7 +19,7 @@ namespace WinFormsApp
             InitializeComponent();
             //For users
             #region Users
-            UserRepository userRep = new UserRepository();
+            userRep = new UserRepository();
             IUserRepository IuserRep = userRep;
 
             userManager = new UserManager(userRep, IuserRep);
@@ -42,7 +39,7 @@ namespace WinFormsApp
             AlbumRepository albumRep = new AlbumRepository();
             IAlbumRepository IalbumRep = albumRep;
 
-            albumManager =  new AlbumManager(albumRep, IalbumRep);
+            albumManager = new AlbumManager(albumRep, IalbumRep);
             albumManager.LoadAlbumsFromDatabase();
             #endregion
 
@@ -60,26 +57,51 @@ namespace WinFormsApp
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            string enteredUsername = txtUsername.Text;
-            string enteredPassword = txtPassword.Text;
+            string username = txtUsername.Text.Trim();
+            string password = txtPassword.Text.Trim();
 
-            if (enteredUsername == AdminUsername && enteredPassword == AdminPassword)
+            if (string.IsNullOrWhiteSpace(username))
             {
-                DashBoard_Form dash_form = new DashBoard_Form(AdminUsername, userManager, artistManager, albumManager, songManager, artistList);
-                dash_form.Owner = this;
-                dash_form.Text = "Hello" + AdminUsername;
-                this.Visible = false;
-                dash_form.Show();
-                ClearControls();
+                tsslblLoginForm.Text = "The Username cannot be empty";
             }
-            else if (string.IsNullOrWhiteSpace(enteredUsername) || string.IsNullOrWhiteSpace(enteredPassword)) 
+            if (string.IsNullOrWhiteSpace(password))
             {
-                tsslblLoginForm.Text = "The Username and Password cannot be empty";
+                tsslblLoginForm.Text = "The Password cannot be empty";
             }
             else
             {
                 tsslblLoginForm.Text = "Looks like the Username or Password is incorrect";
             }
+
+            List<UserDTO> users = userRep.GetRecentUser(1000);
+            if (users == null)
+            {
+                tsslblLoginForm.Text = "Unable to connect to the database";
+                return;
+            }
+
+            UserDTO user = users.Find(u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+            if (user == null)
+            {
+                tsslblLoginForm.Text = "This user was not found";
+                ClearControls();
+                return;
+            }
+
+            if (!PasswordHasher.VerifyPassword(password, user.Password))
+            {
+                tsslblLoginForm.Text = "The password is incorrect";
+                ClearControls();
+                return;
+            }
+
+            DashBoard_Form dash_form = new DashBoard_Form(user.Username, userManager, artistManager, albumManager, songManager, artistList);
+            dash_form.Owner = this;
+            dash_form.Text = "Hello" + txtUsername.Text;
+            this.Visible = false;
+            dash_form.Show();
+            ClearControls();
+
         }
 
         public void ClearControls()
