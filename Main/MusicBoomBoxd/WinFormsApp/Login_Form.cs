@@ -68,10 +68,6 @@ namespace WinFormsApp
             {
                 tsslblLoginForm.Text = "The Password cannot be empty";
             }
-            else
-            {
-                tsslblLoginForm.Text = "Looks like the Username or Password is incorrect";
-            }
 
             List<UserDTO> users = userRep.GetRecentUser(1000);
             if (users == null)
