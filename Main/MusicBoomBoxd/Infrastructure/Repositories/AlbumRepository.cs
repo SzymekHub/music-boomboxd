@@ -126,8 +126,10 @@ namespace Infrastructure
             {
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE [Album] SET Title = @Title, Date = @ReleaseDate, Genre = @Genre, AlbumCoverName = @AlbumCoverName, AlbumCoverData = @AlbumCoverData, AlbumCoverContentType = @AlbumCoverContentType
+                cmd.CommandText = @"UPDATE [Album] SET ArtistID = @ArtistID, Title = @Title, Date = @ReleaseDate, Genre = @Genre, AlbumCoverName = @AlbumCoverName, AlbumCoverData = @AlbumCoverData, AlbumCoverContentType = @AlbumCoverContentType
                                   WHERE AlbumID = @AlbumID";
+
+                cmd.Parameters.AddWithValue("@ArtistID", newAlbumDTO.ArtistID);
 
                 cmd.Parameters.AddWithValue("@Title", newAlbumDTO.AlbumTitle);
 

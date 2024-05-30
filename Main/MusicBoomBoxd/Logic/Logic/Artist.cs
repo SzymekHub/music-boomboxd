@@ -24,5 +24,10 @@
             ArtistPictureData = artistPictureData;
             ArtistPictureContentType = artistPictureContentType;
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

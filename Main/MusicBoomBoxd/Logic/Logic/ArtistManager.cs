@@ -5,7 +5,7 @@ namespace Logic
 {
     public class ArtistManager
     {
-        public readonly IArtistRepository _artistsRepository;
+        private readonly IArtistRepository _artistsRepository;
 
         public ArtistManager(IArtistRepository iArtRep)
         {
@@ -42,6 +42,10 @@ namespace Logic
         public Result Update(Artist newArtist)
         {
             ArtistDTO artistDTO = ConvertToArtistDTO(newArtist);
+            if (newArtist.ArtistID == 0)
+            {
+                return Add(newArtist);
+            }
 
             Result resultUpdate = _artistsRepository.UpdateArtist(artistDTO);
 

@@ -8,13 +8,13 @@ namespace WinFormsApp
         public Album NewAlbum { get; private set; }
         private Album existingAlbum;
         private AlbumManager albumManager;
-        private List<Artist> artists;
+        private ArtistManager artistManager;
         private string selectedImagePath;
 
-        public NewAlbum_Form(AlbumManager am, List<Artist> artistList, Album album = null, bool view = false)
+        public NewAlbum_Form(AlbumManager am, ArtistManager arm, Album album = null, bool view = false)
         {
             albumManager = am;
-            artists = artistList;
+            artistManager = arm;
             InitializeComponent();
             InitializeComboBox();
             existingAlbum = album;
@@ -148,7 +148,10 @@ namespace WinFormsApp
         private void FillFormWithAlbumDetails(Album album)
         {
             tbTitleAlbum.Text = album.Title;
-            cbArtistAlbum.SelectedItem = artists.FirstOrDefault(a => a.ArtistID == album.ArtistID);
+            if (cbArtistAlbum.Items.IndexOf(album.Artist) != -1)
+            {
+                cbArtistAlbum.SelectedIndex = cbArtistAlbum.Items.IndexOf(album.Artist);
+            }
             DatePickerAlbum.Value = album.Date;
             cbGenreAlbum.SelectedItem = album.Genre;
         }
@@ -312,7 +315,8 @@ namespace WinFormsApp
         public void InitializeComboBox()
         {
             cbGenreAlbum.DataSource = Enum.GetValues(typeof(genreType));
-            //cbArtistAlbum.DataSource = Enum.GetValues(typeof(genreType));
+            
+            cbArtistAlbum.DataSource = artistManager.LoadArtistFromDB();
         }
 
         private void NewAlbum_Form_FormClosed(object sender, FormClosedEventArgs e)

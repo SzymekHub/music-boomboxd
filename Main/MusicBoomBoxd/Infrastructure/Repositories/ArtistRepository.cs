@@ -16,21 +16,21 @@ namespace Infrastructure
                 if (artistDTO.ArtistID != 0)
                 {
                     cmd.CommandText = @"SET IDENTITY_INSERT [Artist] ON
-                                    INSERT INTO [Artist] (ArtistID, Name, ArtistPictureName, ArtistPictureData, ArtistPictureContentType) 
-                                    VALUES (@ArtistID, @Name, @ArtistPictureName, @ArtistPictureData, @ArtistPictureContentType); 
+                                    INSERT INTO [Artist] (ArtistID, Name, AritstPictureName, ArtistPictureData, ArtistPictureContentType) 
+                                    VALUES (@ArtistID, @Name, @AritstPictureName, @ArtistPictureData, @ArtistPictureContentType); 
                                     SELECT SCOPE_IDENTITY();";
 
                     cmd.Parameters.AddWithValue("@ArtistID", artistDTO.ArtistID);
                 }
                 else
                 {
-                    cmd.CommandText = @"INSERT INTO [Artist] (Name, ArtistPictureName, ArtistPictureData, ArtistPictureContentType) 
-                                    VALUES (@Name, @ArtistPictureName, @ArtistPictureData, @ArtistPictureContentType); 
+                    cmd.CommandText = @"INSERT INTO [Artist] (Name, AritstPictureName, ArtistPictureData, ArtistPictureContentType) 
+                                    VALUES (@Name, @AritstPictureName, @ArtistPictureData, @ArtistPictureContentType); 
                                     SELECT SCOPE_IDENTITY();";
                 }
 
                 cmd.Parameters.AddWithValue("@Name", artistDTO.Name);
-                cmd.Parameters.AddWithValue("@ArtistPictureName", artistDTO.ArtistPictureName);
+                cmd.Parameters.AddWithValue("@AritstPictureName", artistDTO.ArtistPictureName);
                 //This converts the albumcover to a byte array to pass it to Database
                 byte[] artistPicData = artistDTO.ArtistPictureData.ToArray();
                 cmd.Parameters.AddWithValue("@ArtistPictureData", artistPicData);
@@ -68,7 +68,7 @@ namespace Infrastructure
             {
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "SELECT TOP (@Count) ArtistID, Name, ArtistPictureName, ArtistPictureData, ArtistPictureContentType " +
+                cmd.CommandText = "SELECT TOP (@Count) ArtistID, Name, AritstPictureName, ArtistPictureData, ArtistPictureContentType " +
                                   "FROM [Artist] WHERE Active = 1 ORDER BY ArtistID DESC";
 
                 cmd.Parameters.AddWithValue("@Count", count);
@@ -82,23 +82,21 @@ namespace Infrastructure
                         {
                             int artistID = reader.GetInt32(0);
                             string name = reader.GetString(1);
-                            string artistPictureName = reader.GetString(2);
-                            byte[] artistPictureData = (byte[])reader.GetValue(3);
-                            string artistPictureContentType = reader.GetString(4);
+                            string AritstPictureName = reader.GetString(2);
+                            byte[] ArtistPictureData = (byte[])reader.GetValue(3);
+                            string ArtistPictureContentType = reader.GetString(4);
 
-                            ArtistDTO artist = new ArtistDTO(artistID, name, artistPictureName, artistPictureData, artistPictureContentType);
+                            ArtistDTO artist = new ArtistDTO(artistID, name, AritstPictureName, ArtistPictureData, ArtistPictureContentType);
                             recentArtists.Add(artist);
                         }
                     }
                 }
                 catch (SqlException ex)
                 {
-                    // Log or handle exception
                     Console.WriteLine($"SQL Exception: {ex.Message}");
                 }
                 catch (Exception ex)
                 {
-                    // Log or handle exception
                     Console.WriteLine($"Exception: {ex.Message}");
                 }
             }
@@ -113,14 +111,14 @@ namespace Infrastructure
             {
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE [Artist] SET Name = @Name, ArtistPictureName = @ArtistPictureName, ArtistPictureData = @ArtistPictureData, ArtistPictureContentType = @ArtistPictureContentType
+                cmd.CommandText = @"UPDATE [Artist] SET Name = @Name, AritstPictureName = @AritstPictureName, ArtistPictureData = @ArtistPictureData, ArtistPictureContentType = @ArtistPictureContentType
                                 WHERE ArtistID = @ArtistID";
 
 
                 cmd.Parameters.AddWithValue("@ArtistID", artistDTO.ArtistID);
 
                 cmd.Parameters.AddWithValue("@Name", artistDTO.Name);
-                cmd.Parameters.AddWithValue("@ArtistPictureName", artistDTO.ArtistPictureName);
+                cmd.Parameters.AddWithValue("@AritstPictureName", artistDTO.ArtistPictureName);
                 
                 //This converts the albumcover to a byte array to pass it to Database
                 byte[] artistPicData = artistDTO.ArtistPictureData.ToArray();

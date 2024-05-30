@@ -138,7 +138,7 @@
             btnAddArtist.Name = "btnAddArtist";
             btnAddArtist.Size = new Size(127, 57);
             btnAddArtist.TabIndex = 19;
-            btnAddArtist.Text = "Add Album";
+            btnAddArtist.Text = "Add Artist";
             btnAddArtist.UseVisualStyleBackColor = false;
             btnAddArtist.Click += btnAddArtist_Click;
             // 

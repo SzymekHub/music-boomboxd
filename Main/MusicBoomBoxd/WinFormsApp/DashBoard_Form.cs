@@ -533,6 +533,9 @@ namespace WinFormsApp
             dgvAlbums.Columns.Add("Title", "Title");
             dgvAlbums.Columns["Title"].DataPropertyName = "Title";
 
+            dgvAlbums.Columns.Add("ArtistID", "ArtistID");
+            dgvAlbums.Columns["ArtistID"].DataPropertyName = "ArtistID";
+            dgvAlbums.Columns["ArtistID"].Visible = false;
             dgvAlbums.Columns.Add("Artist", "Artist");
             dgvAlbums.Columns["Artist"].DataPropertyName = "Artist";
 
@@ -544,21 +547,29 @@ namespace WinFormsApp
 
             dgvAlbums.Columns.Add("AlbumCoverName", "AlbumCoverName");
             dgvAlbums.Columns["AlbumCoverName"].DataPropertyName = "AlbumCoverName";
-
-            // Bind the list of albums from albumManager to the DataGridView
-            dgvAlbums.DataSource = albumManager.GetArray();
+            
+            PopulateAlbums();
         }
 
         private void PopulateAlbums()
         {
             //This will populate the form with exisiting albums
             dgvAlbums.DataSource = albumManager.GetArray();
+
+            foreach (DataGridViewRow row in dgvAlbums.Rows)
+            {
+                int artistID = (int)row.Cells["ArtistID"].Value;
+
+                var artists = artistManager.LoadArtistFromDB().Where(a => a.ArtistID == artistID);
+
+                row.Cells["Artist"].Value = artists.First();
+            }
         }
 
         private void bntAddAlbum_Click(object sender, EventArgs e)
         {
             // Open the NewAlbum_Form
-            using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, artists))
+            using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, artistManager))
             {
                 // Show the addAlbumForm
                 if (addAlbumForm.ShowDialog() == DialogResult.OK)
@@ -567,7 +578,7 @@ namespace WinFormsApp
                     albumManager.LoadAlbumsFromDatabase();
 
                     // Update the DataGridView
-                    dgvAlbums.DataSource = albumManager.GetArray();
+                    PopulateAlbums();
 
                 }
             }
@@ -580,7 +591,7 @@ namespace WinFormsApp
                 // Get the selected album
                 Album selectedAlbum = dgvAlbums.SelectedRows[0].DataBoundItem as Album;
                 // Open the NewAlbum_Form with the selected albums's information
-                using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, artists, selectedAlbum))
+                using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, artistManager,selectedAlbum))
                 {
                     if (addAlbumForm.ShowDialog() == DialogResult.OK)
                     {
@@ -589,7 +600,7 @@ namespace WinFormsApp
                         if (updatedAlbum != null)
                         {
                             albumManager.Update(updatedAlbum, selectedAlbum);
-                            dgvAlbums.DataSource = albumManager.GetArray();
+                            PopulateAlbums();
                         }
                     }
                 }
@@ -608,7 +619,7 @@ namespace WinFormsApp
                 Album selectedAlbum = dgvAlbums.SelectedRows[0].DataBoundItem as Album;
 
                 // Opens the NewAlbum_Form with the selected albums's information
-                using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, artists, selectedAlbum, true))
+                using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, artistManager, selectedAlbum, true))
                 {
                     if (addAlbumForm.ShowDialog() == DialogResult.OK)
                 {
@@ -617,7 +628,7 @@ namespace WinFormsApp
                         if (updatedAlbum != null)
                     {
                             albumManager.Update(updatedAlbum, selectedAlbum);
-                            dgvAlbums.DataSource = albumManager.GetArray();
+                            PopulateAlbums();
                     }
                     }
                 }
@@ -644,7 +655,7 @@ namespace WinFormsApp
                     albumManager.Remove(selectedAlbum);
 
                     // This updates the DataGridView
-                    dgvAlbums.DataSource = albumManager.GetArray();
+                    PopulateAlbums();
                 }
             }
             else
