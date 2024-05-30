@@ -12,6 +12,8 @@ namespace WinFormsApp
         public AlbumManager albumManager { get; }
         public SongManager songManager { get; }
 
+        public ArtistManager artistManager { get; } 
+
         private List<Artist> artistList;
 
 
@@ -25,6 +27,14 @@ namespace WinFormsApp
 
             userManager = new UserManager(userRep, IuserRep);
             userManager.LoadUsersFromDataBase();
+            #endregion
+
+            //for artists
+            #region Artists
+            IArtistRepository iartRep = new ArtistRepository();
+
+            artistManager = new ArtistManager(iartRep);
+            artistManager.LoadArtistFromDB();
             #endregion
 
             //For Albums
@@ -55,7 +65,7 @@ namespace WinFormsApp
 
             if (enteredUsername == AdminUsername && enteredPassword == AdminPassword)
             {
-                DashBoard_Form dash_form = new DashBoard_Form(AdminUsername, userManager, albumManager, songManager, artistList);
+                DashBoard_Form dash_form = new DashBoard_Form(AdminUsername, userManager, artistManager, albumManager, songManager, artistList);
                 dash_form.Owner = this;
                 dash_form.Text = "Hello" + AdminUsername;
                 this.Visible = false;

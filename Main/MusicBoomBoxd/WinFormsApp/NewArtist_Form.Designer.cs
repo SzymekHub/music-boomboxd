@@ -1,6 +1,6 @@
 ﻿namespace WinFormsApp
 {
-    partial class NewArtist
+    partial class NewArtist_Form
     {
         /// <summary>
         /// Required designer variable.
@@ -28,39 +28,33 @@
         /// </summary>
         private void InitializeComponent()
         {
-            tsslblNewAlbumFormCSV = new ToolStripStatusLabel();
-            this.btnCancelArtist = new Button();
+            btnCancelArtist = new Button();
             pbLogo = new PictureBox();
-            this.SelectedProfileArtist = new PictureBox();
-            this.btnAddProfileArtist = new Button();
+            SelectedProfileArtist = new PictureBox();
+            btnAddProfileArtist = new Button();
             lblProfileArtist = new Label();
             ssNewArtistForm = new StatusStrip();
-            tsslblNewAlbumForm = new ToolStripStatusLabel();
-            this.tbNameArtist = new TextBox();
+            tsslblNewArtistForm = new ToolStripStatusLabel();
+            tbNameArtist = new TextBox();
             lblNameArtist = new Label();
             btnAddArtist = new Button();
-            NewAlbumPanel = new Panel();
+            NewArtistPanel = new Panel();
             ((System.ComponentModel.ISupportInitialize)pbLogo).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)this.SelectedProfileArtist).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)SelectedProfileArtist).BeginInit();
             ssNewArtistForm.SuspendLayout();
-            NewAlbumPanel.SuspendLayout();
+            NewArtistPanel.SuspendLayout();
             SuspendLayout();
-            // 
-            // tsslblNewAlbumFormCSV
-            // 
-            tsslblNewAlbumFormCSV.ActiveLinkColor = Color.LavenderBlush;
-            tsslblNewAlbumFormCSV.Name = "tsslblNewAlbumFormCSV";
-            tsslblNewAlbumFormCSV.Size = new Size(0, 18);
             // 
             // btnCancelArtist
             // 
-            this.btnCancelArtist.BackColor = Color.MediumSlateBlue;
-            this.btnCancelArtist.Location = new Point(540, 232);
-            this.btnCancelArtist.Name = "btnCancelArtist";
-            this.btnCancelArtist.Size = new Size(127, 33);
-            this.btnCancelArtist.TabIndex = 36;
-            this.btnCancelArtist.Text = "Cancel";
-            this.btnCancelArtist.UseVisualStyleBackColor = false;
+            btnCancelArtist.BackColor = Color.MediumSlateBlue;
+            btnCancelArtist.Location = new Point(540, 232);
+            btnCancelArtist.Name = "btnCancelArtist";
+            btnCancelArtist.Size = new Size(127, 33);
+            btnCancelArtist.TabIndex = 36;
+            btnCancelArtist.Text = "Cancel";
+            btnCancelArtist.UseVisualStyleBackColor = false;
+            btnCancelArtist.Click += btnCancelArtist_Click;
             // 
             // pbLogo
             // 
@@ -74,28 +68,29 @@
             // 
             // SelectedProfileArtist
             // 
-            this.SelectedProfileArtist.Location = new Point(195, 57);
-            this.SelectedProfileArtist.Name = "SelectedProfileArtist";
-            this.SelectedProfileArtist.Size = new Size(181, 169);
-            this.SelectedProfileArtist.SizeMode = PictureBoxSizeMode.Zoom;
-            this.SelectedProfileArtist.TabIndex = 34;
-            this.SelectedProfileArtist.TabStop = false;
+            SelectedProfileArtist.Location = new Point(172, 9);
+            SelectedProfileArtist.Name = "SelectedProfileArtist";
+            SelectedProfileArtist.Size = new Size(199, 178);
+            SelectedProfileArtist.SizeMode = PictureBoxSizeMode.Zoom;
+            SelectedProfileArtist.TabIndex = 34;
+            SelectedProfileArtist.TabStop = false;
             // 
             // btnAddProfileArtist
             // 
-            this.btnAddProfileArtist.BackColor = Color.MediumSlateBlue;
-            this.btnAddProfileArtist.Location = new Point(403, 133);
-            this.btnAddProfileArtist.Name = "btnAddProfileArtist";
-            this.btnAddProfileArtist.Size = new Size(97, 30);
-            this.btnAddProfileArtist.TabIndex = 32;
-            this.btnAddProfileArtist.Text = "Add Picture";
-            this.btnAddProfileArtist.UseVisualStyleBackColor = false;
+            btnAddProfileArtist.BackColor = Color.MediumSlateBlue;
+            btnAddProfileArtist.Location = new Point(409, 86);
+            btnAddProfileArtist.Name = "btnAddProfileArtist";
+            btnAddProfileArtist.Size = new Size(97, 30);
+            btnAddProfileArtist.TabIndex = 32;
+            btnAddProfileArtist.Text = "Add Picture";
+            btnAddProfileArtist.UseVisualStyleBackColor = false;
+            btnAddProfileArtist.Click += btnAddProfileArtist_Click;
             // 
             // lblProfileArtist
             // 
             lblProfileArtist.AutoSize = true;
             lblProfileArtist.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblProfileArtist.Location = new Point(40, 129);
+            lblProfileArtist.Location = new Point(17, 83);
             lblProfileArtist.Name = "lblProfileArtist";
             lblProfileArtist.Size = new Size(146, 33);
             lblProfileArtist.TabIndex = 31;
@@ -106,31 +101,31 @@
             ssNewArtistForm.BackColor = Color.MediumSlateBlue;
             ssNewArtistForm.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             ssNewArtistForm.ImageScalingSize = new Size(24, 24);
-            ssNewArtistForm.Items.AddRange(new ToolStripItem[] { tsslblNewAlbumForm, tsslblNewAlbumFormCSV });
+            ssNewArtistForm.Items.AddRange(new ToolStripItem[] { tsslblNewArtistForm });
             ssNewArtistForm.Location = new Point(0, 428);
             ssNewArtistForm.Name = "ssNewArtistForm";
             ssNewArtistForm.Size = new Size(800, 22);
             ssNewArtistForm.TabIndex = 27;
             ssNewArtistForm.Text = "statusStrip1";
             // 
-            // tsslblNewAlbumForm
+            // tsslblNewArtistForm
             // 
-            tsslblNewAlbumForm.ActiveLinkColor = Color.LavenderBlush;
-            tsslblNewAlbumForm.Name = "tsslblNewAlbumForm";
-            tsslblNewAlbumForm.Size = new Size(0, 18);
+            tsslblNewArtistForm.ActiveLinkColor = Color.LavenderBlush;
+            tsslblNewArtistForm.Name = "tsslblNewArtistForm";
+            tsslblNewArtistForm.Size = new Size(0, 16);
             // 
             // tbNameArtist
             // 
-            this.tbNameArtist.Location = new Point(195, 264);
-            this.tbNameArtist.Name = "tbNameArtist";
-            this.tbNameArtist.Size = new Size(262, 27);
-            this.tbNameArtist.TabIndex = 16;
+            tbNameArtist.Location = new Point(169, 214);
+            tbNameArtist.Name = "tbNameArtist";
+            tbNameArtist.Size = new Size(262, 27);
+            tbNameArtist.TabIndex = 16;
             // 
             // lblNameArtist
             // 
             lblNameArtist.AutoSize = true;
             lblNameArtist.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblNameArtist.Location = new Point(75, 264);
+            lblNameArtist.Location = new Point(52, 208);
             lblNameArtist.Name = "lblNameArtist";
             lblNameArtist.Size = new Size(111, 33);
             lblNameArtist.TabIndex = 12;
@@ -143,41 +138,43 @@
             btnAddArtist.Name = "btnAddArtist";
             btnAddArtist.Size = new Size(127, 57);
             btnAddArtist.TabIndex = 19;
-            btnAddArtist.Text = "Add Artist";
+            btnAddArtist.Text = "Add Album";
             btnAddArtist.UseVisualStyleBackColor = false;
+            btnAddArtist.Click += btnAddArtist_Click;
             // 
-            // NewAlbumPanel
+            // NewArtistPanel
             // 
-            NewAlbumPanel.BackColor = Color.DarkGray;
-            NewAlbumPanel.Controls.Add(this.btnCancelArtist);
-            NewAlbumPanel.Controls.Add(pbLogo);
-            NewAlbumPanel.Controls.Add(this.SelectedProfileArtist);
-            NewAlbumPanel.Controls.Add(this.btnAddProfileArtist);
-            NewAlbumPanel.Controls.Add(lblProfileArtist);
-            NewAlbumPanel.Controls.Add(btnAddArtist);
-            NewAlbumPanel.Controls.Add(this.tbNameArtist);
-            NewAlbumPanel.Controls.Add(lblNameArtist);
-            NewAlbumPanel.Location = new Point(41, 20);
-            NewAlbumPanel.Name = "NewAlbumPanel";
-            NewAlbumPanel.Size = new Size(718, 373);
-            NewAlbumPanel.TabIndex = 26;
+            NewArtistPanel.BackColor = Color.DarkGray;
+            NewArtistPanel.Controls.Add(btnCancelArtist);
+            NewArtistPanel.Controls.Add(pbLogo);
+            NewArtistPanel.Controls.Add(SelectedProfileArtist);
+            NewArtistPanel.Controls.Add(btnAddProfileArtist);
+            NewArtistPanel.Controls.Add(lblProfileArtist);
+            NewArtistPanel.Controls.Add(btnAddArtist);
+            NewArtistPanel.Controls.Add(tbNameArtist);
+            NewArtistPanel.Controls.Add(lblNameArtist);
+            NewArtistPanel.Location = new Point(41, 20);
+            NewArtistPanel.Name = "NewArtistPanel";
+            NewArtistPanel.Size = new Size(718, 373);
+            NewArtistPanel.TabIndex = 26;
             // 
-            // NewArtist
+            // NewArtist_Form
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.MediumSlateBlue;
             ClientSize = new Size(800, 450);
             Controls.Add(ssNewArtistForm);
-            Controls.Add(NewAlbumPanel);
-            Name = "NewArtist";
-            Text = "NewArtist";
+            Controls.Add(NewArtistPanel);
+            Name = "NewArtist_Form";
+            Text = "NewArtist_Form";
+            FormClosed += NewArtist_Form_FormClosed;
             ((System.ComponentModel.ISupportInitialize)pbLogo).EndInit();
-            ((System.ComponentModel.ISupportInitialize)this.SelectedProfileArtist).EndInit();
+            ((System.ComponentModel.ISupportInitialize)SelectedProfileArtist).EndInit();
             ssNewArtistForm.ResumeLayout(false);
             ssNewArtistForm.PerformLayout();
-            NewAlbumPanel.ResumeLayout(false);
-            NewAlbumPanel.PerformLayout();
+            NewArtistPanel.ResumeLayout(false);
+            NewArtistPanel.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -185,20 +182,16 @@
         #endregion
 
         private ToolStripStatusLabel tsslblNewAlbumFormCSV;
-        private ComboBox cbArtistAlbum;
-        private Button btnCancel;
+        private Button btnCancelArtist;
         private PictureBox pbLogo;
-        private PictureBox SelectedCoverAlbum;
-        private Button btnAddPictureAlbum;
+        private PictureBox SelectedProfileArtist;
+        private Button btnAddProfileArtist;
         private Label lblProfileArtist;
         private StatusStrip ssNewArtistForm;
-        private ToolStripStatusLabel tsslblNewAlbumForm;
-        private ComboBox cbGenreAlbum;
-        private TextBox tbTitleAlbum;
-        private Label lblGenreAlbum;
-        private Label lblArtistAlbum;
+        private ToolStripStatusLabel tsslblNewArtistForm;
+        private TextBox tbNameArtist;
         private Label lblNameArtist;
         private Button btnAddArtist;
-        private Panel NewAlbumPanel;
+        private Panel NewArtistPanel;
     }
 }

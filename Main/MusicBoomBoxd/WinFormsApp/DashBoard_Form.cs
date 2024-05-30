@@ -10,6 +10,9 @@ namespace WinFormsApp
         //for the User tab
         private static UserManager userManager;
         private static List<User> userList = new List<User>();
+        
+        //for the artist tab
+        private static ArtistManager artistManager;
         private List<Artist> artists;
 
 
@@ -21,7 +24,7 @@ namespace WinFormsApp
         private static SongManager songManager;
         private static List<Song> songList = new List<Song>();
 
-        public DashBoard_Form(string adminUsername, UserManager um, AlbumManager am, SongManager sm, List<Artist> artistList)
+        public DashBoard_Form(string adminUsername, UserManager um, ArtistManager arm, AlbumManager am, SongManager sm, List<Artist> artistList)
         {
             InitializeComponent();
 
@@ -29,6 +32,12 @@ namespace WinFormsApp
             userManager = um;
             SetUpDataGridViewUsers();
             PopulateUsers();
+
+            //This is for the Artist page
+            artistManager = arm;
+            SetUpDataGridViewArtist();
+            PopulateArtist();
+
 
             //This is for the album page
             albumManager = am;
@@ -253,6 +262,10 @@ namespace WinFormsApp
                 tsslblDashBoardForm.Text = "Please select an User to delete.";
             }
         }
+
+        #endregion
+
+        #region Artists
 
         #endregion
 
