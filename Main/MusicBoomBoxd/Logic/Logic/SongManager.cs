@@ -7,6 +7,7 @@ namespace Logic
         public List<Song> _songs;
         private readonly SongRepository _songRepository;
         private readonly ISongRepository _isongRepository;
+        private readonly Artist artist;
 
         public SongManager(SongRepository songRep, ISongRepository isongRep)
         {
@@ -24,14 +25,15 @@ namespace Logic
             foreach (var songDTO in songDTOs)
             {
                 //This converts SongDTO to Songs and adds to the songs list
-                Song song = ConvertToSong(songDTO);
+                Song song = SongMapper.ToSong(songDTO, artist);
+
                 _songs.Add(song);
             }
         }
 
         public Result Add(Song song)
         {
-            SongDTO songDTO = ConvertToSongDTO(song);
+            SongDTO songDTO = SongMapper.ToSongDTO(song);
 
             _songs.Add(song);
 
@@ -43,10 +45,11 @@ namespace Logic
 
         public bool Remove(Song song)
         {
-            _songRepository.DeleteSong(ConvertToSongDTO(song));
+            _songRepository.DeleteSong(SongMapper.ToSongDTO(song));
 
             return _songs.Remove(song);
         }
+
         public Song[] GetArray()
         {
             return _songs.ToArray();
@@ -54,7 +57,7 @@ namespace Logic
 
         public Result Update(Song newSong, Song oldSong)
         {
-            SongDTO newSongDTO = ConvertToSongDTO(newSong);
+            SongDTO newSongDTO = SongMapper.ToSongDTO(newSong);
 
             if (oldSong == null)
             {
@@ -63,7 +66,7 @@ namespace Logic
             }
             else
             {
-                SongDTO oldSongDTO = ConvertToSongDTO(oldSong);
+                SongDTO oldSongDTO = SongMapper.ToSongDTO(oldSong);
 
                 // This calls the repository method to update the Song
                 Result resultUpdate = _songRepository.UpdateSong(newSongDTO, oldSongDTO);
@@ -95,37 +98,37 @@ namespace Logic
         }
 
 
-        public Song ConvertToSong(SongDTO newsongDTO)
-        {
-            //Converts the genre enum to a string 
-            genreType genre = (genreType)Enum.Parse(typeof(genreType), newsongDTO.Genre);
+        //public Song ConvertToSong(SongDTO newsongDTO)
+        //{
+        //    //Converts the genre enum to a string 
+        //    genreType genre = (genreType)Enum.Parse(typeof(genreType), newsongDTO.Genre);
 
-            //this converts SongDTO to songs
-            return new Song(
-                newsongDTO.SongID,
-                newsongDTO.SongTitle,
-                newsongDTO.Artist,
-                newsongDTO.ReleaseDate,
-                genre,
-                newsongDTO.SongCoverName,
-                newsongDTO.SongCoverData,
-                newsongDTO.SongCoverContentType
-                );
-        }
+        //    //this converts SongDTO to songs
+        //    return new Song(
+        //        newsongDTO.SongID,
+        //        newsongDTO.SongTitle,
+        //        newsongDTO.Artist,
+        //        newsongDTO.ReleaseDate,
+        //        genre,
+        //        newsongDTO.SongCoverName,
+        //        newsongDTO.SongCoverData,
+        //        newsongDTO.SongCoverContentType
+        //        );
+        //}
 
-        public SongDTO ConvertToSongDTO(Song song)
-        {
-            // this converts Song to SongDTO
-            return new SongDTO(
-                song.SongID,
-                song.Title,
-                song.Artist,
-                song.Date,
-                song.Genre.ToString(),
-                song.SongCoverName,
-                song.SongCoverData,
-                song.SongCoverContentType
-            );
-        }
+        //public SongDTO ConvertToSongDTO(Song song)
+        //{
+        //    // this converts Song to SongDTO
+        //    return new SongDTO(
+        //        song.SongID,
+        //        song.Title,
+        //        song.Artist,
+        //        song.Date,
+        //        song.Genre.ToString(),
+        //        song.SongCoverName,
+        //        song.SongCoverData,
+        //        song.SongCoverContentType
+        //    );
+        //}
     }
 }

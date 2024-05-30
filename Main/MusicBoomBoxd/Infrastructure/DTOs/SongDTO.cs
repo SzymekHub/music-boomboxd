@@ -5,18 +5,18 @@
     {
         public int SongID { get; set; }
         public string SongTitle { get; set; }
-        public string Artist { get; set; }
+        public int ArtistID { get; set; }
         public DateTime ReleaseDate { get; set; }
         public string Genre { get; set; }
         public string SongCoverName { get; set; }
         public byte[] SongCoverData { get; set; }
         public string SongCoverContentType { get; set; }
 
-        public SongDTO(int songID, string songTitle, string artist, DateTime releaseDate, string genre, string songCoverName, byte[] songCoverData, string songCoverContentType)
+        public SongDTO(int songID, string songTitle, int artistID, DateTime releaseDate, string genre, string songCoverName, byte[] songCoverData, string songCoverContentType)
         {
             SongID = songID;
             SongTitle = songTitle;
-            Artist = artist;
+            ArtistID = artistID;
             ReleaseDate = releaseDate;
             Genre = genre;
             SongCoverName = songCoverName;

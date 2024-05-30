@@ -3,9 +3,9 @@ namespace Infrastructure
 {
     public interface ISongRepository
     {
-        Result DeleteSong(SongDTO songDTO);
-        List<SongDTO> GetRecentSong(int count);
         Result InsertSong(SongDTO songDTO);
+        List<SongDTO> GetRecentSong(int count);
         Result UpdateSong(SongDTO newSongDTO, SongDTO oldSongDTO);
+        Result DeleteSong(SongDTO songDTO);
     }
 }

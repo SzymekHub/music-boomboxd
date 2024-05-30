@@ -9,11 +9,13 @@ namespace WinFormsApp
         public Song NewSong { get; private set; }
         private Song exisitingSong;
         private SongManager songManager;
+        private ArtistManager artistManager;
         private string selectedImagePath;
 
-        public NewSong_Form(SongManager sm, Song song = null, bool view = false)
+        public NewSong_Form(SongManager sm, ArtistManager arm, Song song = null, bool view = false)
         {
             songManager = sm;
+            artistManager = arm;    
             InitializeComponent();
             InitializeComboBox();
             exisitingSong = song;
@@ -23,7 +25,7 @@ namespace WinFormsApp
             if (exisitingSong != null)
             {
                 FillFormWithSongDetails(exisitingSong);
-                //This will load and display the album cover
+                //This will load and display the song cover
                 DisplaySongCover(exisitingSong.SongCoverData);
             }
 
@@ -31,7 +33,7 @@ namespace WinFormsApp
             {
                 tbTitleSong.Enabled = false;
                 DatePickerSong.Enabled = false;
-                tbArtistSong.Enabled = false;
+                cbArtistSong.Enabled = false;
                 cbGenre.Enabled = false;
                 btnAddPictureSong.Enabled = false;
                 BtnAddSong.Enabled = false;
@@ -110,16 +112,17 @@ namespace WinFormsApp
                     }
                 }
 
+                Artist selectedArtist = cbArtistSong.SelectedItem as Artist;
+
                 // This reads the selected image file into a byte array
                 byte[] songCoverData = File.ReadAllBytes(selectedImagePath);
 
-                Song newSong = null;
                 if (exisitingSong == null)
                 {
                     //This creates a new Song Object with the provided details 
-                    newSong = new Song(
+                    NewSong = new Song(
                       tbTitleSong.Text,
-                      tbArtistSong.Text,
+                      selectedArtist.ArtistID,
                       DatePickerSong.Value,
                       (genreType)cbGenre.SelectedItem,
                       songCoverName,
@@ -127,13 +130,13 @@ namespace WinFormsApp
                       songCoverContentType
                     );
                 }
-                else if (exisitingSong != null)
+                else
                 {
                     //This creates a new Song Object with the provided details 
-                    newSong = new Song(
+                    NewSong = new Song(
                       exisitingSong.SongID,
                       tbTitleSong.Text,
-                      tbArtistSong.Text,
+                      selectedArtist.ArtistID,
                       DatePickerSong.Value,
                       (genreType)cbGenre.SelectedItem,
                       songCoverName,
@@ -142,7 +145,7 @@ namespace WinFormsApp
                     );
                 }
 
-                Result result = songManager.Update(newSong, exisitingSong);
+                Result result = songManager.Update(NewSong, exisitingSong);
 
                 if (result.Success)
                 {
@@ -159,7 +162,10 @@ namespace WinFormsApp
         private void FillFormWithSongDetails(Song song)
         {
             tbTitleSong.Text = song.Title;
-            tbArtistSong.Text = song.Artist;
+            if (cbArtistSong.Items.IndexOf(song.Artist) != -1 )
+            {
+                cbArtistSong.SelectedIndex = cbArtistSong.Items.IndexOf(song.Artist);
+            }
             DatePickerSong.Value = song.Date;
             cbGenre.SelectedItem = song.Genre;
         }
@@ -175,7 +181,7 @@ namespace WinFormsApp
         private void ClearControls()
         {
             tbTitleSong.Clear();
-            tbArtistSong.Clear();
+            cbArtistSong.SelectedIndex = 0;
             DatePickerSong.Value = DateTime.Now;
             cbGenre.SelectedIndex = 0;
             selectedImagePath = null;
@@ -215,7 +221,7 @@ namespace WinFormsApp
                 // This is a new Song object that returns with the provided details
                 return new Song(
                       tbTitleSong.Text,
-                      tbArtistSong.Text,
+                      ((Artist)cbArtistSong.SelectedItem).ArtistID,
                       DatePickerSong.Value,
                       (genreType)cbGenre.SelectedItem,
                       songCoverName,
@@ -261,8 +267,9 @@ namespace WinFormsApp
 
                 songManager.Update(
                      new Song(
+                        exisitingSong.SongID,
                         tbTitleSong.Text,
-                        tbArtistSong.Text,
+                        ((Artist)cbArtistSong.SelectedItem).ArtistID,
                         DatePickerSong.Value,
                         (genreType)cbGenre.SelectedItem,
                         songCoverName,
@@ -271,8 +278,9 @@ namespace WinFormsApp
                         exisitingSong
                      );
                 return new Song(
+                        exisitingSong.SongID,
                         tbTitleSong.Text,
-                        tbArtistSong.Text,
+                        ((Artist)cbArtistSong.SelectedItem).ArtistID,
                         DatePickerSong.Value,
                         (genreType)cbGenre.SelectedItem,
                         songCoverName,
@@ -297,9 +305,9 @@ namespace WinFormsApp
             }
 
             // Checks if the artist is provided
-            if (string.IsNullOrEmpty(tbArtistSong.Text))
+            if (cbArtistSong.SelectedItem == null)
             {
-                tsslblNewSongForm.Text = "Every song needs an artist. Please enter one.";
+                tsslblNewSongForm.Text = "Every song needs an artist. Please select one.";
                 return false;
             }
 
@@ -324,6 +332,8 @@ namespace WinFormsApp
         public void InitializeComboBox()
         {
             cbGenre.DataSource = Enum.GetValues(typeof(genreType));
+
+            cbArtistSong.DataSource = artistManager.LoadArtistFromDB();
         }
 
         private void NewMusic_Form_FormClosed(object sender, FormClosedEventArgs e)

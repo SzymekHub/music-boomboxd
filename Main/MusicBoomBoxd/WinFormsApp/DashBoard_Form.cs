@@ -401,6 +401,9 @@ namespace WinFormsApp
             dgvSongs.Columns.Add("Title", "Title");
             dgvSongs.Columns["Title"].DataPropertyName = "Title";
 
+            dgvSongs.Columns.Add("ArtistID", "ArtistID");
+            dgvSongs.Columns["ArtistID"].DataPropertyName = "ArtistID";
+            dgvSongs.Columns["ArtistID"].Visible = false;
             dgvSongs.Columns.Add("Artist", "Artist");
             dgvSongs.Columns["Artist"].DataPropertyName = "Artist";
 
@@ -413,20 +416,28 @@ namespace WinFormsApp
             dgvSongs.Columns.Add("SongCoverName", "SongCoverName");
             dgvSongs.Columns["SongCoverName"].DataPropertyName = "SongCoverName";
 
-            // Bind the list of Songs from SongManager to the DataGridView
-            dgvSongs.DataSource = songManager.GetArray();
+            PopulateSongs();
         }
 
         private void PopulateSongs()
         {
             //This will populate the form with exisiting Songs
             dgvSongs.DataSource = songManager.GetArray();
+
+            foreach (DataGridViewRow rows in dgvSongs.Rows)
+            {
+                int artistID = (int)rows.Cells["ArtistID"].Value;
+
+                var artists = artistManager.LoadArtistFromDB().Where(a => a.ArtistID == artistID);
+
+                rows.Cells["Artist"].Value = artists.First();
+            }
         }
 
         private void btnAddSong_Click(object sender, EventArgs e)
         {
             // Open the NewSong_Form
-            using (NewSong_Form addSongForm = new NewSong_Form(songManager))
+            using (NewSong_Form addSongForm = new NewSong_Form(songManager, artistManager))
             {
                 // Show the addSongForm
                 if (addSongForm.ShowDialog() == DialogResult.OK)
@@ -435,7 +446,7 @@ namespace WinFormsApp
                     songManager.LoadSongsFromDataBase();
 
                     // Update the DataGridView
-                    dgvSongs.DataSource = songManager.GetArray();
+                    PopulateSongs();
 
                 }
             }
@@ -448,7 +459,7 @@ namespace WinFormsApp
                 Song selectedSong = dgvSongs.SelectedRows[0].DataBoundItem as Song;
 
                 // Open the NewSong_Form with the selected Songs's information
-                using (NewSong_Form addSongForm = new NewSong_Form(songManager, selectedSong))
+                using (NewSong_Form addSongForm = new NewSong_Form(songManager, artistManager, selectedSong))
                 {
                     if (addSongForm.ShowDialog() == DialogResult.OK)
                     {
@@ -457,7 +468,7 @@ namespace WinFormsApp
                         if (updatedSong != null)
                         {
                             songManager.Update(updatedSong, selectedSong);
-                            dgvSongs.DataSource = songManager.GetArray();
+                            PopulateSongs();
                         }
                     }
                 }
@@ -476,7 +487,7 @@ namespace WinFormsApp
                 Song selectedSong = dgvSongs.SelectedRows[0].DataBoundItem as Song;
 
                 // Opens the NewSong_Form with the selected Songs's information
-                using (NewSong_Form addSongForm = new NewSong_Form(songManager, selectedSong, true))
+                using (NewSong_Form addSongForm = new NewSong_Form(songManager, artistManager, selectedSong, true))
                 {
                     if (addSongForm.ShowDialog() == DialogResult.OK)
                     {
@@ -485,7 +496,7 @@ namespace WinFormsApp
                         if (updatedSong != null)
                         {
                             songManager.Update(updatedSong, selectedSong);
-                            dgvSongs.DataSource = songManager.GetArray();
+                            PopulateSongs();
                         }
                     }
                 }
@@ -511,8 +522,7 @@ namespace WinFormsApp
                     // This removes the selected song from the userManager
                     songManager.Remove(selectedSong);
 
-                    // This updates the DataGridView
-                    dgvSongs.DataSource = songManager.GetArray();
+                    PopulateSongs();
                 }
             }
             else
