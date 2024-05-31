@@ -8,6 +8,7 @@ namespace Logic
 {
     public enum userType
     {
+        Admin,
         Regular,
         Critic,
         Musician

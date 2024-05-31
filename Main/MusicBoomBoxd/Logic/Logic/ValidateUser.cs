@@ -24,19 +24,7 @@ namespace Logic
             return errors;
         }
 
-        public Dictionary<string, List<string>> ConvertUsers(string username)
-        {
-            var errors = new Dictionary<string, List<string>>();
-
-            if (UsernameExists(username))
-            {
-                errors.TryAdd("username", new List<string>());
-                errors["username"].Add("Username is already taken");
-            }
-            return errors;
-        }
-
-        private bool UsernameExists(string username)
+        public bool UsernameExists(string username)
         {
             UserDTO userDTO = _userRepository.GetUserByUsername(username);
             return userDTO != null;

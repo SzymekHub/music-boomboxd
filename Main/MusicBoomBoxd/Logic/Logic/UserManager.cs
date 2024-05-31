@@ -6,12 +6,13 @@ namespace Logic
     {
         public List<User> _users;
         private readonly IUserRepository _userRepository;
-        private readonly ValidateUser validateUser;
+        private readonly ValidateUser _validateUsers;
 
         public UserManager(IUserRepository iuserRep)
         {
             _users = new List<User>();
             _userRepository = iuserRep;
+            _validateUsers = new(iuserRep);
 
             // inject the repository and use userRepistory as an interface and inject it as well. Get rid of Load stuff.
         }
@@ -99,20 +100,23 @@ namespace Logic
 
         public Result SendUserToTheDb(UserDTO newUser)
         {
-            var validateErrors = validateUser.ValidateUsers(newUser.Username);
-            if (validateErrors.Any())
+            if (_validateUsers.UsernameExists(newUser.Username) == false)
             {
-                return new Result
-                {
-                    Success = false,
-                    Errors = validateErrors
-                };
+                string HashedPassword = PasswordHasher.HashPassword(newUser.Password);
+
+                newUser.Password = HashedPassword;
+
+                return _userRepository.InsertUser(newUser);
             }
-            string HashedPassword = PasswordHasher.HashPassword(newUser.Password);
+            else
+            {
+                return new Result 
+                { 
+                    Success = false, 
+                    Message = "Username is already taken" 
+                };
 
-            newUser.Password = HashedPassword;  
-
-            return _userRepository.InsertUser(newUser);
+            }
 
         }
         public User ConvertToUser(UserDTO newUserDTO)

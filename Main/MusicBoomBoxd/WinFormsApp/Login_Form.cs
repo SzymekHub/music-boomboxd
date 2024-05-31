@@ -83,12 +83,19 @@ namespace WinFormsApp
                 return;
             }
 
-            DashBoard_Form dash_form = new DashBoard_Form(user.Username, userManager, artistManager, albumManager, songManager, artistList);
-            dash_form.Owner = this;
-            dash_form.Text = "Hello" + txtUsername.Text;
-            this.Visible = false;
-            dash_form.Show();
-            ClearControls();
+            if (user.UserType == userType.Admin)
+            {
+                DashBoard_Form dash_form = new DashBoard_Form(user.Username, userManager, artistManager, albumManager, songManager, artistList);
+                dash_form.Owner = this;
+                dash_form.Text = "Hello" + txtUsername.Text;
+                this.Visible = false;
+                dash_form.Show();
+                ClearControls();
+            }
+            else
+            {
+                tsslblLoginForm.Text = "Looks like you do not have access to this form. It is admin only :(";
+            }
 
         }
 
