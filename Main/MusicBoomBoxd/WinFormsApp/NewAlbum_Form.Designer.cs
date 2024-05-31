@@ -29,6 +29,10 @@
         private void InitializeComponent()
         {
             NewAlbumPanel = new Panel();
+            lblSeconds = new Label();
+            nudRunTimeAlbum = new NumericUpDown();
+            lblRunTime = new Label();
+            cbArtistAlbum = new ComboBox();
             btnCancel = new Button();
             pbLogo = new PictureBox();
             SelectedCoverAlbum = new PictureBox();
@@ -45,8 +49,8 @@
             ssNewAlbumForm = new StatusStrip();
             tsslblNewAlbumForm = new ToolStripStatusLabel();
             tsslblNewAlbumFormCSV = new ToolStripStatusLabel();
-            cbArtistAlbum = new ComboBox();
             NewAlbumPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)nudRunTimeAlbum).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbLogo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)SelectedCoverAlbum).BeginInit();
             ssNewAlbumForm.SuspendLayout();
@@ -55,6 +59,9 @@
             // NewAlbumPanel
             // 
             NewAlbumPanel.BackColor = Color.DarkGray;
+            NewAlbumPanel.Controls.Add(lblSeconds);
+            NewAlbumPanel.Controls.Add(nudRunTimeAlbum);
+            NewAlbumPanel.Controls.Add(lblRunTime);
             NewAlbumPanel.Controls.Add(cbArtistAlbum);
             NewAlbumPanel.Controls.Add(btnCancel);
             NewAlbumPanel.Controls.Add(pbLogo);
@@ -73,6 +80,42 @@
             NewAlbumPanel.Name = "NewAlbumPanel";
             NewAlbumPanel.Size = new Size(718, 373);
             NewAlbumPanel.TabIndex = 13;
+            // 
+            // lblSeconds
+            // 
+            lblSeconds.AutoSize = true;
+            lblSeconds.Font = new Font("Stencil", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblSeconds.Location = new Point(296, 318);
+            lblSeconds.Name = "lblSeconds";
+            lblSeconds.Size = new Size(138, 27);
+            lblSeconds.TabIndex = 40;
+            lblSeconds.Text = "(Seconds)";
+            // 
+            // nudRunTimeAlbum
+            // 
+            nudRunTimeAlbum.Location = new Point(172, 318);
+            nudRunTimeAlbum.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
+            nudRunTimeAlbum.Name = "nudRunTimeAlbum";
+            nudRunTimeAlbum.Size = new Size(118, 27);
+            nudRunTimeAlbum.TabIndex = 39;
+            // 
+            // lblRunTime
+            // 
+            lblRunTime.AutoSize = true;
+            lblRunTime.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblRunTime.Location = new Point(3, 312);
+            lblRunTime.Name = "lblRunTime";
+            lblRunTime.Size = new Size(164, 33);
+            lblRunTime.TabIndex = 38;
+            lblRunTime.Text = "RunTime :";
+            // 
+            // cbArtistAlbum
+            // 
+            cbArtistAlbum.FormattingEnabled = true;
+            cbArtistAlbum.Location = new Point(172, 217);
+            cbArtistAlbum.Name = "cbArtistAlbum";
+            cbArtistAlbum.Size = new Size(262, 28);
+            cbArtistAlbum.TabIndex = 37;
             // 
             // btnCancel
             // 
@@ -225,14 +268,6 @@
             tsslblNewAlbumFormCSV.Name = "tsslblNewAlbumFormCSV";
             tsslblNewAlbumFormCSV.Size = new Size(0, 16);
             // 
-            // cbArtistAlbum
-            // 
-            cbArtistAlbum.FormattingEnabled = true;
-            cbArtistAlbum.Location = new Point(172, 217);
-            cbArtistAlbum.Name = "cbArtistAlbum";
-            cbArtistAlbum.Size = new Size(262, 28);
-            cbArtistAlbum.TabIndex = 37;
-            // 
             // NewAlbum_Form
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -246,6 +281,7 @@
             FormClosed += NewAlbum_Form_FormClosed;
             NewAlbumPanel.ResumeLayout(false);
             NewAlbumPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)nudRunTimeAlbum).EndInit();
             ((System.ComponentModel.ISupportInitialize)pbLogo).EndInit();
             ((System.ComponentModel.ISupportInitialize)SelectedCoverAlbum).EndInit();
             ssNewAlbumForm.ResumeLayout(false);
@@ -274,5 +310,8 @@
         private PictureBox pbLogo;
         private Button btnCancel;
         private ComboBox cbArtistAlbum;
+        private Label lblRunTime;
+        private Label lblSeconds;
+        private NumericUpDown nudRunTimeAlbum;
     }
 }

@@ -28,7 +28,6 @@ namespace WinFormsApp
             {
                 tbNameArtist.Enabled = false;
                 btnAddArtist.Enabled = false;
-                btnCancelArtist.Enabled = false;
                 btnAddProfileArtist.Enabled = false;
             }
         }

@@ -33,6 +33,7 @@ namespace WinFormsApp
                 DatePickerAlbum.Enabled = false;
                 cbArtistAlbum.Enabled = false;
                 cbGenreAlbum.Enabled = false;
+                nudRunTimeAlbum.Enabled = false;
                 btnAddPictureAlbum.Enabled = false;
                 btnAddAlbum.Enabled = false;
             }
@@ -111,6 +112,7 @@ namespace WinFormsApp
                         selectedArtist.ArtistID,
                         tbTitleAlbum.Text,
                         DatePickerAlbum.Value,
+                        (int)nudRunTimeAlbum.Value,
                         (genreType)cbGenreAlbum.SelectedItem,
                         albumCoverName,
                         albumCoverData,
@@ -124,6 +126,7 @@ namespace WinFormsApp
                         selectedArtist.ArtistID,
                         tbTitleAlbum.Text,
                         DatePickerAlbum.Value,
+                        (int)nudRunTimeAlbum.Value,
                         (genreType)cbGenreAlbum.SelectedItem,
                         albumCoverName,
                         albumCoverData,
@@ -153,6 +156,7 @@ namespace WinFormsApp
                 cbArtistAlbum.SelectedIndex = cbArtistAlbum.Items.IndexOf(album.Artist);
             }
             DatePickerAlbum.Value = album.Date;
+            nudRunTimeAlbum.Value = album.RunTime;
             cbGenreAlbum.SelectedItem = album.Genre;
         }
 
@@ -169,6 +173,7 @@ namespace WinFormsApp
             tbTitleAlbum.Clear();
             cbArtistAlbum.SelectedIndex = 0;
             DatePickerAlbum.Value = DateTime.Now;
+            nudRunTimeAlbum.Value = 0;
             cbGenreAlbum.SelectedIndex = 0;
             selectedImagePath = null;
             SelectedCoverAlbum.Image = null;
@@ -208,6 +213,7 @@ namespace WinFormsApp
                       ((Artist)cbArtistAlbum.SelectedItem).ArtistID,
                       tbTitleAlbum.Text,
                       DatePickerAlbum.Value,
+                      (int)nudRunTimeAlbum.Value,
                       (genreType)cbGenreAlbum.SelectedItem,
                       albumCoverName,
                       albumCoverData,
@@ -256,6 +262,7 @@ namespace WinFormsApp
                         ((Artist)cbArtistAlbum.SelectedItem).ArtistID,
                         tbTitleAlbum.Text,
                         DatePickerAlbum.Value,
+                        (int)nudRunTimeAlbum.Value,
                         (genreType)cbGenreAlbum.SelectedItem,
                         albumCoverName,
                         albumCoverData,
@@ -267,6 +274,7 @@ namespace WinFormsApp
                         ((Artist)cbArtistAlbum.SelectedItem).ArtistID,
                         tbTitleAlbum.Text,
                         DatePickerAlbum.Value,
+                        (int)nudRunTimeAlbum.Value,
                         (genreType)cbGenreAlbum.SelectedItem,
                         albumCoverName,
                         albumCoverData,
@@ -306,6 +314,12 @@ namespace WinFormsApp
             if (string.IsNullOrEmpty(selectedImagePath))
             {
                 tsslblNewAlbumForm.Text = "Please select an album cover image for the Album.";
+                return false;
+            }
+
+            if (nudRunTimeAlbum == null)
+            {
+                tsslblNewAlbumForm.Text = "Every Album needs a runtime in seconds. Please input one";
                 return false;
             }
 

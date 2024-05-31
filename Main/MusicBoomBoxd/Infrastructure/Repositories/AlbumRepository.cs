@@ -16,16 +16,16 @@ namespace Infrastructure
                 if (albumDTO.AlbumID != 0)
                 {
                     cmd.CommandText = @"SET IDENTITY_INSERT [Album] ON
-                                        INSERT INTO [Album] (AlbumID, ArtistID, Title, Date, Genre, AlbumCoverName, AlbumCoverData, AlbumCoverContentType) 
-                                        VALUES (@AlbumID, @ArtistID, @Title, @ReleaseDate, @Genre, @AlbumCoverName, @AlbumCoverData, @AlbumCoverContentType); 
+                                        INSERT INTO [Album] (AlbumID, ArtistID, Title, Date, RunTimeSec, Genre, AlbumCoverName, AlbumCoverData, AlbumCoverContentType) 
+                                        VALUES (@AlbumID, @ArtistID, @Title, @Date, @RunTimeSec, @Genre, @AlbumCoverName, @AlbumCoverData, @AlbumCoverContentType); 
                                         SELECT SCOPE_IDENTITY();";
 
                     cmd.Parameters.AddWithValue("@AlbumID", albumDTO.AlbumID);
                 }
                 else
                 {
-                    cmd.CommandText = @"INSERT INTO [Album] (ArtistID, Title, Date, Genre, AlbumCoverName, AlbumCoverData, AlbumCoverContentType) 
-                                        VALUES (@ArtistID, @Title, @ReleaseDate, @Genre, @AlbumCoverName, @AlbumCoverData, @AlbumCoverContentType); 
+                    cmd.CommandText = @"INSERT INTO [Album] (ArtistID, Title, Date,RunTimeSec, Genre, AlbumCoverName, AlbumCoverData, AlbumCoverContentType) 
+                                        VALUES (@ArtistID, @Title, @Date, @RunTimeSec, @Genre, @AlbumCoverName, @AlbumCoverData, @AlbumCoverContentType); 
                                         SELECT SCOPE_IDENTITY();";
                 }
 
@@ -33,7 +33,9 @@ namespace Infrastructure
 
                 // This converts DateTime to string in the format "yyyy-MM-dd HH:mm:ss.fff" so that it works with the databse
                 string releaseDateString = albumDTO.ReleaseDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                cmd.Parameters.AddWithValue("@ReleaseDate", releaseDateString);
+                cmd.Parameters.AddWithValue("@Date", releaseDateString);
+
+                cmd.Parameters.AddWithValue("@RunTimeSec", albumDTO.RunTime);
 
                 // This converts the genre enum to a string to pass it to Database
                 string genreString = albumDTO.Genre.ToString();
@@ -79,7 +81,7 @@ namespace Infrastructure
             {
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP (@Count) AlbumID, ArtistID, Title, Date, Genre, AlbumCoverName, AlbumCoverData, AlbumCoverContentType 
+                cmd.CommandText = @"SELECT TOP (@Count) AlbumID, ArtistID, Title, Date,RunTimeSec, Genre, AlbumCoverName, AlbumCoverData, AlbumCoverContentType 
                                     FROM [Album] WHERE Active = 1 ORDER BY AlbumID DESC";
 
 
@@ -96,12 +98,13 @@ namespace Infrastructure
                             int artistID = reader.GetInt32(1);
                             string title = reader.GetString(2);
                             DateTime releaseDate = reader.GetDateTime(3);
-                            string genre = reader.GetString(4);
-                            string albumCoverName = reader.GetString(5);
-                            byte[] albumCoverData = (byte[])reader.GetValue(6);
-                            string albumCoverContentType = reader.GetString(7);
+                            int runTime = reader.GetInt32(4);
+                            string genre = reader.GetString(5);
+                            string albumCoverName = reader.GetString(6);
+                            byte[] albumCoverData = (byte[])reader.GetValue(7);
+                            string albumCoverContentType = reader.GetString(8);
 
-                            AlbumDTO album = new AlbumDTO(albumID, artistID, title, releaseDate, genre, albumCoverName, albumCoverData, albumCoverContentType);
+                            AlbumDTO album = new AlbumDTO(albumID, artistID, title, releaseDate, runTime, genre, albumCoverName, albumCoverData, albumCoverContentType);
                             recentAlbums.Add(album);
                         }
                     }
@@ -126,7 +129,7 @@ namespace Infrastructure
             {
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE [Album] SET ArtistID = @ArtistID, Title = @Title, Date = @ReleaseDate, Genre = @Genre, AlbumCoverName = @AlbumCoverName, AlbumCoverData = @AlbumCoverData, AlbumCoverContentType = @AlbumCoverContentType
+                cmd.CommandText = @"UPDATE [Album] SET ArtistID = @ArtistID, Title = @Title, Date = @Date, RunTimeSec = @RunTimeSec, Genre = @Genre, AlbumCoverName = @AlbumCoverName, AlbumCoverData = @AlbumCoverData, AlbumCoverContentType = @AlbumCoverContentType
                                   WHERE AlbumID = @AlbumID";
 
                 cmd.Parameters.AddWithValue("@ArtistID", newAlbumDTO.ArtistID);
@@ -135,7 +138,9 @@ namespace Infrastructure
 
                 // This converts DateTime to string in the format "yyyy-MM-dd HH:mm:ss.fff" so that it works with the databse
                 string releaseDateString = newAlbumDTO.ReleaseDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                cmd.Parameters.AddWithValue("@ReleaseDate", releaseDateString);
+                cmd.Parameters.AddWithValue("@Date", releaseDateString);
+
+                cmd.Parameters.AddWithValue("@RunTimeSec", newAlbumDTO.RunTime);
 
                 // This converts the genre enum to a string to pass it to Database
                 string genreString = newAlbumDTO.Genre.ToString();
