@@ -3,25 +3,28 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Logic;
 using Infrastructure;
 using WebApp.Pages.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApp.Pages
 {
     public class RegisterModel : PageModel
     {
-        private readonly UserManager _userManager;
-        private readonly UserRepository _userRepository;
-        private readonly IWebHostEnvironment _environment;
+        public UserManager _userManager { get; }
+        private IWebHostEnvironment _environment;
+
 
         // Binds the User object
         [BindProperty]
-        public LoginUser User { get; set; }
+        public RegisterUser RegiUser { get; set; }
 
         // Added a property for handling file upload
         [BindProperty]
+        [Display(Name = "Profile Picture"), Required]
         public IFormFile ProfilePicture { get; set; }
 
-        public RegisterModel(IWebHostEnvironment environment)
+        public RegisterModel(UserManager userManager, IWebHostEnvironment environment)
         {
+            _userManager = userManager;
             _environment = environment;
         }
 
@@ -35,29 +38,55 @@ namespace WebApp.Pages
             {
                 return Page();
             }
-
-            // Handles file upload
-            if (ProfilePicture != null)
+            else
             {
-                string filePath = Path.Combine(_environment.WebRootPath, "img", ProfilePicture.FileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                try
                 {
-                    await ProfilePicture.CopyToAsync(fileStream);
+                    string ProfilePictureName = ProfilePicture.FileName;
+                    string filePath = Path.Combine(_environment.WebRootPath, "img", ProfilePicture.FileName);
+                    string ProfilePictureContentType = ProfilePicture.ContentType;
+                    using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        ProfilePicture.CopyTo(fileStream);
+                    }
                 }
+                catch (Exception ex)
+                {
 
-                User.ProfilePictureContentType = filePath;
+                }
+                
             }
             //saves user to the Database
-            UserDTO newUser = new UserDTO(User.UserName, User.Password, User.Email, User.UserType, User.Birthday, User.FavGenre, User.ProfilePictureName, User.ProfilePictureData, User.ProfilePictureContentType);
-            
+            UserDTO newUser = new UserDTO(RegiUser.Name, RegiUser.Password, RegiUser.Email, RegiUser.UserType, RegiUser.Birthday, RegiUser.FavGenre, RegiUser.ProfilePictureName, RegiUser.ProfilePictureData, RegiUser.ProfilePictureContentType);
+
             // validate if user already exists.It could go wrong
             // Change the naming for more functionaity 
 
-            if (_userManager.SendUserToTheDb(newUser))
+            var result = _userManager.SendUserToTheDbWEB(newUser);
+            
+            if (result.Success)
             {
-                return RedirectToPage("/Index");
+                return RedirectToPage("/Login");
             }
-            return Page();
+            else
+            {
+                if (result.Errors != null)
+                {
+                    foreach (var errorKey in result.Errors)
+                    {
+                        foreach (var errorValue in errorKey.Value)
+                        {
+                            ModelState.AddModelError($"User.{errorKey.Key}", errorValue);
+                        }
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", result.Message);
+                }
+                return Page();
+            }
+
         }
     }
 }

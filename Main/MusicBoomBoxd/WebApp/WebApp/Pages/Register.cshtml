@@ -12,29 +12,29 @@
         <form method="post" enctype="multipart/form-data">
 
             <div class="form-group">
-                <label asp-for="ProfilePicture">Profile Picture</label>
-                <input asp-for="ProfilePicture" type="file" class="form-control" />
-                <span asp-validation-for="ProfilePicture" class="text-danger"></span>
+                <label asp-for="ProfilePicture" class="form-group"></label>
+                <input asp-for="ProfilePicture" class="form-control" />
+                <span asp-validation-for="ProfilePicture"></span>
             </div>
             <div class="form-group">
-                <label for="user" class="label" asp-for="User.UserName">Username</label>
-                <span asp-validation-for="User.UserName" style="color:red"></span>
-                <input id="user" type="text" class="input" asp-for="User.UserName">
+                <label for="user" class="label" asp-for="RegiUser.Name">Username</label>
+                <span asp-validation-for="RegiUser.Name" style="color:red"></span>
+                <input type="text" class="input" asp-for="RegiUser.Name">
             </div>
             <div class="form-group">
-                <label for="pass" class="label" asp-for="User.Password">Password</label>
-                <span asp-validation-for="User.Password" style="color:red"></span>
-                <input id="pass" type="password" class="input" asp-for="User.Password">
+                <label for="pass" class="label" asp-for="RegiUser.Password">Password</label>
+                <span asp-validation-for="RegiUser.Password" style="color:red"></span>
+                <input  type="password" class="input" asp-for="RegiUser.Password">
             </div>
             <div class="form-group">
-                <label for="pass" class="label" asp-for="User.Email">Email</label>
-                <span asp-validation-for="User.Email" style="color:red"></span>
-                <input id="pass" type="text" class="input" asp-for="User.Email">
+                <label for="pass" class="label" asp-for="RegiUser.Email">Email</label>
+                <span asp-validation-for="RegiUser.Email" style="color:red"></span>
+                <input type="text" class="input" asp-for="RegiUser.Email">
             </div>
 
             <div class="form-group">
-                <label for="userType" class="label" asp-for="User.UserType">User Type</label>
-                <select id="userType" class="input" asp-for="User.UserType">
+                <label for="userType" class="label" asp-for="RegiUser.UserType">User Type</label>
+                <select class="input" asp-for="RegiUser.UserType">
                     <option value="Regular">Regular</option>
                     <option value="Critic">Critic</option>
                     <option value="Musician">Musician</option>
@@ -42,13 +42,13 @@
             </div>
 
             <div class="form-group">
-                <label for="birthday" class="label" asp-for="User.Birthday">Birthday</label>
-                <input id="birthday" type="date" class="input" asp-for="User.Birthday">
+                <label for="birthday" class="label" asp-for="RegiUser.Birthday">Birthday</label>
+                <input  type="date" class="input" asp-for="RegiUser.Birthday">
             </div>
 
             <div class="form-group">
-                <label for="genre" class="label" asp-for="User.FavGenre">Favorite Genre</label>
-                <select id="genre" class="input" asp-for="User.FavGenre">
+                <label for="genre" class="label" asp-for="RegiUser.FavGenre">Favorite Genre</label>
+                <select class="input" asp-for="RegiUser.FavGenre">
                     <option value="Rock">Rock</option>
                     <option value="Reggae">Reggae</option>
                     <option value="Metal">Metal</option>

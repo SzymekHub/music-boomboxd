@@ -26,7 +26,6 @@ namespace WebApp.Pages.Models
         public string FavGenre { get; set; }
 
         [Required(ErrorMessage = "ProfilePicture is required")]
-        [Display(Name = "Profile Picture")]
         public string ProfilePictureName { get; set; }
 
         [Required(ErrorMessage = "Profile Picture is required")]

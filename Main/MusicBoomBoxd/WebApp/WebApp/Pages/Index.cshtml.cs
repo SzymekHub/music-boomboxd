@@ -5,21 +5,23 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 using WebApp.Pages.Models;
 using Infrastructure;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Logic;
 
 namespace WebApp.Pages
 {
     public class IndexModel : PageModel
     {
-        [BindProperty]
-        public LoginUser LoginUser { get; set; }
+        public UserManager userManager { get; }
 
-        private readonly UserRepository _userRepository;
-        public IndexModel(UserRepository userRepository)
+        public IndexModel()
         {
-            _userRepository = userRepository;
+            IUserRepository iuserRep = new UserRepository();
+            ValidateUser validateUsers = new ValidateUser(iuserRep);
+            userManager = new UserManager(iuserRep);
         }
+
+        [BindProperty]
+        public LoginUser Login { get; set; }
 
         [BindProperty]
         public string Username { get; set; }
@@ -29,16 +31,16 @@ namespace WebApp.Pages
 
         // i want ui to handle rules. And logic to validate. Introduce a class manager that validates user  
 
-        public IActionResult OnPostLogin()
+        public async  Task<IActionResult> OnPostAsync()
         {
-            var userDTO = _userRepository.GetUserByUsername(Username);
+            User user = userManager.GetUserByUsernameFromDb(Username);
 
-            if (userDTO != null && PasswordHasher.VerifyPassword(Password, userDTO.Password))
+            if (user != null && PasswordHasher.VerifyPassword(Password, user.Password))
             {
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, Username),
-                    new Claim(ClaimTypes.Email, userDTO.Email.ToString()), // Use ClaimTypes.Email for email claim
+                    new Claim(ClaimTypes.Email, user.Email.ToString()), // Use ClaimTypes.Email for email claim
                     // Add other claims as needed
                 };
 
@@ -52,7 +54,7 @@ namespace WebApp.Pages
                 await HttpContext.SignInAsync(new ClaimsPrincipal(claimsIdentity), authProperties);
 
                 // Redirect to the profile page after successful login
-                return RedirectToPage("/Profile");
+                return RedirectToPage("/HomePage");
             }
 
             // Display error message if username or password is incorrect

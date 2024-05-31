@@ -30,7 +30,7 @@ namespace Logic
             List<UserDTO> userDTOs = _userRepository.GetRecentUser(1000);
 
             _users.Clear();
-            
+
             foreach (var userDTO in userDTOs)
             {
                 //This converts UserDTO to Users and adds to the users list
@@ -42,15 +42,15 @@ namespace Logic
         public Result Add(User user)
         {
             UserDTO userDTO = ConvertToUserDTO(user);
-            
+
             _users.Add(user);
 
             Result resultUser = SendUserToTheDb(userDTO);
-            
+
             return resultUser;
-            
+
         }
-        
+
         public bool Remove(User user)
         {
             _userRepository.DeleteUser(ConvertToUserDTO(user));
@@ -110,18 +110,38 @@ namespace Logic
             }
             else
             {
-                return new Result 
-                { 
-                    Success = false, 
-                    Message = "Username is already taken" 
+                return new Result
+                {
+                    Success = false,
+                    Message = "Username is already taken"
                 };
 
             }
 
         }
+
+        public Result SendUserToTheDbWEB(UserDTO newUser)
+        {
+            var errors = _validateUsers.ValidateUsers(newUser.Username);
+            if (errors.Any())
+            {
+                return new Result
+                {
+                    Success = false,
+                    Errors = errors
+                };
+            }
+
+            string HashedPassword = PasswordHasher.HashPassword(newUser.Password);
+
+            newUser.Password = HashedPassword;
+
+            return _userRepository.InsertUser(newUser);
+        }
+
         public User ConvertToUser(UserDTO newUserDTO)
         {
-            if(newUserDTO == null)
+            if (newUserDTO == null)
             {
                 return null;
             }

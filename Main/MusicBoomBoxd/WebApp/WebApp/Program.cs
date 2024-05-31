@@ -7,9 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
-builder.Services.AddSingleton<UserRepository>();
-builder.Services.AddSingleton<LoadUsers>();
+builder.Services.AddSingleton<IUserRepository, UserRepository>();
 builder.Services.AddSingleton<UserManager>();
+builder.Services.AddSingleton<ValidateUser>();
 builder.Services.AddRazorPages();
 
 // Tells us how we want to use auth.
