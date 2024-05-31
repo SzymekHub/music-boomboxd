@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Azure.Core.Pipeline;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +11,7 @@ namespace Infrastructure
     {
         public bool Success { get; set; }
         public string Message { get; set; }
+
+        public Dictionary<string, List<string>> Errors { get; set; }
     }
 }

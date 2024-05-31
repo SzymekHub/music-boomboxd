@@ -6,7 +6,7 @@ namespace WinFormsApp
 {
     public partial class Login_Form : Form
     {
-        private readonly UserRepository userRep;
+        private readonly IUserRepository userRep;
         private readonly UserManager userManager;
         private readonly AlbumManager albumManager;
         private readonly SongManager songManager;
@@ -20,9 +20,8 @@ namespace WinFormsApp
             //For users
             #region Users
             userRep = new UserRepository();
-            IUserRepository IuserRep = userRep;
 
-            userManager = new UserManager(userRep, IuserRep);
+            userManager = new UserManager(userRep);
             userManager.LoadUsersFromDataBase();
             #endregion
 
@@ -69,14 +68,7 @@ namespace WinFormsApp
                 tsslblLoginForm.Text = "The Password cannot be empty";
             }
 
-            List<UserDTO> users = userRep.GetRecentUser(1000);
-            if (users == null)
-            {
-                tsslblLoginForm.Text = "Unable to connect to the database";
-                return;
-            }
-
-            UserDTO user = users.Find(u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+            User user = userManager.GetUserByUsernameFromDb(username);
             if (user == null)
             {
                 tsslblLoginForm.Text = "This user was not found";

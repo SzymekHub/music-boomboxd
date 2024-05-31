@@ -5,16 +5,23 @@ namespace Logic
     public class UserManager
     {
         public List<User> _users;
-        private readonly UserRepository _userRepository;
-        private readonly IUserRepository _iuserRepostiory;
+        private readonly IUserRepository _userRepository;
+        private readonly ValidateUser validateUser;
 
-        public UserManager(UserRepository userRep, IUserRepository iuserRep)
+        public UserManager(IUserRepository iuserRep)
         {
             _users = new List<User>();
-            _userRepository = userRep;
-            _iuserRepostiory = iuserRep;
+            _userRepository = iuserRep;
 
             // inject the repository and use userRepistory as an interface and inject it as well. Get rid of Load stuff.
+        }
+
+        public User GetUserByUsernameFromDb(string username)
+        {
+            UserDTO userDTO = _userRepository.GetUserByUsername(username);
+            User user = ConvertToUser(userDTO);
+
+            return user;
         }
 
         public void LoadUsersFromDataBase()
@@ -92,6 +99,15 @@ namespace Logic
 
         public Result SendUserToTheDb(UserDTO newUser)
         {
+            var validateErrors = validateUser.ValidateUsers(newUser.Username);
+            if (validateErrors.Any())
+            {
+                return new Result
+                {
+                    Success = false,
+                    Errors = validateErrors
+                };
+            }
             string HashedPassword = PasswordHasher.HashPassword(newUser.Password);
 
             newUser.Password = HashedPassword;  
@@ -101,6 +117,11 @@ namespace Logic
         }
         public User ConvertToUser(UserDTO newUserDTO)
         {
+            if(newUserDTO == null)
+            {
+                return null;
+            }
+
             //Converts the user role enum to a string
             userType type = (userType)Enum.Parse(typeof(userType), newUserDTO.UserType);
 

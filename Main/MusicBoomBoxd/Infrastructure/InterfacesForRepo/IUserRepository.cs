@@ -5,6 +5,7 @@
         Result InsertUser(UserDTO userDTO);
 
         List<UserDTO> GetRecentUser(int count);
+        UserDTO GetUserByUsername(string username);
 
         Result UpdateUser(UserDTO newUserDTO, UserDTO oldUserDTO);
 
