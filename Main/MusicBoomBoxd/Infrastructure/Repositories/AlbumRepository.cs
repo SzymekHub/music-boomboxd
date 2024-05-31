@@ -132,6 +132,8 @@ namespace Infrastructure
                 cmd.CommandText = @"UPDATE [Album] SET ArtistID = @ArtistID, Title = @Title, Date = @Date, RunTimeSec = @RunTimeSec, Genre = @Genre, AlbumCoverName = @AlbumCoverName, AlbumCoverData = @AlbumCoverData, AlbumCoverContentType = @AlbumCoverContentType
                                   WHERE AlbumID = @AlbumID";
 
+
+                cmd.Parameters.AddWithValue("@AlbumID", newAlbumDTO.AlbumID);
                 cmd.Parameters.AddWithValue("@ArtistID", newAlbumDTO.ArtistID);
 
                 cmd.Parameters.AddWithValue("@Title", newAlbumDTO.AlbumTitle);
@@ -151,7 +153,6 @@ namespace Infrastructure
                 byte[] albumCoverData = newAlbumDTO.AlbumCoverData.ToArray();
                 cmd.Parameters.AddWithValue("@AlbumCoverData", albumCoverData);
                 cmd.Parameters.AddWithValue("@AlbumCoverContentType", newAlbumDTO.AlbumCoverContentType);
-                cmd.Parameters.AddWithValue("@AlbumID", newAlbumDTO.AlbumID);
 
                 //// Parameters for old album to find it in the database
                 //cmd.Parameters.AddWithValue("@OldTitle", oldAlbumDTO.AlbumTitle);

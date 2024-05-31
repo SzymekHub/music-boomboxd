@@ -15,10 +15,7 @@ namespace Logic
                 (genreType)Enum.Parse(typeof(genreType), albumDTO.Genre),
                 albumDTO.AlbumCoverName,
                 albumDTO.AlbumCoverData,
-                albumDTO.AlbumCoverContentType)
-            {
-                Artist = artist
-            };
+                albumDTO.AlbumCoverContentType);
         }
 
         public static AlbumDTO ToAlbumDTO(Album album)

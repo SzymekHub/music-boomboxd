@@ -35,6 +35,7 @@ namespace WinFormsApp
                 DatePickerSong.Enabled = false;
                 cbArtistSong.Enabled = false;
                 cbGenre.Enabled = false;
+                nudRunTimeSongs.Enabled = false;
                 btnAddPictureSong.Enabled = false;
                 BtnAddSong.Enabled = false;
             }
@@ -124,6 +125,7 @@ namespace WinFormsApp
                       tbTitleSong.Text,
                       selectedArtist.ArtistID,
                       DatePickerSong.Value,
+                      (int)nudRunTimeSongs.Value,
                       (genreType)cbGenre.SelectedItem,
                       songCoverName,
                       songCoverData,
@@ -138,6 +140,7 @@ namespace WinFormsApp
                       tbTitleSong.Text,
                       selectedArtist.ArtistID,
                       DatePickerSong.Value,
+                      (int)nudRunTimeSongs.Value,
                       (genreType)cbGenre.SelectedItem,
                       songCoverName,
                       songCoverData,
@@ -167,6 +170,7 @@ namespace WinFormsApp
                 cbArtistSong.SelectedIndex = cbArtistSong.Items.IndexOf(song.Artist);
             }
             DatePickerSong.Value = song.Date;
+            nudRunTimeSongs.Value = song.RunTime;
             cbGenre.SelectedItem = song.Genre;
         }
 
@@ -184,6 +188,7 @@ namespace WinFormsApp
             cbArtistSong.SelectedIndex = 0;
             DatePickerSong.Value = DateTime.Now;
             cbGenre.SelectedIndex = 0;
+            nudRunTimeSongs.Value = 0;
             selectedImagePath = null;
             SelectedCoverSong.Image = null;
         }
@@ -223,6 +228,7 @@ namespace WinFormsApp
                       tbTitleSong.Text,
                       ((Artist)cbArtistSong.SelectedItem).ArtistID,
                       DatePickerSong.Value,
+                      (int)nudRunTimeSongs.Value,
                       (genreType)cbGenre.SelectedItem,
                       songCoverName,
                       songCoverData,
@@ -271,6 +277,7 @@ namespace WinFormsApp
                         tbTitleSong.Text,
                         ((Artist)cbArtistSong.SelectedItem).ArtistID,
                         DatePickerSong.Value,
+                        (int)nudRunTimeSongs.Value,
                         (genreType)cbGenre.SelectedItem,
                         songCoverName,
                         songCoverData,
@@ -282,6 +289,7 @@ namespace WinFormsApp
                         tbTitleSong.Text,
                         ((Artist)cbArtistSong.SelectedItem).ArtistID,
                         DatePickerSong.Value,
+                        (int)nudRunTimeSongs.Value,
                         (genreType)cbGenre.SelectedItem,
                         songCoverName,
                         songCoverData,

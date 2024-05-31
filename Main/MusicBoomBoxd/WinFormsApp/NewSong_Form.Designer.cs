@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             NewSongPanel = new Panel();
+            cbArtistSong = new ComboBox();
             btnCancel = new Button();
             pbLogo = new PictureBox();
             SelectedCoverSong = new PictureBox();
@@ -45,16 +46,22 @@
             ssNewSongForm = new StatusStrip();
             tsslblNewSongForm = new ToolStripStatusLabel();
             tsslblNewSongFormCSV = new ToolStripStatusLabel();
-            cbArtistSong = new ComboBox();
+            lblSecondsSongs = new Label();
+            nudRunTimeSongs = new NumericUpDown();
+            lblRunTimeSongs = new Label();
             NewSongPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pbLogo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)SelectedCoverSong).BeginInit();
             ssNewSongForm.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)nudRunTimeSongs).BeginInit();
             SuspendLayout();
             // 
             // NewSongPanel
             // 
             NewSongPanel.BackColor = Color.DarkGray;
+            NewSongPanel.Controls.Add(lblSecondsSongs);
+            NewSongPanel.Controls.Add(nudRunTimeSongs);
+            NewSongPanel.Controls.Add(lblRunTimeSongs);
             NewSongPanel.Controls.Add(cbArtistSong);
             NewSongPanel.Controls.Add(btnCancel);
             NewSongPanel.Controls.Add(pbLogo);
@@ -73,6 +80,14 @@
             NewSongPanel.Name = "NewSongPanel";
             NewSongPanel.Size = new Size(718, 373);
             NewSongPanel.TabIndex = 12;
+            // 
+            // cbArtistSong
+            // 
+            cbArtistSong.FormattingEnabled = true;
+            cbArtistSong.Location = new Point(172, 217);
+            cbArtistSong.Name = "cbArtistSong";
+            cbArtistSong.Size = new Size(262, 28);
+            cbArtistSong.TabIndex = 38;
             // 
             // btnCancel
             // 
@@ -225,13 +240,33 @@
             tsslblNewSongFormCSV.Name = "tsslblNewSongFormCSV";
             tsslblNewSongFormCSV.Size = new Size(0, 16);
             // 
-            // cbArtistSong
+            // lblSecondsSongs
             // 
-            cbArtistSong.FormattingEnabled = true;
-            cbArtistSong.Location = new Point(172, 217);
-            cbArtistSong.Name = "cbArtistSong";
-            cbArtistSong.Size = new Size(262, 28);
-            cbArtistSong.TabIndex = 38;
+            lblSecondsSongs.AutoSize = true;
+            lblSecondsSongs.Font = new Font("Stencil", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblSecondsSongs.Location = new Point(296, 321);
+            lblSecondsSongs.Name = "lblSecondsSongs";
+            lblSecondsSongs.Size = new Size(138, 27);
+            lblSecondsSongs.TabIndex = 43;
+            lblSecondsSongs.Text = "(Seconds)";
+            // 
+            // nudRunTimeSongs
+            // 
+            nudRunTimeSongs.Location = new Point(172, 321);
+            nudRunTimeSongs.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
+            nudRunTimeSongs.Name = "nudRunTimeSongs";
+            nudRunTimeSongs.Size = new Size(118, 27);
+            nudRunTimeSongs.TabIndex = 42;
+            // 
+            // lblRunTimeSongs
+            // 
+            lblRunTimeSongs.AutoSize = true;
+            lblRunTimeSongs.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblRunTimeSongs.Location = new Point(3, 315);
+            lblRunTimeSongs.Name = "lblRunTimeSongs";
+            lblRunTimeSongs.Size = new Size(164, 33);
+            lblRunTimeSongs.TabIndex = 41;
+            lblRunTimeSongs.Text = "RunTime :";
             // 
             // NewSong_Form
             // 
@@ -250,6 +285,7 @@
             ((System.ComponentModel.ISupportInitialize)SelectedCoverSong).EndInit();
             ssNewSongForm.ResumeLayout(false);
             ssNewSongForm.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)nudRunTimeSongs).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -274,5 +310,8 @@
         private PictureBox pbLogo;
         private Button btnCancel;
         private ComboBox cbArtistSong;
+        private Label lblSecondsSongs;
+        private NumericUpDown nudRunTimeSongs;
+        private Label lblRunTimeSongs;
     }
 }
