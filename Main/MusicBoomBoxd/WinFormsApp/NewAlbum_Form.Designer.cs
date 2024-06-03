@@ -41,7 +41,7 @@
             SelectedCoverAlbum = new PictureBox();
             btnAddPictureAlbum = new Button();
             lblCoverAlbum = new Label();
-            DatePickerAlbum = new DateTimePicker();
+            dtpAlbum = new DateTimePicker();
             cbGenreAlbum = new ComboBox();
             btnAddAlbum = new Button();
             tbTitleAlbum = new TextBox();
@@ -52,6 +52,7 @@
             ssNewAlbumForm = new StatusStrip();
             tsslblNewAlbumForm = new ToolStripStatusLabel();
             tsslblNewAlbumFormCSV = new ToolStripStatusLabel();
+            label1 = new Label();
             NewAlbumPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudRunTimeAlbum).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbLogo).BeginInit();
@@ -62,6 +63,7 @@
             // NewAlbumPanel
             // 
             NewAlbumPanel.BackColor = Color.DarkGray;
+            NewAlbumPanel.Controls.Add(label1);
             NewAlbumPanel.Controls.Add(btnAddSongs);
             NewAlbumPanel.Controls.Add(cklbSongs);
             NewAlbumPanel.Controls.Add(lblSongs);
@@ -74,7 +76,7 @@
             NewAlbumPanel.Controls.Add(SelectedCoverAlbum);
             NewAlbumPanel.Controls.Add(btnAddPictureAlbum);
             NewAlbumPanel.Controls.Add(lblCoverAlbum);
-            NewAlbumPanel.Controls.Add(DatePickerAlbum);
+            NewAlbumPanel.Controls.Add(dtpAlbum);
             NewAlbumPanel.Controls.Add(cbGenreAlbum);
             NewAlbumPanel.Controls.Add(btnAddAlbum);
             NewAlbumPanel.Controls.Add(tbTitleAlbum);
@@ -90,7 +92,7 @@
             // btnAddSongs
             // 
             btnAddSongs.BackColor = Color.MediumSlateBlue;
-            btnAddSongs.Location = new Point(611, 329);
+            btnAddSongs.Location = new Point(611, 380);
             btnAddSongs.Name = "btnAddSongs";
             btnAddSongs.Size = new Size(127, 49);
             btnAddSongs.TabIndex = 43;
@@ -203,14 +205,12 @@
             lblCoverAlbum.TabIndex = 31;
             lblCoverAlbum.Text = "Cover:";
             // 
-            // DatePickerAlbum
+            // dtpAlbum
             // 
-            DatePickerAlbum.Checked = false;
-            DatePickerAlbum.ImeMode = ImeMode.NoControl;
-            DatePickerAlbum.Location = new Point(184, 236);
-            DatePickerAlbum.Name = "DatePickerAlbum";
-            DatePickerAlbum.Size = new Size(262, 27);
-            DatePickerAlbum.TabIndex = 30;
+            dtpAlbum.Location = new Point(184, 236);
+            dtpAlbum.Name = "dtpAlbum";
+            dtpAlbum.Size = new Size(262, 27);
+            dtpAlbum.TabIndex = 30;
             // 
             // cbGenreAlbum
             // 
@@ -303,6 +303,16 @@
             tsslblNewAlbumFormCSV.Name = "tsslblNewAlbumFormCSV";
             tsslblNewAlbumFormCSV.Size = new Size(0, 16);
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Stencil", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label1.Location = new Point(456, 326);
+            label1.Name = "label1";
+            label1.Size = new Size(278, 42);
+            label1.TabIndex = 44;
+            label1.Text = "*unselect the songs that \r\n  are already in the album*\r\n";
+            // 
             // NewAlbum_Form
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -331,7 +341,7 @@
         private PictureBox SelectedCoverAlbum;
         private Button btnAddPictureAlbum;
         private Label lblCoverAlbum;
-        private DateTimePicker DatePickerAlbum;
+        private DateTimePicker dtpAlbum;
         private ComboBox cbGenreAlbum;
         private Button btnAddAlbum;
         private TextBox tbTitleAlbum;
@@ -351,5 +361,6 @@
         private Label lblSongs;
         private Button btnAddSongs;
         private CheckedListBox cklbSongs;
+        private Label label1;
     }
 }

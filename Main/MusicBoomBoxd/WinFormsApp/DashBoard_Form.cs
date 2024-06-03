@@ -604,13 +604,7 @@ namespace WinFormsApp
                 {
                     if (addAlbumForm.ShowDialog() == DialogResult.OK)
                     {
-                        // Update the Album with the modified information
-                        Album updatedAlbum = addAlbumForm.GetUpdatedAlbum();
-                        if (updatedAlbum != null)
-                        {
-                            albumManager.Update(updatedAlbum, selectedAlbum);
-                            PopulateAlbums();
-                        }
+                        PopulateAlbums();
                     }
                 }
             }

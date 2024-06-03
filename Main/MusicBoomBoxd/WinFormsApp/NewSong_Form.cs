@@ -32,7 +32,7 @@ namespace WinFormsApp
             if (view)
             {
                 tbTitleSong.Enabled = false;
-                DatePickerSong.Enabled = false;
+                dtpSong.Enabled = false;
                 cbArtistSong.Enabled = false;
                 cbGenre.Enabled = false;
                 nudRunTimeSongs.Enabled = false;
@@ -124,7 +124,7 @@ namespace WinFormsApp
                     NewSong = new Song(
                       tbTitleSong.Text,
                       selectedArtist.ArtistID,
-                      DatePickerSong.Value,
+                      dtpSong.Value,
                       (int)nudRunTimeSongs.Value,
                       (genreType)cbGenre.SelectedItem,
                       songCoverName,
@@ -139,7 +139,7 @@ namespace WinFormsApp
                       exisitingSong.SongID,
                       tbTitleSong.Text,
                       selectedArtist.ArtistID,
-                      DatePickerSong.Value,
+                      dtpSong.Value,
                       (int)nudRunTimeSongs.Value,
                       (genreType)cbGenre.SelectedItem,
                       songCoverName,
@@ -165,11 +165,16 @@ namespace WinFormsApp
         private void FillFormWithSongDetails(Song song)
         {
             tbTitleSong.Text = song.Title;
-            if (cbArtistSong.Items.IndexOf(song.Artist) != -1 )
+            // Finds the artist by ID and sets the selected item
+            foreach (var item in cbArtistSong.Items)
             {
-                cbArtistSong.SelectedIndex = cbArtistSong.Items.IndexOf(song.Artist);
+                if (((Artist)item).ArtistID == song.ArtistID)
+                {
+                    cbArtistSong.SelectedItem = item;
+                    break;
+                }
             }
-            DatePickerSong.Value = song.Date;
+            dtpSong.Value = song.Date;
             nudRunTimeSongs.Value = song.RunTime;
             cbGenre.SelectedItem = song.Genre;
         }
@@ -186,7 +191,7 @@ namespace WinFormsApp
         {
             tbTitleSong.Clear();
             cbArtistSong.SelectedIndex = 0;
-            DatePickerSong.Value = DateTime.Now;
+            dtpSong.Value = DateTime.Now;
             cbGenre.SelectedIndex = 0;
             nudRunTimeSongs.Value = 0;
             selectedImagePath = null;
@@ -227,7 +232,7 @@ namespace WinFormsApp
                 return new Song(
                       tbTitleSong.Text,
                       ((Artist)cbArtistSong.SelectedItem).ArtistID,
-                      DatePickerSong.Value,
+                      dtpSong.Value,
                       (int)nudRunTimeSongs.Value,
                       (genreType)cbGenre.SelectedItem,
                       songCoverName,
@@ -276,7 +281,7 @@ namespace WinFormsApp
                         exisitingSong.SongID,
                         tbTitleSong.Text,
                         ((Artist)cbArtistSong.SelectedItem).ArtistID,
-                        DatePickerSong.Value,
+                        dtpSong.Value,
                         (int)nudRunTimeSongs.Value,
                         (genreType)cbGenre.SelectedItem,
                         songCoverName,
@@ -288,7 +293,7 @@ namespace WinFormsApp
                         exisitingSong.SongID,
                         tbTitleSong.Text,
                         ((Artist)cbArtistSong.SelectedItem).ArtistID,
-                        DatePickerSong.Value,
+                        dtpSong.Value,
                         (int)nudRunTimeSongs.Value,
                         (genreType)cbGenre.SelectedItem,
                         songCoverName,

@@ -18,20 +18,34 @@ namespace Logic
 
         public List<Song> LoadSongsFromDataBase()
         {
-            List<Song> songs = new();
-
             List<SongDTO> songDTOs = _songRepository.GetRecentSong(1000);
+            
+            _songs.Clear();
 
             foreach (var songDTO in songDTOs)
             {
                 //This converts SongDTO to Songs and adds to the songs list
                 Song song = SongMapper.ToSong(songDTO, artist);
-                songs.Add(song);
-
                 _songs.Add(song);
             }
+            return _songs;
+        }
+
+        public List<Song> GetSongsForAlbum(int albumID)
+        {
+            List<Song> songs = new List<Song>();
+
+            List<SongDTO> songDTOs = _songRepository.GetSongsForAlbum(albumID);
+
+            foreach (var songDTO in songDTOs)
+            {
+                Song song = SongMapper.ToSong(songDTO, artist);
+                songs.Add(song);
+            }
+
             return songs;
         }
+
 
         public Result Add(Song song)
         {

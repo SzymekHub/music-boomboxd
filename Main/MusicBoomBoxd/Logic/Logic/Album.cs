@@ -5,10 +5,10 @@
         public int AlbumID { get; }
         public int ArtistID { get; set; }
         public Artist Artist { get; set; }
-        public List<Song> Songs { get; set; }
+        public List<Song> Songs { get; set; } // Changed from Song to List<Song>
         public string Title { get; }
         public DateTime Date { get; set; }
-        public int RunTime {get; set;}
+        public int RunTime { get; set; }
         public genreType Genre { get; set; }
         public string AlbumCoverName { get; set; }
         public byte[] AlbumCoverData { get; set; }
@@ -25,6 +25,7 @@
             AlbumCoverName = albumCoverName;
             AlbumCoverData = albumCoverData;
             AlbumCoverContentType = albumCoverContentType;
+            Songs = new List<Song>(); 
         }
 
         public Album(int artistID, string title, DateTime date, int runTime, genreType genre, string albumCoverName, byte[] albumCoverData, string albumCoverContentType)
@@ -37,6 +38,7 @@
             AlbumCoverName = albumCoverName;
             AlbumCoverData = albumCoverData;
             AlbumCoverContentType = albumCoverContentType;
+            Songs = new List<Song>(); 
         }
     }
 }

@@ -20,6 +20,7 @@ namespace WinFormsApp
             InitializeComponent();
             InitializeComboBox();
             existingAlbum = album;
+
             ClearControls();
             this.StartPosition = FormStartPosition.CenterScreen;
 
@@ -28,11 +29,11 @@ namespace WinFormsApp
                 FillFormWithAlbumDetails(existingAlbum);
                 DisplayAlbumCover(existingAlbum.AlbumCoverData);
             }
-
+            #region Disables_Controls
             if (view)
             {
                 tbTitleAlbum.Enabled = false;
-                DatePickerAlbum.Enabled = false;
+                dtpAlbum.Enabled = false;
                 cbArtistAlbum.Enabled = false;
                 cbGenreAlbum.Enabled = false;
                 cklbSongs.Enabled = false;
@@ -41,7 +42,9 @@ namespace WinFormsApp
                 btnAddPictureAlbum.Enabled = false;
                 btnAddAlbum.Enabled = false;
             }
+            #endregion
         }
+
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
@@ -144,7 +147,7 @@ namespace WinFormsApp
                     NewAlbum = new Album(
                         selectedArtist.ArtistID,
                         tbTitleAlbum.Text,
-                        DatePickerAlbum.Value,
+                        dtpAlbum.Value,
                         (int)nudRunTimeAlbum.Value,
                         (genreType)cbGenreAlbum.SelectedItem,
                         albumCoverName,
@@ -158,7 +161,7 @@ namespace WinFormsApp
                         existingAlbum.AlbumID,
                         selectedArtist.ArtistID,
                         tbTitleAlbum.Text,
-                        DatePickerAlbum.Value,
+                        dtpAlbum.Value,
                         (int)nudRunTimeAlbum.Value,
                         (genreType)cbGenreAlbum.SelectedItem,
                         albumCoverName,
@@ -184,15 +187,44 @@ namespace WinFormsApp
         private void FillFormWithAlbumDetails(Album album)
         {
             tbTitleAlbum.Text = album.Title;
-            if (cbArtistAlbum.Items.IndexOf(album.Artist) != -1)
+
+            // Finds the artist by ID and sets the selected item
+            foreach (var item in cbArtistAlbum.Items)
             {
-                cbArtistAlbum.SelectedIndex = cbArtistAlbum.Items.IndexOf(album.Artist);
+                if (((Artist)item).ArtistID == album.ArtistID)
+                {
+                    cbArtistAlbum.SelectedItem = item;
+                    break;
+                }
             }
-            cklbSongs.SelectedItems.Contains(album.Songs);
-            DatePickerAlbum.Value = album.Date;
+
+            dtpAlbum.Value = album.Date;
             nudRunTimeAlbum.Value = album.RunTime;
             cbGenreAlbum.SelectedItem = album.Genre;
+
+            // Clear all checked items
+            for (int i = 0; i < cklbSongs.Items.Count; i++)
+            {
+                cklbSongs.SetItemChecked(i, false);
+            }
+
+            // Get the songs for the album from the database
+            var songs = songManager.GetSongsForAlbum(album.AlbumID);
+
+            // Check the songs in the checked list box
+            foreach (var song in songs)
+            {
+                for (int i = 0; i < cklbSongs.Items.Count; i++)
+                {
+                    if (((Song)cklbSongs.Items[i]).SongID == song.SongID)
+                    {
+                        cklbSongs.SetItemChecked(i, true);
+                        break;
+                    }
+                }
+            }
         }
+
 
         private void DisplayAlbumCover(byte[] albumCoverData)
         {
@@ -206,7 +238,7 @@ namespace WinFormsApp
         {
             tbTitleAlbum.Clear();
             cbArtistAlbum.SelectedIndex = 0;
-            DatePickerAlbum.Value = DateTime.Now;
+            dtpAlbum.Value = DateTime.Now;
             nudRunTimeAlbum.Value = 0;
             cbGenreAlbum.SelectedIndex = 0;
             selectedImagePath = null;
@@ -246,7 +278,7 @@ namespace WinFormsApp
                 return new Album(
                       ((Artist)cbArtistAlbum.SelectedItem).ArtistID,
                       tbTitleAlbum.Text,
-                      DatePickerAlbum.Value,
+                      dtpAlbum.Value,
                       (int)nudRunTimeAlbum.Value,
                       (genreType)cbGenreAlbum.SelectedItem,
                       albumCoverName,
@@ -295,7 +327,7 @@ namespace WinFormsApp
                         existingAlbum.AlbumID,
                         ((Artist)cbArtistAlbum.SelectedItem).ArtistID,
                         tbTitleAlbum.Text,
-                        DatePickerAlbum.Value,
+                        dtpAlbum.Value,
                         (int)nudRunTimeAlbum.Value,
                         (genreType)cbGenreAlbum.SelectedItem,
                         albumCoverName,
@@ -307,7 +339,7 @@ namespace WinFormsApp
                         existingAlbum.AlbumID,
                         ((Artist)cbArtistAlbum.SelectedItem).ArtistID,
                         tbTitleAlbum.Text,
-                        DatePickerAlbum.Value,
+                        dtpAlbum.Value,
                         (int)nudRunTimeAlbum.Value,
                         (genreType)cbGenreAlbum.SelectedItem,
                         albumCoverName,
@@ -363,8 +395,9 @@ namespace WinFormsApp
         public void InitializeComboBox()
         {
             cbGenreAlbum.DataSource = Enum.GetValues(typeof(genreType));
-
             cbArtistAlbum.DataSource = artistManager.LoadArtistFromDB();
+            cbArtistAlbum.DisplayMember = "Name"; 
+            cbArtistAlbum.ValueMember = "ArtistID";
 
             cklbSongs.DataSource = songManager.LoadSongsFromDataBase();
             cklbSongs.DisplayMember = "Title";
