@@ -29,6 +29,8 @@ namespace Infrastructure
                                         SELECT SCOPE_IDENTITY();";
                 }
 
+                cmd.Parameters.AddWithValue("@ArtistID", albumDTO.ArtistID);
+
                 cmd.Parameters.AddWithValue("@Title", albumDTO.AlbumTitle);
 
                 // This converts DateTime to string in the format "yyyy-MM-dd HH:mm:ss.fff" so that it works with the databse
@@ -120,6 +122,70 @@ namespace Infrastructure
             }
 
             return recentAlbums;
+        }
+        public Result AddSongToAlbum(int albumID, int songID)
+        {
+            using (SqlConnection conn = GetSqlConnection())
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"INSERT INTO [AlbumSongs] (AlbumID, SongID) VALUES (@AlbumID, @SongID);";
+
+                cmd.Parameters.AddWithValue("@AlbumID", albumID);
+                cmd.Parameters.AddWithValue("@SongID", songID);
+
+                try
+                {
+                    conn.Open();
+                    int result = cmd.ExecuteNonQuery();
+                    if (result > 0)
+                    {
+                        return new Result { Success = true, Message = "Song added to album successfully." };
+                    }
+                    return new Result { Success = false, Message = "Failed to add song to album." };
+                }
+                catch (SqlException ex)
+                {
+                    return new Result { Success = false, Message = $"SQL Exception: {ex.Message}" };
+                }
+                catch (Exception ex)
+                {
+                    return new Result { Success = false, Message = $"Exception: {ex.Message}" };
+                }
+            }
+        }
+        public Result RemoveSongFromAlbum(int albumID, int songID)
+        {
+            using (SqlConnection conn = GetSqlConnection())
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"DELETE FROM [AlbumSongs] WHERE AlbumID = @AlbumID AND SongID = @SongID;";
+
+                cmd.Parameters.AddWithValue("@AlbumID", albumID);
+                cmd.Parameters.AddWithValue("@SongID", songID);
+
+                try
+                {
+                    conn.Open();
+                    int result = cmd.ExecuteNonQuery();
+                    if (result > 0)
+                    {
+                        return new Result { Success = true, Message = "Song removed from album successfully." };
+                    }
+                    return new Result { Success = false, Message = "Failed to remove song from album." };
+                }
+                catch (SqlException ex)
+                {
+                    return new Result { Success = false, Message = $"SQL Exception: {ex.Message}" };
+                }
+                catch (Exception ex)
+                {
+                    return new Result { Success = false, Message = $"Exception: {ex.Message}" };
+                }
+            }
         }
 
         public Result UpdateAlbum(AlbumDTO newAlbumDTO, AlbumDTO oldAlbumDTO)

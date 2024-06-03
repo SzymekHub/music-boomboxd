@@ -30,6 +30,28 @@ namespace Logic
             }
         }
 
+        public Result SaveSongsInAlbums(int albumID, List<int> selectedSongIDs)
+        {
+            Result result = new Result();
+
+            foreach (int songID in selectedSongIDs)
+            {
+                Result resultSongInAlbum = _albumRepository.AddSongToAlbum(albumID, songID);
+                if (!resultSongInAlbum.Success)
+                {
+                    // If an error occurs, return the error message
+                    result.Success = false;
+                    result.Message = "This song is already on this album";
+                    return result;
+                }
+            }
+
+            // If all songs are successfully added, return a success message
+            result.Success = true;
+            result.Message = "Successfully added the songs to this album.";
+            return result;
+        }
+
         public Result Add(Album album)
         {
             AlbumDTO albumDTO = AlbumMapper.ToAlbumDTO(album);
@@ -79,10 +101,6 @@ namespace Logic
                     {
                         _albums[index] = newAlbum;
                     }
-                }
-                else
-                {
-                    Console.WriteLine("Looks like something went wrong when updating the album in the database :(");
                 }
 
                 return resultupdate;

@@ -6,6 +6,9 @@
 
         List<AlbumDTO> GetRecentAlbum(int count);
 
+        Result AddSongToAlbum(int albumID, int songID);
+
+        Result RemoveSongFromAlbum(int albumID, int songID);
         Result UpdateAlbum(AlbumDTO newAlbumDTO, AlbumDTO oldAlbumDTO);
 
         Result DeleteAlbum(AlbumDTO albumDTO);

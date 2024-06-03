@@ -8,12 +8,14 @@ namespace WinFormsApp
         public Album NewAlbum { get; private set; }
         private Album existingAlbum;
         private AlbumManager albumManager;
+        private SongManager songManager;
         private ArtistManager artistManager;
         private string selectedImagePath;
 
-        public NewAlbum_Form(AlbumManager am, ArtistManager arm, Album album = null, bool view = false)
+        public NewAlbum_Form(AlbumManager am, SongManager sm, ArtistManager arm, Album album = null, bool view = false)
         {
             albumManager = am;
+            songManager = sm;
             artistManager = arm;
             InitializeComponent();
             InitializeComboBox();
@@ -33,6 +35,8 @@ namespace WinFormsApp
                 DatePickerAlbum.Enabled = false;
                 cbArtistAlbum.Enabled = false;
                 cbGenreAlbum.Enabled = false;
+                cklbSongs.Enabled = false;
+                btnAddSongs.Enabled = false;
                 nudRunTimeAlbum.Enabled = false;
                 btnAddPictureAlbum.Enabled = false;
                 btnAddAlbum.Enabled = false;
@@ -72,6 +76,35 @@ namespace WinFormsApp
                     // This will load and display the image
                     SelectedCoverAlbum.Image = Image.FromFile(selectedImagePath);
                 }
+            }
+        }
+        private void btnAddSongs_Click(object sender, EventArgs e)
+        {
+            // Get the selected album
+            Album selectedAlbum = GetUpdatedAlbum();
+
+            if (ValidateForm())
+            {
+                // Get the selected songs from the checkedListBox
+                List<int> selectedSongIDs = new List<int>();
+                foreach (var item in cklbSongs.CheckedItems)
+                {
+                    selectedSongIDs.Add(((Song)item).SongID);
+                }
+
+                // Call the method in AlbumManager to save songs in albums
+                Result resultaddSong = albumManager.SaveSongsInAlbums(selectedAlbum.AlbumID, selectedSongIDs);
+                
+                if (resultaddSong.Success)
+                {
+                    DialogResult = DialogResult.OK;
+                    tsslblNewAlbumForm.Text = resultaddSong.Message;
+                }
+                else
+                {
+                    tsslblNewAlbumForm.Text = resultaddSong.Message;
+                }
+
             }
         }
 
@@ -155,6 +188,7 @@ namespace WinFormsApp
             {
                 cbArtistAlbum.SelectedIndex = cbArtistAlbum.Items.IndexOf(album.Artist);
             }
+            cklbSongs.SelectedItems.Contains(album.Songs);
             DatePickerAlbum.Value = album.Date;
             nudRunTimeAlbum.Value = album.RunTime;
             cbGenreAlbum.SelectedItem = album.Genre;
@@ -286,7 +320,7 @@ namespace WinFormsApp
                 return null;
             }
         }
-   
+
         private bool ValidateForm()
         {
             // Checks if the title is provided
@@ -329,8 +363,13 @@ namespace WinFormsApp
         public void InitializeComboBox()
         {
             cbGenreAlbum.DataSource = Enum.GetValues(typeof(genreType));
-            
+
             cbArtistAlbum.DataSource = artistManager.LoadArtistFromDB();
+
+            cklbSongs.DataSource = songManager.LoadSongsFromDataBase();
+            cklbSongs.DisplayMember = "Title";
+            cklbSongs.ValueMember = "SongID";
+
         }
 
         private void NewAlbum_Form_FormClosed(object sender, FormClosedEventArgs e)

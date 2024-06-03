@@ -10,7 +10,7 @@ namespace WinFormsApp
         //for the User tab
         private static UserManager userManager;
         private static List<User> userList = new List<User>();
-        
+
         //for the artist tab
         private static ArtistManager artistManager;
         private List<Artist> artists;
@@ -557,7 +557,7 @@ namespace WinFormsApp
 
             dgvAlbums.Columns.Add("AlbumCoverName", "AlbumCoverName");
             dgvAlbums.Columns["AlbumCoverName"].DataPropertyName = "AlbumCoverName";
-            
+
             PopulateAlbums();
         }
 
@@ -579,7 +579,7 @@ namespace WinFormsApp
         private void bntAddAlbum_Click(object sender, EventArgs e)
         {
             // Open the NewAlbum_Form
-            using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, artistManager))
+            using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, songManager, artistManager))
             {
                 // Show the addAlbumForm
                 if (addAlbumForm.ShowDialog() == DialogResult.OK)
@@ -593,7 +593,32 @@ namespace WinFormsApp
                 }
             }
         }
-
+        private void btnAddSongToAlbum_Click(object sender, EventArgs e)
+        {
+            if (dgvAlbums.SelectedRows.Count > 0)
+            {
+                // Get the selected album
+                Album selectedAlbum = dgvAlbums.SelectedRows[0].DataBoundItem as Album;
+                // Open the NewAlbum_Form with the selected albums's information
+                using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, songManager, artistManager, selectedAlbum))
+                {
+                    if (addAlbumForm.ShowDialog() == DialogResult.OK)
+                    {
+                        // Update the Album with the modified information
+                        Album updatedAlbum = addAlbumForm.GetUpdatedAlbum();
+                        if (updatedAlbum != null)
+                        {
+                            albumManager.Update(updatedAlbum, selectedAlbum);
+                            PopulateAlbums();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                tsslblDashBoardForm.Text = "Please select an album to add songs to it.";
+            }
+        }
         private void btnUpdateAlbum_Click(object sender, EventArgs e)
         {
             if (dgvAlbums.SelectedRows.Count > 0)
@@ -601,7 +626,7 @@ namespace WinFormsApp
                 // Get the selected album
                 Album selectedAlbum = dgvAlbums.SelectedRows[0].DataBoundItem as Album;
                 // Open the NewAlbum_Form with the selected albums's information
-                using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, artistManager,selectedAlbum))
+                using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, songManager, artistManager, selectedAlbum))
                 {
                     if (addAlbumForm.ShowDialog() == DialogResult.OK)
                     {
@@ -629,17 +654,17 @@ namespace WinFormsApp
                 Album selectedAlbum = dgvAlbums.SelectedRows[0].DataBoundItem as Album;
 
                 // Opens the NewAlbum_Form with the selected albums's information
-                using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, artistManager, selectedAlbum, true))
+                using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, songManager, artistManager, selectedAlbum, true))
                 {
                     if (addAlbumForm.ShowDialog() == DialogResult.OK)
-                {
+                    {
                         // Update the album with the modified information
                         Album updatedAlbum = addAlbumForm.GetUpdatedAlbum();
                         if (updatedAlbum != null)
-                    {
+                        {
                             albumManager.Update(updatedAlbum, selectedAlbum);
                             PopulateAlbums();
-                    }
+                        }
                     }
                 }
             }
@@ -674,5 +699,6 @@ namespace WinFormsApp
             }
         }
         #endregion
+
     }
 }
