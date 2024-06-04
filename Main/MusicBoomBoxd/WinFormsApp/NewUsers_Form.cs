@@ -5,6 +5,8 @@ namespace WinFormsApp
 {
     public partial class NewUsers_Form : Form
     {
+        private bool isNewImageSelected = false;
+
         public User NewUser { get; private set; }
         private User exisitingUser;
         private UserManager userManager;
