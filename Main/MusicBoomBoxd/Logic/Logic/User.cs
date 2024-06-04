@@ -3,6 +3,8 @@
     public class User
     {
         public int UserID { get; }
+        public Artist Artist { get; set; }
+        public List<Song> Songs { get; set; }
         public string Username { get; }
         public string Password { get; }
         public string Email { get; }
@@ -25,6 +27,7 @@
             ProfilePictureName = profilePictureName;
             ProfilePictureData = profilePictureData;
             ProfilePictureContentType = profilePictureContentType;
+            Songs = new List<Song>();
         }
 
         public User(string username, string password, string email, userType userType, DateTime birthday, genreType favGenre, string profilePictureName, byte[] profilePictureData, string profilePictureContentType)
@@ -38,6 +41,7 @@
             ProfilePictureName = profilePictureName;
             ProfilePictureData = profilePictureData;
             ProfilePictureContentType = profilePictureContentType;
+            Songs = new List<Song>();
         }
     }
 }

@@ -5,10 +5,13 @@ namespace Logic
 {
     public class ArtistManager
     {
+        public List<Artist> Artists;
         private readonly IArtistRepository _artistsRepository;
+        private readonly User user;
 
         public ArtistManager(IArtistRepository iArtRep)
         {
+            Artists = new List<Artist>();
             _artistsRepository = iArtRep;
         }
 
@@ -17,6 +20,20 @@ namespace Logic
             List<Artist> artists = new();
 
             List<ArtistDTO> artistDTOs = _artistsRepository.GetAllArtists(1000);
+
+            foreach (var artistDTO in artistDTOs)
+            {
+                Artist artist = ConvertToArtist(artistDTO);
+                artists.Add(artist);
+            }
+            return artists;
+        }
+
+        public List<Artist> GetArtistForUser(int userId)
+        {
+            List<Artist> artists = new List<Artist>();
+
+            List<ArtistDTO> artistDTOs = _artistsRepository.GetArtistForUser(userId);
 
             foreach (var artistDTO in artistDTOs)
             {

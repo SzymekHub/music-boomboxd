@@ -103,6 +103,40 @@ namespace Infrastructure
 
             return recentArtists;
         }
+        public List<ArtistDTO> GetArtistForUser(int userID)
+        {
+            List<ArtistDTO> artists = new List<ArtistDTO>();
+
+            using (SqlConnection conn = GetSqlConnection())
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"SELECT A.ArtistID, A.Name, A.AritstPictureName, A.ArtistPictureData, A.ArtistPictureContentType 
+                            FROM [Artist] A 
+                            INNER JOIN [UserArtist] ALB ON A.ArtistID = ALB.ArtistID 
+                            WHERE ALB.UserID = @UserID";
+
+                cmd.Parameters.AddWithValue("@UserID", userID);
+
+                conn.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int artistID = reader.GetInt32(0);
+                        string name = reader.GetString(1);
+                        string aritstPictureName = reader.GetString(2);
+                        byte[] artistPictureData = (byte[])reader.GetValue(3);
+                        string artistPictureContentType = reader.GetString(4);
+
+                        ArtistDTO artist = new ArtistDTO(artistID, name, aritstPictureName, artistPictureData, artistPictureContentType);
+                        artists.Add(artist);
+                    }
+                }
+            }
+            return artists;
+        }
 
         public Result UpdateArtist(ArtistDTO artistDTO)
         {

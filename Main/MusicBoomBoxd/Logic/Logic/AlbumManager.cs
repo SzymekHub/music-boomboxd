@@ -5,15 +5,13 @@ namespace Logic
     public class AlbumManager
     {
         public List<Album> _albums;
-        private readonly AlbumRepository _albumRepository;
-        private readonly IAlbumRepository _ialbumRepository;
+        private readonly IAlbumRepository _albumRepository;
         private readonly Artist artist;
 
-        public AlbumManager(AlbumRepository albumRep, IAlbumRepository ialbumRep)
+        public AlbumManager(IAlbumRepository ialbumRep)
         {
             _albums = new List<Album>();
-            _albumRepository = albumRep;
-            _ialbumRepository = ialbumRep;
+            _albumRepository = ialbumRep;
         }
 
         public void LoadAlbumsFromDatabase()

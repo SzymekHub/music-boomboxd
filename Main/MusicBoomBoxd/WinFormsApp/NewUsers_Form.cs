@@ -5,19 +5,29 @@ namespace WinFormsApp
 {
     public partial class NewUsers_Form : Form
     {
+        private List<int> selectedSongIDs = new List<int>();
+        private List<int> selectedAlbumIDs = new List<int>();
+        private List<int> selectedArtistIDs = new List<int>();
         private bool isNewImageSelected = false;
 
         public User NewUser { get; private set; }
         private User exisitingUser;
         private UserManager userManager;
+        private AlbumManager albumManager;
+        private SongManager songManager;
+        private ArtistManager artistManager;
         private string selectedImagePath;
 
-        public NewUsers_Form(UserManager um, User user = null, bool view = false)
+        public NewUsers_Form(UserManager um, AlbumManager am, SongManager sm, ArtistManager arm, User user = null, bool view = false)
         {
             userManager = um;
+            albumManager = am;
+            songManager = sm;
+            artistManager = arm;
             InitializeComponent();
             InitializeComboBox();
             exisitingUser = user;
+
             ClearControls();
             this.StartPosition = FormStartPosition.CenterScreen;
 
@@ -38,6 +48,12 @@ namespace WinFormsApp
                 cbFavGenre.Enabled = false;
                 btnAddPictureAlbum.Enabled = false;
                 btnAddUser.Enabled = false;
+                cklbAlbumUser.Enabled = false;
+                cklbAritstUser.Enabled = false;
+                cklbSongsUser.Enabled = false;
+                btnAddAlbumUser.Enabled = false;
+                btnAddArtistUser.Enabled = false;
+                btnAddSongsUser.Enabled = false;
             }
         }
 
@@ -69,6 +85,7 @@ namespace WinFormsApp
 
                     // Stores the selected image path
                     selectedImagePath = selectedFile;
+                    isNewImageSelected = true;
 
                     // This will load and display the image if needed
                     SelectedProfileUser.Image = Image.FromFile(selectedImagePath);
@@ -76,15 +93,78 @@ namespace WinFormsApp
             }
         }
 
+        //Adding an artist
+        #region Artist
+        private void btnAddArtistUser_Click(object sender, EventArgs e)
+        {
+            //Get the selected User
+            User selectedUser = GetUpdatedUser();
+
+            if (ValidateInput())
+            {
+                // Gets the selected songs from the checkedListBox
+                List<int> selectedArtistIDs = new List<int>();
+                foreach (var item in cklbAritstUser.CheckedItems)
+                {
+                    selectedArtistIDs.Add(((Artist)item).ArtistID);
+                }
+
+                // Calls the method in AlbumManager to save songs in albums
+                Result resultAddArtist = userManager.SaveArtistInUsers(selectedUser.UserID, selectedSongIDs);
+
+                if (resultAddArtist.Success)
+                {
+                    DialogResult = DialogResult.OK;
+                    tsslblNewUserForm.Text = resultAddArtist.Message;
+                }
+                else
+                {
+                    tsslblNewUserForm.Text = resultAddArtist.Message;
+                }
+            }
+        }
+
+
+        private void btnRemoveArtistUser_Click(object sender, EventArgs e)
+        {
+            //Get the selected User
+            User selectedUser = GetUpdatedUser();
+
+            if (ValidateInput())
+            {
+                // Gets the selected songs from the checkedListBox
+                List<int> selectedArtistIDs = new List<int>();
+                foreach (var item in cklbAritstUser.CheckedItems)
+                {
+                    selectedArtistIDs.Add(((Artist)item).ArtistID);
+                }
+
+                // Calls the method in AlbumManager to save songs in albums
+                Result resultAddArtist = userManager.RemoveArtistFromAlbum(selectedUser.UserID, selectedSongIDs);
+
+                if (resultAddArtist.Success)
+                {
+                    DialogResult = DialogResult.OK;
+                    tsslblNewUserForm.Text = resultAddArtist.Message;
+                }
+                else
+                {
+                    tsslblNewUserForm.Text = resultAddArtist.Message;
+                }
+            }
+        }
+
+        #endregion 
         private void BtnAddUser_Click(object sender, EventArgs e)
         {
             if (ValidateInput())
             {
                 //This gets the file name from the selected image path
-                string profilePictureName = Path.GetFileName(selectedImagePath);
+                string profilePictureName = isNewImageSelected ? Path.GetFileName(selectedImagePath) : exisitingUser.ProfilePictureName;
+
                 //This gets the content type based on the file extension
                 string profilePictureContentType = "";
-                string extension = Path.GetExtension(selectedImagePath);
+                string extension = Path.GetExtension(profilePictureName);
                 if (extension != null)
                 {
                     switch (extension.ToLower())
@@ -102,29 +182,27 @@ namespace WinFormsApp
                 }
 
                 //This reads the selected image file into a byte array
-                byte[] profilePictureData = File.ReadAllBytes(selectedImagePath);
-
-                User newUser = null;
+                byte[] profilePictureData = isNewImageSelected ? File.ReadAllBytes(selectedImagePath) : exisitingUser.ProfilePictureData;
 
                 if (exisitingUser == null)
                 {
                     //This creates a new User Object with the provided details
-                     newUser = new User(
-                        tbNameUser.Text,
-                        tbPassword.Text,
-                        tbEmailUser.Text,
-                        (userType)cbUserType.SelectedItem,
-                        dtpUser.Value,
-                        (genreType)cbFavGenre.SelectedItem,
-                        profilePictureName,
-                        profilePictureData,
-                        profilePictureContentType
-                        );
+                    NewUser = new User(
+                       tbNameUser.Text,
+                       tbPassword.Text,
+                       tbEmailUser.Text,
+                       (userType)cbUserType.SelectedItem,
+                       dtpUser.Value,
+                       (genreType)cbFavGenre.SelectedItem,
+                       profilePictureName,
+                       profilePictureData,
+                       profilePictureContentType
+                       );
                 }
-                else if (exisitingUser != null)
+                else
                 {
                     //This creates a new User Object with the provided details
-                    newUser = new User(
+                    NewUser = new User(
                         exisitingUser.UserID,
                         tbNameUser.Text,
                         tbPassword.Text,
@@ -137,9 +215,9 @@ namespace WinFormsApp
                         profilePictureContentType
                         );
                 }
-                
 
-                Result result = userManager.Update(newUser, exisitingUser);
+
+                Result result = userManager.Update(NewUser, exisitingUser);
 
                 if (result.Success)
                 {
@@ -149,6 +227,30 @@ namespace WinFormsApp
                 else
                 {
                     tsslblNewUserForm.Text = result.Message;
+                }
+            }
+        }
+        private void tbArtistSearchUser_TextChanged(object sender, EventArgs e)
+        {
+            FilterArtist(tbArtistSearchUser.Text);
+        }
+
+        private void FilterArtist(string searchText)
+        {
+            List<Artist> allArtists = artistManager.LoadArtistFromDB();
+            List<Artist> filteredArtists = allArtists.Where(artist => artist.Name.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+
+            cklbAritstUser.DataSource = filteredArtists;
+            cklbAritstUser.DisplayMember = "Title";
+            cklbAritstUser.ValueMember = "ArtistID";
+
+            // Reapply the checked state for previously selected songs
+            for (int i = 0; i < cklbAritstUser.Items.Count; i++)
+            {
+                Artist artist = (Artist)cklbAritstUser.Items[i];
+                if (selectedSongIDs.Contains(artist.ArtistID))
+                {
+                    cklbAritstUser.SetItemChecked(i, true);
                 }
             }
         }
@@ -162,6 +264,32 @@ namespace WinFormsApp
             cbUserType.SelectedItem = user.UserType;
             dtpUser.Value = user.Birthday;
             cbFavGenre.SelectedItem = user.FavGenre;
+
+            // Clear all checked items
+            for (int i = 0; i < cklbAritstUser.Items.Count; i++)
+            {
+                cklbAritstUser.SetItemChecked(i, false);
+            }
+
+            // Get the songs for the album from the database
+            var artists = artistManager.GetArtistForUser(user.UserID);
+
+            // Check the songs in the checked list box and update the global selectedSongIDs list
+            foreach (var artist in artists)
+            {
+                for (int i = 0; i < cklbAritstUser.Items.Count; i++)
+                {
+                    if (((Artist)cklbAritstUser.Items[i]).ArtistID == artist.ArtistID)
+                    {
+                        cklbAritstUser.SetItemChecked(i, true);
+                        if (!selectedArtistIDs.Contains(artist.ArtistID))
+                        {
+                            selectedArtistIDs.Add(artist.ArtistID);
+                        }
+                        break;
+                    }
+                }
+            }
         }
 
         private void DisplayProfilePicture(byte[] profilePictureData)
@@ -182,6 +310,7 @@ namespace WinFormsApp
             cbFavGenre.SelectedIndex = 0;
             selectedImagePath = null;
             SelectedProfileUser.Image = null;
+            isNewImageSelected = false;
         }
 
         public User GetNewUser()
@@ -189,11 +318,11 @@ namespace WinFormsApp
             if (ValidateInput())
             {
                 //Gets the file name form the selected image path
-                string profilePictureName = Path.GetFileName(selectedImagePath);
+                string profilePictureName = isNewImageSelected ? Path.GetFileName(selectedImagePath) : exisitingUser?.ProfilePictureName;
 
                 //Gets the content type based on the file extension
                 string profilePictureContentType = "";
-                string extension = Path.GetExtension(selectedImagePath);
+                string extension = Path.GetExtension(profilePictureName);
                 if (extension != null)
                 {
                     switch (extension.ToLower())
@@ -211,7 +340,7 @@ namespace WinFormsApp
                 }
 
                 // This reads the selected image file into a byte array
-                byte[] profilePictureData = File.ReadAllBytes(selectedImagePath);
+                byte[] profilePictureData = isNewImageSelected ? File.ReadAllBytes(selectedImagePath) : exisitingUser?.ProfilePictureData;
 
                 // This is a new User object that returns with the provided details
                 return new User(
@@ -238,11 +367,11 @@ namespace WinFormsApp
             if (ValidateInput())
             {
                 // Get the file name from the selected image path
-                string profilePictureName = Path.GetFileName(selectedImagePath);
+                string profilePictureName = isNewImageSelected ? Path.GetFileName(selectedImagePath) : exisitingUser?.ProfilePictureName;
 
                 // Get the content type based on the file extension
                 string profilePictureContentType = "";
-                string extension = Path.GetExtension(selectedImagePath);
+                string extension = Path.GetExtension(profilePictureName);
                 if (extension != null)
                 {
                     switch (extension.ToLower())
@@ -260,7 +389,7 @@ namespace WinFormsApp
                 }
 
                 // This reads the selected image file into a byte array
-                byte[] profilePictureData = File.ReadAllBytes(selectedImagePath);
+                byte[] profilePictureData = isNewImageSelected ? File.ReadAllBytes(selectedImagePath) : exisitingUser?.ProfilePictureData;
 
                 userManager.Update(
                     new User(
@@ -285,7 +414,7 @@ namespace WinFormsApp
                         profilePictureName,
                         profilePictureData,
                         profilePictureContentType);
-                
+
             }
             else
             {
@@ -325,6 +454,13 @@ namespace WinFormsApp
                 return false;
             }
 
+            // Check if an image is selected or exists for the user
+            if (!isNewImageSelected && (exisitingUser == null || exisitingUser.ProfilePictureData == null))
+            {
+                tsslblNewUserForm.Text = "Please select an profile picture image for the User.";
+                return false;
+            }
+
             // All validation passes, return true
             return true;
         }
@@ -347,6 +483,10 @@ namespace WinFormsApp
             cbFavGenre.DataSource = (Enum.GetValues(typeof(genreType)));
             //populates the user type combo box
             cbUserType.DataSource = (Enum.GetValues(typeof(userType)));
+
+            cklbAritstUser.DataSource = artistManager.LoadArtistFromDB();
+            cklbAritstUser.DisplayMember = "Name";
+            cklbAritstUser.ValueMember = "ArtistID";
         }
 
         private void Users_Form_FormClosed(object sender, FormClosedEventArgs e)
@@ -356,6 +496,5 @@ namespace WinFormsApp
                 Owner.Visible = true;
             }
         }
-
     }
 }

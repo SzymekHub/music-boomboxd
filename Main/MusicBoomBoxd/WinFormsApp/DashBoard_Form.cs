@@ -172,7 +172,7 @@ namespace WinFormsApp
         private void btnAddUser_Click(object sender, EventArgs e)
         {
             // Open the NewUsers_Form
-            using (NewUsers_Form addUsersForm = new NewUsers_Form(userManager))
+            using (NewUsers_Form addUsersForm = new NewUsers_Form(userManager, albumManager, songManager, artistManager))
             {
                 // Show the addUsersForm
                 if (addUsersForm.ShowDialog() == DialogResult.OK)
@@ -193,7 +193,7 @@ namespace WinFormsApp
                 User selectedUser = dgvUsers.SelectedRows[0].DataBoundItem as User;
 
                 // Open the NewUser_Form with the selected Users's information
-                using (NewUsers_Form addUserForm = new NewUsers_Form(userManager, selectedUser))
+                using (NewUsers_Form addUserForm = new NewUsers_Form(userManager, albumManager, songManager, artistManager, selectedUser))
                 {
                     if (addUserForm.ShowDialog() == DialogResult.OK)
                     {
@@ -221,7 +221,7 @@ namespace WinFormsApp
                 User selectedUser = dgvUsers.SelectedRows[0].DataBoundItem as User;
 
                 // Opens the NewUser_Form with the selected Users's information
-                using (NewUsers_Form addUserForm = new NewUsers_Form(userManager, selectedUser, true))
+                using (NewUsers_Form addUserForm = new NewUsers_Form(userManager, albumManager, songManager, artistManager, selectedUser, true))
                 {
                     if (addUserForm.ShowDialog() == DialogResult.OK)
                     {

@@ -8,8 +8,14 @@ namespace WinFormsApp
     {
         private readonly IUserRepository userRep;
         private readonly UserManager userManager;
+
+        private readonly IAlbumRepository albumRep;
         private readonly AlbumManager albumManager;
+
+        private readonly ISongRepository songRep;
         private readonly SongManager songManager;
+
+        private readonly IArtistRepository artistRep;
         private readonly ArtistManager artistManager;
         private readonly List<Artist> artistList;
 
@@ -27,27 +33,25 @@ namespace WinFormsApp
 
             //for artists
             #region Artists
-            IArtistRepository iartRep = new ArtistRepository();
+            artistRep = new ArtistRepository();
 
-            artistManager = new ArtistManager(iartRep);
+            artistManager = new ArtistManager(artistRep);
             artistManager.LoadArtistFromDB();
             #endregion
 
             //For Albums
             #region Albums
-            AlbumRepository albumRep = new AlbumRepository();
-            IAlbumRepository IalbumRep = albumRep;
+            albumRep = new AlbumRepository();
 
-            albumManager = new AlbumManager(albumRep, IalbumRep);
+            albumManager = new AlbumManager(albumRep);
             albumManager.LoadAlbumsFromDatabase();
             #endregion
 
             //For Songs
             #region Songs
-            SongRepository songRep = new SongRepository();
-            ISongRepository IsongRep = songRep;
+            songRep = new SongRepository();
 
-            songManager = new SongManager(songRep, IsongRep);
+            songManager = new SongManager(songRep);
             songManager.LoadSongsFromDataBase();
             #endregion
 

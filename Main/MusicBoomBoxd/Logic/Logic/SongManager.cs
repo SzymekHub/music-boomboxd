@@ -5,15 +5,13 @@ namespace Logic
     public class SongManager
     {
         public List<Song> _songs;
-        private readonly SongRepository _songRepository;
-        private readonly ISongRepository _isongRepository;
+        private readonly ISongRepository _songRepository;
         private readonly Artist artist;
 
-        public SongManager(SongRepository songRep, ISongRepository isongRep)
+        public SongManager(ISongRepository isongRep)
         {
             _songs = new List<Song>();
-            _songRepository = songRep;
-            _isongRepository = isongRep;
+            _songRepository = isongRep;
         }
 
         public List<Song> LoadSongsFromDataBase()

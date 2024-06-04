@@ -121,6 +121,72 @@ namespace Infrastructure
             return recentUsers;
         }
 
+        public Result AddArtistToUser(int userID, int artistID)
+        {
+            using (SqlConnection conn = GetSqlConnection())
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"INSERT INTO [UserArtist] (UserID, ArtistID) VALUES (@UserID, @ArtistID);";
+
+                cmd.Parameters.AddWithValue("@UserID", userID);
+                cmd.Parameters.AddWithValue("@ArtistID", artistID);
+
+                try
+                {
+                    conn.Open();
+                    int result = cmd.ExecuteNonQuery();
+                    if (result > 0)
+                    {
+                        return new Result { Success = true, Message = "Artist added to user successfully." };
+                    }
+                    return new Result { Success = false, Message = "Failed to add artist to user." };
+                }
+                catch (SqlException ex)
+                {
+                    return new Result { Success = false, Message = $"SQL Exception: {ex.Message}" };
+                }
+                catch (Exception ex)
+                {
+                    return new Result { Success = false, Message = $"Exception: {ex.Message}" };
+                }
+            }
+        }
+
+        public Result RemoveArtistFromUser(int userID, int artistID)
+        {
+            using (SqlConnection conn = GetSqlConnection())
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"DELETE FROM [UserArtist] WHERE UserID = @UserID AND ArtistID = @ArtistID;";
+
+                cmd.Parameters.AddWithValue("@UserID", userID);
+                cmd.Parameters.AddWithValue("@ArtistID", artistID);
+
+                try
+                {
+                    conn.Open();
+                    int result = cmd.ExecuteNonQuery();
+                    if (result > 0)
+                    {
+                        return new Result { Success = true, Message = "Artist removed from user successfully." };
+                    }
+                    return new Result { Success = false, Message = "Failed to remove Artist from user." };
+                }
+                catch (SqlException ex)
+                {
+                    return new Result { Success = false, Message = $"SQL Exception: {ex.Message}" };
+                }
+                catch (Exception ex)
+                {
+                    return new Result { Success = false, Message = $"Exception: {ex.Message}" };
+                }
+            }
+        }
+
         public UserDTO GetUserByUsername(string username)
         {
             using (SqlConnection conn = GetSqlConnection())

@@ -8,6 +8,8 @@ namespace Infrastructure
 
         List<ArtistDTO> GetAllArtists(int count);
 
+        List<ArtistDTO> GetArtistForUser(int userID);
+
         Result UpdateArtist(ArtistDTO artistDTO);
 
         Result DeleteArtist(ArtistDTO artistDTO);

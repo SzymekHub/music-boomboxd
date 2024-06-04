@@ -1,4 +1,5 @@
 ﻿using Infrastructure;
+using Infrastructure.DTOs;
 
 namespace Logic
 {
@@ -16,7 +17,7 @@ namespace Logic
 
             // inject the repository and use userRepistory as an interface and inject it as well. Get rid of Load stuff.
         }
-
+        
         public User GetUserByUsernameFromDb(string username)
         {
             UserDTO userDTO = _userRepository.GetUserByUsername(username);
@@ -37,6 +38,47 @@ namespace Logic
                 User user = ConvertToUser(userDTO);
                 _users.Add(user);
             }
+        }
+        public Result SaveArtistInUsers(int userID, List<int> selectedArtistIDs)
+        {
+            Result result = new Result();
+
+            foreach (int artistID in selectedArtistIDs)
+            {
+                Result resultArtistInUsers = _userRepository.AddArtistToUser(userID, artistID);
+                if (!resultArtistInUsers.Success)
+                {
+                    result.Success = false;
+                    result.Message = "This artist is already on this users list";
+                    return result;
+                }
+            }
+
+            // If all artists are successfully added, return a success message
+            result.Success = true;
+            result.Message = "Successfully added the 5 artists to this user.";
+            return result;
+        }
+
+        public Result RemoveArtistFromAlbum(int userID, List<int> selectedArtistIDs)
+        {
+            Result result = new Result();
+
+            foreach (int artistID in selectedArtistIDs)
+            {
+                Result resultRemoveArtistFromUsers = _userRepository.RemoveArtistFromUser(userID, artistID);
+                if (!resultRemoveArtistFromUsers.Success)
+                {
+                    result.Success = false;
+                    result.Message = "This Artist is not on this users account yet";
+                    return result;
+                }
+            }
+
+            // If all songs are successfully deleted, return a success message
+            result.Success = true;
+            result.Message = "Successfully removed the Artist from this user.";
+            return result;
         }
 
         public Result Add(User user)
