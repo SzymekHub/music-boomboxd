@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             NewAlbumPanel = new Panel();
+            label1 = new Label();
             btnAddSongs = new Button();
             cklbSongs = new CheckedListBox();
             lblSongs = new Label();
@@ -52,7 +53,7 @@
             ssNewAlbumForm = new StatusStrip();
             tsslblNewAlbumForm = new ToolStripStatusLabel();
             tsslblNewAlbumFormCSV = new ToolStripStatusLabel();
-            label1 = new Label();
+            btnRemoveSong = new Button();
             NewAlbumPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudRunTimeAlbum).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbLogo).BeginInit();
@@ -63,6 +64,7 @@
             // NewAlbumPanel
             // 
             NewAlbumPanel.BackColor = Color.DarkGray;
+            NewAlbumPanel.Controls.Add(btnRemoveSong);
             NewAlbumPanel.Controls.Add(label1);
             NewAlbumPanel.Controls.Add(btnAddSongs);
             NewAlbumPanel.Controls.Add(cklbSongs);
@@ -89,10 +91,20 @@
             NewAlbumPanel.Size = new Size(895, 485);
             NewAlbumPanel.TabIndex = 13;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Stencil", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label1.Location = new Point(456, 326);
+            label1.Name = "label1";
+            label1.Size = new Size(278, 42);
+            label1.TabIndex = 44;
+            label1.Text = "*unselect the songs that \r\n  are already in the album*\r\n";
+            // 
             // btnAddSongs
             // 
             btnAddSongs.BackColor = Color.MediumSlateBlue;
-            btnAddSongs.Location = new Point(611, 380);
+            btnAddSongs.Location = new Point(456, 371);
             btnAddSongs.Name = "btnAddSongs";
             btnAddSongs.Size = new Size(127, 49);
             btnAddSongs.TabIndex = 43;
@@ -303,15 +315,16 @@
             tsslblNewAlbumFormCSV.Name = "tsslblNewAlbumFormCSV";
             tsslblNewAlbumFormCSV.Size = new Size(0, 16);
             // 
-            // label1
+            // btnRemoveSong
             // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Stencil", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label1.Location = new Point(456, 326);
-            label1.Name = "label1";
-            label1.Size = new Size(278, 42);
-            label1.TabIndex = 44;
-            label1.Text = "*unselect the songs that \r\n  are already in the album*\r\n";
+            btnRemoveSong.BackColor = Color.MediumSlateBlue;
+            btnRemoveSong.Location = new Point(611, 371);
+            btnRemoveSong.Name = "btnRemoveSong";
+            btnRemoveSong.Size = new Size(127, 49);
+            btnRemoveSong.TabIndex = 45;
+            btnRemoveSong.Text = "Remove Songs";
+            btnRemoveSong.UseVisualStyleBackColor = false;
+            btnRemoveSong.Click += btnRemoveSong_Click;
             // 
             // NewAlbum_Form
             // 
@@ -362,5 +375,6 @@
         private Button btnAddSongs;
         private CheckedListBox cklbSongs;
         private Label label1;
+        private Button btnRemoveSong;
     }
 }

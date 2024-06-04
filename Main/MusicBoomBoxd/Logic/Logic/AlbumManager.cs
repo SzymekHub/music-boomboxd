@@ -39,7 +39,6 @@ namespace Logic
                 Result resultSongInAlbum = _albumRepository.AddSongToAlbum(albumID, songID);
                 if (!resultSongInAlbum.Success)
                 {
-                    // If an error occurs, return the error message
                     result.Success = false;
                     result.Message = "This song is already on this album";
                     return result;
@@ -49,6 +48,27 @@ namespace Logic
             // If all songs are successfully added, return a success message
             result.Success = true;
             result.Message = "Successfully added the songs to this album.";
+            return result;
+        }
+
+        public Result RemoveSongFromAlbum(int albumID, List<int> selectedSongIDs)
+        {
+            Result result = new Result();
+
+            foreach (int songID in selectedSongIDs)
+            {
+                Result resultRemoveSongfromAlbum = _albumRepository.RemoveSongFromAlbum(albumID, songID);
+                if (!resultRemoveSongfromAlbum.Success)
+                {
+                    result.Success = false;
+                    result.Message = "This song is not on this album yet";
+                    return result;
+                }
+            }
+
+            // If all songs are successfully deleted, return a success message
+            result.Success = true;
+            result.Message = "Successfully removed the songs from this album.";
             return result;
         }
 

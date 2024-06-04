@@ -97,7 +97,7 @@ namespace WinFormsApp
 
                 // Call the method in AlbumManager to save songs in albums
                 Result resultaddSong = albumManager.SaveSongsInAlbums(selectedAlbum.AlbumID, selectedSongIDs);
-                
+
                 if (resultaddSong.Success)
                 {
                     DialogResult = DialogResult.OK;
@@ -106,6 +106,36 @@ namespace WinFormsApp
                 else
                 {
                     tsslblNewAlbumForm.Text = resultaddSong.Message;
+                }
+
+            }
+        }
+
+        private void btnRemoveSong_Click(object sender, EventArgs e)
+        {
+            // Get the selected album
+            Album selectedAlbum = GetUpdatedAlbum();
+
+            if (ValidateForm())
+            {
+                // Get the selected songs from the checkedListBox
+                List<int> selectedSongIDs = new List<int>();
+                foreach (var item in cklbSongs.CheckedItems)
+                {
+                    selectedSongIDs.Add(((Song)item).SongID);
+                }
+
+                // Call the method in AlbumManager to save songs in albums
+                Result resultremoveSong = albumManager.RemoveSongFromAlbum(selectedAlbum.AlbumID, selectedSongIDs);
+
+                if (resultremoveSong.Success)
+                {
+                    DialogResult = DialogResult.OK;
+                    tsslblNewAlbumForm.Text = resultremoveSong.Message;
+                }
+                else
+                {
+                    tsslblNewAlbumForm.Text = resultremoveSong.Message;
                 }
 
             }
@@ -396,7 +426,7 @@ namespace WinFormsApp
         {
             cbGenreAlbum.DataSource = Enum.GetValues(typeof(genreType));
             cbArtistAlbum.DataSource = artistManager.LoadArtistFromDB();
-            cbArtistAlbum.DisplayMember = "Name"; 
+            cbArtistAlbum.DisplayMember = "Name";
             cbArtistAlbum.ValueMember = "ArtistID";
 
             cklbSongs.DataSource = songManager.LoadSongsFromDataBase();
