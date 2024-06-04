@@ -44,6 +44,21 @@ namespace Logic
             return songs;
         }
 
+        public List<Song> GetSongsForUsers(int albumID)
+        {
+            List<Song> songs = new List<Song>();
+
+            List<SongDTO> songDTOs = _songRepository.GetSongsForUser(albumID);
+
+            foreach (var songDTO in songDTOs)
+            {
+                Song song = SongMapper.ToSong(songDTO, artist);
+                songs.Add(song);
+            }
+
+            return songs;
+        }
+
 
         public Result Add(Song song)
         {

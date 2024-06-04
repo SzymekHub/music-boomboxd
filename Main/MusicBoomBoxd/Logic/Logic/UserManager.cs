@@ -39,6 +39,9 @@ namespace Logic
                 _users.Add(user);
             }
         }
+
+        //For artists
+        #region Artists
         public Result SaveArtistInUsers(int userID, List<int> selectedArtistIDs)
         {
             Result result = new Result();
@@ -60,7 +63,7 @@ namespace Logic
             return result;
         }
 
-        public Result RemoveArtistFromAlbum(int userID, List<int> selectedArtistIDs)
+        public Result RemoveArtistFromUser(int userID, List<int> selectedArtistIDs)
         {
             Result result = new Result();
 
@@ -80,7 +83,52 @@ namespace Logic
             result.Message = "Successfully removed the Artist from this user.";
             return result;
         }
+        #endregion
 
+        //For Songs
+        #region Songs
+        public Result SaveSongsInUsers(int userID, List<int> selectedSongIDs)
+        {
+            Result result = new Result();
+
+            foreach (int songID in selectedSongIDs)
+            {
+                Result resultSongInAlbum = _userRepository.AddSongToUser(userID, songID);
+                if (!resultSongInAlbum.Success)
+                {
+                    result.Success = false;
+                    result.Message = "This Song is already on this users list";
+                    return result;
+                }
+            }
+
+            // If all songs are successfully added, return a success message
+            result.Success = true;
+            result.Message = "Successfully added the 5 Songs to this user.";
+            return result;
+        }
+
+        public Result RemoveSongFromUser(int userID, List<int> selectedSongIDs)
+        {
+            Result result = new Result();
+
+            foreach (int songID in selectedSongIDs)
+            {
+                Result resultRemoveSongfromUser = _userRepository.RemoveSongFromUser(userID, songID);
+                if (!resultRemoveSongfromUser.Success)
+                {
+                    result.Success = false;
+                    result.Message = "This Song is not on this users account yet";
+                    return result;
+                }
+            }
+
+            // If all songs are successfully deleted, return a success message
+            result.Success = true;
+            result.Message = "Successfully removed the Song from this user.";
+            return result;
+        }
+        #endregion
         public Result Add(User user)
         {
             UserDTO userDTO = ConvertToUserDTO(user);

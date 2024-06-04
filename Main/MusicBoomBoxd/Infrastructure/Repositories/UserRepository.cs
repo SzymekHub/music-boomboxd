@@ -121,6 +121,8 @@ namespace Infrastructure
             return recentUsers;
         }
 
+        //Artist
+        #region Artist
         public Result AddArtistToUser(int userID, int artistID)
         {
             using (SqlConnection conn = GetSqlConnection())
@@ -186,6 +188,79 @@ namespace Infrastructure
                 }
             }
         }
+        #endregion
+
+
+        //Songs
+        #region Songs
+        public Result AddSongToUser(int userID, int songID)
+        {
+            using (SqlConnection conn = GetSqlConnection())
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"INSERT INTO [UserSong] (UserID, SongID) VALUES (@UserID, @SongID);";
+
+                cmd.Parameters.AddWithValue("@UserID", userID);
+                cmd.Parameters.AddWithValue("@SongID", songID);
+
+                try
+                {
+                    conn.Open();
+                    int result = cmd.ExecuteNonQuery();
+                    if (result > 0)
+                    {
+                        return new Result { Success = true, Message = "Song added to user successfully." };
+                    }
+                    return new Result { Success = false, Message = "Failed to add Song to user." };
+                }
+                catch (SqlException ex)
+                {
+                    return new Result { Success = false, Message = $"SQL Exception: {ex.Message}" };
+                }
+                catch (Exception ex)
+                {
+                    return new Result { Success = false, Message = $"Exception: {ex.Message}" };
+                }
+            }
+        }
+
+        public Result RemoveSongFromUser(int userID, int songID)
+        {
+            using (SqlConnection conn = GetSqlConnection())
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"DELETE FROM [UserSong] WHERE UserID = @UserID AND SongID = @SongID;";
+
+                cmd.Parameters.AddWithValue("@UserID", userID);
+                cmd.Parameters.AddWithValue("@SongID", songID);
+
+                try
+                {
+                    conn.Open();
+                    int result = cmd.ExecuteNonQuery();
+                    if (result > 0)
+                    {
+                        return new Result { Success = true, Message = "Song removed from user successfully." };
+                    }
+                    return new Result { Success = false, Message = "Failed to remove Song from user." };
+                }
+                catch (SqlException ex)
+                {
+                    return new Result { Success = false, Message = $"SQL Exception: {ex.Message}" };
+                }
+                catch (Exception ex)
+                {
+                    return new Result { Success = false, Message = $"Exception: {ex.Message}" };
+                }
+            }
+        }
+
+
+        #endregion
 
         public UserDTO GetUserByUsername(string username)
         {

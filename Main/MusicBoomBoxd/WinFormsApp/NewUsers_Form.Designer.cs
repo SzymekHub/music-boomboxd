@@ -272,6 +272,7 @@
             txtSongsSearchUsers.Name = "txtSongsSearchUsers";
             txtSongsSearchUsers.Size = new Size(161, 27);
             txtSongsSearchUsers.TabIndex = 52;
+            txtSongsSearchUsers.TextChanged += txtSongsSearch_TextChanged;
             // 
             // btnRemoveSongUser
             // 
@@ -282,6 +283,7 @@
             btnRemoveSongUser.TabIndex = 51;
             btnRemoveSongUser.Text = "Remove Songs";
             btnRemoveSongUser.UseVisualStyleBackColor = false;
+            btnRemoveSongUser.Click += btnRemoveSongUser_Click;
             // 
             // lblSongWarning
             // 
@@ -302,6 +304,7 @@
             btnAddSongsUser.TabIndex = 49;
             btnAddSongsUser.Text = "Add Songs";
             btnAddSongsUser.UseVisualStyleBackColor = false;
+            btnAddSongsUser.Click += btnAddSongsUser_Click;
             // 
             // cklbSongsUser
             // 

@@ -6,8 +6,18 @@
 
         List<UserDTO> GetRecentUser(int count);
 
+        //for artists
+        #region Artist
         Result AddArtistToUser(int userID, int artistID);
         Result RemoveArtistFromUser(int userID, int artistID);
+        #endregion
+
+        //For songs
+        #region Songs
+        Result AddSongToUser(int userID, int songID);
+
+        Result RemoveSongFromUser(int userID, int songID);
+        #endregion
 
         UserDTO GetUserByUsername(string username);
 

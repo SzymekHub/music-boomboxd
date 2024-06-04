@@ -153,6 +153,45 @@ namespace Infrastructure
             return songs;
         }
 
+        public List<SongDTO> GetSongsForUser(int userID)
+        {
+            List<SongDTO> songs = new List<SongDTO>();
+
+            using (SqlConnection conn = GetSqlConnection())
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"SELECT S.SongID, S.Title, S.ArtistID, S.Date, S.RunTimeSec, S.Genre, S.SongCoverName, S.SongCoverData, S.SongCoverContentType 
+                            FROM [Song] S 
+                            INNER JOIN [UserSong] ALB ON S.SongID = ALB.SongID 
+                            WHERE ALB.UserID = @UserID";
+
+                cmd.Parameters.AddWithValue("@UserID", userID);
+
+                conn.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int songID = reader.GetInt32(0);
+                        string songTitle = reader.GetString(1);
+                        int artistID = reader.GetInt32(2);
+                        DateTime releaseDate = reader.GetDateTime(3);
+                        int runTime = reader.GetInt32(4);
+                        string genre = reader.GetString(5);
+                        string songCoverName = reader.GetString(6);
+                        byte[] songCoverData = (byte[])reader.GetValue(7);
+                        string songCoverContentType = reader.GetString(8);
+
+                        SongDTO song = new SongDTO(songID, songTitle, artistID, releaseDate, runTime, genre, songCoverName, songCoverData, songCoverContentType);
+                        songs.Add(song);
+                    }
+                }
+            }
+            return songs; 
+        }
+
 
         public Result UpdateSong(SongDTO newSongDTO, SongDTO oldSongDTO)
         {
