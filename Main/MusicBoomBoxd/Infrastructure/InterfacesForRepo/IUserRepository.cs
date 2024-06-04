@@ -19,6 +19,13 @@
         Result RemoveSongFromUser(int userID, int songID);
         #endregion
 
+        //For albums
+        #region Albums
+        Result AddAlbumToUser(int userID, int albumID);
+
+        Result RemoveAlbumFromUser(int userID, int albumID);
+        #endregion
+
         UserDTO GetUserByUsername(string username);
 
         Result UpdateUser(UserDTO newUserDTO, UserDTO oldUserDTO);

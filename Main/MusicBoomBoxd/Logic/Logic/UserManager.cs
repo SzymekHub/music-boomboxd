@@ -52,7 +52,7 @@ namespace Logic
                 if (!resultArtistInUsers.Success)
                 {
                     result.Success = false;
-                    result.Message = "This artist is already on this users list";
+                    result.Message = "";
                     return result;
                 }
             }
@@ -129,6 +129,53 @@ namespace Logic
             return result;
         }
         #endregion
+
+        //For Albums
+        #region Albums
+        public Result SaveAlbumInUsers(int userID, List<int> selectedAlbumIDs)
+        {
+            Result result = new Result();
+
+            foreach (int albumID in selectedAlbumIDs)
+            {
+                Result resultAlbumInUser = _userRepository.AddAlbumToUser(userID, albumID);
+                if (!resultAlbumInUser.Success)
+                {
+                    result.Success = false;
+                    result.Message = "This Album is already on this users list";
+                    return result;
+                }
+            }
+
+            // If all songs are successfully added, return a success message
+            result.Success = true;
+            result.Message = "Successfully added the 5 Albums to this user.";
+            return result;
+        }
+
+        public Result RemoveAlbumFromUser(int userID, List<int> selectedAlbumIDs)
+        {
+            Result result = new Result();
+
+            foreach (int albumID in selectedAlbumIDs)
+            {
+                Result resultRemoveAlbumfromUser = _userRepository.RemoveAlbumFromUser(userID, albumID);
+                if (!resultRemoveAlbumfromUser.Success)
+                {
+                    result.Success = false;
+                    result.Message = "This Album is not on this users account yet";
+                    return result;
+                }
+            }
+
+            // If all songs are successfully deleted, return a success message
+            result.Success = true;
+            result.Message = "Successfully removed the Album from this user.";
+            return result;
+        }
+
+        #endregion 
+
         public Result Add(User user)
         {
             UserDTO userDTO = ConvertToUserDTO(user);

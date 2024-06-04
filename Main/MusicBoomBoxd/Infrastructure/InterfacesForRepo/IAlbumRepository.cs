@@ -9,6 +9,8 @@
         Result AddSongToAlbum(int albumID, int songID);
 
         Result RemoveSongFromAlbum(int albumID, int songID);
+        List<AlbumDTO> GetAlbumsForUser(int userID);
+
         Result UpdateAlbum(AlbumDTO newAlbumDTO, AlbumDTO oldAlbumDTO);
 
         Result DeleteAlbum(AlbumDTO albumDTO);

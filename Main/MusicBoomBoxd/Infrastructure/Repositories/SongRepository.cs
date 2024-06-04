@@ -162,10 +162,10 @@ namespace Infrastructure
             {
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT S.SongID, S.Title, S.ArtistID, S.Date, S.RunTimeSec, S.Genre, S.SongCoverName, S.SongCoverData, S.SongCoverContentType 
-                            FROM [Song] S 
-                            INNER JOIN [UserSong] ALB ON S.SongID = ALB.SongID 
-                            WHERE ALB.UserID = @UserID";
+                cmd.CommandText = @"SELECT SO.SongID, SO.Title, SO.ArtistID, SO.Date, SO.RunTimeSec, SO.Genre, SO.SongCoverName, SO.SongCoverData, SO.SongCoverContentType 
+                            FROM [Song] SO 
+                            INNER JOIN [UserSongs] USR ON SO.SongID = USR.SongID 
+                            WHERE USR.UserID = @UserID";
 
                 cmd.Parameters.AddWithValue("@UserID", userID);
 

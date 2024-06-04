@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Infrastructure.DTOs;
+using Microsoft.Data.SqlClient;
 using System.Data;
 
 namespace Infrastructure
@@ -83,8 +84,8 @@ namespace Infrastructure
             {
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT TOP (@Count) AlbumID, ArtistID, Title, Date,RunTimeSec, Genre, AlbumCoverName, AlbumCoverData, AlbumCoverContentType 
-                                    FROM [Album] WHERE Active = 1 ORDER BY AlbumID DESC";
+                cmd.CommandText = @"SELECT TOP (@Count) AlbumID, ArtistID, Title, Date,RunTimeSec, Genre, AlbumCoverName, AlbumCoverData, AlbumCoverContentType " +
+                                   "FROM [Album] WHERE Active = 1 ORDER BY AlbumID DESC";
 
 
                 cmd.Parameters.AddWithValue("@Count", count);
@@ -186,6 +187,45 @@ namespace Infrastructure
                     return new Result { Success = false, Message = $"Exception: {ex.Message}" };
                 }
             }
+        }
+
+        public List<AlbumDTO> GetAlbumsForUser(int userID)
+        {
+            List<AlbumDTO> albums = new List<AlbumDTO>();
+
+            using (SqlConnection conn = GetSqlConnection())
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"SELECT AL.AlbumID, AL.ArtistID, AL.Title, AL.Date, AL.RunTimeSec, AL.Genre, AL.AlbumCoverName, AL.AlbumCoverData, AL.AlbumCoverContentType 
+                            FROM [Album] AL 
+                            INNER JOIN [UserAlbums] ULB ON AL.AlbumID = ULB.AlbumID 
+                            WHERE ULB.UserID = @UserID";
+
+                cmd.Parameters.AddWithValue("@UserID", userID);
+
+                conn.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int albumID = reader.GetInt32(0);
+                        int artistID = reader.GetInt32(1);
+                        string title = reader.GetString(2);
+                        DateTime releaseDate = reader.GetDateTime(3);
+                        int runTime = reader.GetInt32(4);
+                        string genre = reader.GetString(5);
+                        string albumCoverName = reader.GetString(6);
+                        byte[] albumCoverData = (byte[])reader.GetValue(7);
+                        string albumCoverContentType = reader.GetString(8);
+
+                        AlbumDTO album = new AlbumDTO(albumID, artistID, title, releaseDate, runTime, genre, albumCoverName, albumCoverData, albumCoverContentType);
+                        albums.Add(album);
+                    }
+                }
+            }
+            return albums;
         }
 
         public Result UpdateAlbum(AlbumDTO newAlbumDTO, AlbumDTO oldAlbumDTO)

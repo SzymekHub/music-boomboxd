@@ -44,7 +44,7 @@
             btnAddAlbumUser = new Button();
             cklbAlbumUser = new CheckedListBox();
             lblAlbumsUser = new Label();
-            txtSongsSearchUsers = new TextBox();
+            tbSongsSearchUsers = new TextBox();
             btnRemoveSongUser = new Button();
             lblSongWarning = new Label();
             btnAddSongsUser = new Button();
@@ -94,7 +94,7 @@
             NewUserPanel.Controls.Add(btnAddAlbumUser);
             NewUserPanel.Controls.Add(cklbAlbumUser);
             NewUserPanel.Controls.Add(lblAlbumsUser);
-            NewUserPanel.Controls.Add(txtSongsSearchUsers);
+            NewUserPanel.Controls.Add(tbSongsSearchUsers);
             NewUserPanel.Controls.Add(btnRemoveSongUser);
             NewUserPanel.Controls.Add(lblSongWarning);
             NewUserPanel.Controls.Add(btnAddSongsUser);
@@ -217,6 +217,7 @@
             tbAlbumsSearchUser.Name = "tbAlbumsSearchUser";
             tbAlbumsSearchUser.Size = new Size(184, 27);
             tbAlbumsSearchUser.TabIndex = 58;
+            tbAlbumsSearchUser.TextChanged += tbAlbumsSearchUser_TextChanged;
             // 
             // btnRemoveAlbumUser
             // 
@@ -227,6 +228,7 @@
             btnRemoveAlbumUser.TabIndex = 57;
             btnRemoveAlbumUser.Text = "Remove Album";
             btnRemoveAlbumUser.UseVisualStyleBackColor = false;
+            btnRemoveAlbumUser.Click += btnRemoveAlbumUser_Click;
             // 
             // lblAlbumWarning
             // 
@@ -247,6 +249,7 @@
             btnAddAlbumUser.TabIndex = 55;
             btnAddAlbumUser.Text = "Add Album";
             btnAddAlbumUser.UseVisualStyleBackColor = false;
+            btnAddAlbumUser.Click += btnAddAlbumUser_Click;
             // 
             // cklbAlbumUser
             // 
@@ -266,13 +269,13 @@
             lblAlbumsUser.TabIndex = 53;
             lblAlbumsUser.Text = "Albums :";
             // 
-            // txtSongsSearchUsers
+            // tbSongsSearchUsers
             // 
-            txtSongsSearchUsers.Location = new Point(667, 37);
-            txtSongsSearchUsers.Name = "txtSongsSearchUsers";
-            txtSongsSearchUsers.Size = new Size(161, 27);
-            txtSongsSearchUsers.TabIndex = 52;
-            txtSongsSearchUsers.TextChanged += txtSongsSearch_TextChanged;
+            tbSongsSearchUsers.Location = new Point(667, 37);
+            tbSongsSearchUsers.Name = "tbSongsSearchUsers";
+            tbSongsSearchUsers.Size = new Size(161, 27);
+            tbSongsSearchUsers.TabIndex = 52;
+            tbSongsSearchUsers.TextChanged += tbSongsSearch_TextChanged;
             // 
             // btnRemoveSongUser
             // 
@@ -554,7 +557,7 @@
         private Label lblPassword;
         private ComboBox cbFavGenre;
         private PictureBox pbLogoUsers;
-        private TextBox txtSongsSearchUsers;
+        private TextBox tbSongsSearchUsers;
         private Button btnRemoveSongUser;
         private Label lblSongWarning;
         private Button btnAddSongsUser;

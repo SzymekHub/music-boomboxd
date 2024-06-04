@@ -114,8 +114,8 @@ namespace Infrastructure
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = @"SELECT A.ArtistID, A.Name, A.AritstPictureName, A.ArtistPictureData, A.ArtistPictureContentType 
                             FROM [Artist] A 
-                            INNER JOIN [UserArtist] ALB ON A.ArtistID = ALB.ArtistID 
-                            WHERE ALB.UserID = @UserID";
+                            INNER JOIN [UserArtists] UAR ON A.ArtistID = UAR.ArtistID 
+                            WHERE UAR.UserID = @UserID";
 
                 cmd.Parameters.AddWithValue("@UserID", userID);
 

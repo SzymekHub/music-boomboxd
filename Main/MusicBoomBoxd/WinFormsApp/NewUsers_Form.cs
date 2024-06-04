@@ -102,7 +102,7 @@ namespace WinFormsApp
 
             if (ValidateInput())
             {
-                // Gets the selected songs from the checkedListBox
+                // Gets the selected artists from the checkedListBox
                 List<int> selectedArtistIDs = new List<int>();
                 foreach (var item in cklbAritstUser.CheckedItems)
                 {
@@ -171,7 +171,7 @@ namespace WinFormsApp
             for (int i = 0; i < cklbAritstUser.Items.Count; i++)
             {
                 Artist artist = (Artist)cklbAritstUser.Items[i];
-                if (selectedSongIDs.Contains(artist.ArtistID))
+                if (selectedArtistIDs.Contains(artist.ArtistID))
                 {
                     cklbAritstUser.SetItemChecked(i, true);
                 }
@@ -238,9 +238,9 @@ namespace WinFormsApp
                 }
             }
         }
-        private void txtSongsSearch_TextChanged(object sender, EventArgs e)
+        private void tbSongsSearch_TextChanged(object sender, EventArgs e)
         {
-            FilterSongs(txtSongsSearchUsers.Text);
+            FilterSongs(tbSongsSearchUsers.Text);
         }
 
         private void FilterSongs(string searchText)
@@ -263,6 +263,92 @@ namespace WinFormsApp
             }
         }
         #endregion
+
+        //Adding a Album
+        #region Albums
+
+        private void btnAddAlbumUser_Click(object sender, EventArgs e)
+        {
+            //Get the selected User
+            User selectedUser = GetUpdatedUser();
+
+            if (ValidateInput())
+            {
+                // Gets the selected songs from the checkedListBox
+                List<int> selectedAlbumIDs = new List<int>();
+                foreach (var item in cklbAlbumUser.CheckedItems)
+                {
+                    selectedAlbumIDs.Add(((Album)item).AlbumID);
+                }
+
+                // Calls the method in AlbumManager to save songs in albums
+                Result resultAddAlbum = userManager.SaveAlbumInUsers(selectedUser.UserID, selectedAlbumIDs);
+
+                if (resultAddAlbum.Success)
+                {
+                    DialogResult = DialogResult.OK;
+                    tsslblNewUserForm.Text = resultAddAlbum.Message;
+                }
+                else
+                {
+                    tsslblNewUserForm.Text = resultAddAlbum.Message;
+                }
+            }
+        }
+
+        private void btnRemoveAlbumUser_Click(object sender, EventArgs e)
+        {
+            //Get the selected User
+            User selectedUser = GetUpdatedUser();
+
+            if (ValidateInput())
+            {
+                // Gets the selected songs from the checkedListBox
+                List<int> selectedAlbumIDs = new List<int>();
+                foreach (var item in cklbAlbumUser.CheckedItems)
+                {
+                    selectedAlbumIDs.Add(((Album)item).AlbumID);
+                }
+
+                // Calls the method in AlbumManager to save songs in albums
+                Result resultRemoveAlbum = userManager.RemoveAlbumFromUser(selectedUser.UserID, selectedAlbumIDs);
+
+                if (resultRemoveAlbum.Success)
+                {
+                    DialogResult = DialogResult.OK;
+                    tsslblNewUserForm.Text = resultRemoveAlbum.Message;
+                }
+                else
+                {
+                    tsslblNewUserForm.Text = resultRemoveAlbum.Message;
+                }
+            }
+        }
+        private void tbAlbumsSearchUser_TextChanged(object sender, EventArgs e)
+        {
+            FilterAlbums(tbAlbumsSearchUser.Text);
+        }
+
+        private void FilterAlbums(string searchText)
+        {
+            List<Album> allAlbums = albumManager.LoadAlbumsFromDatabase();
+            List<Album> filteredAlbums = allAlbums.Where(album => album.Title.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+
+            cklbAlbumUser.DataSource = filteredAlbums;
+            cklbAlbumUser.DisplayMember = "Title";
+            cklbAlbumUser.ValueMember = "AlbumID";
+
+            // Reapply the checked state for previously selected songs
+            for (int i = 0; i < cklbAlbumUser.Items.Count; i++)
+            {
+                Album album = (Album)cklbAlbumUser.Items[i];
+                if (selectedAlbumIDs.Contains(album.AlbumID))
+                {
+                    cklbAlbumUser.SetItemChecked(i, true);
+                }
+            }
+        }
+        #endregion 
         private void BtnAddUser_Click(object sender, EventArgs e)
         {
             if (ValidateInput())
@@ -338,13 +424,13 @@ namespace WinFormsApp
                 }
             }
         }
-       
+
         private void FillFormWithUserDetails(User user)
         {
             tbNameUser.Text = user.Username;
             tbPassword.Visible = false;
             tbEmailUser.Text = user.Email;
-            tbPassword.Text = user.Password;
+            //tbPassword.Text = user.Password;
             cbUserType.SelectedItem = user.UserType;
             dtpUser.Value = user.Birthday;
             cbFavGenre.SelectedItem = user.FavGenre;
@@ -361,22 +447,21 @@ namespace WinFormsApp
             // Get the songs for the album from the database
             var artists = artistManager.GetArtistForUser(user.UserID);
 
-            // Check the songs in the checked list box and update the global selectedSongIDs list
+            // Set the selected items and update selectedArtistIDs
             foreach (var artist in artists)
             {
-                for (int i = 0; i < cklbAritstUser.Items.Count; i++)
+                var matchingItem = cklbAritstUser.Items.Cast<Artist>()
+                                         .FirstOrDefault(item => item.ArtistID == artist.ArtistID);
+                if (matchingItem != null)
                 {
-                    if (((Artist)cklbAritstUser.Items[i]).ArtistID == artist.ArtistID)
+                    cklbAritstUser.SetItemChecked(cklbAritstUser.Items.IndexOf(matchingItem), true);
+                    if (!selectedArtistIDs.Contains(artist.ArtistID))
                     {
-                        cklbAritstUser.SetItemChecked(i, true);
-                        if (!selectedArtistIDs.Contains(artist.ArtistID))
-                        {
-                            selectedArtistIDs.Add(artist.ArtistID);
-                        }
-                        break;
+                        selectedArtistIDs.Add(artist.ArtistID);
                     }
                 }
             }
+
             #endregion
 
             //For songs
@@ -406,6 +491,37 @@ namespace WinFormsApp
                     }
                 }
             }
+            #endregion
+
+            //For albums
+            #region Albums
+
+            // Clear all checked items
+            for (int i = 0; i < cklbAlbumUser.Items.Count; i++)
+            {
+                cklbAlbumUser.SetItemChecked(i, false);
+            }
+
+            // Get the songs for the album from the database
+            var albums = albumManager.GetAlbumForUsers(user.UserID);
+
+            // Check the songs in the checked list box and update the global selectedSongIDs list
+            foreach (var album in albums)
+            {
+                for (int i = 0; i < cklbAlbumUser.Items.Count; i++)
+                {
+                    if (((Album)cklbAlbumUser.Items[i]).AlbumID == album.AlbumID)
+                    {
+                        cklbAlbumUser.SetItemChecked(i, true);
+                        if (!selectedAlbumIDs.Contains(album.AlbumID))
+                        {
+                            selectedAlbumIDs.Add(album.AlbumID);
+                        }
+                        break;
+                    }
+                }
+            }
+
             #endregion
         }
 
@@ -510,6 +626,7 @@ namespace WinFormsApp
 
                 userManager.Update(
                     new User(
+                        exisitingUser.UserID,
                         tbNameUser.Text,
                         tbPassword.Text,
                         tbEmailUser.Text,
@@ -522,6 +639,7 @@ namespace WinFormsApp
                         exisitingUser
                     );
                 return new User(
+                        exisitingUser.UserID,
                         tbNameUser.Text,
                         tbPassword.Text,
                         tbEmailUser.Text,
@@ -610,6 +728,11 @@ namespace WinFormsApp
             cklbSongsUser.DataSource = songManager.LoadSongsFromDataBase();
             cklbSongsUser.DisplayMember = "Title";
             cklbSongsUser.ValueMember = "SongID";
+
+            //for albums
+            cklbAlbumUser.DataSource = albumManager.LoadAlbumsFromDatabase();
+            cklbAlbumUser.DisplayMember = "Title";
+            cklbAlbumUser.ValueMember = "AlbumID";
         }
 
         private void Users_Form_FormClosed(object sender, FormClosedEventArgs e)

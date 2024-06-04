@@ -14,7 +14,7 @@ namespace Logic
             _albumRepository = ialbumRep;
         }
 
-        public void LoadAlbumsFromDatabase()
+        public List<Album> LoadAlbumsFromDatabase()
         {
             List<AlbumDTO> albumDTOs = _albumRepository.GetRecentAlbum(1000);
 
@@ -26,6 +26,23 @@ namespace Logic
                 Album album = AlbumMapper.ToAlbum(albumDTO, artist);
                 _albums.Add(album);
             }
+
+            return _albums;
+        }
+
+        public List<Album> GetAlbumForUsers(int userID)
+        {
+            List<Album> albums = new List<Album>();
+
+            List<AlbumDTO> albumDTOs = _albumRepository.GetAlbumsForUser(userID);
+
+            foreach (var albumDTO in albumDTOs)
+            {
+                Album album = AlbumMapper.ToAlbum(albumDTO, artist);
+                albums.Add(album);
+            }
+
+            return albums;
         }
 
         public Result SaveSongsInAlbums(int albumID, List<int> selectedSongIDs)

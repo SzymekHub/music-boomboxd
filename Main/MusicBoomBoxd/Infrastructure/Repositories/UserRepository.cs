@@ -130,7 +130,7 @@ namespace Infrastructure
             {
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"INSERT INTO [UserArtist] (UserID, ArtistID) VALUES (@UserID, @ArtistID);";
+                cmd.CommandText = @"INSERT INTO [UserArtists] (UserID, ArtistID) VALUES (@UserID, @ArtistID);";
 
                 cmd.Parameters.AddWithValue("@UserID", userID);
                 cmd.Parameters.AddWithValue("@ArtistID", artistID);
@@ -163,7 +163,7 @@ namespace Infrastructure
             {
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"DELETE FROM [UserArtist] WHERE UserID = @UserID AND ArtistID = @ArtistID;";
+                cmd.CommandText = @"DELETE FROM [UserArtists] WHERE UserID = @UserID AND ArtistID = @ArtistID;";
 
                 cmd.Parameters.AddWithValue("@UserID", userID);
                 cmd.Parameters.AddWithValue("@ArtistID", artistID);
@@ -200,7 +200,7 @@ namespace Infrastructure
             {
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"INSERT INTO [UserSong] (UserID, SongID) VALUES (@UserID, @SongID);";
+                cmd.CommandText = @"INSERT INTO [UserSongs] (UserID, SongID) VALUES (@UserID, @SongID);";
 
                 cmd.Parameters.AddWithValue("@UserID", userID);
                 cmd.Parameters.AddWithValue("@SongID", songID);
@@ -233,7 +233,7 @@ namespace Infrastructure
             {
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"DELETE FROM [UserSong] WHERE UserID = @UserID AND SongID = @SongID;";
+                cmd.CommandText = @"DELETE FROM [UserSongs] WHERE UserID = @UserID AND SongID = @SongID;";
 
                 cmd.Parameters.AddWithValue("@UserID", userID);
                 cmd.Parameters.AddWithValue("@SongID", songID);
@@ -259,6 +259,77 @@ namespace Infrastructure
             }
         }
 
+
+        #endregion
+
+
+        //Albums
+        #region Albums
+        public Result AddAlbumToUser(int userID, int albumID)
+        {
+            using (SqlConnection conn = GetSqlConnection())
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"INSERT INTO [UserAlbums] (UserID, AlbumID) VALUES (@UserID, @AlbumID);";
+
+                cmd.Parameters.AddWithValue("@UserID", userID);
+                cmd.Parameters.AddWithValue("@AlbumID", albumID);
+
+                try
+                {
+                    conn.Open();
+                    int result = cmd.ExecuteNonQuery();
+                    if (result > 0)
+                    {
+                        return new Result { Success = true, Message = "Album added to user successfully." };
+                    }
+                    return new Result { Success = false, Message = "Failed to add Album to user." };
+                }
+                catch (SqlException ex)
+                {
+                    return new Result { Success = false, Message = $"SQL Exception: {ex.Message}" };
+                }
+                catch (Exception ex)
+                {
+                    return new Result { Success = false, Message = $"Exception: {ex.Message}" };
+                }
+            }
+        }
+
+        public Result RemoveAlbumFromUser(int userID, int albumID)
+        {
+            using (SqlConnection conn = GetSqlConnection())
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"DELETE FROM [UserAlbums] WHERE UserID = @UserID AND AlbumID = @AlbumID;";
+
+                cmd.Parameters.AddWithValue("@UserID", userID);
+                cmd.Parameters.AddWithValue("@AlbumID", albumID);
+
+                try
+                {
+                    conn.Open();
+                    int result = cmd.ExecuteNonQuery();
+                    if (result > 0)
+                    {
+                        return new Result { Success = true, Message = "Album removed from user successfully." };
+                    }
+                    return new Result { Success = false, Message = "Failed to remove Album from user." };
+                }
+                catch (SqlException ex)
+                {
+                    return new Result { Success = false, Message = $"SQL Exception: {ex.Message}" };
+                }
+                catch (Exception ex)
+                {
+                    return new Result { Success = false, Message = $"Exception: {ex.Message}" };
+                }
+            }
+        }
 
         #endregion
 
@@ -307,8 +378,9 @@ namespace Infrastructure
                 cmd.Connection = conn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = @"UPDATE [User] SET Username = @Username, Password = @Password, Email = @Email, UserType = @UserType, Birthday = @Birthday, FavGenre = @FavGenre, ProfilePictureName = @ProfilePictureName, ProfilePictureData = @ProfilePictureData, ProfilePictureContentType = @ProfilePictureContentType
-                                WHERE Username = @OldUsername AND Password = @OldPassword AND Email = @OldEmail AND UserType = @OldUserType AND Birthday = @OldBirthday AND FavGenre = @OldFavGenre AND ProfilePictureName = @OldProfilePictureName AND ProfilePictureData = @OldProfilePictureData AND  ProfilePictureContentType = @OldProfilePictureContentType";
+                                WHERE UserID = @UserID";
 
+                cmd.Parameters.AddWithValue("@UserID", newUserDTO.UserID);
                 cmd.Parameters.AddWithValue("@Username", newUserDTO.Username);
                 cmd.Parameters.AddWithValue("@Password", newUserDTO.Password);
                 cmd.Parameters.AddWithValue("@Email", newUserDTO.Email);
@@ -333,16 +405,16 @@ namespace Infrastructure
 
                 cmd.Parameters.AddWithValue("@ProfilePictureContentType", newUserDTO.ProfilePictureContentType);
 
-                // Parameters for old Song to find it in the database
-                cmd.Parameters.AddWithValue("@OldUsername", oldUserDTO.Username);
-                cmd.Parameters.AddWithValue("@OldPassword", oldUserDTO.Password);
-                cmd.Parameters.AddWithValue("@OldEmail", oldUserDTO.Email);
-                cmd.Parameters.AddWithValue("@OldUserType", oldUserDTO.UserType.ToString());
-                cmd.Parameters.AddWithValue("@OldBirthday", oldUserDTO.Birthday.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-                cmd.Parameters.AddWithValue("@OldFavGenre", oldUserDTO.FavGenre.ToString());
-                cmd.Parameters.AddWithValue("@OldProfilePictureName", oldUserDTO.ProfilePictureName);
-                cmd.Parameters.AddWithValue("@OldProfilePictureData", oldUserDTO.ProfilePictureData.ToArray());
-                cmd.Parameters.AddWithValue("@OldProfilePictureContentType", oldUserDTO.ProfilePictureContentType);
+                //// Parameters for old Song to find it in the database
+                //cmd.Parameters.AddWithValue("@OldUsername", oldUserDTO.Username);
+                //cmd.Parameters.AddWithValue("@OldPassword", oldUserDTO.Password);
+                //cmd.Parameters.AddWithValue("@OldEmail", oldUserDTO.Email);
+                //cmd.Parameters.AddWithValue("@OldUserType", oldUserDTO.UserType.ToString());
+                //cmd.Parameters.AddWithValue("@OldBirthday", oldUserDTO.Birthday.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                //cmd.Parameters.AddWithValue("@OldFavGenre", oldUserDTO.FavGenre.ToString());
+                //cmd.Parameters.AddWithValue("@OldProfilePictureName", oldUserDTO.ProfilePictureName);
+                //cmd.Parameters.AddWithValue("@OldProfilePictureData", oldUserDTO.ProfilePictureData.ToArray());
+                //cmd.Parameters.AddWithValue("@OldProfilePictureContentType", oldUserDTO.ProfilePictureContentType);
 
                 try
                 {

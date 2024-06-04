@@ -44,11 +44,11 @@ namespace Logic
             return songs;
         }
 
-        public List<Song> GetSongsForUsers(int albumID)
+        public List<Song> GetSongsForUsers(int userID)
         {
             List<Song> songs = new List<Song>();
 
-            List<SongDTO> songDTOs = _songRepository.GetSongsForUser(albumID);
+            List<SongDTO> songDTOs = _songRepository.GetSongsForUser(userID);
 
             foreach (var songDTO in songDTOs)
             {
