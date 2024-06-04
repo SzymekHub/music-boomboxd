@@ -6,6 +6,8 @@ namespace WinFormsApp
 {
     public partial class NewSong_Form : Form
     {
+        private bool isNewImageSelected = false;
+
         public Song NewSong { get; private set; }
         private Song exisitingSong;
         private SongManager songManager;
@@ -19,6 +21,7 @@ namespace WinFormsApp
             InitializeComponent();
             InitializeComboBox();
             exisitingSong = song;
+
             ClearControls();
             this.StartPosition = FormStartPosition.CenterScreen;
 
@@ -80,6 +83,7 @@ namespace WinFormsApp
 
                     // Stores the selected image path
                     selectedImagePath = selectedFile;
+                    isNewImageSelected = true;
 
                     // This will load and display the image if needed
                     SelectedCoverSong.Image = Image.FromFile(selectedImagePath);
@@ -92,11 +96,11 @@ namespace WinFormsApp
             if (ValidateForm())
             {
                 // This gets the file name from the selected image path
-                string songCoverName = Path.GetFileName(selectedImagePath);
+                string songCoverName = isNewImageSelected ? Path.GetFileName(selectedImagePath) : exisitingSong.SongCoverName;
 
                 // This gets the content type based on the file extension
                 string songCoverContentType = "";
-                string extension = Path.GetExtension(selectedImagePath);
+                string extension = Path.GetExtension(songCoverName);
                 if (extension != null)
                 {
                     switch (extension.ToLower())
@@ -116,7 +120,7 @@ namespace WinFormsApp
                 Artist selectedArtist = cbArtistSong.SelectedItem as Artist;
 
                 // This reads the selected image file into a byte array
-                byte[] songCoverData = File.ReadAllBytes(selectedImagePath);
+                byte[] songCoverData = isNewImageSelected ? File.ReadAllBytes(selectedImagePath) : exisitingSong.SongCoverData;
 
                 if (exisitingSong == null)
                 {
@@ -165,6 +169,7 @@ namespace WinFormsApp
         private void FillFormWithSongDetails(Song song)
         {
             tbTitleSong.Text = song.Title;
+
             // Finds the artist by ID and sets the selected item
             foreach (var item in cbArtistSong.Items)
             {
@@ -196,6 +201,7 @@ namespace WinFormsApp
             nudRunTimeSongs.Value = 0;
             selectedImagePath = null;
             SelectedCoverSong.Image = null;
+            isNewImageSelected = false;
         }
 
         public Song GetNewSong()
@@ -204,11 +210,11 @@ namespace WinFormsApp
             if (ValidateForm())
             {
                 // Get the file name from the selected image path
-                string songCoverName = Path.GetFileName(selectedImagePath);
+                string songCoverName = isNewImageSelected ? Path.GetFileName(selectedImagePath) : exisitingSong?.SongCoverName;
 
                 // Get the content type based on the file extension
                 string songCoverContentType = "";
-                string extension = Path.GetExtension(selectedImagePath);
+                string extension = Path.GetExtension(songCoverName);
                 if (extension != null)
                 {
                     switch (extension.ToLower())
@@ -226,7 +232,7 @@ namespace WinFormsApp
                 }
 
                 // This reads the selected image file into a byte array
-                byte[] songCoverData = File.ReadAllBytes(selectedImagePath);
+                byte[] songCoverData = isNewImageSelected ? File.ReadAllBytes(selectedImagePath) : exisitingSong?.SongCoverData;
 
                 // This is a new Song object that returns with the provided details
                 return new Song(
@@ -252,11 +258,11 @@ namespace WinFormsApp
             if (ValidateForm())
             {
                 // Get the file name from the selected image path
-                string songCoverName = Path.GetFileName(selectedImagePath);
+                string songCoverName = isNewImageSelected ? Path.GetFileName(selectedImagePath) : exisitingSong?.SongCoverName;
 
                 // Get the content type based on the file extension
                 string songCoverContentType = "";
-                string extension = Path.GetExtension(selectedImagePath);
+                string extension = Path.GetExtension(songCoverName);
                 if (extension != null)
                 {
                     switch (extension.ToLower())
@@ -274,7 +280,7 @@ namespace WinFormsApp
                 }
 
                 // This reads the selected image file into a byte array
-                byte[] songCoverData = File.ReadAllBytes(selectedImagePath);
+                byte[] songCoverData = isNewImageSelected ? File.ReadAllBytes(selectedImagePath) : exisitingSong?.SongCoverData;
 
                 songManager.Update(
                      new Song(
@@ -331,10 +337,15 @@ namespace WinFormsApp
                 return false;
             }
 
-            // Checks if an image is selected
-            if (string.IsNullOrEmpty(selectedImagePath))
+            // Check if an image is selected or exists for the song
+            if (!isNewImageSelected && (exisitingSong == null || exisitingSong.SongCoverData == null))
             {
-                tsslblNewSongForm.Text = "Please select an song cover image for the song.";
+                tsslblNewSongForm.Text = "Please select an song cover image for the Song.";
+                return false;
+            }
+            if (nudRunTimeSongs == null)
+            {
+                tsslblNewSongForm.Text = "Every Song needs a runtime in seconds. Please input one";
                 return false;
             }
 
@@ -347,6 +358,8 @@ namespace WinFormsApp
             cbGenre.DataSource = Enum.GetValues(typeof(genreType));
 
             cbArtistSong.DataSource = artistManager.LoadArtistFromDB();
+            cbArtistSong.DisplayMember = "Name";
+            cbArtistSong.ValueMember = "ArtistID";
         }
 
         private void NewMusic_Form_FormClosed(object sender, FormClosedEventArgs e)
