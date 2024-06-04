@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             NewAlbumPanel = new Panel();
+            txtSongsSearch = new TextBox();
+            btnRemoveSong = new Button();
             label1 = new Label();
             btnAddSongs = new Button();
             cklbSongs = new CheckedListBox();
@@ -53,7 +55,6 @@
             ssNewAlbumForm = new StatusStrip();
             tsslblNewAlbumForm = new ToolStripStatusLabel();
             tsslblNewAlbumFormCSV = new ToolStripStatusLabel();
-            btnRemoveSong = new Button();
             NewAlbumPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudRunTimeAlbum).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbLogo).BeginInit();
@@ -64,6 +65,7 @@
             // NewAlbumPanel
             // 
             NewAlbumPanel.BackColor = Color.DarkGray;
+            NewAlbumPanel.Controls.Add(txtSongsSearch);
             NewAlbumPanel.Controls.Add(btnRemoveSong);
             NewAlbumPanel.Controls.Add(label1);
             NewAlbumPanel.Controls.Add(btnAddSongs);
@@ -91,20 +93,39 @@
             NewAlbumPanel.Size = new Size(895, 485);
             NewAlbumPanel.TabIndex = 13;
             // 
+            // txtSongsSearch
+            // 
+            txtSongsSearch.Location = new Point(568, 66);
+            txtSongsSearch.Name = "txtSongsSearch";
+            txtSongsSearch.Size = new Size(170, 27);
+            txtSongsSearch.TabIndex = 46;
+            txtSongsSearch.TextChanged += txtSongsSearch_TextChanged;
+            // 
+            // btnRemoveSong
+            // 
+            btnRemoveSong.BackColor = Color.MediumSlateBlue;
+            btnRemoveSong.Location = new Point(611, 392);
+            btnRemoveSong.Name = "btnRemoveSong";
+            btnRemoveSong.Size = new Size(127, 49);
+            btnRemoveSong.TabIndex = 45;
+            btnRemoveSong.Text = "Remove Songs";
+            btnRemoveSong.UseVisualStyleBackColor = false;
+            btnRemoveSong.Click += btnRemoveSong_Click;
+            // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Stencil", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label1.Location = new Point(456, 326);
             label1.Name = "label1";
-            label1.Size = new Size(278, 42);
+            label1.Size = new Size(278, 63);
             label1.TabIndex = 44;
-            label1.Text = "*unselect the songs that \r\n  are already in the album*\r\n";
+            label1.Text = "* To add a new song please \r\n  unselect the songs that \r\n  are already in the album*\r\n";
             // 
             // btnAddSongs
             // 
             btnAddSongs.BackColor = Color.MediumSlateBlue;
-            btnAddSongs.Location = new Point(456, 371);
+            btnAddSongs.Location = new Point(456, 393);
             btnAddSongs.Name = "btnAddSongs";
             btnAddSongs.Size = new Size(127, 49);
             btnAddSongs.TabIndex = 43;
@@ -115,16 +136,16 @@
             // cklbSongs
             // 
             cklbSongs.FormattingEnabled = true;
-            cklbSongs.Location = new Point(456, 77);
+            cklbSongs.Location = new Point(456, 99);
             cklbSongs.Name = "cklbSongs";
-            cklbSongs.Size = new Size(282, 246);
+            cklbSongs.Size = new Size(282, 224);
             cklbSongs.TabIndex = 42;
             // 
             // lblSongs
             // 
             lblSongs.AutoSize = true;
             lblSongs.Font = new Font("Stencil", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblSongs.Location = new Point(456, 41);
+            lblSongs.Location = new Point(456, 63);
             lblSongs.Name = "lblSongs";
             lblSongs.Size = new Size(116, 33);
             lblSongs.TabIndex = 41;
@@ -315,17 +336,6 @@
             tsslblNewAlbumFormCSV.Name = "tsslblNewAlbumFormCSV";
             tsslblNewAlbumFormCSV.Size = new Size(0, 16);
             // 
-            // btnRemoveSong
-            // 
-            btnRemoveSong.BackColor = Color.MediumSlateBlue;
-            btnRemoveSong.Location = new Point(611, 371);
-            btnRemoveSong.Name = "btnRemoveSong";
-            btnRemoveSong.Size = new Size(127, 49);
-            btnRemoveSong.TabIndex = 45;
-            btnRemoveSong.Text = "Remove Songs";
-            btnRemoveSong.UseVisualStyleBackColor = false;
-            btnRemoveSong.Click += btnRemoveSong_Click;
-            // 
             // NewAlbum_Form
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -376,5 +386,6 @@
         private CheckedListBox cklbSongs;
         private Label label1;
         private Button btnRemoveSong;
+        private TextBox txtSongsSearch;
     }
 }

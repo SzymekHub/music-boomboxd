@@ -593,26 +593,6 @@ namespace WinFormsApp
                 }
             }
         }
-        private void btnAddSongToAlbum_Click(object sender, EventArgs e)
-        {
-            if (dgvAlbums.SelectedRows.Count > 0)
-            {
-                // Get the selected album
-                Album selectedAlbum = dgvAlbums.SelectedRows[0].DataBoundItem as Album;
-                // Open the NewAlbum_Form with the selected albums's information
-                using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, songManager, artistManager, selectedAlbum))
-                {
-                    if (addAlbumForm.ShowDialog() == DialogResult.OK)
-                    {
-                        PopulateAlbums();
-                    }
-                }
-            }
-            else
-            {
-                tsslblDashBoardForm.Text = "Please select an album to add songs to it.";
-            }
-        }
         private void btnUpdateAlbum_Click(object sender, EventArgs e)
         {
             if (dgvAlbums.SelectedRows.Count > 0)

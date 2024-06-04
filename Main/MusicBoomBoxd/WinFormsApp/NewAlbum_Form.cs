@@ -5,6 +5,9 @@ namespace WinFormsApp
 {
     public partial class NewAlbum_Form : Form
     {
+        private List<int> selectedSongIDs = new List<int>();
+        private bool isNewImageSelected = false;
+
         public Album NewAlbum { get; private set; }
         private Album existingAlbum;
         private AlbumManager albumManager;
@@ -29,6 +32,7 @@ namespace WinFormsApp
                 FillFormWithAlbumDetails(existingAlbum);
                 DisplayAlbumCover(existingAlbum.AlbumCoverData);
             }
+
             #region Disables_Controls
             if (view)
             {
@@ -64,50 +68,50 @@ namespace WinFormsApp
                 {
                     string selectedFile = openFileDialog.FileName;
 
-                    // Checks if the selected file has a valid image extension
+                    // Check if the selected file has a valid image extension
                     string extension = Path.GetExtension(selectedFile);
                     if (extension != ".jpg" && extension != ".png")
                     {
                         tsslblNewAlbumForm.Text = $"Please select an image file with .jpg or .png extension.";
-
                         return;
                     }
 
-                    // Stores the selected image path
+                    // Store the selected image path
                     selectedImagePath = selectedFile;
+                    isNewImageSelected = true;
 
-                    // This will load and display the image
+                    // Load and display the image
                     SelectedCoverAlbum.Image = Image.FromFile(selectedImagePath);
                 }
             }
         }
+
         private void btnAddSongs_Click(object sender, EventArgs e)
         {
-            // Get the selected album
+            // Gets the selected album
             Album selectedAlbum = GetUpdatedAlbum();
 
             if (ValidateForm())
             {
-                // Get the selected songs from the checkedListBox
+                // Gets the selected songs from the checkedListBox
                 List<int> selectedSongIDs = new List<int>();
                 foreach (var item in cklbSongs.CheckedItems)
                 {
                     selectedSongIDs.Add(((Song)item).SongID);
                 }
 
-                // Call the method in AlbumManager to save songs in albums
-                Result resultaddSong = albumManager.SaveSongsInAlbums(selectedAlbum.AlbumID, selectedSongIDs);
+                // Calls the method in AlbumManager to save songs in albums
+                Result resultAddSong = albumManager.SaveSongsInAlbums(selectedAlbum.AlbumID, selectedSongIDs);
 
-                if (resultaddSong.Success)
+                if (resultAddSong.Success)
                 {
                     DialogResult = DialogResult.OK;
-                    tsslblNewAlbumForm.Text = resultaddSong.Message;
+                    tsslblNewAlbumForm.Text = resultAddSong.Message;
                 }
                 else
                 {
-                    tsslblNewAlbumForm.Text = resultaddSong.Message;
+                    tsslblNewAlbumForm.Text = resultAddSong.Message;
                 }
-
             }
         }
 
@@ -125,19 +129,18 @@ namespace WinFormsApp
                     selectedSongIDs.Add(((Song)item).SongID);
                 }
 
-                // Call the method in AlbumManager to save songs in albums
-                Result resultremoveSong = albumManager.RemoveSongFromAlbum(selectedAlbum.AlbumID, selectedSongIDs);
+                // Call the method in AlbumManager to remove songs in albums
+                Result resultRemoveSong = albumManager.RemoveSongFromAlbum(selectedAlbum.AlbumID, selectedSongIDs);
 
-                if (resultremoveSong.Success)
+                if (resultRemoveSong.Success)
                 {
                     DialogResult = DialogResult.OK;
-                    tsslblNewAlbumForm.Text = resultremoveSong.Message;
+                    tsslblNewAlbumForm.Text = resultRemoveSong.Message;
                 }
                 else
                 {
-                    tsslblNewAlbumForm.Text = resultremoveSong.Message;
+                    tsslblNewAlbumForm.Text = resultRemoveSong.Message;
                 }
-
             }
         }
 
@@ -145,12 +148,12 @@ namespace WinFormsApp
         {
             if (ValidateForm())
             {
-                // This gets the file name from the selected image path
-                string albumCoverName = Path.GetFileName(selectedImagePath);
+                // Get the file name from the selected image path or existing image data
+                string albumCoverName = isNewImageSelected ? Path.GetFileName(selectedImagePath) : existingAlbum.AlbumCoverName;
 
-                // This gets the content type based on the file extension
+                // Get the content type based on the file extension
                 string albumCoverContentType = "";
-                string extension = Path.GetExtension(selectedImagePath);
+                string extension = Path.GetExtension(albumCoverName);
                 if (extension != null)
                 {
                     switch (extension.ToLower())
@@ -169,8 +172,8 @@ namespace WinFormsApp
 
                 Artist selectedArtist = cbArtistAlbum.SelectedItem as Artist;
 
-                // This reads the selected image file into a byte array
-                byte[] albumCoverData = File.ReadAllBytes(selectedImagePath);
+                // Read the selected image file into a byte array or use existing image data
+                byte[] albumCoverData = isNewImageSelected ? File.ReadAllBytes(selectedImagePath) : existingAlbum.AlbumCoverData;
 
                 if (existingAlbum == null)
                 {
@@ -214,11 +217,36 @@ namespace WinFormsApp
             }
         }
 
+        private void txtSongsSearch_TextChanged(object sender, EventArgs e)
+        {
+            FilterSongs(txtSongsSearch.Text);
+        }
+
+        private void FilterSongs(string searchText)
+        {
+            List<Song> allSongs = songManager.LoadSongsFromDataBase();
+            List<Song> filteredSongs = allSongs.Where(song => song.Title.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+
+            cklbSongs.DataSource = filteredSongs;
+            cklbSongs.DisplayMember = "Title";
+            cklbSongs.ValueMember = "SongID";
+
+            // Reapply the checked state for previously selected songs
+            for (int i = 0; i < cklbSongs.Items.Count; i++)
+            {
+                Song song = (Song)cklbSongs.Items[i];
+                if (selectedSongIDs.Contains(song.SongID))
+                {
+                    cklbSongs.SetItemChecked(i, true);
+                }
+            }
+        }
+
         private void FillFormWithAlbumDetails(Album album)
         {
             tbTitleAlbum.Text = album.Title;
 
-            // Finds the artist by ID and sets the selected item
+            // Find the artist by ID and set the selected item
             foreach (var item in cbArtistAlbum.Items)
             {
                 if (((Artist)item).ArtistID == album.ArtistID)
@@ -241,7 +269,7 @@ namespace WinFormsApp
             // Get the songs for the album from the database
             var songs = songManager.GetSongsForAlbum(album.AlbumID);
 
-            // Check the songs in the checked list box
+            // Check the songs in the checked list box and update the global selectedSongIDs list
             foreach (var song in songs)
             {
                 for (int i = 0; i < cklbSongs.Items.Count; i++)
@@ -249,12 +277,15 @@ namespace WinFormsApp
                     if (((Song)cklbSongs.Items[i]).SongID == song.SongID)
                     {
                         cklbSongs.SetItemChecked(i, true);
+                        if (!selectedSongIDs.Contains(song.SongID))
+                        {
+                            selectedSongIDs.Add(song.SongID);
+                        }
                         break;
                     }
                 }
             }
         }
-
 
         private void DisplayAlbumCover(byte[] albumCoverData)
         {
@@ -273,18 +304,19 @@ namespace WinFormsApp
             cbGenreAlbum.SelectedIndex = 0;
             selectedImagePath = null;
             SelectedCoverAlbum.Image = null;
+            isNewImageSelected = false;
         }
 
         public Album GetNewAlbum()
         {
             if (ValidateForm())
             {
-                // Get the file name from the selected image path
-                string albumCoverName = Path.GetFileName(selectedImagePath);
+                // Get the file name from the selected image path or existing image data
+                string albumCoverName = isNewImageSelected ? Path.GetFileName(selectedImagePath) : existingAlbum?.AlbumCoverName;
 
                 // Get the content type based on the file extension
                 string albumCoverContentType = "";
-                string extension = Path.GetExtension(selectedImagePath);
+                string extension = Path.GetExtension(albumCoverName);
                 if (extension != null)
                 {
                     switch (extension.ToLower())
@@ -301,10 +333,10 @@ namespace WinFormsApp
                     }
                 }
 
-                // This reads the selected image file into a byte array
-                byte[] albumCoverData = File.ReadAllBytes(selectedImagePath);
+                // Read the selected image file into a byte array or use existing image data
+                byte[] albumCoverData = isNewImageSelected ? File.ReadAllBytes(selectedImagePath) : existingAlbum?.AlbumCoverData;
 
-                // This is a new Album object that returns with the provided details
+                // Return a new Album object with the provided details
                 return new Album(
                       ((Artist)cbArtistAlbum.SelectedItem).ArtistID,
                       tbTitleAlbum.Text,
@@ -327,12 +359,12 @@ namespace WinFormsApp
         {
             if (ValidateForm())
             {
-                // Get the file name from the selected image path
-                string albumCoverName = Path.GetFileName(selectedImagePath);
+                // Get the file name from the selected image path or existing image data
+                string albumCoverName = isNewImageSelected ? Path.GetFileName(selectedImagePath) : existingAlbum?.AlbumCoverName;
 
                 // Get the content type based on the file extension
                 string albumCoverContentType = "";
-                string extension = Path.GetExtension(selectedImagePath);
+                string extension = Path.GetExtension(albumCoverName);
                 if (extension != null)
                 {
                     switch (extension.ToLower())
@@ -349,8 +381,8 @@ namespace WinFormsApp
                     }
                 }
 
-                // This reads the selected image file into a byte array
-                byte[] albumCoverData = File.ReadAllBytes(selectedImagePath);
+                // Read the selected image file into a byte array or use existing image data
+                byte[] albumCoverData = isNewImageSelected ? File.ReadAllBytes(selectedImagePath) : existingAlbum?.AlbumCoverData;
 
                 albumManager.Update(
                     new Album(
@@ -365,6 +397,7 @@ namespace WinFormsApp
                         albumCoverContentType),
                         existingAlbum
                     );
+
                 return new Album(
                         existingAlbum.AlbumID,
                         ((Artist)cbArtistAlbum.SelectedItem).ArtistID,
@@ -378,36 +411,36 @@ namespace WinFormsApp
             }
             else
             {
-                // Returns null if validation fails
+                // Return null if validation fails
                 return null;
             }
         }
 
         private bool ValidateForm()
         {
-            // Checks if the title is provided
+            // Check if the title is provided
             if (string.IsNullOrEmpty(tbTitleAlbum.Text))
             {
                 tsslblNewAlbumForm.Text = "Every Album needs a title. Please enter one.";
                 return false;
             }
 
-            // Checks if the artist is provided
+            // Check if the artist is provided
             if (cbArtistAlbum.SelectedItem == null)
             {
                 tsslblNewAlbumForm.Text = "Every Album needs an artist. Please select one.";
                 return false;
             }
 
-            // Checks if a genre is selected
+            // Check if a genre is selected
             if (cbGenreAlbum.SelectedItem == null)
             {
                 tsslblNewAlbumForm.Text = "Please select a genre for the Album.";
                 return false;
             }
 
-            // Checks if an image is selected
-            if (string.IsNullOrEmpty(selectedImagePath))
+            // Check if an image is selected or exists for the album
+            if (!isNewImageSelected && (existingAlbum == null || existingAlbum.AlbumCoverData == null))
             {
                 tsslblNewAlbumForm.Text = "Please select an album cover image for the Album.";
                 return false;
@@ -432,7 +465,6 @@ namespace WinFormsApp
             cklbSongs.DataSource = songManager.LoadSongsFromDataBase();
             cklbSongs.DisplayMember = "Title";
             cklbSongs.ValueMember = "SongID";
-
         }
 
         private void NewAlbum_Form_FormClosed(object sender, FormClosedEventArgs e)
@@ -442,6 +474,5 @@ namespace WinFormsApp
                 Owner.Visible = true;
             }
         }
-
     }
 }

@@ -109,7 +109,6 @@
             btnLogOut = new Button();
             ssDashBoardForm = new StatusStrip();
             tsslblDashBoardForm = new ToolStripStatusLabel();
-            btnAddSongToAlbum = new Button();
             DashBoardPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pbArtists1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbReviews).BeginInit();
@@ -611,7 +610,6 @@
             // plAlbums
             // 
             plAlbums.BackColor = Color.DarkGray;
-            plAlbums.Controls.Add(btnAddSongToAlbum);
             plAlbums.Controls.Add(btnDeleteAlbum);
             plAlbums.Controls.Add(btnViewAlbum);
             plAlbums.Controls.Add(btnUpdateAlbum);
@@ -630,7 +628,7 @@
             // 
             btnDeleteAlbum.BackColor = Color.MediumSlateBlue;
             btnDeleteAlbum.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnDeleteAlbum.Location = new Point(747, 383);
+            btnDeleteAlbum.Location = new Point(747, 339);
             btnDeleteAlbum.Name = "btnDeleteAlbum";
             btnDeleteAlbum.Size = new Size(137, 49);
             btnDeleteAlbum.TabIndex = 31;
@@ -642,7 +640,7 @@
             // 
             btnViewAlbum.BackColor = Color.MediumSlateBlue;
             btnViewAlbum.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnViewAlbum.Location = new Point(747, 319);
+            btnViewAlbum.Location = new Point(747, 269);
             btnViewAlbum.Name = "btnViewAlbum";
             btnViewAlbum.Size = new Size(137, 49);
             btnViewAlbum.TabIndex = 30;
@@ -654,7 +652,7 @@
             // 
             btnUpdateAlbum.BackColor = Color.MediumSlateBlue;
             btnUpdateAlbum.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnUpdateAlbum.Location = new Point(747, 255);
+            btnUpdateAlbum.Location = new Point(747, 196);
             btnUpdateAlbum.Name = "btnUpdateAlbum";
             btnUpdateAlbum.Size = new Size(137, 49);
             btnUpdateAlbum.TabIndex = 29;
@@ -1053,18 +1051,6 @@
             tsslblDashBoardForm.Name = "tsslblDashBoardForm";
             tsslblDashBoardForm.Size = new Size(0, 16);
             // 
-            // btnAddSongToAlbum
-            // 
-            btnAddSongToAlbum.BackColor = Color.MediumSlateBlue;
-            btnAddSongToAlbum.Font = new Font("Segoe UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnAddSongToAlbum.Location = new Point(747, 180);
-            btnAddSongToAlbum.Name = "btnAddSongToAlbum";
-            btnAddSongToAlbum.Size = new Size(137, 59);
-            btnAddSongToAlbum.TabIndex = 32;
-            btnAddSongToAlbum.Text = "Add Song \r\nTo Album";
-            btnAddSongToAlbum.UseVisualStyleBackColor = false;
-            btnAddSongToAlbum.Click += btnAddSongToAlbum_Click;
-            // 
             // DashBoard_Form
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -1210,6 +1196,5 @@
         private PictureBox pbArtists2;
         private Button btnArtists;
         private PictureBox pbArtists1;
-        private Button btnAddSongToAlbum;
     }
 }
