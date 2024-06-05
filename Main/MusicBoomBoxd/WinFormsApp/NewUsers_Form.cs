@@ -57,6 +57,7 @@ namespace WinFormsApp
             }
         }
 
+
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;
@@ -274,14 +275,14 @@ namespace WinFormsApp
 
             if (ValidateInput())
             {
-                // Gets the selected songs from the checkedListBox
+                // Gets the selected albums from the checkedListBox
                 List<int> selectedAlbumIDs = new List<int>();
                 foreach (var item in cklbAlbumUser.CheckedItems)
                 {
                     selectedAlbumIDs.Add(((Album)item).AlbumID);
                 }
 
-                // Calls the method in AlbumManager to save songs in albums
+                // Calls the method in AlbumManager to save albums in users
                 Result resultAddAlbum = userManager.SaveAlbumInUsers(selectedUser.UserID, selectedAlbumIDs);
 
                 if (resultAddAlbum.Success)
@@ -303,14 +304,14 @@ namespace WinFormsApp
 
             if (ValidateInput())
             {
-                // Gets the selected songs from the checkedListBox
+                // Gets the selected albums from the checkedListBox
                 List<int> selectedAlbumIDs = new List<int>();
                 foreach (var item in cklbAlbumUser.CheckedItems)
                 {
                     selectedAlbumIDs.Add(((Album)item).AlbumID);
                 }
 
-                // Calls the method in AlbumManager to save songs in albums
+                // Calls the method in AlbumManager to save albums in users
                 Result resultRemoveAlbum = userManager.RemoveAlbumFromUser(selectedUser.UserID, selectedAlbumIDs);
 
                 if (resultRemoveAlbum.Success)
@@ -324,6 +325,7 @@ namespace WinFormsApp
                 }
             }
         }
+
         private void tbAlbumsSearchUser_TextChanged(object sender, EventArgs e)
         {
             FilterAlbums(tbAlbumsSearchUser.Text);
@@ -338,7 +340,7 @@ namespace WinFormsApp
             cklbAlbumUser.DisplayMember = "Title";
             cklbAlbumUser.ValueMember = "AlbumID";
 
-            // Reapply the checked state for previously selected songs
+            // Reapply the checked state for previously selected albums
             for (int i = 0; i < cklbAlbumUser.Items.Count; i++)
             {
                 Album album = (Album)cklbAlbumUser.Items[i];
@@ -348,7 +350,8 @@ namespace WinFormsApp
                 }
             }
         }
-        #endregion 
+        #endregion
+
         private void BtnAddUser_Click(object sender, EventArgs e)
         {
             if (ValidateInput())
