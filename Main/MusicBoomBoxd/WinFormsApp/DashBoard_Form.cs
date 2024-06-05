@@ -160,13 +160,13 @@ namespace WinFormsApp
             dgvUsers.Columns["ProfilePictureName"].DataPropertyName = "ProfilePictureName";
 
             // Bind the list of Users from UserManager to the DataGridView
-            dgvUsers.DataSource = userManager.GetArray();
+            PopulateUsers();
         }
 
         private void PopulateUsers()
         {
             //This will populate the form with exisiting users
-            dgvUsers.DataSource = userManager.GetArray();
+            dgvUsers.DataSource = userManager.LoadUsersFromDataBase();
         }
 
         private void btnAddUser_Click(object sender, EventArgs e)
@@ -180,7 +180,7 @@ namespace WinFormsApp
                     userManager.LoadUsersFromDataBase();
 
                     // Update the DataGridView
-                    dgvUsers.DataSource = userManager.GetArray();
+                    PopulateUsers();
 
                 }
             }
@@ -202,7 +202,7 @@ namespace WinFormsApp
                         if (updatedUser != null)
                         {
                             userManager.Update(updatedUser, selectedUser);
-                            dgvUsers.DataSource = userManager.GetArray();
+                            PopulateUsers();
                         }
                     }
                 }
@@ -230,7 +230,7 @@ namespace WinFormsApp
                         if (updatedUser != null)
                         {
                             userManager.Update(updatedUser, selectedUser);
-                            dgvUsers.DataSource = userManager.GetArray();
+                            PopulateUsers();
                         }
                     }
                 }
@@ -257,7 +257,7 @@ namespace WinFormsApp
                     userManager.Remove(selectedUser);
 
                     // This updates the DataGridView
-                    dgvUsers.DataSource = userManager.GetArray();
+                    PopulateUsers();
                 }
 
             }
@@ -283,7 +283,7 @@ namespace WinFormsApp
             dgvArtists.Columns["ArtistPictureName"].DataPropertyName = "ArtistPictureName";
 
             // Bind the list of Users from UserManager to the DataGridView
-            dgvArtists.DataSource = artistManager.LoadArtistFromDB();
+            PopulateArtist();
         }
 
         private void PopulateArtist()
@@ -303,7 +303,7 @@ namespace WinFormsApp
                     artistManager.LoadArtistFromDB();
 
                     // Update the DataGridView
-                    dgvArtists.DataSource = artistManager.LoadArtistFromDB();
+                    PopulateArtist();
 
                 }
             }
@@ -325,7 +325,7 @@ namespace WinFormsApp
                         if (updatedArtist != null)
                         {
                             artistManager.Update(updatedArtist);
-                            dgvArtists.DataSource = artistManager.LoadArtistFromDB();
+                            PopulateArtist();
                         }
                     }
                 }
@@ -353,7 +353,7 @@ namespace WinFormsApp
                         if (updatedArtist != null)
                         {
                             artistManager.Update(updatedArtist);
-                            dgvArtists.DataSource = artistManager.LoadArtistFromDB();
+                            PopulateArtist();
                         }
                     }
                 }
@@ -380,7 +380,7 @@ namespace WinFormsApp
                     artistManager.Delete(selectedArtist);
 
                     // This updates the DataGridView
-                    dgvArtists.DataSource = artistManager.LoadArtistFromDB();
+                    PopulateArtist();
                 }
 
             }

@@ -8,6 +8,7 @@ namespace WinFormsApp
     {
         private readonly IUserRepository userRep;
         private readonly UserManager userManager;
+        private readonly ValidateUser valUser;
 
         private readonly IAlbumRepository albumRep;
         private readonly AlbumManager albumManager;
@@ -27,7 +28,7 @@ namespace WinFormsApp
             #region Users
             userRep = new UserRepository();
 
-            userManager = new UserManager(userRep);
+            userManager = new UserManager(userRep, valUser);
             userManager.LoadUsersFromDataBase();
             #endregion
 
