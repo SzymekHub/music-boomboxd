@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebApp.Pages.Models
+namespace WebApp.Pages
 {
     public class RegisterUser
     {

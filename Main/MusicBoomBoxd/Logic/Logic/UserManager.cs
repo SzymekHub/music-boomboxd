@@ -5,15 +5,13 @@ namespace Logic
 {
     public class UserManager
     {
-        public List<User> _users;
         private readonly IUserRepository _userRepository;
         private readonly ValidateUser _validateUsers;
 
-        public UserManager(IUserRepository iuserRep)
+        public UserManager(IUserRepository iuserRep, ValidateUser valUser)
         {
-            _users = new List<User>();
             _userRepository = iuserRep;
-            _validateUsers = new(iuserRep);
+            _validateUsers = valUser;
 
             // inject the repository and use userRepistory as an interface and inject it as well. Get rid of Load stuff.
         }
@@ -21,23 +19,22 @@ namespace Logic
         public User GetUserByUsernameFromDb(string username)
         {
             UserDTO userDTO = _userRepository.GetUserByUsername(username);
+            
             User user = ConvertToUser(userDTO);
 
             return user;
         }
 
-        public void LoadUsersFromDataBase()
+        public List<User> LoadUsersFromDataBase()
         {
+            List<User> users = new();
             List<UserDTO> userDTOs = _userRepository.GetRecentUser(1000);
-
-            _users.Clear();
 
             foreach (var userDTO in userDTOs)
             {
-                //This converts UserDTO to Users and adds to the users list
-                User user = ConvertToUser(userDTO);
-                _users.Add(user);
+                users.Add(ConvertToUser(userDTO));
             }
+            return users;
         }
 
         //For artists
@@ -142,26 +139,18 @@ namespace Logic
 
         public Result Add(User user)
         {
-            UserDTO userDTO = ConvertToUserDTO(user);
-
-            _users.Add(user);
+            UserDTO userDTO = ConvertToUserDTO(user); 
 
             Result resultUser = SendUserToTheDb(userDTO);
 
             return resultUser;
-
         }
 
-        public bool Remove(User user)
+        public Result Remove(User user)
         {
-            _userRepository.DeleteUser(ConvertToUserDTO(user));
+            Result resultRemoveUser = _userRepository.DeleteUser(ConvertToUserDTO(user));
 
-            return _users.Remove(user);
-        }
-
-        public User[] GetArray()
-        {
-            return _users.ToArray();
+            return resultRemoveUser;
         }
 
         // Method to update an existing user
@@ -182,21 +171,27 @@ namespace Logic
 
                 if (resultupdate.Success)
                 {
-                    LoadUsersFromDataBase();
-                    int index = _users.FindIndex(ur => ur == oldUser);
+                    List<User> users = LoadUsersFromDataBase();
+                    int index = users.FindIndex(ur => ur == oldUser);
 
                     if (index != -1)
                     {
-                        _users[index] = newUser;
+                        users[index] = newUser;
                     }
                 }
-                else
+                else if (!resultupdate.Success)
                 {
-                    Console.WriteLine("Something went wrong when updating the user");
+                    return new Result { Success = false, Message = "Something went wrong when updating the user" };
                 }
 
                 return resultupdate;
             }
+        }
+
+        public Result UpgradeToCritic(User user)
+        {
+            Result resultUpgrade = _userRepository.UpdateUserRoleToCritic(ConvertToUserDTO(user));
+            return resultUpgrade;
         }
 
         public Result SendUserToTheDb(UserDTO newUser)

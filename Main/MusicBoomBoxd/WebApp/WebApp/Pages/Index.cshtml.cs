@@ -1,9 +1,8 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
-using WebApp.Pages.Models;
 using Infrastructure;
 using Logic;
 
@@ -17,7 +16,7 @@ namespace WebApp.Pages
         {
             IUserRepository iuserRep = new UserRepository();
             ValidateUser validateUsers = new ValidateUser(iuserRep);
-            userManager = new UserManager(iuserRep);
+            userManager = new UserManager(iuserRep, validateUsers);
         }
 
         [BindProperty]
@@ -40,8 +39,9 @@ namespace WebApp.Pages
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, Username),
-                    new Claim(ClaimTypes.Email, user.Email.ToString()), // Use ClaimTypes.Email for email claim
-                    // Add other claims as needed
+                    new Claim(ClaimTypes.Email, user.Email.ToString()),
+                    new Claim(ClaimTypes.Role, user.UserType.ToString())
+                    
                 };
 
                 // Create authentication cookie
@@ -53,7 +53,7 @@ namespace WebApp.Pages
 
                 await HttpContext.SignInAsync(new ClaimsPrincipal(claimsIdentity), authProperties);
 
-                // Redirect to the profile page after successful login
+                // Redirect to the HomePage after successful login
                 return RedirectToPage("/HomePage");
             }
 

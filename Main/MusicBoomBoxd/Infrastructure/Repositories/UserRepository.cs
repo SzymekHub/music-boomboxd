@@ -29,7 +29,7 @@ namespace Infrastructure
                                     VALUES (@Username, @Password, @Email, @UserType, @Birthday, @FavGenre, @ProfilePictureName, @ProfilePictureData, @ProfilePictureContentType)
                                     SELECT SCOPE_IDENTITY()";
                 }
-                
+
                 cmd.Parameters.AddWithValue("@Username", userDTO.Username);
 
                 cmd.Parameters.AddWithValue("@Password", userDTO.Password);
@@ -368,7 +368,7 @@ namespace Infrastructure
                 }
             }
             return null;
-        } 
+        }
 
         public Result UpdateUser(UserDTO newUserDTO, UserDTO oldUserDTO)
         {
@@ -426,6 +426,47 @@ namespace Infrastructure
                     }
 
                     return new Result { Success = false, Message = "Failed to retrieve user ID." };
+                }
+                catch (SqlException ex)
+                {
+                    return new Result { Success = false, Message = $"SQL Exception: {ex.Message}" };
+                }
+                catch (Exception ex)
+                {
+                    return new Result { Success = false, Message = $"Exception: {ex.Message}" };
+                }
+            }
+        }
+
+        public Result UpdateUserRoleToCritic(UserDTO userDTO)
+        {
+            int premiumCritic = 50;
+
+            using (SqlConnection connection = GetSqlConnection())
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = connection;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"UPDATE [User] SET UserType = 'Critic'
+                            WHERE Username = @Username AND Email = @Email";
+
+                cmd.Parameters.AddWithValue("@Username", userDTO.Username);
+                cmd.Parameters.AddWithValue("@Email", userDTO.Email);
+
+                try
+                {
+                    connection.Open();
+                    var result = cmd.ExecuteNonQuery();
+
+                    if (result == 1)
+                    {
+                        cmd.CommandText = $"UPDATE Profile SET User_Balance = User_Balance - {premiumCritic} WHERE UserID = (SELECT UserID FROM [User] WHERE Username = @Username)";
+                        cmd.ExecuteNonQuery();
+
+                        return new Result { Success = true, Message = "User role updated to regular and balance updated successfully." };
+                    }
+
+                    return new Result { Success = true, Message = "User role updated to Critic." };
                 }
                 catch (SqlException ex)
                 {

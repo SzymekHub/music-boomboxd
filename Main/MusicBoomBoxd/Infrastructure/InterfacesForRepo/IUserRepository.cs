@@ -30,6 +30,8 @@
 
         Result UpdateUser(UserDTO newUserDTO, UserDTO oldUserDTO);
 
+        Result UpdateUserRoleToCritic(UserDTO userDTO);
+
         Result DeleteUser(UserDTO userDTO);
 
     }

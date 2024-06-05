@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Logic;
 using Infrastructure;
-using WebApp.Pages.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace WebApp.Pages
