@@ -1,12 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
-using System;
 using System.ComponentModel.DataAnnotations;
-using System.IO;
 
 
 namespace WebApp.Pages
@@ -21,7 +16,7 @@ namespace WebApp.Pages
         public InputModel Input { get; set; }
 
         public class InputModel
-        { 
+        {
             [Required(ErrorMessage = "Title is required.")]
             public string Title { get; set; }
 
@@ -76,3 +71,4 @@ namespace WebApp.Pages
     }
 
 }
+

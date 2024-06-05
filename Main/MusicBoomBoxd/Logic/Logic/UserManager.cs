@@ -1,5 +1,4 @@
 ﻿using Infrastructure;
-using Infrastructure.DTOs;
 
 namespace Logic
 {
@@ -15,11 +14,11 @@ namespace Logic
 
             // inject the repository and use userRepistory as an interface and inject it as well. Get rid of Load stuff.
         }
-        
+
         public User GetUserByUsernameFromDb(string username)
         {
             UserDTO userDTO = _userRepository.GetUserByUsername(username);
-            
+
             User user = ConvertToUser(userDTO);
 
             return user;
@@ -80,12 +79,12 @@ namespace Logic
                 Result resultSongInAlbum = _userRepository.AddSongToUser(userID, songID);
                 if (!resultSongInAlbum.Success)
                 {
-                    return new Result { Success = false, Message = "This Song is already on this users list"};
+                    return new Result { Success = false, Message = "This Song is already on this users list" };
                 }
             }
 
             // If all songs are successfully added, return a success message
-            return new Result { Success = true, Message = "Successfully added the Song(s) to this user."};
+            return new Result { Success = true, Message = "Successfully added the Song(s) to this user." };
         }
 
         public Result RemoveSongFromUser(int userID, List<int> selectedSongIDs)
@@ -95,11 +94,11 @@ namespace Logic
                 Result resultRemoveSongfromUser = _userRepository.RemoveSongFromUser(userID, songID);
                 if (!resultRemoveSongfromUser.Success)
                 {
-                    return new Result { Success = false, Message = "This Song is not on this users account yet"};
+                    return new Result { Success = false, Message = "This Song is not on this users account yet" };
                 }
             }
 
-            return new Result { Success = true,  Message = "Successfully removed the Song(s) from this user." };
+            return new Result { Success = true, Message = "Successfully removed the Song(s) from this user." };
         }
         #endregion
 
@@ -112,12 +111,12 @@ namespace Logic
                 Result resultAlbumInUser = _userRepository.AddAlbumToUser(userID, albumID);
                 if (!resultAlbumInUser.Success)
                 {
-                    return new Result { Success = false, Message = "This Album is already on this users list"};
+                    return new Result { Success = false, Message = "This Album is already on this users list" };
                 }
             }
 
             // If all songs are successfully added, return a success message
-            return new Result { Success = true, Message = "Successfully added the Album(s) to this user."};
+            return new Result { Success = true, Message = "Successfully added the Album(s) to this user." };
         }
 
         public Result RemoveAlbumFromUser(int userID, List<int> selectedAlbumIDs)
@@ -127,23 +126,32 @@ namespace Logic
                 Result resultRemoveAlbumfromUser = _userRepository.RemoveAlbumFromUser(userID, albumID);
                 if (!resultRemoveAlbumfromUser.Success)
                 {
-                    return new Result { Success = false, Message = "This Album is not on this users account yet"};
+                    return new Result { Success = false, Message = "This Album is not on this users account yet" };
                 }
             }
 
             // If all songs are successfully deleted, return a success message
-            return new Result { Success = true,  Message = "Successfully removed the Album(s) from this user."};
+            return new Result { Success = true, Message = "Successfully removed the Album(s) from this user." };
         }
 
         #endregion 
 
         public Result Add(User user)
         {
-            UserDTO userDTO = ConvertToUserDTO(user); 
+            UserDTO userDTO = ConvertToUserDTO(user);
 
             Result resultUser = SendUserToTheDb(userDTO);
 
             return resultUser;
+        }
+
+        public Result AddWEB(User user)
+        {
+            UserDTO userDTO = ConvertToUserDTO(user);
+
+            Result resultUserWeb = SendUserToTheDbWEB(userDTO);
+
+            return resultUserWeb;
         }
 
         public Result Remove(User user)

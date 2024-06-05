@@ -1,40 +1,46 @@
 ﻿@page
-@using Infrastructure
-@model WebApp.Pages.RegisterModel
+@model RegisterModel
 @{
     Layout = "_LayoutFormPage";
     ViewData["Forms"] = "Register";
 }
 
-<div class="register">
-<h2 class="h2"> Welcome new User!</h2>
-<div class="centered-container">    
-        <form method="post" enctype="multipart/form-data">
+<div class="container">
+    <h2 class="h2">Welcome new User!</h2>
+    <div class="centered-container">
+        <form method="post" class="form" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="text-danger"></div>
 
             <div class="form-group">
                 <label asp-for="ProfilePicture" class="form-group"></label>
-                <input asp-for="ProfilePicture" class="form-control" />
-                <span asp-validation-for="ProfilePicture"></span>
+                <input type="file" asp-for="ProfilePicture" class="form-control" />
+                <span asp-validation-for="ProfilePicture" class="text-danger"></span>
             </div>
+
+            <input type="hidden" asp-for="RegiUser.ProfilePictureName" />
+            <input type="hidden" asp-for="RegiUser.ProfilePictureContentType" />
+
             <div class="form-group">
                 <label for="user" class="label" asp-for="RegiUser.Name">Username</label>
-                <span asp-validation-for="RegiUser.Name" style="color:red"></span>
-                <input type="text" class="input" asp-for="RegiUser.Name">
+                <span asp-validation-for="RegiUser.Name" class="text-danger"></span>
+                <input id="user" type="text" class="input" asp-for="RegiUser.Name" />
             </div>
+
             <div class="form-group">
                 <label for="pass" class="label" asp-for="RegiUser.Password">Password</label>
-                <span asp-validation-for="RegiUser.Password" style="color:red"></span>
-                <input  type="password" class="input" asp-for="RegiUser.Password">
+                <span asp-validation-for="RegiUser.Password" class="text-danger"></span>
+                <input id="pass" type="password" class="input" asp-for="RegiUser.Password" />
             </div>
+
             <div class="form-group">
                 <label for="pass" class="label" asp-for="RegiUser.Email">Email</label>
-                <span asp-validation-for="RegiUser.Email" style="color:red"></span>
-                <input type="text" class="input" asp-for="RegiUser.Email">
+                <span asp-validation-for="RegiUser.Email" class="text-danger"></span>
+                <input id="email" type="text" class="input" asp-for="RegiUser.Email" />
             </div>
 
             <div class="form-group">
                 <label for="userType" class="label" asp-for="RegiUser.UserType">User Type</label>
-                <select class="input" asp-for="RegiUser.UserType">
+                <select id="userType" class="input" asp-for="RegiUser.UserType">
                     <option value="Regular">Regular</option>
                     <option value="Critic">Critic</option>
                     <option value="Musician">Musician</option>
@@ -43,7 +49,7 @@
 
             <div class="form-group">
                 <label for="birthday" class="label" asp-for="RegiUser.Birthday">Birthday</label>
-                <input  type="date" class="input" asp-for="RegiUser.Birthday">
+                <input id="birthday" type="date" class="input" asp-for="RegiUser.Birthday" />
             </div>
 
             <div class="form-group">
@@ -68,10 +74,13 @@
                 <button type="submit" class="btn btn-primary">Register</button>
             </div>
         </form>
-    <a class="login" asp-area="" asp-page="/Index">Already a Member?</a>
+        <div class="foot-lnk">
+            <a class="login" asp-area="" asp-page="/Index">Already a Member?</a>
+        </div>
+    </div>
 </div>
 
 @section Scripts
 {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <partial name="_ValidationScriptsPartial" />
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApp.Pages
 {
@@ -33,5 +34,24 @@ namespace WebApp.Pages
 
         [Required(ErrorMessage = "Profile Picture Content Type is required")]
         public string ProfilePictureContentType { get; set; }
+
+        public RegisterUser()
+        {
+
+        }
+
+        public RegisterUser(string name, string email, string password, string userType, DateTime birthday, string favGenre, string profilePictureName, byte[] profilePictureData, string profilePictureContentType)
+        {
+            Name = name;
+            Email = email;
+            Password = password;
+            UserType = userType;
+            Birthday = birthday;
+            FavGenre = favGenre;
+            ProfilePictureName = profilePictureName;
+            ProfilePictureData = profilePictureData;
+            ProfilePictureContentType = profilePictureContentType;
+        }
     }
 }
+

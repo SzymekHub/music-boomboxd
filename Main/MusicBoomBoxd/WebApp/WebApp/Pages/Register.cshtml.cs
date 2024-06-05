@@ -1,8 +1,12 @@
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Logic;
 using Infrastructure;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace WebApp.Pages
 {
@@ -10,7 +14,6 @@ namespace WebApp.Pages
     {
         public UserManager _userManager { get; }
         private IWebHostEnvironment _environment;
-
 
         // Binds the User object
         [BindProperty]
@@ -41,28 +44,36 @@ namespace WebApp.Pages
             {
                 try
                 {
-                    string ProfilePictureName = ProfilePicture.FileName;
-                    string filePath = Path.Combine(_environment.WebRootPath, "img", ProfilePicture.FileName);
-                    string ProfilePictureContentType = ProfilePicture.ContentType;
-                    using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+                    string ProfilePictureNames = ProfilePicture.FileName;
+                    string ProfilePictureContentTypes = ProfilePicture.ContentType;
+                    using (MemoryStream ms = new MemoryStream())
                     {
-                        ProfilePicture.CopyTo(fileStream);
+                        ProfilePicture.CopyTo(ms);
                     }
                 }
                 catch (Exception ex)
                 {
-
+                    ModelState.AddModelError("", $"Something went wrong!" + ex.Message);
                 }
-                
+
             }
             //saves user to the Database
-            UserDTO newUser = new UserDTO(RegiUser.Name, RegiUser.Password, RegiUser.Email, RegiUser.UserType, RegiUser.Birthday, RegiUser.FavGenre, RegiUser.ProfilePictureName, RegiUser.ProfilePictureData, RegiUser.ProfilePictureContentType);
+            User newUser = new User(RegiUser.Name,
+                    RegiUser.Password,
+                    RegiUser.Email,
+                    (userType)Enum.Parse(typeof(userType), RegiUser.UserType),
+                    RegiUser.Birthday,
+                    (genreType)Enum.Parse(typeof(genreType), RegiUser.FavGenre),
+                    RegiUser.ProfilePictureName,
+                    RegiUser.ProfilePictureData,
+                    RegiUser.ProfilePictureContentType
+                    );
 
             // validate if user already exists.It could go wrong
             // Change the naming for more functionaity 
 
-            var result = _userManager.SendUserToTheDbWEB(newUser);
-            
+            var result = _userManager.AddWEB(newUser);
+
             if (result.Success)
             {
                 return RedirectToPage("/Login");
