@@ -93,12 +93,21 @@ namespace WinFormsApp
                 }
             }
         }
+        private bool CheckLimitExceeded(List<int> selectedIDs, int limit, string itemType)
+        {
+            if (selectedIDs.Count > limit)
+            {
+                tsslblNewUserForm.Text = $"You can only select up to {limit} {itemType}.";
+                return true;
+            }
+            return false;
+        }
 
         //Adding an artist
         #region Artist
         private void btnAddArtistUser_Click(object sender, EventArgs e)
         {
-            //Get the selected User
+            // Get the selected User
             User selectedUser = GetUpdatedUser();
 
             if (ValidateInput())
@@ -110,12 +119,18 @@ namespace WinFormsApp
                     selectedArtistIDs.Add(((Artist)item).ArtistID);
                 }
 
+                // Check if limit exceeded
+                if (CheckLimitExceeded(selectedArtistIDs, 5, "artists"))
+                {
+                    return;
+                }
+
                 // Calls the method in AlbumManager to save songs in albums
                 Result resultAddArtist = userManager.SaveArtistInUsers(selectedUser.UserID, selectedArtistIDs);
 
                 if (resultAddArtist.Success)
                 {
-                    DialogResult = DialogResult.OK;
+                    //DialogResult = DialogResult.OK;
                     tsslblNewUserForm.Text = resultAddArtist.Message;
                 }
                 else
@@ -124,7 +139,6 @@ namespace WinFormsApp
                 }
             }
         }
-
 
         private void btnRemoveArtistUser_Click(object sender, EventArgs e)
         {
@@ -145,7 +159,7 @@ namespace WinFormsApp
 
                 if (resultAddArtist.Success)
                 {
-                    DialogResult = DialogResult.OK;
+                    //DialogResult = DialogResult.OK;
                     tsslblNewUserForm.Text = resultAddArtist.Message;
                 }
                 else
@@ -184,7 +198,7 @@ namespace WinFormsApp
         #region Song
         private void btnAddSongsUser_Click(object sender, EventArgs e)
         {
-            //Get the selected User
+            // Get the selected User
             User selectedUser = GetUpdatedUser();
 
             if (ValidateInput())
@@ -196,12 +210,18 @@ namespace WinFormsApp
                     selectedSongIDs.Add(((Song)item).SongID);
                 }
 
+                // Check if limit exceeded
+                if (CheckLimitExceeded(selectedSongIDs, 5, "songs"))
+                {
+                    return;
+                }
+
                 // Calls the method in AlbumManager to save songs in albums
                 Result resultAddSong = userManager.SaveSongsInUsers(selectedUser.UserID, selectedSongIDs);
 
                 if (resultAddSong.Success)
                 {
-                    DialogResult = DialogResult.OK;
+                    //DialogResult = DialogResult.OK;
                     tsslblNewUserForm.Text = resultAddSong.Message;
                 }
                 else
@@ -210,6 +230,7 @@ namespace WinFormsApp
                 }
             }
         }
+
 
         private void btnRemoveSongUser_Click(object sender, EventArgs e)
         {
@@ -230,7 +251,7 @@ namespace WinFormsApp
 
                 if (resultRemoveSong.Success)
                 {
-                    DialogResult = DialogResult.OK;
+                    //DialogResult = DialogResult.OK;
                     tsslblNewUserForm.Text = resultRemoveSong.Message;
                 }
                 else
@@ -270,7 +291,7 @@ namespace WinFormsApp
 
         private void btnAddAlbumUser_Click(object sender, EventArgs e)
         {
-            //Get the selected User
+            // Get the selected User
             User selectedUser = GetUpdatedUser();
 
             if (ValidateInput())
@@ -282,12 +303,18 @@ namespace WinFormsApp
                     selectedAlbumIDs.Add(((Album)item).AlbumID);
                 }
 
+                // Check if limit exceeded
+                if (CheckLimitExceeded(selectedAlbumIDs, 5, "albums"))
+                {
+                    return;
+                }
+
                 // Calls the method in AlbumManager to save albums in users
                 Result resultAddAlbum = userManager.SaveAlbumInUsers(selectedUser.UserID, selectedAlbumIDs);
 
                 if (resultAddAlbum.Success)
                 {
-                    DialogResult = DialogResult.OK;
+                    //DialogResult = DialogResult.OK;
                     tsslblNewUserForm.Text = resultAddAlbum.Message;
                 }
                 else
@@ -296,6 +323,7 @@ namespace WinFormsApp
                 }
             }
         }
+
 
         private void btnRemoveAlbumUser_Click(object sender, EventArgs e)
         {
@@ -316,7 +344,7 @@ namespace WinFormsApp
 
                 if (resultRemoveAlbum.Success)
                 {
-                    DialogResult = DialogResult.OK;
+                    //DialogResult = DialogResult.OK;
                     tsslblNewUserForm.Text = resultRemoveAlbum.Message;
                 }
                 else

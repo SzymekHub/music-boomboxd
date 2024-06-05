@@ -44,44 +44,33 @@ namespace Logic
         #region Artists
         public Result SaveArtistInUsers(int userID, List<int> selectedArtistIDs)
         {
-            Result result = new Result();
-
             foreach (int artistID in selectedArtistIDs)
             {
                 Result resultArtistInUsers = _userRepository.AddArtistToUser(userID, artistID);
+
                 if (!resultArtistInUsers.Success)
                 {
-                    result.Success = false;
-                    result.Message = "";
-                    return result;
+                    return new Result { Success = false, Message = "This Artist already belongs to this user" };
                 }
             }
 
             // If all artists are successfully added, return a success message
-            result.Success = true;
-            result.Message = "Successfully added the 5 artists to this user.";
-            return result;
+            return new Result { Success = true, Message = "Successfully added the Artist(s) to this user." };
         }
 
         public Result RemoveArtistFromUser(int userID, List<int> selectedArtistIDs)
         {
-            Result result = new Result();
-
             foreach (int artistID in selectedArtistIDs)
             {
                 Result resultRemoveArtistFromUsers = _userRepository.RemoveArtistFromUser(userID, artistID);
                 if (!resultRemoveArtistFromUsers.Success)
                 {
-                    result.Success = false;
-                    result.Message = "This Artist is not on this users account yet";
-                    return result;
+                    return new Result { Success = false, Message = "This Artist is not on this users account yet" };
                 }
             }
 
             // If all songs are successfully deleted, return a success message
-            result.Success = true;
-            result.Message = "Successfully removed the Artist from this user.";
-            return result;
+            return new Result { Success = true, Message = "Successfully removed the Artist(s) from this user." };
         }
         #endregion
 
@@ -89,44 +78,31 @@ namespace Logic
         #region Songs
         public Result SaveSongsInUsers(int userID, List<int> selectedSongIDs)
         {
-            Result result = new Result();
-
             foreach (int songID in selectedSongIDs)
             {
                 Result resultSongInAlbum = _userRepository.AddSongToUser(userID, songID);
                 if (!resultSongInAlbum.Success)
                 {
-                    result.Success = false;
-                    result.Message = "This Song is already on this users list";
-                    return result;
+                    return new Result { Success = false, Message = "This Song is already on this users list"};
                 }
             }
 
             // If all songs are successfully added, return a success message
-            result.Success = true;
-            result.Message = "Successfully added the 5 Songs to this user.";
-            return result;
+            return new Result { Success = true, Message = "Successfully added the Song(s) to this user."};
         }
 
         public Result RemoveSongFromUser(int userID, List<int> selectedSongIDs)
         {
-            Result result = new Result();
-
             foreach (int songID in selectedSongIDs)
             {
                 Result resultRemoveSongfromUser = _userRepository.RemoveSongFromUser(userID, songID);
                 if (!resultRemoveSongfromUser.Success)
                 {
-                    result.Success = false;
-                    result.Message = "This Song is not on this users account yet";
-                    return result;
+                    return new Result { Success = false, Message = "This Song is not on this users account yet"};
                 }
             }
 
-            // If all songs are successfully deleted, return a success message
-            result.Success = true;
-            result.Message = "Successfully removed the Song from this user.";
-            return result;
+            return new Result { Success = true,  Message = "Successfully removed the Song(s) from this user." };
         }
         #endregion
 
@@ -134,44 +110,32 @@ namespace Logic
         #region Albums
         public Result SaveAlbumInUsers(int userID, List<int> selectedAlbumIDs)
         {
-            Result result = new Result();
-
             foreach (int albumID in selectedAlbumIDs)
             {
                 Result resultAlbumInUser = _userRepository.AddAlbumToUser(userID, albumID);
                 if (!resultAlbumInUser.Success)
                 {
-                    result.Success = false;
-                    result.Message = "This Album is already on this users list";
-                    return result;
+                    return new Result { Success = false, Message = "This Album is already on this users list"};
                 }
             }
 
             // If all songs are successfully added, return a success message
-            result.Success = true;
-            result.Message = "Successfully added the 5 Albums to this user.";
-            return result;
+            return new Result { Success = true, Message = "Successfully added the Album(s) to this user."};
         }
 
         public Result RemoveAlbumFromUser(int userID, List<int> selectedAlbumIDs)
         {
-            Result result = new Result();
-
             foreach (int albumID in selectedAlbumIDs)
             {
                 Result resultRemoveAlbumfromUser = _userRepository.RemoveAlbumFromUser(userID, albumID);
                 if (!resultRemoveAlbumfromUser.Success)
                 {
-                    result.Success = false;
-                    result.Message = "This Album is not on this users account yet";
-                    return result;
+                    return new Result { Success = false, Message = "This Album is not on this users account yet"};
                 }
             }
 
             // If all songs are successfully deleted, return a success message
-            result.Success = true;
-            result.Message = "Successfully removed the Album from this user.";
-            return result;
+            return new Result { Success = true,  Message = "Successfully removed the Album(s) from this user."};
         }
 
         #endregion 
