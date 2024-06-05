@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic", "Logic\Logic\Logic.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{81B586F3-B6C0-4D34-92B4-F01F5D16E97C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestsMusicBoomBoxd", "UnitTestsMusicBoomBoxd\UnitTestsMusicBoomBoxd.csproj", "{3E12255A-9782-42F9-A561-6574B7A3DB5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTestsMusicBoomBoxd", "UnitTestsMusicBoomBoxd\UnitTestsMusicBoomBoxd.csproj", "{3E12255A-9782-42F9-A561-6574B7A3DB5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
