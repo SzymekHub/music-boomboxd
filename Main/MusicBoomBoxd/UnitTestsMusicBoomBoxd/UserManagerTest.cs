@@ -15,7 +15,7 @@ namespace UnitTestsMusicBoomBoxd
             var userRepository = new UserRepository(); // Assuming this is the correct usage
 
             // Provide both parameters required by the UserManager constructor
-            UserManager userManager = new UserManager(userRepository, mockUserRepository.Object);
+            UserManager userManager = new UserManager(mockUserRepository.Object);
 
             User user = new User("testuser", "password", "test@example.com", userType.Regular, DateTime.Now, genreType.Metal, "ProfilePicTest", new byte[] { 1, 1, 1, 1 }, "JPG");
 
