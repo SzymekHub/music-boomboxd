@@ -12,6 +12,7 @@
         List<AlbumDTO> GetAlbumsForUser(int userID);
 
         AlbumDTO GetAlbumByTitleAndArtist(string title, int artistId);
+        int GetAlbumIDByAlbumTitle(string albumTitle);
 
 		Result UpdateAlbum(AlbumDTO newAlbumDTO, AlbumDTO oldAlbumDTO);
 

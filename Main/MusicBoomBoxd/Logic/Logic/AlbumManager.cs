@@ -6,12 +6,14 @@ namespace Logic
     {
         public List<Album> _albums;
         private readonly IAlbumRepository _albumRepository;
+        private readonly IValidateAlbum _validateAlbum;
         private readonly Artist artist;
 
-        public AlbumManager(IAlbumRepository ialbumRep)
+        public AlbumManager(IAlbumRepository ialbumRep, IValidateAlbum ivalidAlbum)
         {
             _albums = new List<Album>();
             _albumRepository = ialbumRep;
+            _validateAlbum = ivalidAlbum;
         }
 
         public List<Album> LoadAlbumsFromDatabase()
@@ -87,7 +89,13 @@ namespace Logic
             return result;
         }
 
-        public Result Add(Album album)
+        public int GetAlbumIDByAlbumTitle(string albumTitle)
+        {
+            return _albumRepository.GetAlbumIDByAlbumTitle(albumTitle);
+        }
+
+
+		public Result Add(Album album)
         {
             AlbumDTO albumDTO = AlbumMapper.ToAlbumDTO(album);
 
@@ -97,8 +105,18 @@ namespace Logic
 
             return resultAlbum;
         }
+		public Result AddWEB(Album album)
+		{
+			AlbumDTO albumDTO = AlbumMapper.ToAlbumDTO(album);
 
-        public bool Remove(Album album)
+			_albums.Add(album);
+
+			Result resultAlbum = SendAlbumToTheDbWEB(albumDTO);
+
+			return resultAlbum;
+		}
+
+		public bool Remove(Album album)
         {
             _albumRepository.DeleteAlbum(AlbumMapper.ToAlbumDTO(album));
 
@@ -146,37 +164,50 @@ namespace Logic
         {
             return _albumRepository.InsertAlbum(newAlbum);
         }
+		public Result SendAlbumToTheDbWEB(AlbumDTO newAlbum)
+		{
+			var errors = _validateAlbum.ValidateAlbums(newAlbum.AlbumTitle, newAlbum.ArtistID);
+			if (errors.Any())
+			{
+				return new Result
+				{
+					Success = false,
+					Errors = errors
+				};
+			}
+			return _albumRepository.InsertAlbum(newAlbum);
+		}
 
-        //public Album ConvertToAlbum(AlbumDTO newAlbumDTO)
-        //{
-        //    genreType genre = (genreType)Enum.Parse(typeof(genreType), newAlbumDTO.Genre);
+		//public Album ConvertToAlbum(AlbumDTO newAlbumDTO)
+		//{
+		//    genreType genre = (genreType)Enum.Parse(typeof(genreType), newAlbumDTO.Genre);
 
-        //    // This converts AlbumDTO to Album
-        //    return new Album(
-        //        newAlbumDTO.AlbumID,
-        //        newAlbumDTO.AlbumTitle,
-        //        newAlbumDTO.Artist,
-        //        newAlbumDTO.ReleaseDate,
-        //        genre,
-        //        newAlbumDTO.AlbumCoverName,
-        //        newAlbumDTO.AlbumCoverData,
-        //        newAlbumDTO.AlbumCoverContentType
-        //    );
-        //}
+		//    // This converts AlbumDTO to Album
+		//    return new Album(
+		//        newAlbumDTO.AlbumID,
+		//        newAlbumDTO.AlbumTitle,
+		//        newAlbumDTO.Artist,
+		//        newAlbumDTO.ReleaseDate,
+		//        genre,
+		//        newAlbumDTO.AlbumCoverName,
+		//        newAlbumDTO.AlbumCoverData,
+		//        newAlbumDTO.AlbumCoverContentType
+		//    );
+		//}
 
-        //public AlbumDTO ConvertToAlbumDTO(Album album)
-        //{
-        //    // this converts Album to AlbumDTO
-        //    return new AlbumDTO(
-        //        album.AlbumID,
-        //        album.Title,
-        //        album.Artist,
-        //        album.Date,
-        //        album.Genre.ToString(),
-        //        album.AlbumCoverName,
-        //        album.AlbumCoverData,
-        //        album.AlbumCoverContentType
-        //    );
-        //}
-    }
+		//public AlbumDTO ConvertToAlbumDTO(Album album)
+		//{
+		//    // this converts Album to AlbumDTO
+		//    return new AlbumDTO(
+		//        album.AlbumID,
+		//        album.Title,
+		//        album.Artist,
+		//        album.Date,
+		//        album.Genre.ToString(),
+		//        album.AlbumCoverName,
+		//        album.AlbumCoverData,
+		//        album.AlbumCoverContentType
+		//    );
+		//}
+	}
 }

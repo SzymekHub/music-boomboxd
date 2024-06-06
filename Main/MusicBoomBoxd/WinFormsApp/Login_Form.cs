@@ -8,9 +8,10 @@ namespace WinFormsApp
     {
         private readonly IUserRepository userRep;
         private readonly UserManager userManager;
-        private readonly ValidateUser valUser;
+        private readonly IValidateUser valUser;
 
         private readonly IAlbumRepository albumRep;
+        private readonly IValidateAlbum valAlbum;
         private readonly AlbumManager albumManager;
 
         private readonly ISongRepository songRep;
@@ -44,7 +45,7 @@ namespace WinFormsApp
             #region Albums
             albumRep = new AlbumRepository();
 
-            albumManager = new AlbumManager(albumRep);
+            albumManager = new AlbumManager(albumRep,valAlbum);
             albumManager.LoadAlbumsFromDatabase();
             #endregion
 

@@ -14,6 +14,7 @@ builder.Services.AddSingleton<SongManager>();
 builder.Services.AddSingleton<IArtistRepository, ArtistRepository>();
 builder.Services.AddSingleton<ArtistManager>();
 builder.Services.AddSingleton<IValidateUser, ValidateUser>();
+builder.Services.AddSingleton<IValidateAlbum, ValidateAlbum>();
 builder.Services.AddSingleton<IAlbumRepository, AlbumRepository>();
 builder.Services.AddSingleton<AlbumManager>();
 builder.Services.AddRazorPages();

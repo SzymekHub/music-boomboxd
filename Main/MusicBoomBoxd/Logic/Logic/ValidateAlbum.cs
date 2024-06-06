@@ -3,7 +3,7 @@
 
 namespace Logic
 {
-	public class ValidateAlbum
+	public class ValidateAlbum : IValidateAlbum
 	{
 		private readonly IAlbumRepository _albumRepository;
 

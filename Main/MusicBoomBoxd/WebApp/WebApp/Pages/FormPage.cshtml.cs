@@ -120,13 +120,15 @@ namespace WebApp.Pages
 						InputAlbum.AlbumCoverContentType
 						);
 
-				var result = _albumManager.Add(newAlbum);
+				var result = _albumManager.AddWEB(newAlbum);
 
 				if (result.Success)
 				{
 					// Save selected songs to the album
 					var selectedSongIDs = SelectedSongIDs.Split(',').Select(int.Parse).ToList();
-					var resultAddSongs = _albumManager.SaveSongsInAlbums(newAlbum.AlbumID, selectedSongIDs);
+					int existingalbumID = _albumManager.GetAlbumIDByAlbumTitle(InputAlbum.Title);
+
+					var resultAddSongs = _albumManager.SaveSongsInAlbums(existingalbumID, selectedSongIDs);
 
 					if (resultAddSongs.Success)
 					{

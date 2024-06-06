@@ -235,7 +235,7 @@ namespace Infrastructure
 			{
 				cmd.Connection = conn;
 				cmd.CommandType = CommandType.Text;
-				cmd.CommandText = "SELECT AlbumID, Title, ArtistID, ReleaseDate, Genre " +
+				cmd.CommandText = "SELECT AlbumID, Title, ArtistID, Date, Genre " +
 								  "FROM [Album] WHERE Title = @Title AND ArtistID = @ArtistID";
 
 				cmd.Parameters.AddWithValue("@Title", title);
@@ -248,16 +248,40 @@ namespace Infrastructure
 					while (reader.Read())
 					{
 						int albumID = reader.GetInt32(0);
-						int artistID = reader.GetInt32(1);
-						string albumtitle = reader.GetString(2);
+						string albumtitle = reader.GetString(1);
+						int artistID = reader.GetInt32(2);
 						DateTime releaseDate = reader.GetDateTime(3);
-						string genre = reader.GetString(5);
+						string genre = reader.GetString(4);
 
 						return new AlbumDTO(albumID, artistID, albumtitle, releaseDate, genre);
 					}
 				}
 			}
 			return null;
+		}
+
+        public int GetAlbumIDByAlbumTitle(string albumTitle)
+        {
+            int albumID = 0;
+			using (SqlConnection conn = GetSqlConnection())
+			using (SqlCommand cmd = new SqlCommand())
+            {
+				cmd.Connection = conn;
+				cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT AlbumID FROM [Album] WHERE Title = @Title";
+
+				cmd.Parameters.AddWithValue("@Title", albumTitle);
+
+				conn.Open();
+
+                object result = cmd.ExecuteScalar();
+                if (result != null)
+                {
+                    albumID = Convert.ToInt32(result);
+                }
+			}
+
+            return albumID;
 		}
 
 		public Result UpdateAlbum(AlbumDTO newAlbumDTO, AlbumDTO oldAlbumDTO)
