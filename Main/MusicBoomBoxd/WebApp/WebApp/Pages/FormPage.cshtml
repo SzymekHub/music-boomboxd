@@ -8,21 +8,21 @@
 <div class="container">
 	<h2 class="h2">Add New Album!</h2>
 	<div class="centered-container">
-		<form method="post" class="form" enctype="multipart/form-data">
+		<form method="post" class="form" enctype="multipart/form-data" onsubmit="gatherSelectedSongs()">
 
 			<div class="form-group">
 				<label asp-for="AlbumCover" class="form-group">Album Cover:<sup>*</sup></label>
 				<input type="file" asp-for="AlbumCover" class="form-control">
 				<span asp-validation-for="AlbumCover" class="text-danger"></span>
 			</div>
-			
+
 			<input type="hidden" asp-for="InputAlbum.AlbumCoverName" />
 			<input type="hidden" asp-for="InputAlbum.AlbumCoverContentType" />
-			
+
 			<div class="form-group">
 				<label for="title" class="label" asp-for="InputAlbum.Title">Title:<sup>*</sup></label>
 				<span asp-validation-for="InputAlbum.Title" class="text-danger"></span>
-				<input id="title" type ="text" class="input" asp-for="InputAlbum.Title">
+				<input id="title" type="text" class="input" asp-for="InputAlbum.Title">
 			</div>
 
 			<div class="form-group">
@@ -61,32 +61,35 @@
 				<span asp-validation-for="InputAlbum.Genre" class="text-danger"></span>
 			</div>
 
-			<table class="song-table">
-				<thead>
-					<tr>
-						<th>SongTitle</th>
-						<th>Genre</th>
-						<th>Duration(Sec)</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-					@foreach (var song in Model.Songs)
-					{
-						<tr class="song-row">
-							<td>@song.Title</td>
-							<td>@song.Genre</td>
-							<td>@song.RunTime</td>
-							<td> 
-								<div class="CheckBox">
-									<input id="check" type="checkbox" class="check">
-									<label for="check"><span class="icon"></span> </label>
-								</div> 
-							</td>
+			<input type="hidden" asp-for="SelectedSongIDs" id="SelectedSongIDs" />
+			<div class="form-group">
+				<table class="song-table">
+					<thead>
+						<tr>
+							<th>SongTitle</th>
+							<th>Genre</th>
+							<th>Duration(Sec)</th>
+							<th></th>
 						</tr>
-					}
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						@foreach (var song in Model.Songs)
+						{
+							<tr class="song-row">
+								<td>@song.Title</td>
+								<td>@song.Genre</td>
+								<td>@song.RunTime</td>
+								<td>
+									<div class="CheckBox">
+										<input id="check-@song.SongID" type="checkbox" class="check" value="@song.SongID">
+										<label for="check-@song.SongID"><span class="icon"></span></label>
+									</div>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
 
 			<div class="button-container">
 				<button type="submit" class="btn btn-primary">Save</button>
@@ -95,3 +98,15 @@
 		</form>
 	</div>
 </div>
+
+@section Scripts {
+	<script>
+		function gatherSelectedSongs() {
+			var selectedSongs = [];
+			document.querySelectorAll('.check:checked').forEach(function (checkbox) {
+				selectedSongs.push(checkbox.value);
+			});
+			document.getElementById('SelectedSongIDs').value = selectedSongs.join(',');
+		}
+	</script>
+}

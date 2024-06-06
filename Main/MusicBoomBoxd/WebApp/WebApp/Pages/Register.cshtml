@@ -56,9 +56,9 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="RegiUser.FavGenre">Genre:<sup>*</sup></label>
+                <label asp-for="RegiUser.FavGenre">Favorite Genre:<sup>*</sup></label>
                 <select asp-for="RegiUser.FavGenre" class="form-control">
-                    <option value="">Select a Genre</option>
+                    <option value="">Select a Favorite Genre</option>
                     @foreach (var genre in Model.GenreOptions)
                     {
                         <option value="@genre.Value">@genre.Text</option>

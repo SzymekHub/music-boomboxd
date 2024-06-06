@@ -13,7 +13,9 @@ builder.Services.AddSingleton<ISongRepository, SongRepository>();
 builder.Services.AddSingleton<SongManager>();
 builder.Services.AddSingleton<IArtistRepository, ArtistRepository>();
 builder.Services.AddSingleton<ArtistManager>();
-builder.Services.AddSingleton<ValidateUser>();
+builder.Services.AddSingleton<IValidateUser, ValidateUser>();
+builder.Services.AddSingleton<IAlbumRepository, AlbumRepository>();
+builder.Services.AddSingleton<AlbumManager>();
 builder.Services.AddRazorPages();
 
 // Tells us how we want to use auth.
