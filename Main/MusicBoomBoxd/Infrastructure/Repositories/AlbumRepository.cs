@@ -228,7 +228,39 @@ namespace Infrastructure
             return albums;
         }
 
-        public Result UpdateAlbum(AlbumDTO newAlbumDTO, AlbumDTO oldAlbumDTO)
+		public AlbumDTO GetAlbumByTitleAndArtist(string title, int artistId)
+		{
+			using (SqlConnection conn = GetSqlConnection())
+			using (SqlCommand cmd = new SqlCommand())
+			{
+				cmd.Connection = conn;
+				cmd.CommandType = CommandType.Text;
+				cmd.CommandText = "SELECT AlbumID, Title, ArtistID, ReleaseDate, Genre " +
+								  "FROM [Album] WHERE Title = @Title AND ArtistID = @ArtistID";
+
+				cmd.Parameters.AddWithValue("@Title", title);
+				cmd.Parameters.AddWithValue("@ArtistID", artistId);
+
+				conn.Open();
+
+				using (SqlDataReader reader = cmd.ExecuteReader())
+				{
+					while (reader.Read())
+					{
+						int albumID = reader.GetInt32(0);
+						int artistID = reader.GetInt32(1);
+						string albumtitle = reader.GetString(2);
+						DateTime releaseDate = reader.GetDateTime(3);
+						string genre = reader.GetString(5);
+
+						return new AlbumDTO(albumID, artistID, albumtitle, releaseDate, genre);
+					}
+				}
+			}
+			return null;
+		}
+
+		public Result UpdateAlbum(AlbumDTO newAlbumDTO, AlbumDTO oldAlbumDTO)
         {
             using (SqlConnection conn = GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand())

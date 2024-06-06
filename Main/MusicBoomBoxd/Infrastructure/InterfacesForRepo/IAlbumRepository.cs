@@ -11,7 +11,9 @@
         Result RemoveSongFromAlbum(int albumID, int songID);
         List<AlbumDTO> GetAlbumsForUser(int userID);
 
-        Result UpdateAlbum(AlbumDTO newAlbumDTO, AlbumDTO oldAlbumDTO);
+        AlbumDTO GetAlbumByTitleAndArtist(string title, int artistId);
+
+		Result UpdateAlbum(AlbumDTO newAlbumDTO, AlbumDTO oldAlbumDTO);
 
         Result DeleteAlbum(AlbumDTO albumDTO);
     }

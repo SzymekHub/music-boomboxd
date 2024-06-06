@@ -24,5 +24,13 @@
             AlbumCoverData = albumCoverData;
             AlbumCoverContentType = albumCoverContentType;
         }
+        public AlbumDTO(int albumID, int artistID, string albumTitle, DateTime releaseDate, string genre)
+        {
+            AlbumID = albumID;
+            ArtistID = artistID;
+            AlbumTitle = albumTitle;
+            ReleaseDate = releaseDate;
+            Genre = genre;
+        }	
     }
 }

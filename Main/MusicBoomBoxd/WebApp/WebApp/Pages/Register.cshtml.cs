@@ -93,7 +93,6 @@ namespace WebApp.Pages
                 }
 
             }
-
             catch (Exception ex)
             {
                 ModelState.AddModelError("", $"Something went wrong!" + ex.Message);

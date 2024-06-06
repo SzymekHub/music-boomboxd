@@ -11,6 +11,8 @@ builder.Services.AddSingleton<IUserRepository, UserRepository>();
 builder.Services.AddSingleton<UserManager>();
 builder.Services.AddSingleton<ISongRepository, SongRepository>();
 builder.Services.AddSingleton<SongManager>();
+builder.Services.AddSingleton<IArtistRepository, ArtistRepository>();
+builder.Services.AddSingleton<ArtistManager>();
 builder.Services.AddSingleton<ValidateUser>();
 builder.Services.AddRazorPages();
 

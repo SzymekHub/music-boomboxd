@@ -11,7 +11,7 @@
         <form method="post" class="form" enctype="multipart/form-data">
 
             <div class="form-group">
-                <label asp-for="ProfilePicture" class="form-group"></label>
+                <label asp-for="ProfilePicture" class="form-group">ProfilePicture:<sup>*</sup></label>
                 <input type="file" asp-for="ProfilePicture" class="form-control" />
                 <span asp-validation-for="ProfilePicture" class="text-danger"></span>
             </div>
@@ -20,25 +20,25 @@
             <input type="hidden" asp-for="RegiUser.ProfilePictureContentType" />
 
             <div class="form-group">
-                <label for="user" class="label" asp-for="RegiUser.Name">Username</label>
+                <label for="user" class="label" asp-for="RegiUser.Name">Username:<sup>*</sup></label>
                 <span asp-validation-for="RegiUser.Name" class="text-danger"></span>
                 <input id="user" type="text" class="input" asp-for="RegiUser.Name" />
             </div>
 
             <div class="form-group">
-                <label for="pass" class="label" asp-for="RegiUser.Password">Password</label>
+                <label for="pass" class="label" asp-for="RegiUser.Password">Password:<sup>*</sup></label>
                 <span asp-validation-for="RegiUser.Password" class="text-danger"></span>
                 <input id="pass" type="password" class="input" asp-for="RegiUser.Password" />
             </div>
 
             <div class="form-group">
-                <label for="pass" class="label" asp-for="RegiUser.Email">Email</label>
+                <label for="pass" class="label" asp-for="RegiUser.Email">Emai:<sup>*</sup>l</label>
                 <span asp-validation-for="RegiUser.Email" class="text-danger"></span>
                 <input id="email" type="text" class="input" asp-for="RegiUser.Email" />
             </div>
 
             <div class="form-group">
-                <label for="userType" class="label" asp-for="RegiUser.UserType">User Type</label>
+                <label for="userType" class="label" asp-for="RegiUser.UserType">User Type:<sup>*</sup></label>
                 <select id="userType" class="input" asp-for="RegiUser.UserType">
                     <option value="Regular">Regular</option>
                     <option value="Critic">Critic</option>
@@ -47,13 +47,13 @@
             </div>
 
             <div class="form-group">
-                <label for="birthday" class="label" asp-for="RegiUser.Birthday">Birthday</label>
+                <label for="birthday" class="label" asp-for="RegiUser.Birthday">Birthday:<sup>*</sup></label>
                 <span asp-validation-for="RegiUser.Birthday" class="text-danger"></span>
                 <input id="birthday" type="date" class="input" asp-for="RegiUser.Birthday" />
             </div>
 
             <div class="form-group">
-                <label for="genre" class="label" asp-for="RegiUser.FavGenre">Favorite Genre</label>
+                <label for="genre" class="label" asp-for="RegiUser.FavGenre">Favorite Genre:<sup>*</sup></label>
                 <select class="input" asp-for="RegiUser.FavGenre">
                     <option value="Rock">Rock</option>
                     <option value="Reggae">Reggae</option>
