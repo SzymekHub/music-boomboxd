@@ -9,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddSingleton<IUserRepository, UserRepository>();
 builder.Services.AddSingleton<UserManager>();
+builder.Services.AddSingleton<ISongRepository, SongRepository>();
+builder.Services.AddSingleton<SongManager>();
 builder.Services.AddSingleton<ValidateUser>();
 builder.Services.AddRazorPages();
 

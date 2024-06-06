@@ -405,6 +405,7 @@ namespace Infrastructure
 
                 cmd.Parameters.AddWithValue("@ProfilePictureContentType", newUserDTO.ProfilePictureContentType);
 
+                #region OLD
                 //// Parameters for old Song to find it in the database
                 //cmd.Parameters.AddWithValue("@OldUsername", oldUserDTO.Username);
                 //cmd.Parameters.AddWithValue("@OldPassword", oldUserDTO.Password);
@@ -415,6 +416,7 @@ namespace Infrastructure
                 //cmd.Parameters.AddWithValue("@OldProfilePictureName", oldUserDTO.ProfilePictureName);
                 //cmd.Parameters.AddWithValue("@OldProfilePictureData", oldUserDTO.ProfilePictureData.ToArray());
                 //cmd.Parameters.AddWithValue("@OldProfilePictureContentType", oldUserDTO.ProfilePictureContentType);
+                #endregion
 
                 try
                 {

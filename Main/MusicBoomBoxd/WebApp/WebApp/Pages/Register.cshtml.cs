@@ -2,11 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Logic;
-using Infrastructure;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Hosting;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace WebApp.Pages
 {

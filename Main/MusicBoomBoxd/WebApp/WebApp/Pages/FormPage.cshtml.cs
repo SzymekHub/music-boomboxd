@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Infrastructure;
+using Logic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 
 
 namespace WebApp.Pages
@@ -9,8 +12,11 @@ namespace WebApp.Pages
     [Authorize]
     public class FormPageModel : PageModel
     {
-        private readonly ILogger<FormPageModel> _logger;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly SongManager _songManager;
+
+        public List<SongModel> Songs { get; private set; }
+        public string Username { get; set; }
 
         [BindProperty]
         public InputModel Input { get; set; }
@@ -35,14 +41,28 @@ namespace WebApp.Pages
             public IFormFile AlbumCover { get; set; }
         }
 
-        public FormPageModel(ILogger<FormPageModel> logger, IWebHostEnvironment webHostEnvironment)
+        public FormPageModel(SongManager songManager, IWebHostEnvironment webHostEnvironment)
         {
-            _logger = logger;
             _webHostEnvironment = webHostEnvironment;
+            _songManager = songManager;
+        }
+
+        private void LoadSongs()
+        {
+            var userClaim = User.Claims;
+            Username = userClaim.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+            List<Song> songs = _songManager.LoadSongsFromDataBase();
+            Songs = new List<SongModel>();
+
+            foreach (var song in songs)
+            {
+                Songs.Add(new SongModel(song.SongID, song.Title, song.ArtistID, song.Date, song.RunTime, song.Genre));
+            }
         }
 
         public void OnGet()
         {
+            LoadSongs();
         }
 
         public IActionResult OnPost()
