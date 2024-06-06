@@ -1,51 +1,65 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>@ViewData["Title"]</title>
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
 </head>
 <body>
-    <div class="container">
-            <div class="nav"> 
-                <ul class="left-links">
-                    <li><a href="#">Search</a></li>
-                    <li><a href="#">Chat</a></li>
-                </ul>
-                <div class="logo-container">
-                    <a asp-page="/HomePage">
-                        <img src='Images/LogoBlue.png' alt="Logo" class="logo">
-                    </a>
-                </div>
-                <ul class="right-links">
-                <li><a asp-page="/Index">Profile</a></li>
-                </ul>
-            </div>
-           
-            <section id="content_container">
-            @RenderBody()
-            </section>
-           
-            <div class="footer">
-                <ul class="left-links-footer">
-                    <li><a asp-page="/FormPage">Form to add songs</a></li>
-                </ul>
-                <div class="Thank-You-Container">
-                    <p>Thank you for checking out my website!</p>
-                &copy; 2024 - ZooBaazar - <a asp-area="" asp-page="/Privacy">Privacy</a>
-                </div>
-                <ul class="right-links-footer">
-                    <li><a href="#">Report a bug</a></li>
-                </ul>
-            </div>
-    </div>
+	<div class="container">
+		<div class="nav">
+			@if (!User.Identity.IsAuthenticated)
+			{
+				<div class="logo-container">
+					<a asp-page="/HomePage">
+						<img src='Images/LogoBlue.png' alt="Logo" class="logo">
+					</a>
+				</div>
+				<ul class="right-links">
+					<li><a asp-area="" asp-page="/Index">Login</a></li>
+				</ul>
+			}
+			else if (User.Identity.IsAuthenticated)
+			{
+				<ul class="left-links">
+					<li><a href="#">Search</a></li>
+				</ul>
+				<div class="logo-container">
+					<a asp-page="/HomePage">
+						<img src='Images/LogoBlue.png' alt="Logo" class="logo">
+					</a>
+				</div>
+				<ul class="right-links">
+					<li><a asp-page="#">Profile</a></li>
+					<li><a asp-area="" asp-page="/Logout">Logout</a></li>
+				</ul>
+			}
+		</div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+		<section id="content_container">
+			@RenderBody()
+		</section>
 
-    @await RenderSectionAsync("Scripts", required: false)
+		<div class="footer">
+			<ul class="left-links-footer">
+				<li><a asp-page="/FormPage">Form to add songs</a></li>
+			</ul>
+			<div class="Thank-You-Container">
+				<p>Thank you for checking out my website!</p>
+				&copy; 2024 - ZooBaazar - <a asp-area="" asp-page="/Privacy">Privacy</a>
+			</div>
+			<ul class="right-links-footer">
+				<li><a href="#">Report a bug</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+
+	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

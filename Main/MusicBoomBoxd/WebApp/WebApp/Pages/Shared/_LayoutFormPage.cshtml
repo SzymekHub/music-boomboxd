@@ -9,10 +9,22 @@
 </head>
 <body>
     <div class="container">
-            <div class="nav"> 
+        <div class="nav">
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <div class="logo-container">
+                    <a asp-page="/HomePage">
+                        <img src='Images/LogoBlue.png' alt="Logo" class="logo">
+                    </a>
+                </div>
+                <ul class="right-links">
+                    <li><a asp-area="" asp-page="/Index">Login</a></li>
+                </ul>
+            }
+            else if (User.Identity.IsAuthenticated)
+            {
                 <ul class="left-links">
                     <li><a href="#">Search</a></li>
-                    <li><a href="#">Chat</a></li>
                 </ul>
                 <div class="logo-container">
                     <a asp-page="/HomePage">
@@ -20,9 +32,11 @@
                     </a>
                 </div>
                 <ul class="right-links">
-                    <li><a asp-page="/Index">Profile</a></li>
+                    <li><a asp-page="#">Profile</a></li>
+                    <li><a asp-area="" asp-page="/Logout">Logout</a></li>
                 </ul>
-            </div>
+            }
+        </div>
            
             <section id="content_container">
                 @RenderBody()

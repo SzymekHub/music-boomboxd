@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
-using System.IO;
+using System.Security.Claims;
 
 
 
@@ -21,9 +21,7 @@ namespace WebApp.Pages
 		public List<SongModel> Songs { get; private set; }
 		public List<Artist> Artists { get; private set; }
         public List<SelectListItem> GenreOptions { get; set; }
-
-		//if i had songs for particular album i would use this:
-		//public string Username { get; set; }
+		public string Username { get; set; }
 
 		[BindProperty]
 		public InputFormAlbumModel InputAlbum { get; set; }
@@ -42,9 +40,8 @@ namespace WebApp.Pages
 
 		private void LoadSongs()
 		{
-			//if i had songs for particular album i would use this:
-			//var userClaim = User.Claims;
-			//Username = userClaim.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+			var userClaim = User.Claims;
+			Username = userClaim.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
 			List<Song> songs = _songManager.LoadSongsFromDataBase();
 			Songs = new List<SongModel>();
 

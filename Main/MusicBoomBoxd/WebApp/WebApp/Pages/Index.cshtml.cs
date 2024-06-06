@@ -30,6 +30,15 @@ namespace WebApp.Pages
 
         // i want ui to handle rules. And logic to validate. Introduce a class manager that validates user  
 
+        public IActionResult OnGet()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToPage("/HomePage");
+            }
+            return Page();
+        }
+
         public async  Task<IActionResult> OnPostAsync()
         {
             User user = userManager.GetUserByUsernameFromDb(Username);
