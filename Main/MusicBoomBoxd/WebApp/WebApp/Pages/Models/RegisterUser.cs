@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Logic;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApp.Pages
 {
@@ -17,14 +18,14 @@ namespace WebApp.Pages
         public string Password { get; set; }
 
         [Required(ErrorMessage = "UserType is required")]
-        public string UserType { get; set; }
+        public userType UserType { get; set; }
 
         [Required(ErrorMessage = "Birthday is required")]
         [PastDate(ErrorMessage = "Birthday cannot be today or a future date")]
         public DateTime Birthday { get; set; }
 
         [Required(ErrorMessage = "FavGenre is required")]
-        public string FavGenre { get; set; }
+        public genreType FavGenre { get; set; }
 
         [Required(ErrorMessage = "ProfilePicture is required")]
         public string ProfilePictureName { get; set; }
@@ -40,7 +41,7 @@ namespace WebApp.Pages
 
         }
 
-        public RegisterUser(string name, string email, string password, string userType, DateTime birthday, string favGenre, string profilePictureName, byte[] profilePictureData, string profilePictureContentType)
+        public RegisterUser(string name, string email, string password, userType userType, DateTime birthday, genreType favGenre, string profilePictureName, byte[] profilePictureData, string profilePictureContentType)
         {
             Name = name;
             Email = email;

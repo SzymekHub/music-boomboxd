@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Logic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace WebApp.Pages
 {
@@ -10,6 +11,10 @@ namespace WebApp.Pages
     {
         public UserManager _userManager { get; }
         private IWebHostEnvironment _environment;
+
+        public List<SelectListItem> GenreOptions { get; set; }
+
+        public List<SelectListItem> UserOptions { get; set; }
 
         // Binds the User object
         [BindProperty]
@@ -25,9 +30,31 @@ namespace WebApp.Pages
             _userManager = userManager;
             _environment = environment;
         }
+        private void LoadGenres()
+        {
+            GenreOptions = Enum.GetValues(typeof(genreType))
+                                .Cast<genreType>()
+                                .Select(g => new SelectListItem
+                                {
+                                    Value = g.ToString(),
+                                    Text = g.ToString()
+                                }).ToList();
+        }
+        private void LoadUsers()
+        {
+            UserOptions = Enum.GetValues(typeof(userType))
+                                .Cast<userType>()
+                                .Select(u => new SelectListItem
+                                {
+                                    Value = u.ToString(),
+                                    Text = u.ToString()
+                                }).ToList();
+        }
 
         public void OnGet()
         {
+            LoadGenres();
+            LoadUsers();
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -56,9 +83,9 @@ namespace WebApp.Pages
                         RegiUser.Name,
                         RegiUser.Password,
                         RegiUser.Email,
-                        (userType)Enum.Parse(typeof(userType), RegiUser.UserType),
+                        (userType)Enum.Parse(typeof(userType), RegiUser.UserType.ToString()),
                         RegiUser.Birthday,
-                        (genreType)Enum.Parse(typeof(genreType), RegiUser.FavGenre),
+                        (genreType)Enum.Parse(typeof(genreType), RegiUser.FavGenre.ToString()),
                         RegiUser.ProfilePictureName,
                         RegiUser.ProfilePictureData,
                         RegiUser.ProfilePictureContentType

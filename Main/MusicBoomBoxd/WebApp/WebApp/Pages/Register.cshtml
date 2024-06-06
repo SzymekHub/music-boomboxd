@@ -32,18 +32,21 @@
             </div>
 
             <div class="form-group">
-                <label for="pass" class="label" asp-for="RegiUser.Email">Emai:<sup>*</sup>l</label>
+                <label for="pass" class="label" asp-for="RegiUser.Email">Email:<sup>*</sup></label>
                 <span asp-validation-for="RegiUser.Email" class="text-danger"></span>
                 <input id="email" type="text" class="input" asp-for="RegiUser.Email" />
             </div>
 
             <div class="form-group">
-                <label for="userType" class="label" asp-for="RegiUser.UserType">User Type:<sup>*</sup></label>
-                <select id="userType" class="input" asp-for="RegiUser.UserType">
-                    <option value="Regular">Regular</option>
-                    <option value="Critic">Critic</option>
-                    <option value="Musician">Musician</option>
+                <label asp-for="RegiUser.UserType">UserType:<sup>*</sup></label>
+                <select asp-for="RegiUser.UserType" class="form-control">
+                    <option value="">Select a User Type</option>
+                    @foreach (var userType in Model.UserOptions)
+                    {
+                        <option value="@userType.Value">@userType.Text</option>
+                    }
                 </select>
+                <span asp-validation-for="RegiUser.UserType" class="text-danger"></span>
             </div>
 
             <div class="form-group">
@@ -53,21 +56,15 @@
             </div>
 
             <div class="form-group">
-                <label for="genre" class="label" asp-for="RegiUser.FavGenre">Favorite Genre:<sup>*</sup></label>
-                <select class="input" asp-for="RegiUser.FavGenre">
-                    <option value="Rock">Rock</option>
-                    <option value="Reggae">Reggae</option>
-                    <option value="Metal">Metal</option>
-                    <option value="Rap">Rap</option>
-                    <option value="Blues">Blues</option>
-                    <option value="HipHop">HipHop</option>
-                    <option value="Pop">Pop</option>
-                    <option value="ClassicalMusic">ClassicalMusic</option>
-                    <option value="Disco">Disco</option>
-                    <option value="Folk">Folk</option>
-                    <option value="Country">Country</option>
-                    <option value="Techno">Techno</option>
+                <label asp-for="RegiUser.FavGenre">Genre:<sup>*</sup></label>
+                <select asp-for="RegiUser.FavGenre" class="form-control">
+                    <option value="">Select a Genre</option>
+                    @foreach (var genre in Model.GenreOptions)
+                    {
+                        <option value="@genre.Value">@genre.Text</option>
+                    }
                 </select>
+                <span asp-validation-for="RegiUser.FavGenre" class="text-danger"></span>
             </div>
 
             <div class="button-container">
