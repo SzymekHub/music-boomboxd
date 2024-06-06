@@ -1,16 +1,17 @@
 ﻿using Infrastructure;
+using System.Collections.Generic;
 
 namespace Logic
 {
     public class UserManager
     {
         private readonly IUserRepository _userRepository;
-        private readonly ValidateUser _validateUsers;
+        private readonly IValidateUser _validateUsers;
 
-        public UserManager(IUserRepository iuserRep, ValidateUser valUser)
+        public UserManager(IUserRepository iuserRep, IValidateUser ivalUser)
         {
             _userRepository = iuserRep;
-            _validateUsers = valUser;
+            _validateUsers = ivalUser;
 
             // inject the repository and use userRepistory as an interface and inject it as well. Get rid of Load stuff.
         }

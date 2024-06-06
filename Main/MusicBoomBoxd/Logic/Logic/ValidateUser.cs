@@ -3,7 +3,7 @@
 
 namespace Logic
 {
-    public class ValidateUser
+    public class ValidateUser : IValidateUser
     {
         private readonly IUserRepository _userRepository;
 
