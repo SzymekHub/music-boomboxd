@@ -6,7 +6,7 @@ namespace WebApp.Pages
 	{
 		public int SongID { get; }
 		public string Title { get; }
-		public int ArtistID { get; set; }
+		public int ArtistID { get; set; } 
 		public Artist Artist { get; set; }
 		public DateTime Date { get; set; }
 		public int RunTime { get; set; }
