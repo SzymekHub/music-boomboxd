@@ -1,5 +1,7 @@
 ﻿
+using Microsoft.Extensions.Options;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 
 namespace WebApp.Pages
 {
@@ -21,6 +23,7 @@ namespace WebApp.Pages
         public string UserType { get; set; }
 
         [Required(ErrorMessage = "Birthday is required")]
+        [PastDate(ErrorMessage = "Birthday cannot be today or a future date")]
         public DateTime Birthday { get; set; }
 
         [Required(ErrorMessage = "FavGenre is required")]

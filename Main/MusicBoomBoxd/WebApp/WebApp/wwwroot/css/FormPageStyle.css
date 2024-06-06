@@ -11,6 +11,13 @@
     margin-bottom: 20px;
 }
 
+.text-danger {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+    display: block;
+}
+
 .form {
     max-width: 400px;
     padding: 20px;
