@@ -135,6 +135,41 @@ namespace Infrastructure
             return balance;
         }
 
+        public Result AddToUserBalance(int profileID, double amount)
+        {
+            using (SqlConnection connection = GetSqlConnection())
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = connection;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "UPDATE Profile SET User_Balance = User_Balance + @Amount WHERE ProfileID = @ProfileID";
+                cmd.Parameters.AddWithValue("@Amount", amount);
+                cmd.Parameters.AddWithValue("@ProfileID", profileID);
+
+                try
+                {
+                    connection.Open();
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    if (rowsAffected > 0)
+                    {
+                        return new Result { Success = true, Message = "User Balance updated successfully" };
+                    }
+                    else
+                    {
+                        return new Result { Success = false, Message = "User not found" };
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    return new Result { Success = false, Message = $"SQL Exception: {ex.Message}" };
+                }
+                catch (Exception ex)
+                {
+                    return new Result { Success = false, Message = $"Exception: {ex.Message}" };
+                }
+            }
+        }
+
         public int GetProfileIDByUsername(string userName)
         {
             int profileID = 0;

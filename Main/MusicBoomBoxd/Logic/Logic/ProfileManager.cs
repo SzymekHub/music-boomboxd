@@ -16,6 +16,12 @@ namespace Logic
             return profileRepository.GetBalance(userName);
         }
 
+        public Result AddToUserBalance(string userName, double amount)
+        {
+            int profileID = profileRepository.GetProfileIDByUsername(userName);
+            return profileRepository.AddToUserBalance(profileID, amount);
+        }
+
         public int GetProfileIDByUsername(string userName)
         {
             return profileRepository.GetProfileIDByUsername(userName);
