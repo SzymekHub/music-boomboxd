@@ -14,8 +14,6 @@ namespace WebApp.Pages
 
         public List<SelectListItem> GenreOptions { get; set; }
 
-        public List<SelectListItem> UserOptions { get; set; }
-
         // Binds the User object
         [BindProperty]
         public RegisterUser RegiUser { get; set; }
@@ -40,21 +38,10 @@ namespace WebApp.Pages
                                     Text = g.ToString()
                                 }).ToList();
         }
-        private void LoadUsers()
-        {
-            UserOptions = Enum.GetValues(typeof(userType))
-                                .Cast<userType>()
-                                .Select(u => new SelectListItem
-                                {
-                                    Value = u.ToString(),
-                                    Text = u.ToString()
-                                }).ToList();
-        }
 
         public void OnGet()
         {
             LoadGenres();
-            LoadUsers();
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -64,68 +51,59 @@ namespace WebApp.Pages
             //    return Page();
             //}
 
-            try
+            if (ProfilePicture != null)
             {
-                if (ProfilePicture != null)
-                {
-                    RegiUser.ProfilePictureName = ProfilePicture.FileName;
-                    RegiUser.ProfilePictureContentType = ProfilePicture.ContentType;
+                RegiUser.ProfilePictureName = ProfilePicture.FileName;
+                RegiUser.ProfilePictureContentType = ProfilePicture.ContentType;
 
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        await ProfilePicture.CopyToAsync(memoryStream);
-                        RegiUser.ProfilePictureData = memoryStream.ToArray();
-                    }
+                using (var memoryStream = new MemoryStream())
+                {
+                    await ProfilePicture.CopyToAsync(memoryStream);
+                    RegiUser.ProfilePictureData = memoryStream.ToArray();
                 }
-               
-                //saves user to the Database
-                User newUser = new User(
-                        RegiUser.Name,
-                        RegiUser.Password,
-                        RegiUser.Email,
-                        (userType)Enum.Parse(typeof(userType), RegiUser.UserType.ToString()),
-                        RegiUser.Birthday,
-                        (genreType)Enum.Parse(typeof(genreType), RegiUser.FavGenre.ToString()),
-                        RegiUser.ProfilePictureName,
-                        RegiUser.ProfilePictureData,
-                        RegiUser.ProfilePictureContentType
-                        );
+            }
 
-                // validate if user already exists.It could go wrong
-                // Change the naming for more functionaity 
+            //saves user to the Database
+            User newUser = new User(
+                    RegiUser.Name,
+                    RegiUser.Password,
+                    RegiUser.Email,
+                    userType.Regular,
+                    RegiUser.Birthday,
+                    (genreType)Enum.Parse(typeof(genreType), RegiUser.FavGenre.ToString()),
+                    RegiUser.ProfilePictureName,
+                    RegiUser.ProfilePictureData,
+                    RegiUser.ProfilePictureContentType
+                    );
 
-                var result = _userManager.AddWEB(newUser);
+            // validate if user already exists.It could go wrong
+            // Change the naming for more functionaity 
 
-                if (result.Success)
+            var result = _userManager.AddWEB(newUser);
+
+            if (result.Success)
+            {
+                return RedirectToPage("/Login");
+            }
+            else
+            {
+                if (result.Errors != null)
                 {
-                    return RedirectToPage("/Login");
+                    foreach (var errorKey in result.Errors)
+                    {
+                        foreach (var errorValue in errorKey.Value)
+                        {
+                            ModelState.AddModelError($"User.{errorKey.Key}", errorValue);
+                        }
+                    }
                 }
                 else
                 {
-                    if (result.Errors != null)
-                    {
-                        foreach (var errorKey in result.Errors)
-                        {
-                            foreach (var errorValue in errorKey.Value)
-                            {
-                                ModelState.AddModelError($"User.{errorKey.Key}", errorValue);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", result.Message);
-                    }
-                    return Page();
+                    ModelState.AddModelError("", result.Message);
                 }
-
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", $"Something went wrong!" + ex.Message);
-
                 return Page();
             }
         }
     }
 }
+

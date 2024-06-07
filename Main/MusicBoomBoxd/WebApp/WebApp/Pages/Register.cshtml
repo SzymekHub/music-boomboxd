@@ -7,12 +7,12 @@
 <link rel="stylesheet" href="~/css/register.css" />
 
 <div class="container">
-    <h2 class="h2">Welcome new User!</h2>
     <div class="centered-container">
+        <h2 class="h2">Welcome new User!</h2>
         <form method="post" class="form" enctype="multipart/form-data">
 
             <div class="form-group">
-                <label asp-for="ProfilePicture" class="form-group">ProfilePicture:<sup>*</sup></label>
+                <label asp-for="ProfilePicture" class="label">ProfilePicture:<sup>*</sup></label>
                 <input type="file" asp-for="ProfilePicture" class="form-control" />
                 <span asp-validation-for="ProfilePicture" class="text-danger"></span>
             </div>
@@ -39,18 +39,6 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="RegiUser.UserType">UserType:<sup>*</sup></label>
-                <select asp-for="RegiUser.UserType" class="form-control">
-                    <option value="">Select a User Type</option>
-                    @foreach (var userType in Model.UserOptions)
-                    {
-                        <option value="@userType.Value">@userType.Text</option>
-                    }
-                </select>
-                <span asp-validation-for="RegiUser.UserType" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
                 <label for="birthday" class="label" asp-for="RegiUser.Birthday">Birthday:<sup>*</sup></label>
                 <span asp-validation-for="RegiUser.Birthday" class="text-danger"></span>
                 <input id="birthday" type="date" class="input" asp-for="RegiUser.Birthday" />
@@ -69,9 +57,10 @@
             </div>
 
             <div class="button-container">
-                <button type="submit" class="btn btn-primary">Register</button>
+                <button type="submit" class="btn-primary">Register</button>
             </div>
         </form>
+        <div class="hr"></div>
         <div class="foot-lnk">
             <a class="login" asp-area="" asp-page="/Login">Already a Member?</a>
         </div>
