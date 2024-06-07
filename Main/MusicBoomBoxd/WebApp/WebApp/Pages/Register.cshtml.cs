@@ -12,7 +12,7 @@ namespace WebApp.Pages
         public UserManager _userManager { get; }
         private IWebHostEnvironment _environment;
 
-        public List<SelectListItem> GenreOptions { get; set; }
+        public List<genreType> GenreOptions { get; set; }
 
         // Binds the User object
         [BindProperty]
@@ -30,13 +30,7 @@ namespace WebApp.Pages
         }
         private void LoadGenres()
         {
-            GenreOptions = Enum.GetValues(typeof(genreType))
-                                .Cast<genreType>()
-                                .Select(g => new SelectListItem
-                                {
-                                    Value = g.ToString(),
-                                    Text = g.ToString()
-                                }).ToList();
+
         }
 
         public void OnGet()
@@ -46,10 +40,10 @@ namespace WebApp.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return Page();
-            //}
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
 
             if (ProfilePicture != null)
             {

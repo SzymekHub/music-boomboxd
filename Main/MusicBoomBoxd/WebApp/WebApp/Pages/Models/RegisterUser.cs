@@ -6,7 +6,6 @@ namespace WebApp.Pages
     public class RegisterUser
     {
         [Required(ErrorMessage = "Username is required")]
-        [MinLength(5, ErrorMessage = "Username is too short")]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
@@ -14,7 +13,7 @@ namespace WebApp.Pages
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Password is required")]
-        [StringLength(100, MinimumLength = 4, ErrorMessage = "Password is too short")]
+        [Length(4, 100, ErrorMessage = "Password is too short")]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "UserType is required")]
@@ -27,13 +26,10 @@ namespace WebApp.Pages
         [Required(ErrorMessage = "FavGenre is required")]
         public genreType FavGenre { get; set; }
 
-        [Required(ErrorMessage = "ProfilePicture is required")]
         public string ProfilePictureName { get; set; }
 
-        [Required(ErrorMessage = "Profile Picture is required")]
         public byte[] ProfilePictureData { get; set; }
 
-        [Required(ErrorMessage = "Profile Picture Content Type is required")]
         public string ProfilePictureContentType { get; set; }
 
         public RegisterUser()
