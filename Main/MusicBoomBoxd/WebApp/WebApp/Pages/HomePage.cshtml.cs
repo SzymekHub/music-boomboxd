@@ -11,11 +11,8 @@ namespace WebApp.Pages
         public string Genre { get; set; }
 
 
-        private readonly ILogger<HomePageModel> _logger;
-
-        public HomePageModel(ILogger<HomePageModel> logger)
+        public HomePageModel()
         {
-            _logger = logger;
         }
 
         public void OnGet(string title, string artist, string date, string genre)

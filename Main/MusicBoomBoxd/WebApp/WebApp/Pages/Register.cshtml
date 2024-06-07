@@ -1,9 +1,10 @@
 ﻿@page
 @model RegisterModel
 @{
-    Layout = "_LayoutFormPage";
-    ViewData["Forms"] = "Register";
+    ViewData["Title"] = "Register";
 }
+
+<link rel="stylesheet" href="~/css/register.css" />
 
 <div class="container">
     <h2 class="h2">Welcome new User!</h2>
@@ -72,7 +73,7 @@
             </div>
         </form>
         <div class="foot-lnk">
-            <a class="login" asp-area="" asp-page="/Index">Already a Member?</a>
+            <a class="login" asp-area="" asp-page="/Login">Already a Member?</a>
         </div>
     </div>
 </div>

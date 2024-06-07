@@ -98,7 +98,7 @@ namespace WebApp.Pages
 
                 if (result.Success)
                 {
-                    return RedirectToPage("/Index");
+                    return RedirectToPage("/Login");
                 }
                 else
                 {

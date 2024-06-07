@@ -4,62 +4,138 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>@ViewData["Title"]</title>
-	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
+	<title>@ViewData["Title"] - MusicBoomBoxd</title>
+	<link rel="stylesheet" href="~/css/site.css">
 </head>
 <body>
-	<div class="container">
-		<div class="nav">
+	<header>
+		<div class="navbar">
 			@if (!User.Identity.IsAuthenticated)
 			{
-				<div class="logo-container">
-					<a asp-page="/HomePage">
+				<div class="logo">
+					<a class="home" asp-area="" asp-page="/HomePage">
 						<img src='Images/LogoBlue.png' alt="Logo" class="logo">
 					</a>
 				</div>
 				<ul class="right-links">
-					<li><a asp-area="" asp-page="/Index">Login</a></li>
+
+					<a asp-area="" asp-page="/Login">Login</a>
+
 				</ul>
 			}
-			else if (User.Identity.IsAuthenticated)
+			else if (User.Identity.IsAuthenticated && User.IsInRole("Regular"))
 			{
 				<ul class="left-links">
-					<li><a href="#">Search</a></li>
+					<a class="nav-link" asp-area="" asp-page="/Albums">Albums</a>
+
+					<a class="nav-link" asp-area="" asp-page="/Songs">Songs</a>
+
+					<a class="nav-link" asp-area="" asp-page="/Artists">Artists</a>
+
+					<a class="nav-link" asp-area="" asp-page="#">Search</a>
 				</ul>
-				<div class="logo-container">
-					<a asp-page="/HomePage">
+				<div class="logo">
+					<a class="home" asp-area="" asp-page="/HomePage">
 						<img src='Images/LogoBlue.png' alt="Logo" class="logo">
 					</a>
 				</div>
 				<ul class="right-links">
-					<li><a asp-page="#">Profile</a></li>
-					<li><a asp-area="" asp-page="/Logout">Logout</a></li>
+					<a class="nav-link" asp-area="" asp-page="/Profile">Profile</a>
+
+					<a class="nav-link" asp-area="" asp-page="/UpgradeAccount">Upgrade Account</a>
+
+					<a class="nav-link" asp-area="" asp-page="/UserBalance">Add Balance</a>
+
+					<a class="nav-link" asp-area="" asp-page="/Logout">Logout</a>
+
+				</ul>
+			}
+			else if (User.Identity.IsAuthenticated && User.IsInRole("Critic"))
+			{
+				<ul class="left-links">
+
+					<a class="nav-link" asp-area="" asp-page="/Albums">Albums</a>
+
+					<a class="nav-link" asp-page="/FormPage">Form to add albums</a>
+
+					<a class="nav-link" asp-area="" asp-page="/Songs">Songs</a>
+
+					<a class="nav-link" asp-page="/FormPageSong">Form to add songs</a>
+
+					<a class="nav-link" asp-area="" asp-page="/Artists">Artists</a>
+
+					<a class="nav-link" asp-area="" asp-page="/Rating">Leave A Rating for Album</a>
+
+					<a class="nav-link" asp-area="" asp-page="/RatingSong">Leave A Rating for Song</a>
+
+					<a class="nav-link" asp-area="" asp-page="#">Search</a>
+
+				</ul>
+				<div class="logo">
+					<a class="home" asp-area="" asp-page="/HomePage">
+						<img src='Images/LogoBlue.png' alt="Logo" class="logo">
+					</a>
+				</div>
+				<ul class="right-links">
+					<a class="nav-link" asp-area="" asp-page="/Profile">Profile</a>
+
+					<a class="nav-link" asp-area="" asp-page="/UserBalance">Donations</a>
+
+					<a class="nav-link" asp-area="" asp-page="/Logout">Logout</a>
+
+				</ul>
+			}
+			else if (User.Identity.IsAuthenticated && User.IsInRole("Musician"))
+			{
+				<ul class="left-links">
+
+					<a class="nav-link" asp-area="" asp-page="/Albums">Albums</a>
+
+					<a class="nav-link" asp-page="/FormPage">Form to add albums</a>
+
+					<a class="nav-link" asp-area="" asp-page="/Songs">Songs</a>
+
+					<a class="nav-link" asp-page="/FormPageSong">Form to add songs</a>
+
+					<a class="nav-link" asp-area="" asp-page="/Artists">Artists</a>
+
+					<a class="nav-link" asp-area="" asp-page="#">Search</a>
+
+				</ul>
+				<div class="logo">
+					<a class="home" asp-area="" asp-page="/HomePage">
+						<img src='Images/LogoBlue.png' alt="Logo" class="logo">
+					</a>
+				</div>
+				<ul class="right-links">
+					<a class="nav-link" asp-area="" asp-page="/Profile">Profile</a>
+
+					<a class="nav-link" asp-area="" asp-page="/UserBalance">Donations</a>
+
+					<a class="nav-link" asp-area="" asp-page="/Logout">Logout</a>
+
 				</ul>
 			}
 		</div>
-
-		<section id="content_container">
+	</header>
+	<div class="container">
+		<main role="main" class="pb-3">
 			@RenderBody()
-		</section>
-
-		<div class="footer">
-			<ul class="left-links-footer">
-				<li><a asp-page="/FormPage">Form to add songs</a></li>
-			</ul>
-			<div class="Thank-You-Container">
-				<p>Thank you for checking out my website!</p>
-				&copy; 2024 - ZooBaazar - <a asp-area="" asp-page="/Privacy">Privacy</a>
-			</div>
-			<ul class="right-links-footer">
-				<li><a href="#">Report a bug</a></li>
-			</ul>
-		</div>
+		</main>
 	</div>
+
+	<footer>
+		<p>
+			Thank you for checking out my website!
+			<br />2024 - MusicBoomBoxd
+		</p>
+	</footer>
 
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script>
 
 	@await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

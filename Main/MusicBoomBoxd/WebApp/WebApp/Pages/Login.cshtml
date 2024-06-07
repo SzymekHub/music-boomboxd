@@ -1,0 +1,33 @@
+﻿@page
+@model WebApp.Pages.LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+<link rel="stylesheet" href="~/css/login.css" />
+
+<div class="log-in">
+    <form method="post">
+        <div class="group-UserName">
+            <label for="user" class="label">Username: </label>
+            <input type="text" class="input" asp-for="Username" />
+        </div>
+        <div class="group-Password">
+            <label for="pass" class="label">Password: </label>
+            <input type="password" class="input" asp-for="Password" data-type="password" />
+        </div>
+        <div class="group">
+            <input type="submit" class="button" value="Log In">
+        </div>
+    </form>
+    <div class="hr"></div>
+    <div class="foot-lnk">
+        <a class="forgot-link" href="#forgot">Forgot Password?</a>
+        <a class="register" asp-area="" asp-page="/Register">Not a Member Yet?</a>
+    </div>
+</div>
+
+@* remove id for it to work most prob *@
+@section Scripts 
+{
+    <partial name ="_ValidationScriptsPartial" />
+}
