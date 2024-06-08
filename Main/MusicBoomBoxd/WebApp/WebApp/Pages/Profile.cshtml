@@ -1,7 +1,7 @@
 ﻿@page
 @model WebApp.Pages.ProfileModel
 @{
-	ViewData["Title"] = "My Profile";
+    ViewData["Title"] = "My Profile";
 }
 
 <link rel="stylesheet" href="~/css/profile.css" />
@@ -26,6 +26,7 @@
                 <p><strong>Username:</strong> @Model.Username</p>
                 <p><strong>Email:</strong> @Model.Email</p>
                 <p><strong>Role:</strong> @Model.Role</p>
+
                 @if (!ViewData.ModelState.IsValid)
                 {
                     <div class="error-message">
@@ -38,15 +39,28 @@
             </div>
             <div class="profile-actions">
                 <form method="post">
+                    <div>
+                        <label for="Username">Username:</label>
+                        <input type="text" class="lbl" id="Username" name="Username" value="@Model.Username" required />
+                    </div>
+                    <div>
+                        <label for="Email">Email:</label>
+                        <input type="email" class="lbl" id="Email" name="Email" value="@Model.Email" required />
+                    </div>
+                    <div>
+                        <label for="ProfilePicture">Profile Picture:</label>
+                        <input type="file" id="ProfilePicture" name="ProfilePicture" class="profile-control" />
+                    </div>
+                    <button type="submit" class="update" asp-page-handler="UpdateProfile">Update Profile</button>
+                </form>
+
+                <form method="post">
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Regular"))
                     {
-                        <button type="submit" class="upgrade" asp-page-handler="UpgradeAccount">Upgrade Account</button>
+                        <button type="submit" class="upgrade" asp-page-handler="UpgradeAccount">Upgrade Your Account</button>
                     }
-                    else if (User.Identity.IsAuthenticated && User.IsInRole("Critic") || User.IsInRole("Musician") || User.IsInRole("Admin"))
-                    {
 
-                    }
-                    <button type="submit" class="deactivate" asp-page-handler="DeactivateAccount">Deactivate Account</button>
+                    <button type="submit" class="deactivate" asp-page-handler="DeleteAccount">Deactivate Your Account</button>
                 </form>
             </div>
         </div>

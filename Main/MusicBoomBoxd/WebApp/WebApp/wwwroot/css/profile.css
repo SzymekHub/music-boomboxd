@@ -1,19 +1,20 @@
 ﻿/* Global styles */
 * {
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #292929;
+    margin: 0;
     color: #fff;
 }
 
 /* Main content padding */
 main {
-    padding: 20px;
+    padding: 0.5%;
+    margin-bottom: 2%;
 }
 
 /* Profile page styles */
@@ -68,7 +69,7 @@ main {
     justify-content: center;
     gap: 20px;
 }
-
+    
     .profile-actions button {
         border: none;
         border-radius: 25px;
@@ -80,22 +81,51 @@ main {
     }
 
         .profile-actions button.deactivate {
-            background-color: #d9534f;
+            margin-top: 3%;
+            background-color: #ce3e39;
             color: #fff;
         }
 
             .profile-actions button.deactivate:hover {
-                background-color: #c9302c;
+                background-color: #ff0600;
             }
 
         .profile-actions button.upgrade {
-            background-color: #1161ee;
+            margin-top: 15%;
+            background-color: #d45800;
             color: #fff;
         }
 
             .profile-actions button.upgrade:hover {
-                background-color: #1454c4;
+                background-color: #ff6a00;
             }
+
+        .profile-actions button.update {
+            margin-top: 5%;
+            background-color: #d45800;
+            color: #fff;
+        }
+
+            .profile-actions button.update:hover {
+                background-color: #ff6a00;
+            }
+
+.lbl {
+    background-color: #d5d1ce;
+}
+
+.profile-control {
+    width: 100%;
+    background-color: rgb(109, 109, 109, 0.35);
+    border-radius: 25px;
+    padding: 5% 8.5%;
+    font-size: 11px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+    .profile-control:hover {
+        background-color: #b64d02a7;
+    }
 
 /* Recommendation boxes */
 .profile-page-container {

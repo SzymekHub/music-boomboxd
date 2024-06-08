@@ -498,13 +498,12 @@ namespace Infrastructure
                 try
                 {
                     conn.Open();
-                    var result = cmd.ExecuteScalar();
-                    int newEmployeeId;
-                    if (int.TryParse(result?.ToString(), out newEmployeeId))
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    if (rowsAffected > 0)
                     {
                         return new Result { Success = true, Message = "User deleted successfully." };
                     }
-                    return new Result { Success = false, Message = "Failed to retrieve user ID." };
+                    return new Result { Success = false, Message = "Failed to delete user." };
                 }
                 catch (SqlException ex)
                 {
