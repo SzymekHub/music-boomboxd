@@ -1,73 +1,70 @@
 ﻿@page
 @model RegisterModel
 @{
-    ViewData["Title"] = "Register";
+	ViewData["Title"] = "Register";
 }
 
 <link rel="stylesheet" href="~/css/register.css" />
 
 <div class="container">
-    <div class="centered-container">
-        <h2 class="h2">Welcome new User!</h2>
-        <form method="post" class="form" enctype="multipart/form-data">
+	<div class="centered-container">
+		<h2 class="h2">Welcome new User!</h2>
+		<form method="post" class="form" enctype="multipart/form-data">
 
-            <div class="form-group">
-                <label asp-for="ProfilePicture" class="label">ProfilePicture:<sup>*</sup></label>
-                <input type="file" asp-for="ProfilePicture" class="form-control" />
-                <span asp-validation-for="ProfilePicture" class="text-danger"></span>
-            </div>
+			<div class="form-group">
+				<label asp-for="ProfilePicture" class="label">Profile Picture:<sup>*</sup></label>
+				<input type="file" asp-for="ProfilePicture" class="form-control" />
+				<span asp-validation-for="ProfilePicture" class="text-danger"></span>
+			</div>
 
-            <input type="hidden" asp-for="RegiUser.ProfilePictureName" />
-            <input type="hidden" asp-for="RegiUser.ProfilePictureContentType" />
+			<div class="form-group">
+				<label for="user" class="label" asp-for="RegiUser.Name">Username:<sup>*</sup></label>
+				<span asp-validation-for="RegiUser.Name" class="text-danger"></span>
+				<input id="user" type="text" class="input" asp-for="RegiUser.Name" />
+			</div>
 
-            <div class="form-group">
-                <label for="user" class="label" asp-for="RegiUser.Name">Username:<sup>*</sup></label>
-                <span asp-validation-for="RegiUser.Name" class="text-danger"></span>
-                <input id="user" type="text" class="input" asp-for="RegiUser.Name" />
-            </div>
+			<div class="form-group">
+				<label for="pass" class="label" asp-for="RegiUser.Password">Password:<sup>*</sup></label>
+				<span asp-validation-for="RegiUser.Password" class="text-danger"></span>
+				<input id="pass" type="password" class="input" asp-for="RegiUser.Password" />
+			</div>
 
-            <div class="form-group">
-                <label for="pass" class="label" asp-for="RegiUser.Password">Password:<sup>*</sup></label>
-                <span asp-validation-for="RegiUser.Password" class="text-danger"></span>
-                <input id="pass" type="password" class="input" asp-for="RegiUser.Password" />
-            </div>
+			<div class="form-group">
+				<label for="pass" class="label" asp-for="RegiUser.Email">Email:<sup>*</sup></label>
+				<span asp-validation-for="RegiUser.Email" class="text-danger"></span>
+				<input id="email" type="text" class="input" asp-for="RegiUser.Email" />
+			</div>
 
-            <div class="form-group">
-                <label for="pass" class="label" asp-for="RegiUser.Email">Email:<sup>*</sup></label>
-                <span asp-validation-for="RegiUser.Email" class="text-danger"></span>
-                <input id="email" type="text" class="input" asp-for="RegiUser.Email" />
-            </div>
+			<div class="form-group">
+				<label for="birthday" class="label" asp-for="RegiUser.Birthday">Birthday:<sup>*</sup></label>
+				<span asp-validation-for="RegiUser.Birthday" class="text-danger"></span>
+				<input id="birthday" type="date" class="input" asp-for="RegiUser.Birthday" />
+			</div>
 
-            <div class="form-group">
-                <label for="birthday" class="label" asp-for="RegiUser.Birthday">Birthday:<sup>*</sup></label>
-                <span asp-validation-for="RegiUser.Birthday" class="text-danger"></span>
-                <input id="birthday" type="date" class="input" asp-for="RegiUser.Birthday" />
-            </div>
+			<div class="form-group">
+				<label asp-for="RegiUser.FavGenre">Favorite Genre:<sup>*</sup></label>
+				<select asp-for="RegiUser.FavGenre" class="form-control">
+					<option value="">Select a Favorite Genre</option>
+					@foreach (var genre in Model.GenreOptions)
+					{
+						<option value="@genre.Value">@genre.Text</option>
+					}
+				</select>
+				<span asp-validation-for="RegiUser.FavGenre" class="text-danger"></span>
+			</div>
 
-            <div class="form-group">
-                <label asp-for="RegiUser.FavGenre">Favorite Genre:<sup>*</sup></label>
-                <select asp-for="RegiUser.FavGenre" class="form-control">
-                    <option value="">Select a Favorite Genre</option>
-                    @foreach (var genre in Model.GenreOptions)
-                    {
-                        <option value="@genre.Value">@genre.Text</option>
-                    }
-                </select>
-                <span asp-validation-for="RegiUser.FavGenre" class="text-danger"></span>
-            </div>
-
-            <div class="button-container">
-                <button type="submit" class="btn-primary">Register</button>
-            </div>
-        </form>
-        <div class="hr"></div>
-        <div class="foot-lnk">
-            <a class="login" asp-area="" asp-page="/Login">Already a Member?</a>
-        </div>
-    </div>
+			<div class="button-container">
+				<button type="submit" class="btn-primary">Register</button>
+			</div>
+		</form>
+		<div class="hr"></div>
+		<div class="foot-lnk">
+			<a class="login" asp-area="" asp-page="/Login">Already a Member?</a>
+		</div>
+	</div>
 </div>
 
 @section Scripts
 {
-    <partial name="_ValidationScriptsPartial" />
+	<partial name="_ValidationScriptsPartial" />
 }

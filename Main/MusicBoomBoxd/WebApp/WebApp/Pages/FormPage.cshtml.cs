@@ -9,163 +9,162 @@ using System.Security.Claims;
 
 namespace WebApp.Pages
 {
-	[Authorize]
-	public class FormPageModel : PageModel
-	{
-		private readonly AlbumManager _albumManager;
-		private readonly IWebHostEnvironment _webHostEnvironment;
-		private readonly SongManager _songManager;
-		private readonly ArtistManager _artistManager;
+    [Authorize]
+    public class FormPageModel : PageModel
+    {
+        private readonly AlbumManager _albumManager;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly SongManager _songManager;
+        private readonly ArtistManager _artistManager;
 
-		public List<SelectListItem> GenreOptions { get; set; }
-		public List<SongModel> Songs { get; private set; }
-		public List<Artist> Artists { get; private set; }
-		public string Username { get; set; }
+        public List<SelectListItem> GenreOptions { get; set; }
+        public List<SongModel> Songs { get; private set; }
+        public List<Artist> Artists { get; private set; }
+        public string Username { get; set; }
 
-		[BindProperty]
-		public InputFormAlbumModel InputAlbum { get; set; }
-		
-		// Added a property for handling file upload
-		[BindProperty]
-		[Display(Name = "Album Cover"), Required]
-		public IFormFile AlbumCover { get; set; }
+        [BindProperty]
+        public InputFormAlbumModel InputAlbum { get; set; }
 
-		// Property to store selected song IDs
-		[BindProperty]
-		public string SelectedSongIDs { get; set; }
+        // Added a property for handling file upload
+        [BindProperty]
+        [Display(Name = "Album Cover"), Required]
+        public IFormFile AlbumCover { get; set; }
 
-		public FormPageModel(AlbumManager albumManager, SongManager songManager, ArtistManager artistManager, IWebHostEnvironment webHostEnvironment)
-		{
-			_albumManager = albumManager;
-			_webHostEnvironment = webHostEnvironment;
-			_songManager = songManager;
-			_artistManager = artistManager;
-			Artists = new List<Artist>();
-		}
+        // Property to store selected song IDs
+        [BindProperty]
+        public string SelectedSongIDs { get; set; }
 
-		private void LoadGenres()
-		{
-			GenreOptions = Enum.GetValues(typeof(genreType))
-								.Cast<genreType>()
-								.Select(g => new SelectListItem
-								{
-									Value = g.ToString(),
-									Text = g.ToString()
-								}).ToList();
-		}
+        public FormPageModel(AlbumManager albumManager, SongManager songManager, ArtistManager artistManager, IWebHostEnvironment webHostEnvironment)
+        {
+            _albumManager = albumManager;
+            _webHostEnvironment = webHostEnvironment;
+            _songManager = songManager;
+            _artistManager = artistManager;
+            Artists = new List<Artist>();
+        }
 
-		private void LoadSongs()
-		{
-			var userClaim = User.Claims;
-			Username = userClaim.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
-			List<Song> songs = _songManager.LoadSongsFromDataBase();
-			Songs = new List<SongModel>();
+        private void LoadGenres()
+        {
+            GenreOptions = Enum.GetValues(typeof(genreType))
+                                .Cast<genreType>()
+                                .Select(g => new SelectListItem
+                                {
+                                    Value = g.ToString(),
+                                    Text = g.ToString()
+                                }).ToList();
+        }
 
-			foreach (var song in songs)
-			{
-				Songs.Add(new SongModel(song.SongID, song.Title, song.ArtistID, song.Date, song.RunTime, song.Genre));
-			}
-		}
+        private void LoadSongs()
+        {
+            var userClaim = User.Claims;
+            Username = userClaim.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+            List<Song> songs = _songManager.LoadSongsFromDataBase();
+            Songs = new List<SongModel>();
 
-		private void LoadArtists()
-		{
-			var artistsFromDb = _artistManager.LoadArtistFromDB();
-			if (artistsFromDb != null)
-			{
-				Artists = artistsFromDb.ToList();
-			}
-			else
-			{
-				Artists = new List<Artist>();
-			}
-		}
+            foreach (var song in songs)
+            {
+                Songs.Add(new SongModel(song.SongID, song.Title, song.ArtistID, song.Date, song.RunTime, song.Genre));
+            }
+        }
 
-		public void OnGet()
-		{
-			LoadGenres(); 
-			LoadSongs();
-			LoadArtists();
-		}
+        private void LoadArtists()
+        {
+            var artistsFromDb = _artistManager.LoadArtistFromDB();
+            if (artistsFromDb != null)
+            {
+                Artists = artistsFromDb.ToList();
+            }
+            else
+            {
+                Artists = new List<Artist>();
+            }
+        }
 
-		public async Task<IActionResult> OnPostAsync()
-		{
-			//if (!ModelState.IsValid)
-			//{
-			//	LoadArtists();
-			//	return Page();
-			//}
-			try 
-			{
-				if (AlbumCover != null)
-				{
-					InputAlbum.AlbumCoverName = AlbumCover.FileName;
-					InputAlbum.AlbumCoverContentType = AlbumCover.ContentType;
-					
-					using (var memorystream = new MemoryStream())
-					{
-						await AlbumCover.CopyToAsync(memorystream);
-						InputAlbum.AlbumCoverData = memorystream.ToArray();
-					}
-				}
+        public void OnGet()
+        {
+            LoadGenres();
+            LoadSongs();
+            LoadArtists();
+        }
 
-				// Save album to the database
-				Album newAlbum = new Album(
-						InputAlbum.ArtistID,
-						InputAlbum.Title,
-						InputAlbum.Date,
-						InputAlbum.RunTime,
-						(genreType)Enum.Parse(typeof(genreType), InputAlbum.Genre.ToString()),
-						InputAlbum.AlbumCoverName,
-						InputAlbum.AlbumCoverData,
-						InputAlbum.AlbumCoverContentType
-						);
+        public async Task<IActionResult> OnPostAsync()
+        {
+            LoadGenres();
+            LoadSongs();
+            LoadArtists();
 
-				var result = _albumManager.AddWEB(newAlbum);
+            if (AlbumCover != null)
+            {
+                InputAlbum.AlbumCoverName = AlbumCover.FileName;
+                InputAlbum.AlbumCoverContentType = AlbumCover.ContentType;
 
-				if (result.Success)
-				{
-					// Save selected songs to the album
-					var selectedSongIDs = SelectedSongIDs.Split(',').Select(int.Parse).ToList();
-					int existingalbumID = _albumManager.GetAlbumIDByAlbumTitle(InputAlbum.Title);
+                using (var memorystream = new MemoryStream())
+                {
+                    await AlbumCover.CopyToAsync(memorystream);
+                    InputAlbum.AlbumCoverData = memorystream.ToArray();
+                }
+            }
 
-					var resultAddSongs = _albumManager.SaveSongsInAlbums(existingalbumID, selectedSongIDs);
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
 
-					if (resultAddSongs.Success)
-					{
-						return RedirectToPage("/HomePage");
-					}
-					else
-					{
-						ModelState.AddModelError("", resultAddSongs.Message);
-					}
-				}
-				else
-				{
-					if (result.Errors != null)
-					{
-						foreach (var errorKey in result.Errors)
-						{
-							foreach (var errorValue in errorKey.Value)
-							{
-								ModelState.AddModelError($"Album.{errorKey.Key}", errorValue);
-							}
-						}
-					}
-					else
-					{
-						ModelState.AddModelError("", result.Message);
-					}
-				}
-				return Page();
-			}
-			catch (Exception ex)
-			{
-				ModelState.AddModelError("", $"Something went wrong!" + ex.Message);
+            // Save album to the database
+            Album newAlbum = new Album(
+                InputAlbum.ArtistID,
+                InputAlbum.Title,
+                InputAlbum.Date,
+                InputAlbum.RunTime,
+                (genreType)Enum.Parse(typeof(genreType), InputAlbum.Genre.ToString()),
+                InputAlbum.AlbumCoverName,
+                InputAlbum.AlbumCoverData,
+                InputAlbum.AlbumCoverContentType
+            );
 
-				return Page();
-			}
-		}
-	}
+            var result = _albumManager.AddWEB(newAlbum);
 
+            if (result.Success)
+            {
+                // Save selected songs to the album
+                var selectedSongIDs = SelectedSongIDs.Split(',').Select(int.Parse).ToList();
+                int existingalbumID = _albumManager.GetAlbumIDByAlbumTitle(InputAlbum.Title);
+
+                var resultAddSongs = _albumManager.SaveSongsInAlbums(existingalbumID, selectedSongIDs);
+
+                if (resultAddSongs.Success)
+                {
+                    return RedirectToPage("/HomePage");
+                }
+                else
+                {
+                    ModelState.AddModelError("", resultAddSongs.Message);
+                }
+            }
+            else
+            {
+                if (result.Errors != null)
+                {
+                    foreach (var errorKey in result.Errors)
+                    {
+                        foreach (var errorValue in errorKey.Value)
+                        {
+                            ModelState.AddModelError($"Album.{errorKey.Key}", errorValue);
+                        }
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", result.Message);
+                }
+            }
+
+            //Returns a page if any of the above conditions are not met
+            return Page();
+        }
+
+    }
 }
+
+
 

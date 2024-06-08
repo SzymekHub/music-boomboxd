@@ -20,14 +20,11 @@ namespace WebApp.Pages
         [Required(ErrorMessage = "Genre is required.")]
         public genreType Genre { get; set; }
 
-        [Required(ErrorMessage = "Album Cover is required")]
-		public string AlbumCoverName { get; set; }
+		public string AlbumCoverName { get; set; } = string.Empty;
 
-		[Required(ErrorMessage = "Album Cover is required")]
-		public byte[] AlbumCoverData { get; set; }
+		public byte[] AlbumCoverData { get; set; } = new byte[0];
 
-		[Required(ErrorMessage = "Album Cover Content Type is required")]
-		public string AlbumCoverContentType { get; set; }
+		public string AlbumCoverContentType { get; set; } = string.Empty;
 		
 		public InputFormAlbumModel()
 		{
