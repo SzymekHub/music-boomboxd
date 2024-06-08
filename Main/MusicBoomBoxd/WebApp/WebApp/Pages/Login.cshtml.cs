@@ -11,14 +11,12 @@ namespace WebApp.Pages
     public class LoginModel : PageModel
     {
         public UserManager userManager { get; }
-
         public LoginModel()
         {
             IUserRepository iuserRep = new UserRepository();
             ValidateUser validateUsers = new ValidateUser(iuserRep);
             userManager = new UserManager(iuserRep, validateUsers);
         }
-
         [BindProperty]
         public LoginUser Login { get; set; }
 
@@ -27,7 +25,6 @@ namespace WebApp.Pages
 
         [BindProperty]
         public string Password { get; set; }
-
         // i want ui to handle rules. And logic to validate. Introduce a class manager that validates user  
 
         public IActionResult OnGet()
@@ -41,6 +38,11 @@ namespace WebApp.Pages
 
         public async  Task<IActionResult> OnPostAsync()
         {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
             User user = userManager.GetUserByUsernameFromDb(Username);
 
             if (user != null && PasswordHasher.VerifyPassword(Password, user.Password))
@@ -50,7 +52,7 @@ namespace WebApp.Pages
                     new Claim(ClaimTypes.Name, Username),
                     new Claim(ClaimTypes.Email, user.Email.ToString()),
                     new Claim(ClaimTypes.Role, user.UserType.ToString())
-                    
+
                 };
 
                 // Create authentication cookie
@@ -67,7 +69,7 @@ namespace WebApp.Pages
             }
 
             // Display error message if username or password is incorrect
-            ModelState.AddModelError(string.Empty, "Invalid username or password");
+            ViewData["ErrorMessage"] = "Invalid username or password";
             return Page();
         }
     }

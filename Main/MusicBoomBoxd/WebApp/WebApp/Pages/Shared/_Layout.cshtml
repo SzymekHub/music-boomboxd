@@ -26,13 +26,13 @@
 			else if (User.Identity.IsAuthenticated && User.IsInRole("Regular"))
 			{
 				<ul class="left-links">
-					<a class="nav-link" asp-area="" asp-page="/Albums">Albums</a>
+					<a  asp-area="" asp-page="/Albums">Albums</a>
 
-					<a class="nav-link" asp-area="" asp-page="/Songs">Songs</a>
+					<a  asp-area="" asp-page="/Songs">Songs</a>
 
-					<a class="nav-link" asp-area="" asp-page="/Artists">Artists</a>
+					<a  asp-area="" asp-page="/Artists">Artists</a>
 
-					<a class="nav-link" asp-area="" asp-page="#">Search</a>
+					<a  asp-area="" asp-page="#">Search</a>
 				</ul>
 				<div class="logo">
 					<a class="home" asp-area="" asp-page="/HomePage">
@@ -40,35 +40,27 @@
 					</a>
 				</div>
 				<ul class="right-links">
-					<a class="nav-link" asp-area="" asp-page="/Profile">Profile</a>
+					<a  asp-area="" asp-page="/Profile">Profile</a>
 
-					<a class="nav-link" asp-area="" asp-page="/UpgradeAccount">Upgrade Account</a>
+					<a  asp-area="" asp-page="/UpgradeAccount">Upgrade Account</a>
 
-					<a class="nav-link" asp-area="" asp-page="/UserBalance">Add Balance</a>
+					<a  asp-area="" asp-page="/UserBalance">Add Balance</a>
 
-					<a class="nav-link" asp-area="" asp-page="/Logout">Logout</a>
+					<a  asp-area="" asp-page="/Logout">Logout</a>
 
 				</ul>
 			}
-			else if (User.Identity.IsAuthenticated && User.IsInRole("Critic"))
+			else if (User.Identity.IsAuthenticated && User.IsInRole("Critic") || User.IsInRole("Admin"))
 			{
 				<ul class="left-links">
 
-					<a class="nav-link" asp-area="" asp-page="/Albums">Albums</a>
+					<a asp-area="" asp-page="/Albums">Albums </a>
 
-					<a class="nav-link" asp-page="/FormPage">Form to add albums</a>
+					<a asp-area="" asp-page="/Songs">Songs</a>
 
-					<a class="nav-link" asp-area="" asp-page="/Songs">Songs</a>
+					<a asp-area="" asp-page="/Artists">Artists</a>
 
-					<a class="nav-link" asp-page="/FormPageSong">Form to add songs</a>
-
-					<a class="nav-link" asp-area="" asp-page="/Artists">Artists</a>
-
-					<a class="nav-link" asp-area="" asp-page="/Rating">Leave A Rating for Album</a>
-
-					<a class="nav-link" asp-area="" asp-page="/RatingSong">Leave A Rating for Song</a>
-
-					<a class="nav-link" asp-area="" asp-page="#">Search</a>
+					<a asp-area="" asp-page="#">Search</a>
 
 				</ul>
 				<div class="logo">
@@ -77,11 +69,11 @@
 					</a>
 				</div>
 				<ul class="right-links">
-					<a class="nav-link" asp-area="" asp-page="/Profile">Profile</a>
+					<a  asp-area="" asp-page="/Profile">Profile</a>
 
-					<a class="nav-link" asp-area="" asp-page="/UserBalance">Donations</a>
+					<a  asp-area="" asp-page="/UserBalance">Donations</a>
 
-					<a class="nav-link" asp-area="" asp-page="/Logout">Logout</a>
+					<a  asp-area="" asp-page="/Logout">Logout</a>
 
 				</ul>
 			}
@@ -89,17 +81,13 @@
 			{
 				<ul class="left-links">
 
-					<a class="nav-link" asp-area="" asp-page="/Albums">Albums</a>
+					<a  asp-area="" asp-page="/Albums">Albums</a>
 
-					<a class="nav-link" asp-page="/FormPage">Form to add albums</a>
+					<a  asp-area="" asp-page="/Songs">Songs</a>
 
-					<a class="nav-link" asp-area="" asp-page="/Songs">Songs</a>
+					<a  asp-area="" asp-page="/Artists">Artists</a>
 
-					<a class="nav-link" asp-page="/FormPageSong">Form to add songs</a>
-
-					<a class="nav-link" asp-area="" asp-page="/Artists">Artists</a>
-
-					<a class="nav-link" asp-area="" asp-page="#">Search</a>
+					<a  asp-area="" asp-page="#">Search</a>
 
 				</ul>
 				<div class="logo">
@@ -108,11 +96,11 @@
 					</a>
 				</div>
 				<ul class="right-links">
-					<a class="nav-link" asp-area="" asp-page="/Profile">Profile</a>
+					<a  asp-area="" asp-page="/Profile">Profile</a>
 
-					<a class="nav-link" asp-area="" asp-page="/UserBalance">Donations</a>
+					<a  asp-area="" asp-page="/UserBalance">Donations</a>
 
-					<a class="nav-link" asp-area="" asp-page="/Logout">Logout</a>
+					<a  asp-area="" asp-page="/Logout">Logout</a>
 
 				</ul>
 			}
@@ -125,7 +113,36 @@
 	</div>
 
 	<footer>
-			&copy; MusicBoomBoxd 
+		<div class="footer-content">
+			<div class="left-links">
+				@if (User.Identity.IsAuthenticated && (User.IsInRole("Critic") || User.IsInRole("Admin")))
+				{
+					<ul>
+						<li><a class="form-link" asp-page="/FormPage">Form to add albums</a></li>
+						<li><a class="form-link" asp-page="/FormPageSong">Form to add songs</a></li>
+					</ul>
+				}
+				else if (User.Identity.IsAuthenticated && User.IsInRole("Musician"))
+				{
+					<ul>
+						<li><a class="form-link" asp-page="/FormPage">Form to add albums</a></li>
+						<li><a class="form-link" asp-page="/FormPageSong">Form to add songs</a></li>
+					</ul>
+				}
+			</div>
+			<div class="copyright">
+				&copy; MusicBoomBoxd
+			</div>
+			<div class="right-links">
+				@if (User.Identity.IsAuthenticated && (User.IsInRole("Critic") || User.IsInRole("Admin")))
+				{
+					<ul>
+						<li><a class="form-link" asp-area="" asp-page="/Rating">Leave A Rating for Album</a></li>
+						<li><a class="form-link" asp-area="" asp-page="/RatingSong">Leave A Rating for Song</a></li>
+					</ul>
+				}
+			</div>
+		</div>
 	</footer>
 
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>

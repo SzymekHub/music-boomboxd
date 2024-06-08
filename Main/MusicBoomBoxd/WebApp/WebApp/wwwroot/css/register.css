@@ -21,6 +21,7 @@ body {
 }
 .centered-container {
     margin: auto;
+    margin-top: 3%;
     max-width: 45%;
     min-height: 45%;
     max-height: 30%;

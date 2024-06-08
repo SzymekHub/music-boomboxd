@@ -3,17 +3,23 @@
 @{
     ViewData["Title"] = "Login";
 }
+
 <link rel="stylesheet" href="~/css/login.css" />
 
 <div class="log-in">
+    <h2 class="h2">Login :)</h2>
+    <h3 class="text-danger">@Html.Raw(ViewData["ErrorMessage"])</h3>
     <form method="post">
-        <div class="group-UserName">
-            <label for="user" class="label">Username: </label>
-            <input type="text" class="input" asp-for="Username" />
+        <div class="group">
+            <label for="user" class="label">Username:<sup>*</sup></label>
+            <span asp-validation-for="Username" class="text-danger"></span>
+            <input id="user" type="text" class="input" asp-for="Username">
         </div>
-        <div class="group-Password">
-            <label for="pass" class="label">Password: </label>
-            <input type="password" class="input" asp-for="Password" data-type="password" />
+        
+        <div class="group">
+            <label for="pass" class="label">Password:<sup>*</sup></label>
+            <span asp-validation-for="Password" class="text-danger"></span>
+            <input id="pass" type="password" class="input" asp-for="Password">
         </div>
         <div class="group">
             <input type="submit" class="button" value="Log In">
@@ -21,12 +27,10 @@
     </form>
     <div class="hr"></div>
     <div class="foot-lnk">
-        <a class="forgot-link" href="#forgot">Forgot Password?</a>
         <a class="register" asp-area="" asp-page="/Register">Not a Member Yet?</a>
     </div>
 </div>
 
-@* remove id for it to work most prob *@
 @section Scripts 
 {
     <partial name ="_ValidationScriptsPartial" />
