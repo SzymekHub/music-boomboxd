@@ -1,0 +1,59 @@
+﻿@page
+@model WebApp.Pages.ProfileModel
+@{
+	ViewData["Title"] = "My Profile";
+}
+
+<link rel="stylesheet" href="~/css/profile.css" />
+
+<main>
+    <div class="profile-page-container">
+        <div class="profile-container">
+            <div class="profile-header">
+                <h1>@ViewData["Title"]</h1>
+            </div>
+            <div class="profile-details">
+                @if (Model.ProfilePictureData != null && Model.ProfilePictureData.Length > 0)
+                {
+                    string base64Image = Convert.ToBase64String(Model.ProfilePictureData);
+                    string imageSrc = $"data:{Model.ProfilePictureContentType};base64,{base64Image}";
+                    <img src="@imageSrc" alt="Profile Picture" class="pfp" />
+                }
+                else
+                {
+                    <img src="Images/MONKE.jpg" alt="Could not load image" class="pfp" />
+                }
+                <p><strong>Username:</strong> @Model.Username</p>
+                <p><strong>Email:</strong> @Model.Email</p>
+                <p><strong>Role:</strong> @Model.Role</p>
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="error-message">
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <p>@error.ErrorMessage</p>
+                        }
+                    </div>
+                }
+            </div>
+            <div class="profile-actions">
+                <form method="post">
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Regular"))
+                    {
+                        <button type="submit" class="upgrade" asp-page-handler="UpgradeAccount">Upgrade Account</button>
+                    }
+                    else if (User.Identity.IsAuthenticated && User.IsInRole("Critic") || User.IsInRole("Musician") || User.IsInRole("Admin"))
+                    {
+
+                    }
+                    <button type="submit" class="deactivate" asp-page-handler="DeactivateAccount">Deactivate Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}
