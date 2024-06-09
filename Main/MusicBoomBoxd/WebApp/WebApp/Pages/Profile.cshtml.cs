@@ -67,7 +67,7 @@ namespace WebApp.Pages
                     {
                         ModelState.AddModelError(string.Empty, string.Join(", ", error.Value));
                     }
-                    LoadUserData(); // Ensure the latest user data is loaded
+                    LoadUserData();
                     return Page();
                 }
 
@@ -79,6 +79,16 @@ namespace WebApp.Pages
                         newUser.ProfilePictureData = memoryStream.ToArray();
                         newUser.ProfilePictureContentType = profilePicture.ContentType;
                         newUser.ProfilePictureName = profilePicture.FileName;
+                    }
+                }
+                else
+                {
+                    var user = userManager.GetUserByUsernameFromDb(oldUsername);
+                    if (user != null)
+                    {
+                        newUser.ProfilePictureName = user.ProfilePictureName;
+                        newUser.ProfilePictureData = user.ProfilePictureData;
+                        newUser.ProfilePictureContentType = user.ProfilePictureContentType;
                     }
                 }
 
@@ -100,7 +110,7 @@ namespace WebApp.Pages
                 ModelState.AddModelError(string.Empty, "User not found.");
             }
 
-            LoadUserData(); // Ensure the latest user data is loaded
+            LoadUserData();
             return Page();
         }
         private void LoadUserData()
