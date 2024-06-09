@@ -52,7 +52,7 @@ main {
         }
 
 .login-btn {
-    background-color: #1161ee;
+    background-color: #d45800;
     color: #fff;
     border: none;
     border-radius: 25px;
@@ -62,9 +62,9 @@ main {
     transition: background-color 0.3s ease;
 }
 
-.login-btn:hover {
-    background-color: #1454c4;
-}
+    .login-btn:hover {
+        background-color: #ff6a00;
+    }
 
 @media only screen and (max-width: 768px) {
     .landing-content h2 {

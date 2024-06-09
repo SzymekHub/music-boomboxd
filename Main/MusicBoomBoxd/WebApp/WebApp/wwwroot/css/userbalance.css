@@ -79,7 +79,7 @@ form {
 }
 
     form button[type="submit"] {
-        background-color: #1161ee;
+        background-color: #d45800;
         color: #fff;
         border: none;
         border-radius: 5px;
@@ -90,7 +90,7 @@ form {
     }
 
         form button[type="submit"]:hover {
-            background-color: #1454c4;
+            background-color: #ff6a00;
         }
 
 /* Balance page styles */
