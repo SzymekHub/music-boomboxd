@@ -8,6 +8,7 @@
 
 <div class="container">
 	<h2 class="h2">Add New Album!</h2>
+	<h3 class="text-danger">@Html.Raw(ViewData["ErrorMessage"])</h3>
 	<div class="centered-container">
 		<form method="post" class="form" enctype="multipart/form-data" onsubmit="gatherSelectedSongs()">
 
@@ -92,13 +93,14 @@
 
 			<div class="button-container">
 				<button type="submit" class="button">Save</button>
-				<button type="reset" class="button-secondary">Cancel</button>
+				<button type="button" class="button-secondary" onclick="location.href='@Url.Page("/HomePage")'">Cancel</button>
 			</div>
 		</form>
 	</div>
 </div>
 
 @section Scripts {
+	<partial name="_ValidationScriptsPartial" />
 	<script>
 		function gatherSelectedSongs() {
 			var selectedSongs = [];

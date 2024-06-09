@@ -25,5 +25,13 @@
             SongCoverData = songCoverData;
             SongCoverContentType = songCoverContentType;
         }
-    }
+		public SongDTO(int songID, string songTitle, int artistID, DateTime releaseDate, string genre)
+		{
+			SongID = songID;
+			SongTitle = songTitle;
+			ArtistID = artistID;
+			ReleaseDate = releaseDate;
+			Genre = genre;
+		}
+	}
 }

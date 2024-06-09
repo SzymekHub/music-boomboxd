@@ -191,9 +191,63 @@ namespace Infrastructure
             }
             return songs; 
         }
+		public SongDTO GetSongByTitleAndArtist(string title, int artistId)
+		{
+			using (SqlConnection conn = GetSqlConnection())
+			using (SqlCommand cmd = new SqlCommand())
+			{
+				cmd.Connection = conn;
+				cmd.CommandType = CommandType.Text;
+				cmd.CommandText = "SELECT SongID, Title, ArtistID, Date, Genre " +
+								  "FROM [Song] WHERE Title = @Title AND ArtistID = @ArtistID";
 
+				cmd.Parameters.AddWithValue("@Title", title);
+				cmd.Parameters.AddWithValue("@ArtistID", artistId);
 
-        public Result UpdateSong(SongDTO newSongDTO, SongDTO oldSongDTO)
+				conn.Open();
+
+				using (SqlDataReader reader = cmd.ExecuteReader())
+				{
+					while (reader.Read())
+					{
+						int songID = reader.GetInt32(0);
+						string songtitle = reader.GetString(1);
+						int artistID = reader.GetInt32(2);
+						DateTime releaseDate = reader.GetDateTime(3);
+						string genre = reader.GetString(4);
+
+						return new SongDTO(songID, songtitle, artistID, releaseDate, genre);
+					}
+				}
+			}
+			return null;
+		}
+
+		public int GetSongIDBySongTitle(string songTitle)
+		{
+			int songID = 0;
+			using (SqlConnection conn = GetSqlConnection())
+			using (SqlCommand cmd = new SqlCommand())
+			{
+				cmd.Connection = conn;
+				cmd.CommandType = CommandType.Text;
+				cmd.CommandText = "SELECT SongID FROM [Song] WHERE Title = @Title";
+
+				cmd.Parameters.AddWithValue("@Title", songTitle);
+
+				conn.Open();
+
+				object result = cmd.ExecuteScalar();
+				if (result != null)
+				{
+					songID = Convert.ToInt32(result);
+				}
+			}
+
+			return songID;
+		}
+
+		public Result UpdateSong(SongDTO newSongDTO, SongDTO oldSongDTO)
         {
             using (SqlConnection conn = GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand())

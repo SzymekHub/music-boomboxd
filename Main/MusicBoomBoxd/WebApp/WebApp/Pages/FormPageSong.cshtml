@@ -1,0 +1,74 @@
+﻿@page
+@model FormPageSongModel
+@{
+	ViewData["Title"] = "Form Page";
+}
+
+<link rel="stylesheet" href="~/css/formpageSong.css" />
+
+<div class="container">
+	<h2 class="h2">Add New Song!</h2>
+	<h3 class="text-danger">@Html.Raw(ViewData["ErrorMessage"])</h3>
+	<div class="centered-container">
+		<form method="post" class="form" enctype="multipart/form-data" onsubmit="gatherSelectedSongs()">
+
+			<div class="form-group">
+				<label asp-for="SongCover" class="form-group">Song Cover:<sup>*</sup></label>
+				<input type="file" asp-for="SongCover" class="form-control">
+				<span asp-validation-for="SongCover" class="text-danger"></span>
+			</div>
+
+			<div class="form-group">
+				<label for="title" class="label" asp-for="InputSong.Title">Title:<sup>*</sup></label>
+				<span asp-validation-for="InputSong.Title" class="text-danger"></span>
+				<input id="title" type="text" class="input" asp-for="InputSong.Title">
+			</div>
+
+			<div class="form-group">
+				<label asp-for="InputSong.ArtistID">Artist:<sup>*</sup></label>
+				<select asp-for="InputSong.ArtistID" class="form-control">
+					<option value="">Select an Artist</option>
+					@foreach (var artist in Model.Artists)
+					{
+						<option value="@artist.ArtistID">@artist.Name</option>
+					}
+				</select>
+				<span asp-validation-for="InputSong.ArtistID" class="text-danger"></span>
+			</div>
+
+			<div class="form-group">
+				<label for="runtime" class="label" asp-for="InputSong.RunTime">Runtime:<sup>*</sup></label>
+				<span asp-validation-for="InputSong.RunTime" class="text-danger"></span>
+				<input id="runtime" type="number" class="input" asp-for="InputSong.RunTime">
+			</div>
+
+			<div class="form-group">
+				<label for="date" class="date" asp-for="InputSong.Date">Date:<sup>*</sup></label>
+				<input asp-for="InputSong.Date" class="form-control" type="date">
+				<span asp-validation-for="InputSong.Date" class="text-danger"></span>
+			</div>
+
+			<div class="form-group">
+				<label asp-for="InputSong.Genre">Genre:<sup>*</sup></label>
+				<select asp-for="InputSong.Genre" class="form-control">
+					<option value="">Select a Genre</option>
+					@foreach (var genre in Model.GenreOptions)
+					{
+						<option value="@genre.Value">@genre.Text</option>
+					}
+				</select>
+				<span asp-validation-for="InputSong.Genre" class="text-danger"></span>
+			</div>
+
+			<div class="button-container">
+				<button type="submit" class="button">Save</button>
+				<button type="button" class="button-secondary" onclick="location.href='@Url.Page("/HomePage")'">Cancel</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+@section Scripts
+{
+	<partial name="_ValidationScriptsPartial" />
+}

@@ -6,12 +6,14 @@ namespace Logic
     {
         public List<Song> _songs;
         private readonly ISongRepository _songRepository;
-        private readonly Artist artist;
+		private readonly IValidateSong _validateSong;
+		private readonly Artist artist;
 
-        public SongManager(ISongRepository isongRep)
+        public SongManager(ISongRepository isongRep, IValidateSong ivalidSong)
         {
             _songs = new List<Song>();
             _songRepository = isongRep;
+            _validateSong = ivalidSong;
         }
 
         public List<Song> LoadSongsFromDataBase()
@@ -58,9 +60,12 @@ namespace Logic
 
             return songs;
         }
+		public int GetSongIDBySongTitle(string songTitle)
+		{
+			return _songRepository.GetSongIDBySongTitle(songTitle);
+		}
 
-
-        public Result Add(Song song)
+		public Result Add(Song song)
         {
             SongDTO songDTO = SongMapper.ToSongDTO(song);
 
@@ -71,8 +76,19 @@ namespace Logic
             return resultSong;
 
         }
+		public Result AddWEB(Song song)
+		{
+			SongDTO songDTO = SongMapper.ToSongDTO(song);
 
-        public bool Remove(Song song)
+			_songs.Add(song);
+
+			Result resultSong = SendSongToTheDbWEB(songDTO);
+
+			return resultSong;
+
+		}
+
+		public bool Remove(Song song)
         {
             _songRepository.DeleteSong(SongMapper.ToSongDTO(song));
 
@@ -126,38 +142,52 @@ namespace Logic
             return _songRepository.InsertSong(newSong);
         }
 
+		public Result SendSongToTheDbWEB(SongDTO newSong)
+		{
+			var errors = _validateSong.ValidateSongs(newSong.SongTitle, newSong.ArtistID);
+			if (errors.Any())
+			{
+				return new Result
+				{
+					Success = false,
+					Errors = errors
+				};
+			}
+			return _songRepository.InsertSong(newSong);
+		}
 
-        //public Song ConvertToSong(SongDTO newsongDTO)
-        //{
-        //    //Converts the genre enum to a string 
-        //    genreType genre = (genreType)Enum.Parse(typeof(genreType), newsongDTO.Genre);
 
-        //    //this converts SongDTO to songs
-        //    return new Song(
-        //        newsongDTO.SongID,
-        //        newsongDTO.SongTitle,
-        //        newsongDTO.Artist,
-        //        newsongDTO.ReleaseDate,
-        //        genre,
-        //        newsongDTO.SongCoverName,
-        //        newsongDTO.SongCoverData,
-        //        newsongDTO.SongCoverContentType
-        //        );
-        //}
+		//public Song ConvertToSong(SongDTO newsongDTO)
+		//{
+		//    //Converts the genre enum to a string 
+		//    genreType genre = (genreType)Enum.Parse(typeof(genreType), newsongDTO.Genre);
 
-        //public SongDTO ConvertToSongDTO(Song song)
-        //{
-        //    // this converts Song to SongDTO
-        //    return new SongDTO(
-        //        song.SongID,
-        //        song.Title,
-        //        song.Artist,
-        //        song.Date,
-        //        song.Genre.ToString(),
-        //        song.SongCoverName,
-        //        song.SongCoverData,
-        //        song.SongCoverContentType
-        //    );
-        //}
-    }
+		//    //this converts SongDTO to songs
+		//    return new Song(
+		//        newsongDTO.SongID,
+		//        newsongDTO.SongTitle,
+		//        newsongDTO.Artist,
+		//        newsongDTO.ReleaseDate,
+		//        genre,
+		//        newsongDTO.SongCoverName,
+		//        newsongDTO.SongCoverData,
+		//        newsongDTO.SongCoverContentType
+		//        );
+		//}
+
+		//public SongDTO ConvertToSongDTO(Song song)
+		//{
+		//    // this converts Song to SongDTO
+		//    return new SongDTO(
+		//        song.SongID,
+		//        song.Title,
+		//        song.Artist,
+		//        song.Date,
+		//        song.Genre.ToString(),
+		//        song.SongCoverName,
+		//        song.SongCoverData,
+		//        song.SongCoverContentType
+		//    );
+		//}
+	}
 }

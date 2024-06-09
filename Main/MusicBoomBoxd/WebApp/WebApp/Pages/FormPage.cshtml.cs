@@ -159,8 +159,10 @@ namespace WebApp.Pages
                 }
             }
 
-            //Returns a page if any of the above conditions are not met
-            return Page();
+			//Returns a page if any of the above conditions are not met
+			// Display error message if album already Exists for this artist is incorrect
+			ViewData["ErrorMessage"] = "This album already exists for this artist";
+			return Page();
         }
 
     }
