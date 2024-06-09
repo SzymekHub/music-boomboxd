@@ -27,6 +27,7 @@
         #endregion
 
         UserDTO GetUserByUsername(string username);
+        UserDTO GetUserByEmail(string email);
 
         Result UpdateUser(UserDTO newUserDTO, UserDTO oldUserDTO);
 

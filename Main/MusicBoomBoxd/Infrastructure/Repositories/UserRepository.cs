@@ -369,6 +369,42 @@ namespace Infrastructure
             }
             return null;
         }
+        public UserDTO GetUserByEmail(string email)
+        {
+            using (SqlConnection conn = GetSqlConnection())
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = conn;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT UserID, Username, Password, Email, UserType, Birthday, FavGenre, ProfilePictureName, ProfilePictureData, ProfilePictureContentType " +
+                                  "FROM [User] WHERE Email = @Email AND Active = 1";
+
+
+                cmd.Parameters.AddWithValue("@Email", email);
+
+                conn.Open();
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int userID = reader.GetInt32(0);
+                        string userName = reader.GetString(1);
+                        string password = reader.GetString(2);
+                        string useremail = reader.GetString(3);
+                        string userType = reader.GetString(4);
+                        DateTime birthday = reader.GetDateTime(5);
+                        string favGenre = reader.GetString(6);
+                        string profilePictureName = reader.GetString(7);
+                        byte[] profilePictureData = (byte[])reader.GetValue(8);
+                        string profilePictureContentType = reader.GetString(9);
+
+                        return new UserDTO(userID, userName, password, useremail, userType, birthday, favGenre, profilePictureName, profilePictureData, profilePictureContentType);
+                    }
+                }
+            }
+            return null;
+        }
 
         public Result UpdateUser(UserDTO newUserDTO, UserDTO oldUserDTO)
         {

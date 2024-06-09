@@ -5,6 +5,8 @@ using System.Security.Claims;
 using Logic;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace WebApp.Pages
 {
@@ -12,6 +14,7 @@ namespace WebApp.Pages
     public class ProfileModel : PageModel
     {
         private readonly UserManager userManager;
+        private readonly ValidateUser validateUser;
 
         public string Username { get; set; }
         public string Email { get; set; }
@@ -23,26 +26,16 @@ namespace WebApp.Pages
         {
             IUserRepository iUserRep = new UserRepository();
             IProfileRepository iPortRep = new ProfileRepository();
-            ValidateUser ValUser = new ValidateUser(iUserRep);
-            userManager = new UserManager(iUserRep, ValUser);
+            validateUser = new ValidateUser(iUserRep);
+            userManager = new UserManager(iUserRep, validateUser);
         }
 
-		// This initializes user information
+        // This initializes user information
         public void OnGet()
         {
-            var userClaims = User.Claims;
-            Username = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
-            Email = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            Role = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-
-            var user = userManager.GetUserByUsernameFromDb(Username);
-            if (user != null)
-            {
-                ProfilePictureData = user.ProfilePictureData;
-                ProfilePictureContentType = user.ProfilePictureContentType;
-            }
+            LoadUserData();
         }
-
+        
         public async Task<IActionResult> OnPostUpdateProfile(IFormFile profilePicture, string username, string email)
         {
             var userClaims = User.Claims;
@@ -53,18 +46,30 @@ namespace WebApp.Pages
             if (oldUser != null)
             {
                 User newUser = new User
-                (
-                    oldUser.UserID,
-                    username,
-                    oldUser.Password,
-                    email,
-                    oldUser.UserType,
-                    oldUser.Birthday,
-                    oldUser.FavGenre,
-                    oldUser.ProfilePictureName,
-                    oldUser.ProfilePictureData,
-                    oldUser.ProfilePictureContentType
-                );
+               (
+                   oldUser.UserID,
+                   username,
+                   oldUser.Password,
+                   email,
+                   oldUser.UserType,
+                   oldUser.Birthday,
+                   oldUser.FavGenre,
+                   oldUser.ProfilePictureName,
+                   oldUser.ProfilePictureData,
+                   oldUser.ProfilePictureContentType
+               );
+
+                var Errors = validateUser.ValidateUsersWEB(newUser);
+
+                if (Errors.Count > 0)
+                {
+                    foreach (var error in Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, string.Join(", ", error.Value));
+                    }
+                    LoadUserData(); // Ensure the latest user data is loaded
+                    return Page();
+                }
 
                 if (profilePicture != null && profilePicture.Length > 0)
                 {
@@ -76,9 +81,9 @@ namespace WebApp.Pages
                         newUser.ProfilePictureName = profilePicture.FileName;
                     }
                 }
-                
+
                 var result = userManager.Update(newUser, oldUser);
-                
+
                 if (result.Success)
                 {
                     // Updates the claims in the current user identity
@@ -95,7 +100,22 @@ namespace WebApp.Pages
                 ModelState.AddModelError(string.Empty, "User not found.");
             }
 
+            LoadUserData(); // Ensure the latest user data is loaded
             return Page();
+        }
+        private void LoadUserData()
+        {
+            var userClaims = User.Claims;
+            Username = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+            Email = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            Role = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+            var user = userManager.GetUserByUsernameFromDb(Username);
+            if (user != null)
+            {
+                ProfilePictureData = user.ProfilePictureData;
+                ProfilePictureContentType = user.ProfilePictureContentType;
+            }
         }
 
         private async Task UpdateUserClaims(User newUser)
@@ -130,16 +150,14 @@ namespace WebApp.Pages
                 else
                 {
                     ModelState.AddModelError(string.Empty, result.Message);
-                    userClaims = User.Claims;
-                    Username = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
-                    Email = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-                    Role = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+                    LoadUserData();
                     return Page();
                 }
             }
             else
             {
-                //ModelState here
+                ModelState.AddModelError(string.Empty, "User not found.");
+                LoadUserData();
                 return Page();
             }
         }
