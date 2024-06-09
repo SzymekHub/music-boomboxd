@@ -1,0 +1,36 @@
+﻿@page
+@model WebApp.Pages.UpgradeUserAccountModel
+@{
+    ViewData["Title"] = "Upgrade My Account";
+}
+
+<link rel="stylesheet" href="~/css/upgradeacc.css" />
+
+<main>
+    <div class="upgrade-page-container">
+        <div class="upgrade-container">
+            <div class="upgradeAccount-header">
+                <h1>@ViewData["Title"]</h1>
+            </div>
+            <p> Upgrade your account to either a musician or critic account:</p>
+            <p class="Musician"> By upgrading to a musician account for only <strong>€ 10.00</strong>.</p>
+            <p class="Musician-desc"> You will be able to add new albums, songs, and artists.</p>
+            
+            <p class="critic"> By upgrading to a critic account for only <strong>€ 40.00</strong>.</p>
+            <p class="critic-desc"> You will have all the abilities of a musician as well as the option to create reviews for each album, song, and artist.</p>
+            <form method="post">
+                <button type="submit" class="upgrade" asp-page-handler="UpgradeAccountMusician">Become a Musician</button>
+                <button type="submit" class="upgrade" asp-page-handler="UpgradeAccountCritic">Become a Critic</button>
+            </form>
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="error-message">
+                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <p>@error.ErrorMessage</p>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</main>

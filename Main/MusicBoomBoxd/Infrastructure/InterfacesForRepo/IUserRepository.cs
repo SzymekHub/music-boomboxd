@@ -33,6 +33,8 @@
 
         Result UpdateUserRoleToCritic(UserDTO userDTO);
 
+        Result UpdateUserRoleToMusician(UserDTO userDTO);
+
         Result DeleteUser(UserDTO userDTO);
 
     }

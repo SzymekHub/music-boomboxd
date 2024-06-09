@@ -196,6 +196,18 @@ namespace Logic
             return resultUserWeb;
         }
 
+        public Result UpgradeToCritic(User user)
+        {
+            Result resultUpgradeCritic = _userRepository.UpdateUserRoleToCritic(ConvertToUserDTO(user));
+            return resultUpgradeCritic;
+        }
+        
+        public Result UpgradeToMusician(User user)
+        {
+            Result resultUpgradeMusician = _userRepository.UpdateUserRoleToMusician(ConvertToUserDTO(user));
+            return resultUpgradeMusician;
+        }
+       
         public Result Remove(User user)
         {
             Result resultRemoveUser = _userRepository.DeleteUser(ConvertToUserDTO(user));
@@ -236,12 +248,6 @@ namespace Logic
 
                 return resultupdate;
             }
-        }
-
-        public Result UpgradeToCritic(User user)
-        {
-            Result resultUpgrade = _userRepository.UpdateUserRoleToCritic(ConvertToUserDTO(user));
-            return resultUpgrade;
         }
 
         public Result SendUserToTheDb(UserDTO newUser)
