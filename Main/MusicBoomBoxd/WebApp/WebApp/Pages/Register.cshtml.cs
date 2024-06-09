@@ -3,15 +3,14 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Logic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.IO;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Infrastructure;
 
 namespace WebApp.Pages
 {
 	public class RegisterModel : PageModel
 	{
-		public UserManager _userManager { get; }
+		public readonly UserManager _userManager;
+
 		private IWebHostEnvironment _environment;
 
 		public List<SelectListItem> GenreOptions { get; set; }
@@ -23,13 +22,16 @@ namespace WebApp.Pages
 		[Display(Name = "Profile Picture"), Required]
 		public IFormFile ProfilePicture { get; set; }
 
-		public RegisterModel(UserManager userManager, IWebHostEnvironment environment)
+		public RegisterModel(IWebHostEnvironment environment)
 		{
-			_userManager = userManager;
-			_environment = environment;
-		}
+			IUserRepository iuserRep = new UserRepository();
+            IProfileRepository iprofRep = new ProfileRepository();
+            IValidateUser ivalUser = new ValidateUser(iuserRep); 
+            _userManager = new UserManager(iuserRep, iprofRep, ivalUser);
+            _environment = environment;
+        }
 
-		private void LoadGenres()
+        private void LoadGenres()
 		{
 			GenreOptions = Enum.GetValues(typeof(genreType))
 								.Cast<genreType>()

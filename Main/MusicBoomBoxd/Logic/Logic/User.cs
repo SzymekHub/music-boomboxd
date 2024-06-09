@@ -2,18 +2,19 @@
 {
     public class User
     {
-        public int UserID { get; }
+        public int UserID { get; private set; }
         public string Username { get; }
         public string Password { get; }
         public string Email { get; }
-        public userType UserType { get;  set; }
+        public userType UserType { get; set; }
         public DateTime Birthday { get; set; }
         public genreType FavGenre { get; set; }
         public string ProfilePictureName { get; set; }
         public byte[] ProfilePictureData { get; set; }
         public string ProfilePictureContentType { get; set; }
+        public Profile Profile { get; private set; }
 
-        public User(int userID, string username, string password, string email, userType userType, DateTime birthday, genreType favGenre, string profilePictureName, byte[] profilePictureData, string profilePictureContentType)
+        public User(int userID, string username, string password, string email, userType userType, DateTime birthday, genreType favGenre, string profilePictureName, byte[] profilePictureData, string profilePictureContentType, Profile profile = null)
         {
             UserID = userID;
             Username = username;
@@ -25,6 +26,7 @@
             ProfilePictureName = profilePictureName;
             ProfilePictureData = profilePictureData;
             ProfilePictureContentType = profilePictureContentType;
+            Profile = profile;
         }
 
         public User(string username, string password, string email, userType userType, DateTime birthday, genreType favGenre, string profilePictureName, byte[] profilePictureData, string profilePictureContentType)
@@ -38,6 +40,19 @@
             ProfilePictureName = profilePictureName;
             ProfilePictureData = profilePictureData;
             ProfilePictureContentType = profilePictureContentType;
+            Profile = new Profile
+            {
+                User_Balance= 0
+            };
+        }
+
+        public void SetUserID(int userID)
+        {
+            if (UserID == 0)
+            {
+                UserID = userID;
+                Profile.UserID = userID;
+            }
         }
     }
 }

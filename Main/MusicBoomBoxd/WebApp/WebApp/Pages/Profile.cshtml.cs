@@ -5,8 +5,6 @@ using System.Security.Claims;
 using Logic;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication;
-using System.Threading.Tasks;
-using System.Linq;
 
 namespace WebApp.Pages
 {
@@ -15,6 +13,7 @@ namespace WebApp.Pages
     {
         private readonly UserManager userManager;
         private readonly ValidateUser validateUser;
+        private readonly ProfileRepository profileRepository;
 
         public string Username { get; set; }
         public string Email { get; set; }
@@ -27,7 +26,7 @@ namespace WebApp.Pages
             IUserRepository iUserRep = new UserRepository();
             IProfileRepository iPortRep = new ProfileRepository();
             validateUser = new ValidateUser(iUserRep);
-            userManager = new UserManager(iUserRep, validateUser);
+            userManager = new UserManager(iUserRep, profileRepository, validateUser);
         }
 
         // This initializes user information

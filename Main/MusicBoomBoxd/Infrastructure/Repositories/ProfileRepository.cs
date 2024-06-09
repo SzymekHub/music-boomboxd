@@ -12,7 +12,7 @@ namespace Infrastructure
             {
                 cmd.Connection = connection;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"INSERT INTO Profile (UserID, User_Balance) 
+                    cmd.CommandText = @"INSERT INTO Profile (UserID, User_Balance) 
                                     VALUES (@UserID, @User_Balance)";
 
                 cmd.Parameters.AddWithValue("@UserID", profileDTO.UserID);

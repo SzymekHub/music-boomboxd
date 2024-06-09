@@ -42,14 +42,6 @@ namespace Logic
             return result;
         }
 
-        public static Profile ConvertToProfile(ProfileDTO profileDTO)
-        {
-            return new Profile(
-                    profileDTO.ProfileID,
-                    profileDTO.UserID,
-                    profileDTO.User_Balance
-                );
-        }
         public static ProfileDTO ConvertToProfileDTO(Profile profile)
         {
             ProfileDTO profileDTO = new ProfileDTO();

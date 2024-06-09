@@ -7,11 +7,13 @@ namespace Logic
     {
         private readonly IUserRepository _userRepository;
         private readonly IValidateUser _validateUsers;
+        private readonly IProfileRepository _profileRepository;
 
-        public UserManager(IUserRepository iuserRep, IValidateUser ivalUser)
+        public UserManager(IUserRepository iuserRep, IProfileRepository iprofRep, IValidateUser ivalUser)
         {
             _userRepository = iuserRep;
             _validateUsers = ivalUser;
+            _profileRepository = iprofRep;
 
             // inject the repository and use userRepistory as an interface and inject it as well. Get rid of Load stuff.
         }
@@ -145,6 +147,24 @@ namespace Logic
 
             Result resultUser = SendUserToTheDb(userDTO);
 
+            if (resultUser.Success)
+            {
+                // Set the UserID in the user object
+                user.SetUserID(userDTO.UserID);
+
+                // Create ProfileDTO for the new User
+                ProfileDTO profileDTO = new();
+                profileDTO.UserID = user.UserID;
+                profileDTO.User_Balance = 0;
+
+                // Insert Profile into the database
+                Result resultProfile = _profileRepository.InsertProfile(profileDTO);
+
+                if (!resultProfile.Success)
+                {
+                    return new Result { Success = false, Message = "User created but failed to create Profile." };
+                }
+            }
             return resultUser;
         }
 
@@ -153,6 +173,25 @@ namespace Logic
             UserDTO userDTO = ConvertToUserDTO(user);
 
             Result resultUserWeb = SendUserToTheDbWEB(userDTO);
+
+            if (resultUserWeb.Success)
+            {
+                // Set the UserID in the user object
+                user.SetUserID(userDTO.UserID);
+
+                // Create ProfileDTO for the new User
+                ProfileDTO profileDTO = new();
+                profileDTO.UserID = user.UserID;
+                profileDTO.User_Balance = 0;
+
+                // Insert Profile into the database
+                Result resultProfile = _profileRepository.InsertProfile(profileDTO);
+
+                if (!resultProfile.Success)
+                {
+                    return new Result { Success = false, Message = "User created but failed to create Profile." };
+                }
+            }
 
             return resultUserWeb;
         }

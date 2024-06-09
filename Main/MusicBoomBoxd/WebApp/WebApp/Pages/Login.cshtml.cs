@@ -10,12 +10,13 @@ namespace WebApp.Pages
 {
     public class LoginModel : PageModel
     {
-        public UserManager userManager { get; }
+        public UserManager userManager { get; } 
         public LoginModel()
         {
             IUserRepository iuserRep = new UserRepository();
+            IProfileRepository iprofileRep = new ProfileRepository();
             ValidateUser validateUsers = new ValidateUser(iuserRep);
-            userManager = new UserManager(iuserRep, validateUsers);
+            userManager = new UserManager(iuserRep, iprofileRep, validateUsers);
         }
         [BindProperty]
         public LoginUser Login { get; set; }

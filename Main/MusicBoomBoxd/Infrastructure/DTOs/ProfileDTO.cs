@@ -4,7 +4,7 @@
     {
         public int ProfileID { get; set; }
 
-        public string UserID { get; set; }
+        public int UserID { get; set; }
 
         public double User_Balance { get; set; }
     }
