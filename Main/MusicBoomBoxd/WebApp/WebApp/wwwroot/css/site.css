@@ -41,7 +41,7 @@ header {
 
 .logo {
     text-align: center;
-    margin-left: 2%;
+    margin-right: 2%;
     border-radius: 56%;
     flex-grow: 1;
     max-height: 125px;
