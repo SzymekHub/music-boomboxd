@@ -17,11 +17,6 @@
 						<img src='Images/LogoBlue.png' alt="Logo" class="logo">
 					</a>
 				</div>
-				<ul class="right-links">
-
-					<a asp-area="" asp-page="/Login">Login</a>
-
-				</ul>
 			}
 			else if (User.Identity.IsAuthenticated && User.IsInRole("Regular"))
 			{
