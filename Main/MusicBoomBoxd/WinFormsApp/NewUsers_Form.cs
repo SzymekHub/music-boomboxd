@@ -461,7 +461,7 @@ namespace WinFormsApp
             tbNameUser.Text = user.Username;
             tbPassword.Visible = false;
             tbEmailUser.Text = user.Email;
-            //tbPassword.Text = user.Password;
+            tbPassword.Text = user.Password;
             cbUserType.SelectedItem = user.UserType;
             dtpUser.Value = user.Birthday;
             cbFavGenre.SelectedItem = user.FavGenre;
