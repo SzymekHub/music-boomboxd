@@ -16,7 +16,8 @@ namespace WinFormsApp
         private readonly AlbumManager albumManager;
 
         private readonly ISongRepository songRep;
-        private readonly SongManager songManager;
+		private readonly IValidateSong valSong;
+		private readonly SongManager songManager;
 
         private readonly IArtistRepository artistRep;
         private readonly ArtistManager artistManager;
@@ -54,7 +55,7 @@ namespace WinFormsApp
             #region Songs
             songRep = new SongRepository();
 
-            songManager = new SongManager(songRep);
+            songManager = new SongManager(songRep, valSong);
             songManager.LoadSongsFromDataBase();
             #endregion
 

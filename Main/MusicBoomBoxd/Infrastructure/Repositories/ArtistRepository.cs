@@ -138,6 +138,38 @@ namespace Infrastructure
             return artists;
         }
 
+        public ArtistDTO GetArtistByArtistID(int artistID)
+        {
+            using (SqlConnection connection = GetSqlConnection())
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = connection;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT ArtistID, Name, AritstPictureName, ArtistPictureData, ArtistPictureContentType FROM [Artist] WHERE ArtistID = @ArtistID AND Active = 1";
+
+                cmd.Parameters.AddWithValue("@ArtistID", artistID);
+
+                connection.Open();
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        int ArtistID = reader.GetInt32(0);
+                        string name = reader.GetString(1);
+                        string aritstPictureName = reader.GetString(2);
+                        byte[] artistPictureData = (byte[])reader.GetValue(3);
+                        string artistPictureContentType = reader.GetString(4);
+
+                        ArtistDTO artist = new ArtistDTO(ArtistID, name, aritstPictureName, artistPictureData, artistPictureContentType);
+
+                        return artist;
+                    }
+                }
+            }
+            return null;
+        }
+
         public Result UpdateArtist(ArtistDTO artistDTO)
         {
             using (SqlConnection conn = GetSqlConnection())

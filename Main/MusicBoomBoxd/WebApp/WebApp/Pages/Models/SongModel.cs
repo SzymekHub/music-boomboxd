@@ -21,5 +21,10 @@ namespace WebApp.Pages
 			RunTime = runTime;
 			Genre = genre;
 		}
-	}
+        public SongModel(int songID, string title)
+        {
+            SongID = songID;
+            Title = title;
+        }
+    }
 }

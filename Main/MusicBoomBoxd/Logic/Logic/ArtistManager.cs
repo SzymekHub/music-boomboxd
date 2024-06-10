@@ -29,6 +29,13 @@ namespace Logic
             return artists;
         }
 
+        public Artist GetArtistByArtistID(int artistID) 
+        {
+            ArtistDTO artistDTO = _artistsRepository.GetArtistByArtistID(artistID);
+            Artist artist = ConvertToArtist(artistDTO);
+            return artist;
+        }
+
         public List<Artist> GetArtistForUser(int userId)
         {
             List<Artist> artists = new List<Artist>();
