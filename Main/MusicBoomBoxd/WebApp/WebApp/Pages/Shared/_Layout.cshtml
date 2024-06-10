@@ -1,150 +1,123 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>@ViewData["Title"] - MusicBoomBoxd</title>
-	<link rel="stylesheet" href="~/css/site.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - MusicBoomBoxd</title>
+    <link rel="stylesheet" href="~/css/site.css">
 </head>
 <body>
-	<header>
-		<div class="navbar">
-			@if (!User.Identity.IsAuthenticated)
-			{
-				<div class="logo">
-					<a class="home" asp-area="" asp-page="/HomePage">
-						<img src='Images/LogoBlue.png' alt="Logo" class="logo">
-					</a>
-				</div>
-			}
-			else if (User.Identity.IsAuthenticated && User.IsInRole("Regular"))
-			{
-				<ul class="left-links">
-					<a  asp-area="" asp-page="/Albums">Albums</a>
-
-					<a  asp-area="" asp-page="/Songs">Songs</a>
-
-					<a  asp-area="" asp-page="/Artists">Artists</a>
-
-					<a  asp-area="" asp-page="#">Search</a>
-				</ul>
-				<div class="logo">
-					<a class="home" asp-area="" asp-page="/HomePage">
-						<img src='Images/LogoBlue.png' alt="Logo" class="logo">
-					</a>
-				</div>
-				<ul class="right-links">
-					<a  asp-area="" asp-page="/Profile">Profile</a>
-
-					<a asp-area="" asp-page="/UpgradeUserAccount">Upgrade Account</a>
-
-					<a  asp-area="" asp-page="/UserBalance">Add Balance</a>
-
-					<a  asp-area="" asp-page="/Logout">Logout</a>
-
-				</ul>
-			}
-			else if (User.Identity.IsAuthenticated && User.IsInRole("Critic") || User.IsInRole("Admin"))
-			{
-				<ul class="left-links">
-
-					<a asp-area="" asp-page="/Albums">Albums </a>
-
-					<a asp-area="" asp-page="/Songs">Songs</a>
-
-					<a asp-area="" asp-page="/Artists">Artists</a>
-
-					<a asp-area="" asp-page="#">Search</a>
-
-				</ul>
-				<div class="logo">
-					<a class="home" asp-area="" asp-page="/HomePage">
-						<img src='Images/LogoBlue.png' alt="Logo" class="logo">
-					</a>
-				</div>
-				<ul class="right-links">
-					<a  asp-area="" asp-page="/Profile">Profile</a>
-
-					<a  asp-area="" asp-page="/UserBalance">Donations</a>
-
-					<a  asp-area="" asp-page="/Logout">Logout</a>
-
-				</ul>
-			}
-			else if (User.Identity.IsAuthenticated && User.IsInRole("Musician"))
-			{
-				<ul class="left-links">
-
-					<a  asp-area="" asp-page="/Albums">Albums</a>
-
-					<a  asp-area="" asp-page="/Songs">Songs</a>
-
-					<a  asp-area="" asp-page="/Artists">Artists</a>
-
-					<a  asp-area="" asp-page="#">Search</a>
-
-				</ul>
-				<div class="logo">
-					<a class="home" asp-area="" asp-page="/HomePage">
-						<img src='Images/LogoBlue.png' alt="Logo" class="logo">
-					</a>
-				</div>
-				<ul class="right-links">
-					<a  asp-area="" asp-page="/Profile">Profile</a>
-
-					<a  asp-area="" asp-page="/UserBalance">Donations</a>
-
-					<a  asp-area="" asp-page="/Logout">Logout</a>
-
-				</ul>
-			}
-		</div>
-	</header>
-	<div class="container">
-		<main role="main" class="pb-3">
-			@RenderBody()
-		</main>
-	</div>
-
-	<footer>
-		<div class="footer-content">
-			<div class="left-links">
-				@if (User.Identity.IsAuthenticated && (User.IsInRole("Critic") || User.IsInRole("Admin")))
-				{
-					<ul>
-						<li><a class="form-link" asp-page="/FormPage">Form to add albums</a></li>
-						<li><a class="form-link" asp-page="/FormPageSong">Form to add songs</a></li>
-					</ul>
-				}
-				else if (User.Identity.IsAuthenticated && User.IsInRole("Musician"))
-				{
-					<ul>
-						<li><a class="form-link" asp-page="/FormPage">Form to add albums</a></li>
-						<li><a class="form-link" asp-page="/FormPageSong">Form to add songs</a></li>
-					</ul>
-				}
-			</div>
-			<div class="copyright">
-				&copy; MusicBoomBoxd
-			</div>
-			<div class="right-links">
-				@if (User.Identity.IsAuthenticated && (User.IsInRole("Critic") || User.IsInRole("Admin")))
-				{
-					<ul>
-						<li><a class="form-link" asp-area="" asp-page="/Rating">Leave A Rating for Album</a></li>
-						<li><a class="form-link" asp-area="" asp-page="/RatingSong">Leave A Rating for Song</a></li>
-					</ul>
-				}
-			</div>
-		</div>
-	</footer>
-
-	<script src="~/lib/jquery/dist/jquery.min.js"></script>
-	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="~/js/site.js" asp-append-version="true"></script>
-
-	@await RenderSectionAsync("Scripts", required: false)
-
+    <header>
+        <div class="navbar">
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <div class="logo">
+                    <a class="home" asp-area="" asp-page="/HomePage">
+                        <img src='Images/LogoBlue.png' alt="Logo" class="logo">
+                    </a>
+                </div>
+            }
+            else if (User.Identity.IsAuthenticated && User.IsInRole("Regular"))
+            {
+                <ul class="left-links">
+                    <a asp-area="" asp-page="/Albums">Albums</a>
+                    <a asp-area="" asp-page="/Songs">Songs</a>
+                    <a asp-area="" asp-page="/Artists">Artists</a>
+                    <a asp-area="" asp-page="#">Search</a>
+                </ul>
+                <div class="logo">
+                    <a class="home" asp-area="" asp-page="/HomePage">
+                        <img src='Images/LogoBlue.png' alt="Logo" class="logo">
+                    </a>
+                </div>
+                <ul class="right-links">
+                    <a asp-area="" asp-page="/Profile">Profile</a>
+                    <a asp-area="" asp-page="/UpgradeUserAccount">Upgrade Account</a>
+                    <a asp-area="" asp-page="/UserBalance">Add Balance</a>
+                    <a asp-area="" asp-page="/Logout">Logout</a>
+                </ul>
+            }
+            else if (User.Identity.IsAuthenticated && (User.IsInRole("Critic") || User.IsInRole("Admin")))
+            {
+                <ul class="left-links">
+                    <a asp-area="" asp-page="/Albums">Albums</a>
+                    <a asp-area="" asp-page="/Songs">Songs</a>
+                    <a asp-area="" asp-page="/Artists">Artists</a>
+                    <a asp-area="" asp-page="#">Search</a>
+                </ul>
+                <div class="logo">
+                    <a class="home" asp-area="" asp-page="/HomePage">
+                        <img src='Images/LogoBlue.png' alt="Logo" class="logo">
+                    </a>
+                </div>
+                <ul class="right-links">
+                    <a asp-area="" asp-page="/Profile">Profile</a>
+                    <a asp-area="" asp-page="/UserBalance">Donations</a>
+                    <a asp-area="" asp-page="/Logout">Logout</a>
+                </ul>
+            }
+            else if (User.Identity.IsAuthenticated && User.IsInRole("Musician"))
+            {
+                <ul class="left-links">
+                    <a asp-area="" asp-page="/Albums">Albums</a>
+                    <a asp-area="" asp-page="/Songs">Songs</a>
+                    <a asp-area="" asp-page="/Artists">Artists</a>
+                    <a asp-area="" asp-page="#">Search</a>
+                </ul>
+                <div class="logo">
+                    <a class="home" asp-area="" asp-page="/HomePage">
+                        <img src='Images/LogoBlue.png' alt="Logo" class="logo">
+                    </a>
+                </div>
+                <ul class="right-links">
+                    <a asp-area="" asp-page="/Profile">Profile</a>
+                    <a asp-area="" asp-page="/UserBalance">Donations</a>
+                    <a asp-area="" asp-page="/Logout">Logout</a>
+                </ul>
+            }
+        </div>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <footer>
+        <div class="footer-content">
+            <div class="left-links">
+                @if (User.Identity.IsAuthenticated && (User.IsInRole("Critic") || User.IsInRole("Admin")))
+                {
+                    <ul>
+                        <li><a class="form-link" asp-page="/FormPage">Form to add albums</a></li>
+                        <li><a class="form-link" asp-page="/FormPageSong">Form to add songs</a></li>
+                    </ul>
+                }
+                else if (User.Identity.IsAuthenticated && User.IsInRole("Musician"))
+                {
+                    <ul>
+                        <li><a class="form-link" asp-page="/FormPage">Form to add albums</a></li>
+                        <li><a class="form-link" asp-page="/FormPageSong">Form to add songs</a></li>
+                    </ul>
+                }
+            </div>
+            <div class="copyright">
+                &copy; MusicBoomBoxd
+            </div>
+            <div class="right-links">
+                @if (User.Identity.IsAuthenticated && (User.IsInRole("Critic") || User.IsInRole("Admin")))
+                {
+                    <ul>
+                        <li><a class="form-link" asp-area="" asp-page="/Rating">Leave A Rating for Album</a></li>
+                        <li><a class="form-link" asp-area="" asp-page="/RatingSong">Leave A Rating for Song</a></li>
+                    </ul>
+                }
+            </div>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
