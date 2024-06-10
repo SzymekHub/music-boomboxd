@@ -9,7 +9,7 @@ namespace WebApp.Pages
 		public string Title { get; set; }
 
 		[Required(ErrorMessage = "Artist is required.")]
-		public int ArtistID { get; set; }
+		public Artist Artist { get; set; }
 
 		[Required(ErrorMessage = "Date is required.")]
 		public DateTime Date { get; set; }
@@ -31,10 +31,10 @@ namespace WebApp.Pages
 
 		}
 
-		public InputFormAlbumModel(string title, int artistID, DateTime date, genreType genre, string albumCoverName, byte[] albumCoverData, string albumCoverContentType)
+		public InputFormAlbumModel(string title, Artist artist, DateTime date, genreType genre, string albumCoverName, byte[] albumCoverData, string albumCoverContentType)
 		{
 			Title = title;
-			ArtistID = artistID;
+			Artist = artist;
 			Date = date;
 			Genre = genre;
 			AlbumCoverName = albumCoverName;

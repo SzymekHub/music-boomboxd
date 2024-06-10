@@ -752,8 +752,7 @@ namespace WinFormsApp
 
             //for artists
             cklbAritstUser.DataSource = artistManager.LoadArtistFromDB();
-            cklbAritstUser.DisplayMember = "Name";
-            cklbAritstUser.ValueMember = "ArtistID";
+            cklbAritstUser.ValueMember = "Artist";
 
             //for songs
             cklbSongsUser.DataSource = songManager.LoadSongsFromDataBase();

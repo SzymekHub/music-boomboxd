@@ -3,9 +3,9 @@
     public class Album
     {
         public int AlbumID { get; }
-        public int ArtistID { get; set; }
+        //public int ArtistID { get; set; }
         public Artist Artist { get; set; }
-        public List<Song> Songs { get; set; } // Changed from Song to List<Song>
+        public List<Song> Songs { get; set; } 
         public string Title { get; }
         public DateTime Date { get; set; }
         public int RunTime { get; set; }
@@ -14,10 +14,11 @@
         public byte[] AlbumCoverData { get; set; }
         public string AlbumCoverContentType { get; set; }
 
-        public Album(int albumID, int artistID, string title, DateTime date, int runTime, genreType genre, string albumCoverName, byte[] albumCoverData, string albumCoverContentType)
+        public Album(int albumID, /*int artistID*/ Artist artist, string title, DateTime date, int runTime, genreType genre, string albumCoverName, byte[] albumCoverData, string albumCoverContentType)
         {
             AlbumID = albumID;
-            ArtistID = artistID;
+            //ArtistID = artistID;
+            Artist = artist;
             Title = title;
             Date = date;
             RunTime = runTime;
@@ -28,9 +29,10 @@
             Songs = new List<Song>(); 
         }
 
-        public Album(int artistID, string title, DateTime date, int runTime, genreType genre, string albumCoverName, byte[] albumCoverData, string albumCoverContentType)
+        public Album(/*int artistID*/Artist artist, string title, DateTime date, int runTime, genreType genre, string albumCoverName, byte[] albumCoverData, string albumCoverContentType)
         {
-            ArtistID = artistID;
+            Artist = artist;
+            //ArtistID = artistID;
             Title = title;
             Date = date;
             RunTime = runTime;

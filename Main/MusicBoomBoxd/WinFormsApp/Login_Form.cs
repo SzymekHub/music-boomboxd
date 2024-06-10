@@ -49,7 +49,7 @@ namespace WinFormsApp
             #region Albums
             albumRep = new AlbumRepository();
 
-            albumManager = new AlbumManager(albumRep,valAlbum);
+            albumManager = new AlbumManager(albumRep, artistRep, valAlbum);
             albumManager.LoadAlbumsFromDatabase();
             #endregion
 

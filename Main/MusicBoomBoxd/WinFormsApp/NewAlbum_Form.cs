@@ -1,5 +1,6 @@
 ﻿using Infrastructure;
 using Logic;
+using System.Linq;
 
 namespace WinFormsApp
 {
@@ -178,7 +179,7 @@ namespace WinFormsApp
                 if (existingAlbum == null)
                 {
                     NewAlbum = new Album(
-                        selectedArtist.ArtistID,
+                        selectedArtist,
                         tbTitleAlbum.Text,
                         dtpAlbum.Value,
                         (int)nudRunTimeAlbum.Value,
@@ -192,7 +193,7 @@ namespace WinFormsApp
                 {
                     NewAlbum = new Album(
                         existingAlbum.AlbumID,
-                        selectedArtist.ArtistID,
+                        selectedArtist,
                         tbTitleAlbum.Text,
                         dtpAlbum.Value,
                         (int)nudRunTimeAlbum.Value,
@@ -246,13 +247,12 @@ namespace WinFormsApp
         {
             tbTitleAlbum.Text = album.Title;
 
-            // Find the artist by ID and set the selected item
             foreach (var item in cbArtistAlbum.Items)
             {
-                if (((Artist)item).ArtistID == album.ArtistID)
+                Artist artist = item as Artist;
+                if (artist.Name == album.Artist.Name)
                 {
                     cbArtistAlbum.SelectedItem = item;
-                    break;
                 }
             }
 
@@ -338,7 +338,7 @@ namespace WinFormsApp
 
                 // Return a new Album object with the provided details
                 return new Album(
-                      ((Artist)cbArtistAlbum.SelectedItem).ArtistID,
+                      ((Artist)cbArtistAlbum.SelectedItem),
                       tbTitleAlbum.Text,
                       dtpAlbum.Value,
                       (int)nudRunTimeAlbum.Value,
@@ -387,7 +387,7 @@ namespace WinFormsApp
                 albumManager.Update(
                     new Album(
                         existingAlbum.AlbumID,
-                        ((Artist)cbArtistAlbum.SelectedItem).ArtistID,
+                        ((Artist)cbArtistAlbum.SelectedItem),
                         tbTitleAlbum.Text,
                         dtpAlbum.Value,
                         (int)nudRunTimeAlbum.Value,
@@ -400,7 +400,7 @@ namespace WinFormsApp
 
                 return new Album(
                         existingAlbum.AlbumID,
-                        ((Artist)cbArtistAlbum.SelectedItem).ArtistID,
+                        ((Artist)cbArtistAlbum.SelectedItem),
                         tbTitleAlbum.Text,
                         dtpAlbum.Value,
                         (int)nudRunTimeAlbum.Value,
@@ -458,9 +458,9 @@ namespace WinFormsApp
         public void InitializeComboBox()
         {
             cbGenreAlbum.DataSource = Enum.GetValues(typeof(genreType));
-            cbArtistAlbum.DataSource = artistManager.LoadArtistFromDB();
-            cbArtistAlbum.DisplayMember = "Name";
-            cbArtistAlbum.ValueMember = "ArtistID";
+            cbArtistAlbum.DataSource = artistManager.LoadArtistFromDB();/*.Select(x => new AlbumViewModelWin(x)).ToList();*/
+            //cbArtistAlbum.ValueMember = "Artist";
+
 
             cklbSongs.DataSource = songManager.LoadSongsFromDataBase();
             cklbSongs.DisplayMember = "Title";

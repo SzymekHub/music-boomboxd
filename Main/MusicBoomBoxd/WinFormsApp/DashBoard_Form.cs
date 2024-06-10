@@ -1,5 +1,6 @@
 ﻿using Infrastructure;
 using Logic;
+using System.Drawing.Text;
 
 
 namespace WinFormsApp
@@ -401,9 +402,6 @@ namespace WinFormsApp
             dgvSongs.Columns.Add("Title", "Title");
             dgvSongs.Columns["Title"].DataPropertyName = "Title";
 
-            dgvSongs.Columns.Add("ArtistID", "ArtistID");
-            dgvSongs.Columns["ArtistID"].DataPropertyName = "ArtistID";
-            dgvSongs.Columns["ArtistID"].Visible = false;
             dgvSongs.Columns.Add("Artist", "Artist");
             dgvSongs.Columns["Artist"].DataPropertyName = "Artist";
 
@@ -422,16 +420,8 @@ namespace WinFormsApp
         private void PopulateSongs()
         {
             //This will populate the form with exisiting Songs
-            dgvSongs.DataSource = songManager.GetArray();
+            dgvSongs.DataSource = songManager.LoadSongsFromDataBase();
 
-            foreach (DataGridViewRow rows in dgvSongs.Rows)
-            {
-                int artistID = (int)rows.Cells["ArtistID"].Value;
-
-                var artists = artistManager.LoadArtistFromDB().Where(a => a.ArtistID == artistID);
-
-                rows.Cells["Artist"].Value = artists.First();
-            }
         }
 
         private void btnAddSong_Click(object sender, EventArgs e)
@@ -543,9 +533,6 @@ namespace WinFormsApp
             dgvAlbums.Columns.Add("Title", "Title");
             dgvAlbums.Columns["Title"].DataPropertyName = "Title";
 
-            dgvAlbums.Columns.Add("ArtistID", "ArtistID");
-            dgvAlbums.Columns["ArtistID"].DataPropertyName = "ArtistID";
-            dgvAlbums.Columns["ArtistID"].Visible = false;
             dgvAlbums.Columns.Add("Artist", "Artist");
             dgvAlbums.Columns["Artist"].DataPropertyName = "Artist";
 
@@ -564,16 +551,8 @@ namespace WinFormsApp
         private void PopulateAlbums()
         {
             //This will populate the form with exisiting albums
-            dgvAlbums.DataSource = albumManager.GetArray();
+            dgvAlbums.DataSource = albumManager.LoadAlbumsFromDatabase().Select(x => new AlbumViewModelWin(x)).ToList();
 
-            foreach (DataGridViewRow row in dgvAlbums.Rows)
-            {
-                int artistID = (int)row.Cells["ArtistID"].Value;
-
-                var artists = artistManager.LoadArtistFromDB().Where(a => a.ArtistID == artistID);
-
-                row.Cells["Artist"].Value = artists.First();
-            }
         }
 
         private void bntAddAlbum_Click(object sender, EventArgs e)
@@ -598,7 +577,10 @@ namespace WinFormsApp
             if (dgvAlbums.SelectedRows.Count > 0)
             {
                 // Get the selected album
-                Album selectedAlbum = dgvAlbums.SelectedRows[0].DataBoundItem as Album;
+                AlbumViewModelWin selectedAlbumView = dgvAlbums.SelectedRows[0].DataBoundItem as AlbumViewModelWin;
+
+                Album selectedAlbum = albumManager.LoadAlbumsFromDatabase().Find(album => album.AlbumID == selectedAlbumView.AlbumID);
+
                 // Open the NewAlbum_Form with the selected albums's information
                 using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, songManager, artistManager, selectedAlbum))
                 {

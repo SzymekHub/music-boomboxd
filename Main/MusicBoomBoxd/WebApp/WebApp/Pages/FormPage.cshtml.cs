@@ -112,7 +112,7 @@ namespace WebApp.Pages
 
             // Save album to the database
             Album newAlbum = new Album(
-                InputAlbum.ArtistID,
+                InputAlbum.Artist,
                 InputAlbum.Title,
                 InputAlbum.Date,
                 InputAlbum.RunTime,

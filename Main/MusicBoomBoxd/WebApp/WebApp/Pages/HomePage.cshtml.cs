@@ -33,7 +33,7 @@ namespace WebApp.Pages
 
             foreach (var album in albums)
             {
-                Artist artist = _artistManager.GetArtistByArtistID(album.ArtistID);
+                Artist artist = _artistManager.GetArtistByArtistID(album.Artist);
 
                 List<Song> songs = _songManager.GetSongsForAlbum(album.AlbumID);
 

@@ -6,27 +6,35 @@ namespace Logic
     {
         public List<Album> _albums;
         private readonly IAlbumRepository _albumRepository;
+        private readonly IArtistRepository _artistRepository;
+        private readonly ArtistManager _artistManager;
         private readonly IValidateAlbum _validateAlbum;
         private readonly Artist artist;
 
-        public AlbumManager(IAlbumRepository ialbumRep, IValidateAlbum ivalidAlbum)
+        public AlbumManager(IAlbumRepository ialbumRep, IArtistRepository iartRep, IValidateAlbum ivalidAlbum)
         {
             _albums = new List<Album>();
             _albumRepository = ialbumRep;
+            _artistManager = new ArtistManager(iartRep);
+            _artistRepository = iartRep;
             _validateAlbum = ivalidAlbum;
         }
 
         public List<Album> LoadAlbumsFromDatabase()
         {
             List<AlbumDTO> albumDTOs = _albumRepository.GetRecentAlbum(1000);
-
             _albums.Clear();
 
             foreach (var albumDTO in albumDTOs)
             {
-                // This converts AlbumDTO to Album and adds to the albums list
-                Album album = AlbumMapper.ToAlbum(albumDTO, artist);
-                _albums.Add(album);
+                Artist artist = _artistManager.GetArtistByArtistID(albumDTO.ArtistID);
+
+                if (artist != null)
+                {
+                    Album album = AlbumMapper.ToAlbum(albumDTO, artist);
+                    album.Artist = artist;
+                    _albums.Add(album);
+                }
             }
 
             return _albums;
@@ -177,37 +185,5 @@ namespace Logic
 			}
 			return _albumRepository.InsertAlbum(newAlbum);
 		}
-
-		//public Album ConvertToAlbum(AlbumDTO newAlbumDTO)
-		//{
-		//    genreType genre = (genreType)Enum.Parse(typeof(genreType), newAlbumDTO.Genre);
-
-		//    // This converts AlbumDTO to Album
-		//    return new Album(
-		//        newAlbumDTO.AlbumID,
-		//        newAlbumDTO.AlbumTitle,
-		//        newAlbumDTO.Artist,
-		//        newAlbumDTO.ReleaseDate,
-		//        genre,
-		//        newAlbumDTO.AlbumCoverName,
-		//        newAlbumDTO.AlbumCoverData,
-		//        newAlbumDTO.AlbumCoverContentType
-		//    );
-		//}
-
-		//public AlbumDTO ConvertToAlbumDTO(Album album)
-		//{
-		//    // this converts Album to AlbumDTO
-		//    return new AlbumDTO(
-		//        album.AlbumID,
-		//        album.Title,
-		//        album.Artist,
-		//        album.Date,
-		//        album.Genre.ToString(),
-		//        album.AlbumCoverName,
-		//        album.AlbumCoverData,
-		//        album.AlbumCoverContentType
-		//    );
-		//}
 	}
 }
