@@ -29,27 +29,17 @@ namespace Logic
 
         public Result AddProfileCritic(Profile profile)
         {
-            ProfileDTO profileDTO = ConvertToProfileDTO(profile);
+            ProfileDTO profileDTO = ProfileMapper.ConvertToProfileDTO(profile);
             Result result = profileRepository.AddProfileCritic(profileDTO);
 
             return result;
         }
         public Result AddProfileMusician(Profile profile)
         {
-            ProfileDTO profileDTO = ConvertToProfileDTO(profile);
+            ProfileDTO profileDTO = ProfileMapper.ConvertToProfileDTO(profile);
             Result result = profileRepository.AddProfileMusician(profileDTO);
 
             return result;
-        }
-
-        public static ProfileDTO ConvertToProfileDTO(Profile profile)
-        {
-            ProfileDTO profileDTO = new ProfileDTO();
-            profileDTO.ProfileID = profile.ProfileID;
-            profileDTO.UserID = profile.UserID;
-            profileDTO.User_Balance = profile.User_Balance;
-
-            return profileDTO;
         }
     }
 }

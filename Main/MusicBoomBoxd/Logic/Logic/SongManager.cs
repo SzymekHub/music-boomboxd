@@ -155,39 +155,5 @@ namespace Logic
 			}
 			return _songRepository.InsertSong(newSong);
 		}
-
-
-		//public Song ConvertToSong(SongDTO newsongDTO)
-		//{
-		//    //Converts the genre enum to a string 
-		//    genreType genre = (genreType)Enum.Parse(typeof(genreType), newsongDTO.Genre);
-
-		//    //this converts SongDTO to songs
-		//    return new Song(
-		//        newsongDTO.SongID,
-		//        newsongDTO.SongTitle,
-		//        newsongDTO.Artist,
-		//        newsongDTO.ReleaseDate,
-		//        genre,
-		//        newsongDTO.SongCoverName,
-		//        newsongDTO.SongCoverData,
-		//        newsongDTO.SongCoverContentType
-		//        );
-		//}
-
-		//public SongDTO ConvertToSongDTO(Song song)
-		//{
-		//    // this converts Song to SongDTO
-		//    return new SongDTO(
-		//        song.SongID,
-		//        song.Title,
-		//        song.Artist,
-		//        song.Date,
-		//        song.Genre.ToString(),
-		//        song.SongCoverName,
-		//        song.SongCoverData,
-		//        song.SongCoverContentType
-		//    );
-		//}
 	}
 }

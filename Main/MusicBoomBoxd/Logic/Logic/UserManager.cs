@@ -24,7 +24,7 @@ namespace Logic
         {
             UserDTO userDTO = _userRepository.GetUserByUsername(username);
 
-            User user = ConvertToUser(userDTO);
+            User user = UserMapper.ConvertToUser(userDTO);
 
             return user;
         }
@@ -36,7 +36,7 @@ namespace Logic
 
             foreach (var userDTO in userDTOs)
             {
-                users.Add(ConvertToUser(userDTO));
+                users.Add(UserMapper.ConvertToUser(userDTO));
             }
             return users;
         }
@@ -143,7 +143,7 @@ namespace Logic
 
         public Result Add(User user)
         {
-            UserDTO userDTO = ConvertToUserDTO(user);
+            UserDTO userDTO = UserMapper.ConvertToUserDTO(user);
 
             Result resultUser = SendUserToTheDb(userDTO);
 
@@ -170,7 +170,7 @@ namespace Logic
 
         public Result AddWEB(User user)
         {
-            UserDTO userDTO = ConvertToUserDTO(user);
+            UserDTO userDTO = UserMapper.ConvertToUserDTO(user);
 
             Result resultUserWeb = SendUserToTheDbWEB(userDTO);
 
@@ -198,19 +198,19 @@ namespace Logic
 
         public Result UpgradeToCritic(User user)
         {
-            Result resultUpgradeCritic = _userRepository.UpdateUserRoleToCritic(ConvertToUserDTO(user));
+            Result resultUpgradeCritic = _userRepository.UpdateUserRoleToCritic(UserMapper.ConvertToUserDTO(user));
             return resultUpgradeCritic;
         }
         
         public Result UpgradeToMusician(User user)
         {
-            Result resultUpgradeMusician = _userRepository.UpdateUserRoleToMusician(ConvertToUserDTO(user));
+            Result resultUpgradeMusician = _userRepository.UpdateUserRoleToMusician(UserMapper.ConvertToUserDTO(user));
             return resultUpgradeMusician;
         }
        
         public Result Remove(User user)
         {
-            Result resultRemoveUser = _userRepository.DeleteUser(ConvertToUserDTO(user));
+            Result resultRemoveUser = _userRepository.DeleteUser(UserMapper.ConvertToUserDTO(user));
 
             return resultRemoveUser;
         }
@@ -218,7 +218,7 @@ namespace Logic
         // Method to update an existing user
         public Result Update(User newUser, User oldUser)
         {
-            UserDTO newUserDTO = ConvertToUserDTO(newUser);
+            UserDTO newUserDTO = UserMapper.ConvertToUserDTO(newUser);
             if (oldUser == null)
             {
                 Result resultAdd = Add(newUser);
@@ -226,7 +226,7 @@ namespace Logic
             }
             else
             {
-                UserDTO oldUserDTO = ConvertToUserDTO(oldUser);
+                UserDTO oldUserDTO = UserMapper.ConvertToUserDTO(oldUser);
 
                 //This calls the repository method to update the User
                 Result resultupdate = _userRepository.UpdateUser(newUserDTO, oldUserDTO);
@@ -291,51 +291,5 @@ namespace Logic
             return _userRepository.InsertUser(newUser);
         }
 
-        public User ConvertToUser(UserDTO newUserDTO)
-        {
-            if (newUserDTO == null)
-            {
-                return null;
-            }
-
-            //Converts the user role enum to a string
-            userType type = (userType)Enum.Parse(typeof(userType), newUserDTO.UserType);
-
-            //Converts the genre enum to a string 
-            genreType genre = (genreType)Enum.Parse(typeof(genreType), newUserDTO.FavGenre);
-
-            //this converts UserDto to users
-            return new User(
-                newUserDTO.UserID,
-                newUserDTO.Username,
-                newUserDTO.Password,
-                newUserDTO.Email,
-                type,
-                newUserDTO.Birthday,
-                genre,
-                newUserDTO.ProfilePictureName,
-                newUserDTO.ProfilePictureData,
-                newUserDTO.ProfilePictureContentType
-                );
-
-            //try and use a tryparse
-        }
-
-        public UserDTO ConvertToUserDTO(User user)
-        {
-            // this converts User to UserDTO
-            return new UserDTO(
-                user.UserID,
-                user.Username,
-                user.Password,
-                user.Email,
-                user.UserType.ToString(),
-                user.Birthday,
-                user.FavGenre.ToString(),
-                user.ProfilePictureName,
-                user.ProfilePictureData,
-                user.ProfilePictureContentType
-                );
-        }
     }
 }
