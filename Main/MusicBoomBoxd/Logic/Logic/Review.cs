@@ -13,19 +13,13 @@ namespace Logic
 
         public int UserID { get; set; }
 
-        public string Content { get; set; }
-
         public int Rating { get; set; }
 
-        public DateTime CreationDate { get; set; }
-
-        public Review(int reviewID, int userID, string content, int rating, DateTime creationDate)
+        public Review(int reviewID, int userID, int rating)
         {
             ReviewID = reviewID;
             UserID = userID;
-            Content = content;
             Rating = rating;
-            CreationDate = creationDate;
         }
     }
 }

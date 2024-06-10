@@ -20,11 +20,6 @@ namespace Logic
             reviews.Add(review);
         }
 
-        public Review[] GetArray()
-        {
-            return reviews.ToArray();
-        }
-
         public bool Remove(Review review)
         {
             return reviews.Remove(review);
