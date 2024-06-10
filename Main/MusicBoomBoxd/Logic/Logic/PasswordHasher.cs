@@ -7,11 +7,11 @@ using BCrypt.Net;
 
 namespace Logic
 {
-    public class PasswordHasher
+    public class PasswordHasher : IPasswordHasher
     {
-        private static readonly string Pepper = "20082004";
+        private readonly string Pepper = "20082004";
 
-        public static string HashPassword(string password)
+        public string HashPassword(string password)
         {
             string salt = BCrypt.Net.BCrypt.GenerateSalt();
 
@@ -22,7 +22,7 @@ namespace Logic
             return hashedPassword;
         }
 
-        public static bool VerifyPassword(string password, string hashedPassword)
+        public bool VerifyPassword(string password, string hashedPassword)
         {
             // Concatenates pepper with the password
             string pepperedPassword = password + Pepper;

@@ -9,6 +9,7 @@ namespace WinFormsApp
         private readonly IUserRepository userRep;
         private readonly UserManager userManager;
         private readonly IValidateUser valUser;
+        private readonly IPasswordHasher _passwordHasher;
         private readonly IProfileRepository iprofRep;
 
         private readonly IAlbumRepository albumRep;
@@ -30,8 +31,9 @@ namespace WinFormsApp
             //For users
             #region Users
             userRep = new UserRepository();
+            _passwordHasher = new PasswordHasher();
 
-            userManager = new UserManager(userRep, iprofRep, valUser);
+            userManager = new UserManager(userRep, iprofRep, valUser, _passwordHasher);
             userManager.LoadUsersFromDataBase();
             #endregion
 
@@ -84,7 +86,7 @@ namespace WinFormsApp
                 return;
             }
 
-            if (!PasswordHasher.VerifyPassword(password, user.Password))
+            if (!_passwordHasher.VerifyPassword(password, user.Password))
             {
                 tsslblLoginForm.Text = "The password is incorrect";
                 ClearControls();

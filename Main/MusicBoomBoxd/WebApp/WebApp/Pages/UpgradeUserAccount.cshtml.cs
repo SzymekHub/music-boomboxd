@@ -12,17 +12,22 @@ namespace WebApp.Pages
     public class UpgradeUserAccountModel : PageModel
     {
         private readonly UserManager _userManager;
-        private readonly ProfileManager _profileManager;
+        public readonly IPasswordHasher _passwordHasher;
+        public readonly IProfileRepository _profileRepository;
+        public readonly ProfileManager _profileManager;
+        public readonly IUserRepository _userRepository;
+        private readonly IValidateUser _validateUsers;
 
         public string Username { get; private set; }
 
-        public UpgradeUserAccountModel()
+        public UpgradeUserAccountModel(IPasswordHasher passwordHasher, IUserRepository userRepository, IValidateUser validateUsers, IProfileRepository profileRepository)
         {
-            IUserRepository iUserRep = new UserRepository();
-            IProfileRepository iProfRep = new ProfileRepository();
-            ValidateUser valUser = new ValidateUser(iUserRep);
-            _userManager = new UserManager(iUserRep, iProfRep, valUser);
-            _profileManager = new ProfileManager(iProfRep);
+            _passwordHasher = passwordHasher;
+            _userRepository = userRepository;
+            _validateUsers = validateUsers;
+            _profileRepository = profileRepository;
+            _userManager = new UserManager(userRepository, profileRepository, validateUsers, passwordHasher);
+            _profileManager = new ProfileManager(profileRepository);
         }
 
         public void OnGet()

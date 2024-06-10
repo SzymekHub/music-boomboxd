@@ -5,15 +5,18 @@ using System.Security.Claims;
 using Logic;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 
 namespace WebApp.Pages
 {
     [Authorize]
     public class ProfileModel : PageModel
     {
-        private readonly UserManager userManager;
-        private readonly ValidateUser validateUser;
-        private readonly ProfileRepository profileRepository;
+        public readonly UserManager _userManager;
+        public readonly IPasswordHasher _passwordHasher;
+        public readonly IProfileRepository _profileRepository;
+        public readonly IUserRepository _userRepository;
+        private readonly IValidateUser _validateUsers;
 
         public string Username { get; set; }
         public string Email { get; set; }
@@ -21,12 +24,13 @@ namespace WebApp.Pages
         public byte[] ProfilePictureData { get; set; }
         public string ProfilePictureContentType { get; set; }
 
-        public ProfileModel()
+        public ProfileModel(IPasswordHasher passwordHasher, IUserRepository userRepository, IValidateUser validateUsers, IProfileRepository profileRepository)
         {
-            IUserRepository iUserRep = new UserRepository();
-            IProfileRepository iPortRep = new ProfileRepository();
-            validateUser = new ValidateUser(iUserRep);
-            userManager = new UserManager(iUserRep, profileRepository, validateUser);
+            _userManager = new UserManager(userRepository, profileRepository, validateUsers, passwordHasher);
+            _passwordHasher = passwordHasher;
+            _userRepository = userRepository;
+            _validateUsers = validateUsers;
+            _profileRepository = profileRepository;
         }
 
         // This initializes user information
@@ -40,7 +44,7 @@ namespace WebApp.Pages
             var userClaims = User.Claims;
             string oldUsername = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
 
-            User oldUser = userManager.GetUserByUsernameFromDb(oldUsername);
+            User oldUser = _userManager.GetUserByUsernameFromDb(oldUsername);
 
             if (oldUser != null)
             {
@@ -58,7 +62,7 @@ namespace WebApp.Pages
                    oldUser.ProfilePictureContentType
                );
 
-                var Errors = validateUser.ValidateUsersWEB(newUser);
+                var Errors = _validateUsers.ValidateUsersWEB(newUser);
 
                 if (Errors.Count > 0)
                 {
@@ -82,7 +86,7 @@ namespace WebApp.Pages
                 }
                 else
                 {
-                    var user = userManager.GetUserByUsernameFromDb(oldUsername);
+                    var user = _userManager.GetUserByUsernameFromDb(oldUsername);
                     if (user != null)
                     {
                         newUser.ProfilePictureName = user.ProfilePictureName;
@@ -91,7 +95,7 @@ namespace WebApp.Pages
                     }
                 }
 
-                var result = userManager.Update(newUser, oldUser);
+                var result = _userManager.Update(newUser, oldUser);
 
                 if (result.Success)
                 {
@@ -119,7 +123,7 @@ namespace WebApp.Pages
             Email = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             Role = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 
-            var user = userManager.GetUserByUsernameFromDb(Username);
+            var user = _userManager.GetUserByUsernameFromDb(Username);
             if (user != null)
             {
                 ProfilePictureData = user.ProfilePictureData;
@@ -148,10 +152,10 @@ namespace WebApp.Pages
             var userClaims = User.Claims;
             string username = userClaims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
 
-            User user = userManager.GetUserByUsernameFromDb(username);
+            User user = _userManager.GetUserByUsernameFromDb(username);
             if (user != null)
             {
-                Result result = userManager.Remove(user);
+                Result result = _userManager.Remove(user);
                 if (result.Success)
                 {
                     return RedirectToPage("/Logout");

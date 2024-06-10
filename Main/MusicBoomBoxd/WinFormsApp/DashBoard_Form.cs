@@ -9,7 +9,7 @@ namespace WinFormsApp
 
         //for the User tab
         private static UserManager userManager;
-        private static List<User> userList = new List<User>();
+        //private static List<User> userList = new List<User>();
 
         //for the artist tab
         private static ArtistManager artistManager;
@@ -18,11 +18,11 @@ namespace WinFormsApp
 
         //for the Album tab
         private static AlbumManager albumManager;
-        private static List<Album> albumsList = new List<Album>();
+        //private static List<Album> albumsList = new List<Album>();
 
         //For the Song tab
         private static SongManager songManager;
-        private static List<Song> songList = new List<Song>();
+        //private static List<Song> songList = new List<Song>();
 
         public DashBoard_Form(string adminUsername, UserManager um, ArtistManager arm, AlbumManager am, SongManager sm, List<Artist> artistList)
         {

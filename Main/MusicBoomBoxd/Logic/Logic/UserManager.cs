@@ -8,12 +8,14 @@ namespace Logic
         private readonly IUserRepository _userRepository;
         private readonly IValidateUser _validateUsers;
         private readonly IProfileRepository _profileRepository;
+        private readonly IPasswordHasher _passwordHasher;
 
-        public UserManager(IUserRepository iuserRep, IProfileRepository iprofRep, IValidateUser ivalUser)
+        public UserManager(IUserRepository iuserRep, IProfileRepository iprofRep, IValidateUser ivalUser, IPasswordHasher passwordHasher)
         {
             _userRepository = iuserRep;
             _validateUsers = ivalUser;
             _profileRepository = iprofRep;
+            _passwordHasher = passwordHasher;
 
             // inject the repository and use userRepistory as an interface and inject it as well. Get rid of Load stuff.
         }
@@ -39,8 +41,6 @@ namespace Logic
             return users;
         }
         
-       
-
         //For artists
         #region Artists
         public Result SaveArtistInUsers(int userID, List<int> selectedArtistIDs)
@@ -254,7 +254,7 @@ namespace Logic
         {
             if (_validateUsers.UsernameExists(newUser.Username) == false)
             {
-                string HashedPassword = PasswordHasher.HashPassword(newUser.Password);
+                string HashedPassword = _passwordHasher.HashPassword(newUser.Password);
 
                 newUser.Password = HashedPassword;
 
@@ -284,7 +284,7 @@ namespace Logic
                 };
             }
 
-            string HashedPassword = PasswordHasher.HashPassword(newUser.Password);
+            string HashedPassword = _passwordHasher.HashPassword(newUser.Password);
 
             newUser.Password = HashedPassword;
 

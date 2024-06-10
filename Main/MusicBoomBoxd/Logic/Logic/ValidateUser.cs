@@ -57,7 +57,7 @@ namespace Logic
             UserDTO userDTO = _userRepository.GetUserByUsername(username);
             return userDTO != null;
         }
-        private bool EmailExists(string email)
+        public bool EmailExists(string email)
         {
             UserDTO userDTO = _userRepository.GetUserByEmail(email);
             return userDTO != null;

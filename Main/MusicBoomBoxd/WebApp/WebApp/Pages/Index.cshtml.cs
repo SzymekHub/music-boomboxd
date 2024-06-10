@@ -10,14 +10,21 @@ namespace WebApp.Pages
 {
     public class IndexModel : PageModel
     {
-        public UserManager userManager { get; } 
-        public IndexModel()
+        public readonly UserManager _userManager;
+        public readonly IPasswordHasher _passwordHasher;
+        public readonly IProfileRepository _profileRepository;
+        public readonly IUserRepository _userRepository;
+        private readonly IValidateUser _validateUsers;
+
+        public IndexModel(IPasswordHasher passwordHasher, IUserRepository userRepository, IValidateUser validateUsers, IProfileRepository profileRepository)
         {
-            IUserRepository iuserRep = new UserRepository();
-            IProfileRepository iprofileRep = new ProfileRepository();
-            ValidateUser validateUsers = new ValidateUser(iuserRep);
-            userManager = new UserManager(iuserRep, iprofileRep, validateUsers);
+            _userManager = new UserManager(userRepository, profileRepository, validateUsers, passwordHasher);
+            _passwordHasher = passwordHasher;
+            _userRepository = userRepository;
+            _validateUsers = validateUsers;
+            _profileRepository = profileRepository;
         }
+
         [BindProperty]
         public LoginUser Login { get; set; }
 
@@ -44,9 +51,9 @@ namespace WebApp.Pages
                 return Page();
             }
 
-            User user = userManager.GetUserByUsernameFromDb(Username);
+            User user = _userManager.GetUserByUsernameFromDb(Username);
 
-            if (user != null && PasswordHasher.VerifyPassword(Password, user.Password))
+            if (user != null && _passwordHasher.VerifyPassword(Password, user.Password))
             {
                 var claims = new List<Claim>
                 {

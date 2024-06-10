@@ -14,6 +14,7 @@ builder.Services.AddSingleton<ISongRepository, SongRepository>();
 builder.Services.AddSingleton<SongManager>();
 builder.Services.AddSingleton<IArtistRepository, ArtistRepository>();
 builder.Services.AddSingleton<ArtistManager>();
+builder.Services.AddSingleton<IPasswordHasher, PasswordHasher>();
 builder.Services.AddSingleton<IValidateUser, ValidateUser>();
 builder.Services.AddSingleton<IValidateAlbum, ValidateAlbum>();
 builder.Services.AddSingleton<IValidateSong, ValidateSong>();

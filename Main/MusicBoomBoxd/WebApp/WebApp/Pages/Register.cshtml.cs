@@ -10,8 +10,12 @@ namespace WebApp.Pages
 	public class RegisterModel : PageModel
 	{
 		public readonly UserManager _userManager;
+        public readonly IPasswordHasher _passwordHasher;
+        public readonly IProfileRepository _profileRepository;
+        public readonly IUserRepository _userRepository;
+        private readonly IValidateUser _validateUsers;
 
-		private IWebHostEnvironment _environment;
+        private IWebHostEnvironment _environment;
 
 		public List<SelectListItem> GenreOptions { get; set; }
 
@@ -22,12 +26,13 @@ namespace WebApp.Pages
 		[Display(Name = "Profile Picture"), Required]
 		public IFormFile ProfilePicture { get; set; }
 
-		public RegisterModel(IWebHostEnvironment environment)
+		public RegisterModel(IPasswordHasher passwordHasher, IUserRepository userRepository, IValidateUser validateUsers, IProfileRepository profileRepository, IWebHostEnvironment environment)
 		{
-			IUserRepository iuserRep = new UserRepository();
-            IProfileRepository iprofRep = new ProfileRepository();
-            IValidateUser ivalUser = new ValidateUser(iuserRep); 
-            _userManager = new UserManager(iuserRep, iprofRep, ivalUser);
+            _passwordHasher = passwordHasher;
+            _userRepository = userRepository;
+            _validateUsers = validateUsers;
+            _profileRepository = profileRepository;
+            _userManager = new UserManager(userRepository, profileRepository, validateUsers, passwordHasher);
             _environment = environment;
         }
 
