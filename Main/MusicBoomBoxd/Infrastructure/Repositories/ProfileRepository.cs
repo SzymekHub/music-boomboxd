@@ -18,7 +18,7 @@ namespace Infrastructure
 				cmd.CommandText = @"INSERT INTO Profile (UserID, User_Balance) 
                                     VALUES (@UserID, @User_Balance)";
 
-				cmd.Parameters.AddWithValue("@UserID", profileDTO.UserDTO);
+				cmd.Parameters.AddWithValue("@UserID", profileDTO.UserDTO.UserID);
 				cmd.Parameters.AddWithValue("@User_Balance", profileDTO.User_Balance);
 
 				try

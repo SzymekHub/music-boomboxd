@@ -13,8 +13,9 @@
         public string ProfilePictureName { get; set; }
         public byte[] ProfilePictureData { get; set; }
         public string ProfilePictureContentType { get; set; }
+		public ProfileDTO ProfileDTO { get; set; }
 
-        public UserDTO(int userID, string username, string password, string email, string userType, DateTime birthday, string favGenre, string profilePictureName, byte[] profilePictureData, string profilePictureContentType)
+		public UserDTO(int userID, string username, string password, string email, string userType, DateTime birthday, string favGenre, string profilePictureName, byte[] profilePictureData, string profilePictureContentType)
         {
             UserID = userID;
             Username = username;

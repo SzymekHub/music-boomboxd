@@ -176,13 +176,15 @@ namespace Logic
 
             if (resultUserWeb.Success)
             {
-                // Set the UserID in the user object
-                user.SetUserID(userDTO.UserID);
+				// Create ProfileDTO for the new User
+				ProfileDTO profileDTO = new();
+				profileDTO.UserDTO = userDTO;
+				profileDTO.User_Balance = 0;
 
-                // Create ProfileDTO for the new User
-                ProfileDTO profileDTO = new();
-                profileDTO.UserDTO = userDTO;
-                profileDTO.User_Balance = 0;
+                userDTO.ProfileDTO = profileDTO;
+
+				// Set the UserID in the user object
+				user.SetUserID(userDTO.UserID);
 
                 // Insert Profile into the database
                 Result resultProfile = _profileRepository.InsertProfile(profileDTO);
