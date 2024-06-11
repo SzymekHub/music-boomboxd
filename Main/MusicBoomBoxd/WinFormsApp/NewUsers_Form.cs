@@ -180,7 +180,6 @@ namespace WinFormsApp
 
             cklbAritstUser.DataSource = filteredArtists;
             cklbAritstUser.DisplayMember = "Title";
-            cklbAritstUser.ValueMember = "ArtistID";
 
             // Reapply the checked state for previously selected songs
             for (int i = 0; i < cklbAritstUser.Items.Count; i++)
@@ -272,7 +271,6 @@ namespace WinFormsApp
 
             cklbSongsUser.DataSource = filteredSongs;
             cklbSongsUser.DisplayMember = "Title";
-            cklbSongsUser.ValueMember = "SongID";
 
             // Reapply the checked state for previously selected songs
             for (int i = 0; i < cklbSongsUser.Items.Count; i++)
@@ -366,7 +364,6 @@ namespace WinFormsApp
 
             cklbAlbumUser.DataSource = filteredAlbums;
             cklbAlbumUser.DisplayMember = "Title";
-            cklbAlbumUser.ValueMember = "AlbumID";
 
             // Reapply the checked state for previously selected albums
             for (int i = 0; i < cklbAlbumUser.Items.Count; i++)
@@ -752,18 +749,15 @@ namespace WinFormsApp
 
             //for artists
             cklbAritstUser.DataSource = artistManager.LoadArtistFromDB();
-            cklbAritstUser.ValueMember = "Artist";
 
             //for songs
             cklbSongsUser.DataSource = songManager.LoadSongsFromDataBase();
-            cklbSongsUser.DisplayMember = "Title";
-            cklbSongsUser.ValueMember = "SongID";
+			cklbSongsUser.DisplayMember = "Title";
 
-            //for albums
-            cklbAlbumUser.DataSource = albumManager.LoadAlbumsFromDatabase();
-            cklbAlbumUser.DisplayMember = "Title";
-            cklbAlbumUser.ValueMember = "AlbumID";
-        }
+			//for albums
+			cklbAlbumUser.DataSource = albumManager.LoadAlbumsFromDatabase();
+			cklbAlbumUser.DisplayMember = "Title";
+		}
 
         private void Users_Form_FormClosed(object sender, FormClosedEventArgs e)
         {

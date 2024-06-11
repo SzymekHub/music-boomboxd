@@ -1,8 +1,5 @@
 ﻿using System.Data;
-using Infrastructure.DTOs;
-using System.Reflection.PortableExecutable;
 using Microsoft.Data.SqlClient;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Infrastructure
 {
@@ -15,7 +12,7 @@ namespace Infrastructure
 			{
 				cmd.Connection = connection;
 				cmd.CommandType = CommandType.Text;
-				cmd.CommandText = @"INSERT INTO Profile (UserID, User_Balance) 
+				cmd.CommandText = @"INSERT INTO [Profile] (UserID, User_Balance) 
                                     VALUES (@UserID, @User_Balance)";
 
 				cmd.Parameters.AddWithValue("@UserID", profileDTO.UserDTO.UserID);
@@ -55,7 +52,7 @@ namespace Infrastructure
 					double totalUpgradeAmount = upgradeToCriticFee;
 
 					cmd.Parameters.Clear();
-					cmd.CommandText = "UPDATE Profile SET User_Balance = User_Balance - @TotalUpgradeAmount WHERE ProfileID = @ProfileID";
+					cmd.CommandText = "UPDATE [Profile] SET User_Balance = User_Balance - @TotalUpgradeAmount WHERE ProfileID = @ProfileID";
 					cmd.Parameters.AddWithValue("@TotalUpgradeAmount", totalUpgradeAmount);
 					cmd.Parameters.AddWithValue("@ProfileID", profileDTO.ProfileID);
 					cmd.ExecuteNonQuery();
@@ -93,7 +90,7 @@ namespace Infrastructure
 					double totalUpgradeAmount = upgradeToMusicianFee;
 
 					cmd.Parameters.Clear();
-					cmd.CommandText = "UPDATE Profile SET User_Balance = User_Balance - @TotalUpgradeAmount WHERE ProfileID = @ProfileID";
+					cmd.CommandText = "UPDATE [Profile] SET User_Balance = User_Balance - @TotalUpgradeAmount WHERE ProfileID = @ProfileID";
 					cmd.Parameters.AddWithValue("@TotalUpgradeAmount", totalUpgradeAmount);
 					cmd.Parameters.AddWithValue("@ProfileID", profileDTO.ProfileID);
 					cmd.ExecuteNonQuery();
@@ -174,7 +171,8 @@ namespace Infrastructure
 			{
 				cmd.Connection = connection;
 				cmd.CommandType = CommandType.Text;
-				cmd.CommandText = "SELECT User_Balance FROM Profile WHERE UserID = (SELECT UserID FROM [User] WHERE Username = @Username)";
+				cmd.CommandText = "SELECT User_Balance FROM [Profile] WHERE UserID = (SELECT UserID FROM [User] WHERE Username = @Username)";
+				
 				cmd.Parameters.AddWithValue("@Username", userName);
 
 				connection.Open();
@@ -196,7 +194,7 @@ namespace Infrastructure
 			{
 				cmd.Connection = connection;
 				cmd.CommandType = CommandType.Text;
-				cmd.CommandText = "UPDATE Profile SET User_Balance = User_Balance + @Amount WHERE ProfileID = @ProfileID";
+				cmd.CommandText = "UPDATE [Profile] SET User_Balance = User_Balance + @Amount WHERE ProfileID = @ProfileID";
 				cmd.Parameters.AddWithValue("@Amount", amount);
 				cmd.Parameters.AddWithValue("@ProfileID", profileID);
 
@@ -233,7 +231,8 @@ namespace Infrastructure
 			{
 				cmd.Connection = connection;
 				cmd.CommandType = CommandType.Text;
-				cmd.CommandText = "SELECT ProfileID FROM Profile WHERE UserID = (SELECT UserID FROM [User] WHERE Username = @Username)";
+				cmd.CommandText = "SELECT ProfileID FROM [Profile] WHERE UserID = (SELECT UserID FROM [User] WHERE Username = @Username)";
+
 				cmd.Parameters.AddWithValue("@Username", userName);
 
 				connection.Open();

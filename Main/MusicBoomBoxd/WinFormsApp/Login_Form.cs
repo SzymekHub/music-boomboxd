@@ -25,39 +25,39 @@ namespace WinFormsApp
         private readonly List<Artist> artistList;
 
 
-        public Login_Form()
+        public Login_Form(IPasswordHasher passwordHasher, IUserRepository userRepository, IValidateUser validateUsers, IProfileRepository profileRepository, IArtistRepository artistRepository, IAlbumRepository albumRepository, ISongRepository songRepository, IValidateAlbum validateAlbum, IValidateSong validateSong)
         {
             InitializeComponent();
             //For users
             #region Users
-            userRep = new UserRepository();
-            _passwordHasher = new PasswordHasher();
+            userRep = userRepository;
+            _passwordHasher = passwordHasher;
 
-            userManager = new UserManager(userRep, iprofRep, valUser, _passwordHasher);
+            userManager = new UserManager(passwordHasher, userRepository, validateUsers, profileRepository);
             userManager.LoadUsersFromDataBase();
             #endregion
 
             //for artists
             #region Artists
-            artistRep = new ArtistRepository();
+            artistRep = artistRepository;
 
-            artistManager = new ArtistManager(artistRep);
+            artistManager = new ArtistManager(artistRepository);
             artistManager.LoadArtistFromDB();
             #endregion
 
             //For Albums
             #region Albums
-            albumRep = new AlbumRepository();
+            albumRep = albumRepository;
 
-            albumManager = new AlbumManager(albumRep, artistRep, valAlbum);
+            albumManager = new AlbumManager(albumRepository, artistRepository, validateAlbum);
             albumManager.LoadAlbumsFromDatabase();
             #endregion
 
             //For Songs
             #region Songs
-            songRep = new SongRepository();
+            songRep = songRepository;
 
-            songManager = new SongManager(songRep, artistRep, valSong);
+            songManager = new SongManager(songRepository, artistRepository, validateSong);
             songManager.LoadSongsFromDataBase();
             #endregion
 

@@ -5,20 +5,20 @@ namespace Logic
 {
     public class UserManager
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IValidateUser _validateUsers;
-        private readonly IProfileRepository _profileRepository;
-        private readonly IPasswordHasher _passwordHasher;
+		public readonly IPasswordHasher _passwordHasher;
+		public readonly IProfileRepository _profileRepository;
+		public readonly IUserRepository _userRepository;
+		private readonly IValidateUser _validateUsers;
 
-        public UserManager(IUserRepository iuserRep, IProfileRepository iprofRep, IValidateUser ivalUser, IPasswordHasher passwordHasher)
+		public UserManager(IPasswordHasher passwordHasher, IUserRepository userRepository, IValidateUser validateUsers, IProfileRepository profileRepository)
         {
-            _userRepository = iuserRep;
-            _validateUsers = ivalUser;
-            _profileRepository = iprofRep;
-            _passwordHasher = passwordHasher;
+			_passwordHasher = passwordHasher;
+			_userRepository = userRepository;
+			_validateUsers = validateUsers;
+			_profileRepository = profileRepository;
 
-            // inject the repository and use userRepistory as an interface and inject it as well. Get rid of Load stuff.
-        }
+			// inject the repository and use userRepistory as an interface and inject it as well. Get rid of Load stuff.
+		}
 
         public User GetUserByUsernameFromDb(string username)
         {
@@ -149,22 +149,24 @@ namespace Logic
 
             if (resultUser.Success)
             {
-                // Set the UserID in the user object
-                user.SetUserID(userDTO.UserID);
+				// Create ProfileDTO for the new User
+				ProfileDTO profileDTO = new();
+				profileDTO.UserDTO = userDTO;
+				profileDTO.User_Balance = 0;
 
-                // Create ProfileDTO for the new User
-                ProfileDTO profileDTO = new();
-                profileDTO.UserDTO = userDTO;
-                profileDTO.User_Balance = 0;
+				userDTO.ProfileDTO = profileDTO;
 
-                // Insert Profile into the database
-                Result resultProfile = _profileRepository.InsertProfile(profileDTO);
+				// Set the UserID in the user object
+				user.SetUserID(userDTO.UserID);
 
-                if (!resultProfile.Success)
-                {
-                    return new Result { Success = false, Message = "User created but failed to create Profile." };
-                }
-            }
+				// Insert Profile into the database
+				Result resultProfile = _profileRepository.InsertProfile(profileDTO);
+
+				if (!resultProfile.Success)
+				{
+					return new Result { Success = false, Message = "User created but failed to create Profile." };
+				}
+			}
             return resultUser;
         }
 
@@ -276,7 +278,7 @@ namespace Logic
 
         public Result SendUserToTheDbWEB(UserDTO newUser)
         {
-            var errors = _validateUsers.ValidateUsers(newUser.Username);
+            var errors = _validateUsers.ValidateUsersWEB(UserMapper.ConvertToUser(newUser));
             if (errors.Any())
             {
                 return new Result

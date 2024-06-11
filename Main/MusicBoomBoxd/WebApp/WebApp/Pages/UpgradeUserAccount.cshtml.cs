@@ -26,7 +26,7 @@ namespace WebApp.Pages
             _userRepository = userRepository;
             _validateUsers = validateUsers;
             _profileRepository = profileRepository;
-            _userManager = new UserManager(userRepository, profileRepository, validateUsers, passwordHasher);
+            _userManager = new UserManager(passwordHasher, userRepository, validateUsers, profileRepository);
             _profileManager = new ProfileManager(profileRepository, userRepository, validateUsers, passwordHasher);
         }
 

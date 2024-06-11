@@ -16,7 +16,7 @@ namespace Logic
 			_userRepository = iUserRep;
 			_validateUser = ivalUser;
 			_passwordHasher = IpassHash;
-			_userManager = new UserManager(iUserRep, iProfRep, ivalUser, IpassHash);
+			_userManager = new UserManager(IpassHash, iUserRep, ivalUser, iProfRep);
 		}
 
 

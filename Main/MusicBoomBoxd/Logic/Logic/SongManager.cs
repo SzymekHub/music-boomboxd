@@ -21,6 +21,7 @@ namespace Logic
         public List<Song> LoadSongsFromDataBase()
         {
             List<Song> songs = new();
+
             List<SongDTO> songDTOs = _songRepository.GetRecentSong(1000);
             
             foreach (var songDTO in songDTOs)
