@@ -97,18 +97,18 @@ namespace Infrastructure
                     {
                         while (reader.Read())
                         {
-                            int albumID = reader.GetInt32(0);
-                            int artistID = reader.GetInt32(1);
-                            string title = reader.GetString(2);
-                            DateTime releaseDate = reader.GetDateTime(3);
-                            int runTime = reader.GetInt32(4);
-                            string genre = reader.GetString(5);
-                            string albumCoverName = reader.GetString(6);
-                            byte[] albumCoverData = (byte[])reader.GetValue(7);
-                            string albumCoverContentType = reader.GetString(8);
+							AlbumDTO albumDTO = new AlbumDTO();
+                            albumDTO.AlbumID = reader.GetInt32(0);
+                            albumDTO.ArtistID = reader.GetInt32(1);
+							albumDTO.AlbumTitle = reader.GetString(2);
+							albumDTO.ReleaseDate = reader.GetDateTime(3);
+							albumDTO.RunTime = reader.GetInt32(4);
+							albumDTO.Genre = reader.GetString(5);
+							albumDTO.AlbumCoverName = reader.GetString(6);
+							albumDTO.AlbumCoverData = (byte[])reader.GetValue(7);
+							albumDTO.AlbumCoverContentType = reader.GetString(8);
 
-                            AlbumDTO album = new AlbumDTO(albumID, artistID, title, releaseDate, runTime, genre, albumCoverName, albumCoverData, albumCoverContentType);
-                            recentAlbums.Add(album);
+                            recentAlbums.Add(albumDTO);
                         }
                     }
                 }
@@ -210,18 +210,18 @@ namespace Infrastructure
                 {
                     while (reader.Read())
                     {
-                        int albumID = reader.GetInt32(0);
-                        int artistID = reader.GetInt32(1);
-                        string title = reader.GetString(2);
-                        DateTime releaseDate = reader.GetDateTime(3);
-                        int runTime = reader.GetInt32(4);
-                        string genre = reader.GetString(5);
-                        string albumCoverName = reader.GetString(6);
-                        byte[] albumCoverData = (byte[])reader.GetValue(7);
-                        string albumCoverContentType = reader.GetString(8);
+						AlbumDTO albumDTO = new AlbumDTO();
+						albumDTO.AlbumID = reader.GetInt32(0);
+						albumDTO.ArtistID = reader.GetInt32(1);
+						albumDTO.AlbumTitle = reader.GetString(2);
+						albumDTO.ReleaseDate = reader.GetDateTime(3);
+						albumDTO.RunTime = reader.GetInt32(4);
+						albumDTO.Genre = reader.GetString(5);
+						albumDTO.AlbumCoverName = reader.GetString(6);
+						albumDTO.AlbumCoverData = (byte[])reader.GetValue(7);
+						albumDTO.AlbumCoverContentType = reader.GetString(8);
 
-                        AlbumDTO album = new AlbumDTO(albumID, artistID, title, releaseDate, runTime, genre, albumCoverName, albumCoverData, albumCoverContentType);
-                        albums.Add(album);
+                        albums.Add(albumDTO);
                     }
                 }
             }
@@ -230,6 +230,8 @@ namespace Infrastructure
 
 		public AlbumDTO GetAlbumByTitleAndArtist(string title, int artistId)
 		{
+			AlbumDTO albumDTO = new AlbumDTO();
+
 			using (SqlConnection conn = GetSqlConnection())
 			using (SqlCommand cmd = new SqlCommand())
 			{
@@ -247,17 +249,15 @@ namespace Infrastructure
 				{
 					while (reader.Read())
 					{
-						int albumID = reader.GetInt32(0);
-						string albumtitle = reader.GetString(1);
-						int artistID = reader.GetInt32(2);
-						DateTime releaseDate = reader.GetDateTime(3);
-						string genre = reader.GetString(4);
-
-						return new AlbumDTO(albumID, artistID, albumtitle, releaseDate, genre);
+						albumDTO.AlbumID = reader.GetInt32(0);
+						albumDTO.AlbumTitle = reader.GetString(1);
+						albumDTO.ArtistID = reader.GetInt32(2);
+						albumDTO.ReleaseDate = reader.GetDateTime(3);
+						albumDTO.Genre = reader.GetString(4);
 					}
 				}
 			}
-			return null;
+			return albumDTO;
 		}
 
         public int GetAlbumIDByAlbumTitle(string albumTitle)

@@ -18,7 +18,7 @@ namespace WebApp.Pages
 
         public IndexModel(IPasswordHasher passwordHasher, IUserRepository userRepository, IValidateUser validateUsers, IProfileRepository profileRepository)
         {
-            _userManager = new UserManager(userRepository, profileRepository, validateUsers, passwordHasher);
+            _userManager = new UserManager(passwordHasher, userRepository, validateUsers, profileRepository);
             _passwordHasher = passwordHasher;
             _userRepository = userRepository;
             _validateUsers = validateUsers;

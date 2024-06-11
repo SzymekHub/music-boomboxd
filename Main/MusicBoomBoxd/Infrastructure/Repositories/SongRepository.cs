@@ -96,18 +96,19 @@ namespace Infrastructure
                 {
                     while (reader.Read())
                     {
-                        int songID = reader.GetInt32(0);
-                        string songtitle = reader.GetString(1);
-                        int artistID = reader.GetInt32(2);
-                        DateTime releaseDate = reader.GetDateTime(3);
-                        int runTime = reader.GetInt32(4);
-                        string genre = reader.GetString(5);
-                        string songCoverName = reader.GetString(6);
-                        byte[] songCoverData = (byte[])reader.GetValue(7);
-                        string songCoverContentType = reader.GetString(8);
+                        SongDTO songDTO = new SongDTO();
 
-                        SongDTO song = new SongDTO(songID, songtitle, artistID, releaseDate, runTime, genre, songCoverName, songCoverData, songCoverContentType);
-                        recentSongs.Add(song);
+						songDTO.SongID = reader.GetInt32(0);
+						songDTO.SongTitle = reader.GetString(1);
+						songDTO.ArtistID = reader.GetInt32(2);
+						songDTO.ReleaseDate = reader.GetDateTime(3);
+						songDTO.RunTime = reader.GetInt32(4);
+						songDTO.Genre = reader.GetString(5);
+						songDTO.SongCoverName = reader.GetString(6);
+						songDTO.SongCoverData = (byte[])reader.GetValue(7);
+						songDTO.SongCoverContentType = reader.GetString(8);
+
+                        recentSongs.Add(songDTO);
                     }
                 }
             }
@@ -135,18 +136,19 @@ namespace Infrastructure
                 {
                     while (reader.Read())
                     {
-                        int songID = reader.GetInt32(0);
-                        string songTitle = reader.GetString(1);
-                        int artistID = reader.GetInt32(2);
-                        DateTime releaseDate = reader.GetDateTime(3);
-                        int runTime = reader.GetInt32(4);
-                        string genre = reader.GetString(5);
-                        string songCoverName = reader.GetString(6);
-                        byte[] songCoverData = (byte[])reader.GetValue(7);
-                        string songCoverContentType = reader.GetString(8);
+						SongDTO songDTO = new SongDTO();
 
-                        SongDTO song = new SongDTO(songID, songTitle, artistID, releaseDate, runTime, genre, songCoverName, songCoverData, songCoverContentType);
-                        songs.Add(song);
+						songDTO.SongID = reader.GetInt32(0);
+						songDTO.SongTitle = reader.GetString(1);
+						songDTO.ArtistID = reader.GetInt32(2);
+						songDTO.ReleaseDate = reader.GetDateTime(3);
+						songDTO.RunTime = reader.GetInt32(4);
+						songDTO.Genre = reader.GetString(5);
+						songDTO.SongCoverName = reader.GetString(6);
+						songDTO.SongCoverData = (byte[])reader.GetValue(7);
+						songDTO.SongCoverContentType = reader.GetString(8);
+
+                        songs.Add(songDTO);
                     }
                 }
             }
@@ -174,18 +176,19 @@ namespace Infrastructure
                 {
                     while (reader.Read())
                     {
-                        int songID = reader.GetInt32(0);
-                        string songTitle = reader.GetString(1);
-                        int artistID = reader.GetInt32(2);
-                        DateTime releaseDate = reader.GetDateTime(3);
-                        int runTime = reader.GetInt32(4);
-                        string genre = reader.GetString(5);
-                        string songCoverName = reader.GetString(6);
-                        byte[] songCoverData = (byte[])reader.GetValue(7);
-                        string songCoverContentType = reader.GetString(8);
+						SongDTO songDTO = new SongDTO();
 
-                        SongDTO song = new SongDTO(songID, songTitle, artistID, releaseDate, runTime, genre, songCoverName, songCoverData, songCoverContentType);
-                        songs.Add(song);
+						songDTO.SongID = reader.GetInt32(0);
+						songDTO.SongTitle = reader.GetString(1);
+						songDTO.ArtistID = reader.GetInt32(2);
+						songDTO.ReleaseDate = reader.GetDateTime(3);
+						songDTO.RunTime = reader.GetInt32(4);
+						songDTO.Genre = reader.GetString(5);
+						songDTO.SongCoverName = reader.GetString(6);
+						songDTO.SongCoverData = (byte[])reader.GetValue(7);
+						songDTO.SongCoverContentType = reader.GetString(8);
+
+                        songs.Add(songDTO);
                     }
                 }
             }
@@ -210,13 +213,16 @@ namespace Infrastructure
 				{
 					while (reader.Read())
 					{
-						int songID = reader.GetInt32(0);
-						string songtitle = reader.GetString(1);
-						int artistID = reader.GetInt32(2);
-						DateTime releaseDate = reader.GetDateTime(3);
-						string genre = reader.GetString(4);
+						SongDTO songDTO = new SongDTO();
 
-						return new SongDTO(songID, songtitle, artistID, releaseDate, genre);
+						songDTO.SongID = reader.GetInt32(0);
+						songDTO.SongTitle = reader.GetString(1);
+						songDTO.ArtistID = reader.GetInt32(2);
+						songDTO.ReleaseDate = reader.GetDateTime(3);
+						songDTO.RunTime = reader.GetInt32(4);
+						songDTO.Genre = reader.GetString(5);
+
+                        return songDTO;
 					}
 				}
 			}

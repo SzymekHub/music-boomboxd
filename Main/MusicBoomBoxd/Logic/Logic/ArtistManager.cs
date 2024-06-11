@@ -23,7 +23,7 @@ namespace Logic
 
             foreach (var artistDTO in artistDTOs)
             {
-                Artist artist = ConvertToArtist(artistDTO);
+                Artist artist = ArtistMapper.ConvertToArtist(artistDTO);
                 artists.Add(artist);
             }
             return artists;
@@ -32,7 +32,7 @@ namespace Logic
         public Artist GetArtistByArtistID(int artistID) 
         {
             ArtistDTO artistDTO = _artistsRepository.GetArtistByArtistID(artistID);
-            Artist artist = ConvertToArtist(artistDTO);
+            Artist artist = ArtistMapper.ConvertToArtist(artistDTO);
             return artist;
         }
 
@@ -44,7 +44,7 @@ namespace Logic
 
             foreach (var artistDTO in artistDTOs)
             {
-                Artist artist = ConvertToArtist(artistDTO);
+                Artist artist = ArtistMapper.ConvertToArtist(artistDTO);
                 artists.Add(artist);
             }
             return artists;
@@ -52,7 +52,7 @@ namespace Logic
 
         public Result Add(Artist artist)
         {
-            ArtistDTO artistDTO = ConvertToArtistDTO(artist);
+            ArtistDTO artistDTO = ArtistMapper.ConvertToArtistDTO(artist);
 
             Result resultArtist = _artistsRepository.InsertArtist(artistDTO);
 
@@ -60,12 +60,12 @@ namespace Logic
         }
         public Result Delete(Artist artist)
         {
-            return _artistsRepository.DeleteArtist(ConvertToArtistDTO(artist));
+            return _artistsRepository.DeleteArtist(ArtistMapper.ConvertToArtistDTO(artist));
         }
 
         public Result Update(Artist newArtist)
         {
-            ArtistDTO artistDTO = ConvertToArtistDTO(newArtist);
+            ArtistDTO artistDTO = ArtistMapper.ConvertToArtistDTO(newArtist);
             if (newArtist.ArtistID == 0)
             {
                 return Add(newArtist);
@@ -74,28 +74,6 @@ namespace Logic
             Result resultUpdate = _artistsRepository.UpdateArtist(artistDTO);
 
             return resultUpdate;
-        }
-
-        private ArtistDTO ConvertToArtistDTO(Artist artist)
-        {
-            return new ArtistDTO(
-                artist.ArtistID,
-                artist.Name,
-                artist.ArtistPictureName,
-                artist.ArtistPictureData,
-                artist.ArtistPictureContentType
-            );
-        }
-
-        private Artist ConvertToArtist(ArtistDTO dto)
-        {
-            return new Artist(
-                dto.ArtistID,
-                dto.Name,
-                dto.ArtistPictureName,
-                dto.ArtistPictureData,
-                dto.ArtistPictureContentType
-            );
         }
     }
 }

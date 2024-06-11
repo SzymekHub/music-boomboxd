@@ -15,32 +15,5 @@
         public string ProfilePictureContentType { get; set; }
 		public ProfileDTO ProfileDTO { get; set; }
 
-		public UserDTO(int userID, string username, string password, string email, string userType, DateTime birthday, string favGenre, string profilePictureName, byte[] profilePictureData, string profilePictureContentType)
-        {
-            UserID = userID;
-            Username = username;
-            Password = password;
-            Email = email;
-            UserType = userType;
-            Birthday = birthday;
-            FavGenre = favGenre;
-            ProfilePictureName = profilePictureName;
-            ProfilePictureData = profilePictureData;
-            ProfilePictureContentType = profilePictureContentType;
-        }
-
-        //For the webapp
-        public UserDTO(string username, string password, string email, string userType, DateTime birthday, string favGenre, string profilePictureName, byte[] profilePictureData, string profilePictureContentType)
-        {
-            Username = username;
-            Password = password;
-            Email = email;
-            UserType = userType;
-            Birthday = birthday;
-            FavGenre = favGenre;
-            ProfilePictureName = profilePictureName;
-            ProfilePictureData = profilePictureData;
-            ProfilePictureContentType = profilePictureContentType;
-        }
     }
 }

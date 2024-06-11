@@ -11,26 +11,5 @@
         public string AlbumCoverName { get; set; }
         public byte[] AlbumCoverData { get; set; }
         public string AlbumCoverContentType { get; set; }
-
-        public AlbumDTO(int albumID, int artistID, string albumTitle, DateTime releaseDate, int runTime, string genre, string albumCoverName, byte[] albumCoverData, string albumCoverContentType)
-        {
-            AlbumID = albumID;
-            ArtistID = artistID;
-            AlbumTitle = albumTitle;
-            ReleaseDate = releaseDate;
-            RunTime = runTime;
-            Genre = genre;
-            AlbumCoverName = albumCoverName;
-            AlbumCoverData = albumCoverData;
-            AlbumCoverContentType = albumCoverContentType;
-        }
-        public AlbumDTO(int albumID, int artistID, string albumTitle, DateTime releaseDate, string genre)
-        {
-            AlbumID = albumID;
-            ArtistID = artistID;
-            AlbumTitle = albumTitle;
-            ReleaseDate = releaseDate;
-            Genre = genre;
-        }	
     }
 }

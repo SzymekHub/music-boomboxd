@@ -21,17 +21,18 @@ namespace Logic
 
         public static SongDTO ToSongDTO(Song song)
         {
-            return new SongDTO(
-                song.SongID,
-                song.Title,
-                song.Artist.ArtistID,
-                song.Date,
-                song.RunTime,
-                song.Genre.ToString(),
-                song.SongCoverName,
-                song.SongCoverData,
-                song.SongCoverContentType
-                );
+            SongDTO songDTO = new();
+            songDTO.SongID = song.SongID;
+			songDTO.SongTitle = song.Title;
+			songDTO.ArtistID = song.Artist.ArtistID;
+			songDTO.ReleaseDate = song.Date;
+			songDTO.RunTime = song.RunTime;
+			songDTO.Genre = song.Genre.ToString();
+			songDTO.SongCoverName = song.SongCoverName;
+			songDTO.SongCoverData = song.SongCoverData;
+			songDTO.SongCoverContentType = song.SongCoverContentType;
+                
+            return songDTO;
         }
 
     }

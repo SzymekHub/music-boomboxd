@@ -6,20 +6,22 @@ using System.Threading.Tasks;
 
 namespace Logic
 {
-    public class Review
-    {
+	public class Review
+	{
+		public int UserRatingID { get; set; }
 
-        public int ReviewID { get; set; }
+		public User User { get; set; }
 
-        public int UserID { get; set; }
+		public Album Album { get; set; }
 
-        public int Rating { get; set; }
+		public int Rate { get; set; }
 
-        public Review(int reviewID, int userID, int rating)
-        {
-            ReviewID = reviewID;
-            UserID = userID;
-            Rating = rating;
-        }
-    }
+		public Review(int userRatingID, User user, Album album, int rate)
+		{
+			UserRatingID = userRatingID;
+			User = user;
+			Album = album;
+			Rate = rate;
+		}
+	}
 }

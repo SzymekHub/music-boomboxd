@@ -13,25 +13,5 @@
         public byte[] SongCoverData { get; set; }
         public string SongCoverContentType { get; set; }
 
-        public SongDTO(int songID, string songTitle, int artistID, DateTime releaseDate, int runTime, string genre, string songCoverName, byte[] songCoverData, string songCoverContentType)
-        {
-            SongID = songID;
-            SongTitle = songTitle;
-            ArtistID = artistID;
-            ReleaseDate = releaseDate;
-            RunTime = runTime;
-            Genre = genre;
-            SongCoverName = songCoverName;
-            SongCoverData = songCoverData;
-            SongCoverContentType = songCoverContentType;
-        }
-		public SongDTO(int songID, string songTitle, int artistID, DateTime releaseDate, string genre)
-		{
-			SongID = songID;
-			SongTitle = songTitle;
-			ArtistID = artistID;
-			ReleaseDate = releaseDate;
-			Genre = genre;
-		}
 	}
 }

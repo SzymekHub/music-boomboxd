@@ -123,43 +123,32 @@ namespace Infrastructure
 
 				cmd.Parameters.AddWithValue("@UserID", userID);
 
-				try
+				conn.Open();
+				using (SqlDataReader reader = cmd.ExecuteReader())
 				{
-					conn.Open();
-					using (SqlDataReader reader = cmd.ExecuteReader())
-					{
-						UserDTO user = new UserDTO(
-							reader.GetInt32(1),
-							reader.GetString(4),
-							reader.GetString(5),
-							reader.GetString(6),
-							reader.GetString(7),
-							reader.GetDateTime(8),
-							reader.GetString(9),
-							reader.GetString(10),
-							(byte[])reader.GetValue(11),
-							reader.GetString(12)
-							);
-					
-						ProfileDTO profile = new ProfileDTO();
-						profile.ProfileID = reader.GetInt32(0);
-						profile.UserDTO = user;
-						profile.User_Balance = reader.GetInt32(2);
+					UserDTO userDTO = new UserDTO();
 
-						return profile;
+					userDTO.UserID = reader.GetInt32(1);
+					userDTO.Username = reader.GetString(4);
+					userDTO.Password = reader.GetString(10);
+					userDTO.Email = reader.GetString(5);
+					userDTO.UserType = reader.GetString(6);
+					userDTO.Birthday = reader.GetDateTime(7);
+					userDTO.FavGenre = reader.GetString(8);
+					userDTO.ProfilePictureName = reader.GetString(9);
+					userDTO.ProfilePictureData = (byte[])reader.GetValue(11);
+					userDTO.ProfilePictureContentType = reader.GetString(12);
 
-					}
+
+					ProfileDTO profile = new ProfileDTO();
+					profile.ProfileID = reader.GetInt32(0);
+					profile.UserDTO = userDTO;
+					profile.User_Balance = reader.GetInt32(2);
+
+					return profile;
 				}
-				catch (SqlException ex)
-				{
-					Console.WriteLine($"SQL Exception: {ex.Message}");
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine($"Exception: {ex.Message}");
-				}
+
 			}
-			return null;
 		}
 
 		public double GetBalance(string userName)
@@ -172,7 +161,7 @@ namespace Infrastructure
 				cmd.Connection = connection;
 				cmd.CommandType = CommandType.Text;
 				cmd.CommandText = "SELECT User_Balance FROM [Profile] WHERE UserID = (SELECT UserID FROM [User] WHERE Username = @Username)";
-				
+
 				cmd.Parameters.AddWithValue("@Username", userName);
 
 				connection.Open();
