@@ -91,7 +91,7 @@ namespace WebApp.Pages
 			// Save Song to the database
 			Song newSong = new Song(
 				InputSong.Title,
-				InputSong.ArtistID,
+				InputSong.Artist,
 				InputSong.Date,
 				InputSong.RunTime,
 				(genreType)Enum.Parse(typeof(genreType), InputSong.Genre.ToString()),

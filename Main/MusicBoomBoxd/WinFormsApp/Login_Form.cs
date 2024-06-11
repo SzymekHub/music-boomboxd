@@ -57,7 +57,7 @@ namespace WinFormsApp
             #region Songs
             songRep = new SongRepository();
 
-            songManager = new SongManager(songRep, valSong);
+            songManager = new SongManager(songRep, artistRep, valSong);
             songManager.LoadSongsFromDataBase();
             #endregion
 

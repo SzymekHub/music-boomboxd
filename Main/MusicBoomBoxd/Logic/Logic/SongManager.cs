@@ -4,31 +4,37 @@ namespace Logic
 {
     public class SongManager
     {
-        public List<Song> _songs;
         private readonly ISongRepository _songRepository;
-		private readonly IValidateSong _validateSong;
+        private readonly IArtistRepository _artistRepository;
+        private readonly ArtistManager _artistManager;
+        private readonly IValidateSong _validateSong;
 		private readonly Artist artist;
 
-        public SongManager(ISongRepository isongRep, IValidateSong ivalidSong)
+        public SongManager(ISongRepository isongRep, IArtistRepository iartRep, IValidateSong ivalidSong)
         {
-            _songs = new List<Song>();
             _songRepository = isongRep;
+            _artistManager = new ArtistManager(iartRep);
+            _artistRepository = iartRep;
             _validateSong = ivalidSong;
         }
 
         public List<Song> LoadSongsFromDataBase()
         {
+            List<Song> songs = new();
             List<SongDTO> songDTOs = _songRepository.GetRecentSong(1000);
             
-            _songs.Clear();
-
             foreach (var songDTO in songDTOs)
             {
-                //This converts SongDTO to Songs and adds to the songs list
-                Song song = SongMapper.ToSong(songDTO, artist);
-                _songs.Add(song);
+                Artist artist = _artistManager.GetArtistByArtistID(songDTO.ArtistID);
+
+                if (artist != null)
+                {
+                    Song song = SongMapper.ToSong(songDTO, artist);
+                    song.Artist = artist;
+                    songs.Add(SongMapper.ToSong(songDTO, artist));
+                }
             }
-            return _songs;
+            return songs;
         }
 
         public List<Song> GetSongsForAlbum(int albumID)
@@ -39,8 +45,13 @@ namespace Logic
 
             foreach (var songDTO in songDTOs)
             {
-                Song song = SongMapper.ToSong(songDTO, artist);
-                songs.Add(song);
+                Artist artist = _artistManager.GetArtistByArtistID(songDTO.ArtistID);
+                if (artist != null)
+                {
+                    Song song = SongMapper.ToSong(songDTO, artist);
+                    song.Artist = artist;
+                    songs.Add(song);
+                }
             }
 
             return songs;
@@ -54,8 +65,13 @@ namespace Logic
 
             foreach (var songDTO in songDTOs)
             {
-                Song song = SongMapper.ToSong(songDTO, artist);
-                songs.Add(song);
+                Artist artist = _artistManager.GetArtistByArtistID(songDTO.ArtistID);
+                if (artist != null)
+                {
+                    Song song = SongMapper.ToSong(songDTO, artist);
+                    song.Artist = artist;
+                    songs.Add(song);
+                }
             }
 
             return songs;
@@ -69,8 +85,6 @@ namespace Logic
         {
             SongDTO songDTO = SongMapper.ToSongDTO(song);
 
-            _songs.Add(song);
-
             Result resultSong = SendSongToTheDb(songDTO);
 
             return resultSong;
@@ -80,24 +94,17 @@ namespace Logic
 		{
 			SongDTO songDTO = SongMapper.ToSongDTO(song);
 
-			_songs.Add(song);
-
 			Result resultSong = SendSongToTheDbWEB(songDTO);
 
 			return resultSong;
 
 		}
 
-		public bool Remove(Song song)
+		public Result Remove(Song song)
         {
-            _songRepository.DeleteSong(SongMapper.ToSongDTO(song));
+            Result resultRemoveSong = _songRepository.DeleteSong(SongMapper.ToSongDTO(song));
 
-            return _songs.Remove(song);
-        }
-
-        public Song[] GetArray()
-        {
-            return _songs.ToArray();
+            return resultRemoveSong;
         }
 
         public Result Update(Song newSong, Song oldSong)
@@ -118,14 +125,14 @@ namespace Logic
 
                 if (resultUpdate.Success)
                 {
-                    LoadSongsFromDataBase();
+                    List<Song> songs = LoadSongsFromDataBase();
 
                     // If the update was successful, this updates the Song in the list
-                    int index = _songs.FindIndex(a => a == oldSong);
+                    int index = songs.FindIndex(a => a == oldSong);
 
                     if (index != -1)
                     {
-                        _songs[index] = newSong;
+                        songs[index] = newSong;
                     }
                 }
                 else

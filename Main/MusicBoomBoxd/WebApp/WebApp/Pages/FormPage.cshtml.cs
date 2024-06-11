@@ -63,7 +63,7 @@ namespace WebApp.Pages
 
             foreach (var song in songs)
             {
-                Songs.Add(new SongModel(song.SongID, song.Title, song.ArtistID, song.Date, song.RunTime, song.Genre));
+                Songs.Add(new SongModel(song.SongID, song.Title, song.Artist.Name, song.Date, song.RunTime, song.Genre));
             }
         }
 

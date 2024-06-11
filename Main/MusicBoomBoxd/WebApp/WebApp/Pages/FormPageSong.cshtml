@@ -25,15 +25,15 @@
 			</div>
 
 			<div class="form-group">
-				<label asp-for="InputSong.ArtistID">Artist:<sup>*</sup></label>
-				<select asp-for="InputSong.ArtistID" class="form-control">
+				<label asp-for="InputSong.Artist.ArtistID">Artist:<sup>*</sup></label>
+				<select asp-for="InputSong.Artist.ArtistID" class="form-control">
 					<option value="">Select an Artist</option>
 					@foreach (var artist in Model.Artists)
 					{
 						<option value="@artist.ArtistID">@artist.Name</option>
 					}
 				</select>
-				<span asp-validation-for="InputSong.ArtistID" class="text-danger"></span>
+				<span asp-validation-for="InputSong.Artist.ArtistID" class="text-danger"></span>
 			</div>
 
 			<div class="form-group">

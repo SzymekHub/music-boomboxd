@@ -4,7 +4,6 @@ namespace Logic
 {
     public class AlbumManager
     {
-        public List<Album> _albums;
         private readonly IAlbumRepository _albumRepository;
         private readonly IArtistRepository _artistRepository;
         private readonly ArtistManager _artistManager;
@@ -13,7 +12,6 @@ namespace Logic
 
         public AlbumManager(IAlbumRepository ialbumRep, IArtistRepository iartRep, IValidateAlbum ivalidAlbum)
         {
-            _albums = new List<Album>();
             _albumRepository = ialbumRep;
             _artistManager = new ArtistManager(iartRep);
             _artistRepository = iartRep;
@@ -22,8 +20,8 @@ namespace Logic
 
         public List<Album> LoadAlbumsFromDatabase()
         {
+            List<Album> albums = new();
             List<AlbumDTO> albumDTOs = _albumRepository.GetRecentAlbum(1000);
-            _albums.Clear();
 
             foreach (var albumDTO in albumDTOs)
             {
@@ -33,11 +31,11 @@ namespace Logic
                 {
                     Album album = AlbumMapper.ToAlbum(albumDTO, artist);
                     album.Artist = artist;
-                    _albums.Add(album);
+                    albums.Add(AlbumMapper.ToAlbum(albumDTO, artist));
                 }
             }
 
-            return _albums;
+            return albums;
         }
 
         public List<Album> GetAlbumForUsers(int userID)
@@ -48,8 +46,14 @@ namespace Logic
 
             foreach (var albumDTO in albumDTOs)
             {
-                Album album = AlbumMapper.ToAlbum(albumDTO, artist);
-                albums.Add(album);
+                Artist artist = _artistManager.GetArtistByArtistID(albumDTO.ArtistID);
+
+                if (artist != null)
+                {
+                    Album album = AlbumMapper.ToAlbum(albumDTO, artist);
+                    album.Artist = artist;
+                    albums.Add(album);
+                }
             }
 
             return albums;
@@ -103,37 +107,28 @@ namespace Logic
         }
 
 
-		public Result Add(Album album)
+        public Result Add(Album album)
         {
             AlbumDTO albumDTO = AlbumMapper.ToAlbumDTO(album);
-
-            _albums.Add(album);
 
             Result resultAlbum = SendAlbumToTheDb(albumDTO);
 
             return resultAlbum;
         }
-		public Result AddWEB(Album album)
-		{
-			AlbumDTO albumDTO = AlbumMapper.ToAlbumDTO(album);
-
-			_albums.Add(album);
-
-			Result resultAlbum = SendAlbumToTheDbWEB(albumDTO);
-
-			return resultAlbum;
-		}
-
-		public bool Remove(Album album)
+        public Result AddWEB(Album album)
         {
-            _albumRepository.DeleteAlbum(AlbumMapper.ToAlbumDTO(album));
+            AlbumDTO albumDTO = AlbumMapper.ToAlbumDTO(album);
 
-            return _albums.Remove(album);
+            Result resultAlbum = SendAlbumToTheDbWEB(albumDTO);
+
+            return resultAlbum;
         }
 
-        public Album[] GetArray()
+        public Result Remove(Album album)
         {
-            return _albums.ToArray();
+            Result resultRemoveAlbum = _albumRepository.DeleteAlbum(AlbumMapper.ToAlbumDTO(album));
+
+            return resultRemoveAlbum;
         }
 
         public Result Update(Album newAlbum, Album oldAlbum)
@@ -154,13 +149,13 @@ namespace Logic
 
                 if (resultupdate.Success)
                 {
-                    LoadAlbumsFromDatabase();
+                    List<Album> albums = LoadAlbumsFromDatabase();
                     // If the update was successful, this updates the album in the list
-                    int index = _albums.FindIndex(a => a == oldAlbum);
+                    int index = albums.FindIndex(a => a == oldAlbum);
 
                     if (index != -1)
                     {
-                        _albums[index] = newAlbum;
+                        albums[index] = newAlbum;
                     }
                 }
 
@@ -172,18 +167,18 @@ namespace Logic
         {
             return _albumRepository.InsertAlbum(newAlbum);
         }
-		public Result SendAlbumToTheDbWEB(AlbumDTO newAlbum)
-		{
-			var errors = _validateAlbum.ValidateAlbums(newAlbum.AlbumTitle, newAlbum.ArtistID);
-			if (errors.Any())
-			{
-				return new Result
-				{
-					Success = false,
-					Errors = errors
-				};
-			}
-			return _albumRepository.InsertAlbum(newAlbum);
-		}
-	}
+        public Result SendAlbumToTheDbWEB(AlbumDTO newAlbum)
+        {
+            var errors = _validateAlbum.ValidateAlbums(newAlbum.AlbumTitle, newAlbum.ArtistID);
+            if (errors.Any())
+            {
+                return new Result
+                {
+                    Success = false,
+                    Errors = errors
+                };
+            }
+            return _albumRepository.InsertAlbum(newAlbum);
+        }
+    }
 }

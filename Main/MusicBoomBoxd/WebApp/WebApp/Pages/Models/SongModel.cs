@@ -6,17 +6,16 @@ namespace WebApp.Pages
 	{
 		public int SongID { get; }
 		public string Title { get; }
-		public int ArtistID { get; set; } 
-		public Artist Artist { get; set; }
+		public string ArtistName { get; set; }
 		public DateTime Date { get; set; }
 		public int RunTime { get; set; }
 		public genreType Genre { get; set; }
 
-		public SongModel(int songID, string title, int artistID, DateTime date, int runTime, genreType genre)
+		public SongModel(int songID, string title, string artist, DateTime date, int runTime, genreType genre)
 		{
 			SongID = songID;
 			Title = title;
-			ArtistID = artistID;
+			ArtistName = artist;
 			Date = date;
 			RunTime = runTime;
 			Genre = genre;

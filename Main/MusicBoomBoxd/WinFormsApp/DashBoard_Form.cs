@@ -420,7 +420,7 @@ namespace WinFormsApp
         private void PopulateSongs()
         {
             //This will populate the form with exisiting Songs
-            dgvSongs.DataSource = songManager.LoadSongsFromDataBase();
+            dgvSongs.DataSource = songManager.LoadSongsFromDataBase().Select(x => new SongViewModelWin(x)).ToList();
 
         }
 
@@ -446,7 +446,9 @@ namespace WinFormsApp
             if (dgvSongs.SelectedRows.Count > 0)
             {
                 // Get the selected Song
-                Song selectedSong = dgvSongs.SelectedRows[0].DataBoundItem as Song;
+                SongViewModelWin selectedSongView = dgvSongs.SelectedRows[0].DataBoundItem as SongViewModelWin;
+
+                Song selectedSong = songManager.LoadSongsFromDataBase().Find(song => song.SongID == selectedSongView.SongID);
 
                 // Open the NewSong_Form with the selected Songs's information
                 using (NewSong_Form addSongForm = new NewSong_Form(songManager, artistManager, selectedSong))

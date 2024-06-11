@@ -10,16 +10,13 @@ namespace Logic
             return new Song(
                 songDTO.SongID,
                 songDTO.SongTitle,
-                songDTO.ArtistID,
+                artist,
                 songDTO.ReleaseDate,
                 songDTO.RunTime,
                 (genreType)Enum.Parse(typeof(genreType), songDTO.Genre),
                 songDTO.SongCoverName,
                 songDTO.SongCoverData,
-                songDTO.SongCoverContentType)
-            {
-                Artist = artist
-            };
+                songDTO.SongCoverContentType);
         }
 
         public static SongDTO ToSongDTO(Song song)
@@ -27,7 +24,7 @@ namespace Logic
             return new SongDTO(
                 song.SongID,
                 song.Title,
-                song.ArtistID,
+                song.Artist.ArtistID,
                 song.Date,
                 song.RunTime,
                 song.Genre.ToString(),

@@ -4,7 +4,6 @@
     {
         public int SongID { get;}
         public string Title { get; }
-        public int ArtistID { get; set; }
         public Artist Artist { get; set; }
         public DateTime Date { get; set; }
         public int RunTime { get; set; }
@@ -13,11 +12,11 @@
         public byte[] SongCoverData { get; set; }
         public string SongCoverContentType { get; set; }
 
-        public Song(int songID, string title, int artistID, DateTime date, int runTime, genreType genre, string songCoverName, byte[] songCoverData, string songCoverContentType)
+        public Song(int songID, string title, Artist artist, DateTime date, int runTime, genreType genre, string songCoverName, byte[] songCoverData, string songCoverContentType)
         {
             SongID = songID;
             Title = title;
-            ArtistID = artistID;
+            Artist = artist;
             Date = date;
             RunTime = runTime;
             Genre = genre;
@@ -26,10 +25,10 @@
             SongCoverContentType = songCoverContentType;
         }
 
-        public Song(string title, int artistID, DateTime date, int runTime, genreType genre, string songCoverName, byte[] songCoverData, string songCoverContentType)
+        public Song(string title, Artist artist, DateTime date, int runTime, genreType genre, string songCoverName, byte[] songCoverData, string songCoverContentType)
         {
             Title = title;
-            ArtistID = artistID;
+            Artist = artist;
             Date = date;
             RunTime = runTime;
             Genre = genre;

@@ -127,7 +127,7 @@ namespace WinFormsApp
                     //This creates a new Song Object with the provided details 
                     NewSong = new Song(
                       tbTitleSong.Text,
-                      selectedArtist.ArtistID,
+                      selectedArtist,
                       dtpSong.Value,
                       (int)nudRunTimeSongs.Value,
                       (genreType)cbGenre.SelectedItem,
@@ -142,7 +142,7 @@ namespace WinFormsApp
                     NewSong = new Song(
                       exisitingSong.SongID,
                       tbTitleSong.Text,
-                      selectedArtist.ArtistID,
+                      selectedArtist,
                       dtpSong.Value,
                       (int)nudRunTimeSongs.Value,
                       (genreType)cbGenre.SelectedItem,
@@ -173,7 +173,8 @@ namespace WinFormsApp
             // Finds the artist by ID and sets the selected item
             foreach (var item in cbArtistSong.Items)
             {
-                if (((Artist)item).ArtistID == song.ArtistID)
+                Artist artist = item as Artist;
+                if (artist.Name == song.Artist.Name)
                 {
                     cbArtistSong.SelectedItem = item;
                     break;
@@ -237,7 +238,7 @@ namespace WinFormsApp
                 // This is a new Song object that returns with the provided details
                 return new Song(
                       tbTitleSong.Text,
-                      ((Artist)cbArtistSong.SelectedItem).ArtistID,
+                      ((Artist)cbArtistSong.SelectedItem),
                       dtpSong.Value,
                       (int)nudRunTimeSongs.Value,
                       (genreType)cbGenre.SelectedItem,
@@ -286,7 +287,7 @@ namespace WinFormsApp
                      new Song(
                         exisitingSong.SongID,
                         tbTitleSong.Text,
-                        ((Artist)cbArtistSong.SelectedItem).ArtistID,
+                        ((Artist)cbArtistSong.SelectedItem),
                         dtpSong.Value,
                         (int)nudRunTimeSongs.Value,
                         (genreType)cbGenre.SelectedItem,
@@ -298,7 +299,7 @@ namespace WinFormsApp
                 return new Song(
                         exisitingSong.SongID,
                         tbTitleSong.Text,
-                        ((Artist)cbArtistSong.SelectedItem).ArtistID,
+                        ((Artist)cbArtistSong.SelectedItem),
                         dtpSong.Value,
                         (int)nudRunTimeSongs.Value,
                         (genreType)cbGenre.SelectedItem,
@@ -358,8 +359,6 @@ namespace WinFormsApp
             cbGenre.DataSource = Enum.GetValues(typeof(genreType));
 
             cbArtistSong.DataSource = artistManager.LoadArtistFromDB();
-            cbArtistSong.DisplayMember = "Name";
-            cbArtistSong.ValueMember = "ArtistID";
         }
 
         private void NewMusic_Form_FormClosed(object sender, FormClosedEventArgs e)
