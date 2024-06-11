@@ -41,9 +41,11 @@
             ProfilePictureData = profilePictureData;
             ProfilePictureContentType = profilePictureContentType;
             Profile = new Profile
-            {
-                User_Balance= 0
-            };
+            (
+                0,
+                new User(username, password, email, userType, birthday, favGenre, profilePictureName, profilePictureData, profilePictureContentType),
+                0
+            );
         }
 
         public void SetUserID(int userID)
@@ -51,7 +53,7 @@
             if (UserID == 0)
             {
                 UserID = userID;
-                Profile.UserID = userID;
+                Profile.User.UserID = userID;
             }
         }
     }

@@ -1,19 +1,23 @@
 ﻿using Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Logic
 {
     public class ProfileMapper
     {
-        public static ProfileDTO ConvertToProfileDTO(Profile profile)
+		public static Profile ConvertToProfile(ProfileDTO profileDTO)
+		{
+            return new Profile(
+                profileDTO.ProfileID,
+                UserMapper.ConvertToUser(profileDTO.UserDTO),
+                profileDTO.User_Balance
+                );
+		}
+
+		public static ProfileDTO ConvertToProfileDTO(Profile profile)
         {
             ProfileDTO profileDTO = new ProfileDTO();
             profileDTO.ProfileID = profile.ProfileID;
-            profileDTO.UserID = profile.UserID;
+            profileDTO.UserDTO = UserMapper.ConvertToUserDTO(profile.User);
             profileDTO.User_Balance = profile.User_Balance;
 
             return profileDTO;

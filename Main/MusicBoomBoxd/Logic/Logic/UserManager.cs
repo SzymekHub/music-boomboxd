@@ -154,7 +154,7 @@ namespace Logic
 
                 // Create ProfileDTO for the new User
                 ProfileDTO profileDTO = new();
-                profileDTO.UserID = user.UserID;
+                profileDTO.UserDTO = userDTO;
                 profileDTO.User_Balance = 0;
 
                 // Insert Profile into the database
@@ -181,7 +181,7 @@ namespace Logic
 
                 // Create ProfileDTO for the new User
                 ProfileDTO profileDTO = new();
-                profileDTO.UserID = user.UserID;
+                profileDTO.UserDTO = userDTO;
                 profileDTO.User_Balance = 0;
 
                 // Insert Profile into the database

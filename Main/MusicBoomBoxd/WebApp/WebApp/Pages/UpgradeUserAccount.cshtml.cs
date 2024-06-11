@@ -27,7 +27,7 @@ namespace WebApp.Pages
             _validateUsers = validateUsers;
             _profileRepository = profileRepository;
             _userManager = new UserManager(userRepository, profileRepository, validateUsers, passwordHasher);
-            _profileManager = new ProfileManager(profileRepository);
+            _profileManager = new ProfileManager(profileRepository, userRepository, validateUsers, passwordHasher);
         }
 
         public void OnGet()

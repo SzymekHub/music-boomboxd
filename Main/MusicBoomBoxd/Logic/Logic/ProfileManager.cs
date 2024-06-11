@@ -2,44 +2,61 @@
 
 namespace Logic
 {
-    public class ProfileManager
-    {
-        private readonly IProfileRepository profileRepository;
+	public class ProfileManager
+	{
+		private readonly IProfileRepository _profileRepository;
+		private readonly IUserRepository _userRepository;
+		private readonly IValidateUser _validateUser;
+		private readonly IPasswordHasher _passwordHasher;
+		private readonly UserManager _userManager;
 
-        public ProfileManager(IProfileRepository iProfRep)
-        {
-            profileRepository = iProfRep;
-        }
+		public ProfileManager(IProfileRepository iProfRep, IUserRepository iUserRep, IValidateUser ivalUser, IPasswordHasher IpassHash)
+		{
+			_profileRepository = iProfRep;
+			_userRepository = iUserRep;
+			_validateUser = ivalUser;
+			_passwordHasher = IpassHash;
+			_userManager = new UserManager(iUserRep, iProfRep, ivalUser, IpassHash);
+		}
 
-        public double GetBalance(string userName)
-        {
-            return profileRepository.GetBalance(userName);
-        }
 
-        public Result AddToUserBalance(string userName, double amount)
-        {
-            int profileID = profileRepository.GetProfileIDByUsername(userName);
-            return profileRepository.AddToUserBalance(profileID, amount);
-        }
+		public double GetBalance(string userName)
+		{
+			return _profileRepository.GetBalance(userName);
+		}
 
-        public int GetProfileIDByUsername(string userName)
-        {
-            return profileRepository.GetProfileIDByUsername(userName);
-        }
+		public Profile GetProfileForUser(int userID)
+		{
+			ProfileDTO profileDTO = _profileRepository.GetProfileDTOForUser(userID);
 
-        public Result AddProfileCritic(Profile profile)
-        {
-            ProfileDTO profileDTO = ProfileMapper.ConvertToProfileDTO(profile);
-            Result result = profileRepository.AddProfileCritic(profileDTO);
+			Profile profile = ProfileMapper.ConvertToProfile(profileDTO);
 
-            return result;
-        }
-        public Result AddProfileMusician(Profile profile)
-        {
-            ProfileDTO profileDTO = ProfileMapper.ConvertToProfileDTO(profile);
-            Result result = profileRepository.AddProfileMusician(profileDTO);
+			return profile;
+		}
+		public Result AddToUserBalance(string userName, double amount)
+		{
+			int profileID = _profileRepository.GetProfileIDByUsername(userName);
+			return _profileRepository.AddToUserBalance(profileID, amount);
+		}
 
-            return result;
-        }
-    }
+		public int GetProfileIDByUsername(string userName)
+		{
+			return _profileRepository.GetProfileIDByUsername(userName);
+		}
+
+		public Result AddProfileCritic(Profile profile)
+		{
+			ProfileDTO profileDTO = ProfileMapper.ConvertToProfileDTO(profile);
+			Result result = _profileRepository.AddProfileCritic(profileDTO);
+
+			return result;
+		}
+		public Result AddProfileMusician(Profile profile)
+		{
+			ProfileDTO profileDTO = ProfileMapper.ConvertToProfileDTO(profile);
+			Result result = _profileRepository.AddProfileMusician(profileDTO);
+
+			return result;
+		}
+	}
 }
