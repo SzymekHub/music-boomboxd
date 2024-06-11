@@ -177,7 +177,7 @@ namespace WebApp.Pages
 
         public IActionResult OnPostUpgradeAccount()
         {
-            return RedirectToPage("/UpgradeAccount");
+            return RedirectToPage("/UpgradeUserAccount");
         }
     }
 }
