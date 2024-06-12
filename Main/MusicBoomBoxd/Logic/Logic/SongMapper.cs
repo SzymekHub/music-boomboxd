@@ -22,9 +22,10 @@ namespace Logic
         public static SongDTO ToSongDTO(Song song)
         {
             SongDTO songDTO = new();
+
             songDTO.SongID = song.SongID;
 			songDTO.SongTitle = song.Title;
-			songDTO.ArtistID = song.Artist.ArtistID;
+			songDTO.ArtistDTO = ArtistMapper.ConvertToArtistDTO(song.Artist);
 			songDTO.ReleaseDate = song.Date;
 			songDTO.RunTime = song.RunTime;
 			songDTO.Genre = song.Genre.ToString();

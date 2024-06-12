@@ -22,11 +22,11 @@ namespace Logic
         {
             List<Song> songs = new();
 
-            List<SongDTO> songDTOs = _songRepository.GetRecentSong(1000);
+            List<SongDTO> songDTOs = _songRepository.GetSongs(1000);
             
             foreach (var songDTO in songDTOs)
             {
-                Artist artist = _artistManager.GetArtistByArtistID(songDTO.ArtistID);
+                Artist artist = _artistManager.GetArtistByArtistID(songDTO.ArtistDTO.ArtistID);
 
                 if (artist != null)
                 {
@@ -46,7 +46,7 @@ namespace Logic
 
             foreach (var songDTO in songDTOs)
             {
-                Artist artist = _artistManager.GetArtistByArtistID(songDTO.ArtistID);
+                Artist artist = _artistManager.GetArtistByArtistID(songDTO.ArtistDTO.ArtistID);
                 if (artist != null)
                 {
                     Song song = SongMapper.ToSong(songDTO, artist);
@@ -66,7 +66,7 @@ namespace Logic
 
             foreach (var songDTO in songDTOs)
             {
-                Artist artist = _artistManager.GetArtistByArtistID(songDTO.ArtistID);
+                Artist artist = _artistManager.GetArtistByArtistID(songDTO.ArtistDTO.ArtistID);
                 if (artist != null)
                 {
                     Song song = SongMapper.ToSong(songDTO, artist);
@@ -129,7 +129,7 @@ namespace Logic
 
 		public Result SendSongToTheDbWEB(SongDTO newSong)
 		{
-			var errors = _validateSong.ValidateSongs(newSong.SongTitle, newSong.ArtistID);
+			var errors = _validateSong.ValidateSongs(newSong.SongTitle, newSong.ArtistDTO.ArtistID);
 			if (errors.Any())
 			{
 				return new Result

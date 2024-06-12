@@ -1,6 +1,7 @@
 ﻿using Infrastructure;
 using Logic;
 using System.Drawing.Text;
+using System.Linq;
 
 
 namespace WinFormsApp
@@ -167,7 +168,7 @@ namespace WinFormsApp
         private void PopulateUsers()
         {
             //This will populate the form with exisiting users
-            dgvUsers.DataSource = userManager.LoadUsersFromDataBase();
+            dgvUsers.DataSource = userManager.LoadUsersFromDataBase().Select(x => new UserViewModelWin(x)).ToList(); ;
         }
 
         private void btnAddUser_Click(object sender, EventArgs e)
@@ -190,11 +191,13 @@ namespace WinFormsApp
         {
             if (dgvUsers.SelectedRows.Count > 0)
             {
-                // Get the selected User
-                User selectedUser = dgvUsers.SelectedRows[0].DataBoundItem as User;
+				// This gets the selected User
+				UserViewModelWin selecetedUserView = dgvUsers.SelectedRows[0].DataBoundItem as UserViewModelWin;
 
-                // Open the NewUser_Form with the selected Users's information
-                using (NewUsers_Form addUserForm = new NewUsers_Form(userManager, albumManager, songManager, artistManager, selectedUser))
+				User selectedUser = userManager.LoadUsersFromDataBase().Find(user => user.UserID == selecetedUserView.UserID);
+
+				// Open the NewUser_Form with the selected Users's information
+				using (NewUsers_Form addUserForm = new NewUsers_Form(userManager, albumManager, songManager, artistManager, selectedUser))
                 {
                     if (addUserForm.ShowDialog() == DialogResult.OK)
                     {
@@ -218,11 +221,13 @@ namespace WinFormsApp
         {
             if (dgvUsers.SelectedRows.Count > 0)
             {
-                // This gets the selected User
-                User selectedUser = dgvUsers.SelectedRows[0].DataBoundItem as User;
+				// This gets the selected User
+				UserViewModelWin selecetedUserView = dgvUsers.SelectedRows[0].DataBoundItem as UserViewModelWin;
 
-                // Opens the NewUser_Form with the selected Users's information
-                using (NewUsers_Form addUserForm = new NewUsers_Form(userManager, albumManager, songManager, artistManager, selectedUser, true))
+				User selectedUser = userManager.LoadUsersFromDataBase().Find(user => user.UserID == selecetedUserView.UserID);
+
+				// Opens the NewUser_Form with the selected Users's information
+				using (NewUsers_Form addUserForm = new NewUsers_Form(userManager, albumManager, songManager, artistManager, selectedUser, true))
                 {
                     if (addUserForm.ShowDialog() == DialogResult.OK)
                     {
@@ -247,8 +252,11 @@ namespace WinFormsApp
             // This chekcs if a row is selected
             if (dgvUsers.SelectedRows.Count > 0)
             {
-                // Get the selected User
-                User selectedUser = dgvUsers.SelectedRows[0].DataBoundItem as User;
+				// This gets the selected User
+				UserViewModelWin selecetedUserView = dgvUsers.SelectedRows[0].DataBoundItem as UserViewModelWin;
+
+				User selectedUser = userManager.LoadUsersFromDataBase().Find(user => user.UserID == selecetedUserView.UserID);
+
 
                 DialogResult result = MessageBox.Show("Are you sure you want to delte this user?", "Delete User", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 
@@ -290,7 +298,7 @@ namespace WinFormsApp
         private void PopulateArtist()
         {
             //This will populate the form with exisiting users
-            dgvArtists.DataSource = artistManager.LoadArtistFromDB();
+            dgvArtists.DataSource = artistManager.LoadArtistFromDB().Select(x => new ArtistViewModelWin(x)).ToList(); ;
         }
 
         private void btnAddArtist_Click(object sender, EventArgs e)
@@ -313,11 +321,13 @@ namespace WinFormsApp
         {
             if (dgvArtists.SelectedRows.Count > 0)
             {
-                // Get the selected User
-                Artist selectedArtist = dgvArtists.SelectedRows[0].DataBoundItem as Artist;
+				// This gets the selected Artist
+				ArtistViewModelWin selecetedArtistView = dgvArtists.SelectedRows[0].DataBoundItem as ArtistViewModelWin;
 
-                // Open the NewUser_Form with the selected Users's information
-                using (NewArtist_Form addArtistForm = new NewArtist_Form(artistManager, selectedArtist))
+				Artist selectedArtist = artistManager.LoadArtistFromDB().Find(artist => artist.ArtistID == selecetedArtistView.ArtistID);
+
+				// Open the NewUser_Form with the selected Users's information
+				using (NewArtist_Form addArtistForm = new NewArtist_Form(artistManager, selectedArtist))
                 {
                     if (addArtistForm.ShowDialog() == DialogResult.OK)
                     {
@@ -341,8 +351,10 @@ namespace WinFormsApp
         {
             if (dgvArtists.SelectedRows.Count > 0)
             {
-                // This gets the selected User
-                Artist selectedArtist = dgvArtists.SelectedRows[0].DataBoundItem as Artist;
+				// This gets the selected Artist
+				ArtistViewModelWin selecetedArtistView = dgvArtists.SelectedRows[0].DataBoundItem as ArtistViewModelWin;
+
+				Artist selectedArtist = artistManager.LoadArtistFromDB().Find(artist => artist.ArtistID == selecetedArtistView.ArtistID);
 
                 // Opens the NewUser_Form with the selected Users's information
                 using (NewArtist_Form addArtistForm = new NewArtist_Form(artistManager, selectedArtist, true))
@@ -370,10 +382,12 @@ namespace WinFormsApp
             // This chekcs if a row is selected
             if (dgvArtists.SelectedRows.Count > 0)
             {
-                // Get the selected User
-                Artist selectedArtist = dgvArtists.SelectedRows[0].DataBoundItem as Artist;
+				// This gets the selected Artist
+				ArtistViewModelWin selecetedArtistView = dgvArtists.SelectedRows[0].DataBoundItem as ArtistViewModelWin;
 
-                DialogResult result = MessageBox.Show("Are you sure you want to delte this artist?", "Delete Artist", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+				Artist selectedArtist = artistManager.LoadArtistFromDB().Find(artist => artist.ArtistID == selecetedArtistView.ArtistID);
+
+				DialogResult result = MessageBox.Show("Are you sure you want to delte this artist?", "Delete Artist", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 
                 if (result == DialogResult.OK)
                 {
@@ -475,11 +489,13 @@ namespace WinFormsApp
         {
             if (dgvSongs.SelectedRows.Count > 0)
             {
-                // This gets the selected Song
-                Song selectedSong = dgvSongs.SelectedRows[0].DataBoundItem as Song;
+				// This gets the selected Song
+				SongViewModelWin selectedSongView = dgvSongs.SelectedRows[0].DataBoundItem as SongViewModelWin;
 
-                // Opens the NewSong_Form with the selected Songs's information
-                using (NewSong_Form addSongForm = new NewSong_Form(songManager, artistManager, selectedSong, true))
+				Song selectedSong = songManager.LoadSongsFromDataBase().Find(song => song.SongID == selectedSongView.SongID);
+
+				// Opens the NewSong_Form with the selected Songs's information
+				using (NewSong_Form addSongForm = new NewSong_Form(songManager, artistManager, selectedSong, true))
                 {
                     if (addSongForm.ShowDialog() == DialogResult.OK)
                     {
@@ -504,10 +520,12 @@ namespace WinFormsApp
             // This chekcs if a row is selected
             if (dgvSongs.SelectedRows.Count > 0)
             {
-                // Get the selected Song
-                Song selectedSong = dgvSongs.SelectedRows[0].DataBoundItem as Song;
+				// This gets the selected Song
+				SongViewModelWin selectedSongView = dgvSongs.SelectedRows[0].DataBoundItem as SongViewModelWin;
 
-                DialogResult result = MessageBox.Show("Are you sure you want to delte this Song?", "Delete Song", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+				Song selectedSong = songManager.LoadSongsFromDataBase().Find(song => song.SongID == selectedSongView.SongID);
+
+				DialogResult result = MessageBox.Show("Are you sure you want to delte this Song?", "Delete Song", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 
                 if (result == DialogResult.OK)
                 {
@@ -608,11 +626,13 @@ namespace WinFormsApp
         {
             if (dgvAlbums.SelectedRows.Count > 0)
             {
-                // This gets the selected album
-                Album selectedAlbum = dgvAlbums.SelectedRows[0].DataBoundItem as Album;
+				// Get the selected album
+				AlbumViewModelWin selectedAlbumView = dgvAlbums.SelectedRows[0].DataBoundItem as AlbumViewModelWin;
 
-                // Opens the NewAlbum_Form with the selected albums's information
-                using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, songManager, artistManager, selectedAlbum, true))
+				Album selectedAlbum = albumManager.LoadAlbumsFromDatabase().Find(album => album.AlbumID == selectedAlbumView.AlbumID);
+
+				// Opens the NewAlbum_Form with the selected albums's information
+				using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, songManager, artistManager, selectedAlbum, true))
                 {
                     if (addAlbumForm.ShowDialog() == DialogResult.OK)
                     {
@@ -637,10 +657,12 @@ namespace WinFormsApp
             // This chekcs if a row is selected
             if (dgvAlbums.SelectedRows.Count > 0)
             {
-                // Get the selected album
-                Album selectedAlbum = dgvAlbums.SelectedRows[0].DataBoundItem as Album;
+				// Get the selected album
+				AlbumViewModelWin selectedAlbumView = dgvAlbums.SelectedRows[0].DataBoundItem as AlbumViewModelWin;
 
-                DialogResult result = MessageBox.Show("Are you sure you want to delte this Album?", "Delete Album", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+				Album selectedAlbum = albumManager.LoadAlbumsFromDatabase().Find(album => album.AlbumID == selectedAlbumView.AlbumID);
+
+				DialogResult result = MessageBox.Show("Are you sure you want to delte this Album?", "Delete Album", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
 
                 if (result == DialogResult.OK)
                 {

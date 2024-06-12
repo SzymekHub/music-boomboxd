@@ -5,8 +5,8 @@
     {
         public int SongID { get; set; }
         public string SongTitle { get; set; }
-        public int ArtistID { get; set; }
-        public DateTime ReleaseDate { get; set; }
+		public ArtistDTO ArtistDTO { get; set; }
+		public DateTime ReleaseDate { get; set; }
         public int RunTime { get; set; }
         public string Genre { get; set; }
         public string SongCoverName { get; set; }

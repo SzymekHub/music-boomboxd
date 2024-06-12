@@ -31,7 +31,7 @@ namespace Infrastructure
 				}
 				cmd.Parameters.AddWithValue("@Title", songDTO.SongTitle);
 
-				cmd.Parameters.AddWithValue("@ArtistID", songDTO.ArtistID);
+				cmd.Parameters.AddWithValue("@ArtistID", songDTO.ArtistDTO.ArtistID);
 
 				// This converts DateTime to string in the format "yyyy-MM-dd HH:mm:ss.fff" so that it works with the databse
 				string releaseDateString = songDTO.ReleaseDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
@@ -75,7 +75,7 @@ namespace Infrastructure
 			}
 		}
 
-		public List<SongDTO> GetRecentSong(int count)
+		public List<SongDTO> GetSongs(int count)
 		{
 			List<SongDTO> recentSongs = new List<SongDTO>();
 
@@ -84,32 +84,63 @@ namespace Infrastructure
 			{
 				cmd.Connection = conn;
 				cmd.CommandType = CommandType.Text;
-				cmd.CommandText = "SELECT TOP (@Count) SongID, Title, ArtistID, Date, RunTimeSec, Genre, SongCoverName, SongCoverData, SongCoverContentType " +
-								  "FROM [Song] WHERE Active = 1 ORDER BY SongID DESC";
+				//The TOP is parameterized with @Count to dynamically limit the result set.
+
+				cmd.CommandText = "SELECT TOP (@Count) " +
+								  "S.SongID, S.Active AS SongActive, S.Title, S.ArtistID, S.Date, S.RunTimeSec, S.Genre, S.SongCoverName, S.SongCoverData, S.SongCoverContentType, " +
+					              "AR.ArtistID AS ArtistID, AR.Active AS ArtistActive, AR.Name, AR.AritstPictureName, AR.ArtistPictureData, AR.ArtistPictureContentType " +
+								  "FROM Song S " +
+								  "INNER JOIN Artist AR ON S.ArtistID = AR.ArtistID " +
+								  "WHERE S.Active = 1 AND AR.Active = 1" +
+								  "ORDER BY S.Date DESC";
 
 
 				cmd.Parameters.AddWithValue("@Count", count);
 
-				conn.Open();
-
-				using (SqlDataReader reader = cmd.ExecuteReader())
+				try
 				{
-					while (reader.Read())
+
+
+					conn.Open();
+
+					using (SqlDataReader reader = cmd.ExecuteReader())
 					{
-						SongDTO songDTO = new SongDTO();
+						while (reader.Read())
+						{
+							//Created and populated the nested ArtistDTO within the AlbumDTO object.
 
-						songDTO.SongID = reader.GetInt32(0);
-						songDTO.SongTitle = reader.GetString(1);
-						songDTO.ArtistID = reader.GetInt32(2);
-						songDTO.ReleaseDate = reader.GetDateTime(3);
-						songDTO.RunTime = reader.GetInt32(4);
-						songDTO.Genre = reader.GetString(5);
-						songDTO.SongCoverName = reader.GetString(6);
-						songDTO.SongCoverData = (byte[])reader.GetValue(7);
-						songDTO.SongCoverContentType = reader.GetString(8);
+							SongDTO songDTO = new SongDTO
+							{
+								SongID = reader.GetInt32(0),
+								SongTitle = reader.GetString(2),
+								ArtistDTO = new ArtistDTO
+								{
+									ArtistID = reader.GetInt32(10),
+									Name = reader.GetString(12),
+									Active = reader.GetBoolean(11),
+									ArtistPictureName = reader.GetString(13),
+									ArtistPictureData = (byte[])reader.GetValue(14),
+									ArtistPictureContentType = reader.GetString(15)
+								},
+								ReleaseDate = reader.GetDateTime(4),
+								RunTime = reader.GetInt32(5),
+								Genre = reader.GetString(6),
+								SongCoverName = reader.GetString(7),
+								SongCoverData = (byte[])reader.GetValue(8),
+								SongCoverContentType = reader.GetString(9)
+							};
 
-						recentSongs.Add(songDTO);
+							recentSongs.Add(songDTO);
+						}
 					}
+				}
+				catch (SqlException ex)
+				{
+					throw new Exception($"SQL Exception: {ex.Message}", ex);
+				}
+				catch (Exception ex)
+				{
+					throw new Exception($"Exception: {ex.Message}", ex);
 				}
 			}
 			return recentSongs;
@@ -124,9 +155,11 @@ namespace Infrastructure
 			{
 				cmd.Connection = conn;
 				cmd.CommandType = CommandType.Text;
-				cmd.CommandText = @"SELECT S.SongID, S.Title, S.ArtistID, S.Date, S.RunTimeSec, S.Genre, S.SongCoverName, S.SongCoverData, S.SongCoverContentType 
-                            FROM [Song] S 
+				cmd.CommandText = @"SELECT S.SongID, S.Title, S.ArtistID, S.Date, S.RunTimeSec, S.Genre, S.SongCoverName, S.SongCoverData, S.SongCoverContentType, 
+                                   AR.ArtistID, AR.Active AS ArtistActive, AR.Name, AR.AritstPictureName, AR.ArtistPictureData, AR.ArtistPictureContentType
+							FROM [Song] S 
                             INNER JOIN [AlbumSongs] ALB ON S.SongID = ALB.SongID 
+                            INNER JOIN [Artist] AR ON S.ArtistID = AR.ArtistID
                             WHERE ALB.AlbumID = @AlbumID";
 
 				cmd.Parameters.AddWithValue("@AlbumID", albumID);
@@ -136,17 +169,26 @@ namespace Infrastructure
 				{
 					while (reader.Read())
 					{
-						SongDTO songDTO = new SongDTO();
-
-						songDTO.SongID = reader.GetInt32(0);
-						songDTO.SongTitle = reader.GetString(1);
-						songDTO.ArtistID = reader.GetInt32(2);
-						songDTO.ReleaseDate = reader.GetDateTime(3);
-						songDTO.RunTime = reader.GetInt32(4);
-						songDTO.Genre = reader.GetString(5);
-						songDTO.SongCoverName = reader.GetString(6);
-						songDTO.SongCoverData = (byte[])reader.GetValue(7);
-						songDTO.SongCoverContentType = reader.GetString(8);
+						SongDTO songDTO = new SongDTO
+						{
+							SongID = reader.GetInt32(0),
+							SongTitle = reader.GetString(1),
+							ArtistDTO = new ArtistDTO
+							{
+								ArtistID = reader.GetInt32(9),
+								Name = reader.GetString(11),
+								Active = reader.GetBoolean(10),
+								ArtistPictureName = reader.GetString(12),
+								ArtistPictureData = (byte[])reader.GetValue(13),
+								ArtistPictureContentType = reader.GetString(14)
+							},
+							ReleaseDate = reader.GetDateTime(3),
+							RunTime = reader.GetInt32(4),
+							Genre = reader.GetString(5),
+							SongCoverName = reader.GetString(6),
+							SongCoverData = (byte[])reader.GetValue(7),
+							SongCoverContentType = reader.GetString(8)
+						};
 
 						songs.Add(songDTO);
 					}
@@ -164,9 +206,11 @@ namespace Infrastructure
 			{
 				cmd.Connection = conn;
 				cmd.CommandType = CommandType.Text;
-				cmd.CommandText = @"SELECT SO.SongID, SO.Title, SO.ArtistID, SO.Date, SO.RunTimeSec, SO.Genre, SO.SongCoverName, SO.SongCoverData, SO.SongCoverContentType 
-                            FROM [Song] SO 
-                            INNER JOIN [UserSongs] USR ON SO.SongID = USR.SongID 
+				cmd.CommandText = @"SELECT S.SongID, S.Title, S.ArtistID, S.Date, S.RunTimeSec, S.Genre, S.SongCoverName, S.SongCoverData, S.SongCoverContentType, 
+                                   AR.ArtistID, AR.Active AS ArtistActive, AR.Name, AR.AritstPictureName, AR.ArtistPictureData, AR.ArtistPictureContentType
+							FROM [Song] S 
+                            INNER JOIN [UserSongs] USR ON S.SongID = USR.SongID 
+                            INNER JOIN [Artist] AR ON S.ArtistID = AR.ArtistID
                             WHERE USR.UserID = @UserID";
 
 				cmd.Parameters.AddWithValue("@UserID", userID);
@@ -176,19 +220,29 @@ namespace Infrastructure
 				{
 					while (reader.Read())
 					{
-						SongDTO songDTO = new SongDTO();
-
-						songDTO.SongID = reader.GetInt32(0);
-						songDTO.SongTitle = reader.GetString(1);
-						songDTO.ArtistID = reader.GetInt32(2);
-						songDTO.ReleaseDate = reader.GetDateTime(3);
-						songDTO.RunTime = reader.GetInt32(4);
-						songDTO.Genre = reader.GetString(5);
-						songDTO.SongCoverName = reader.GetString(6);
-						songDTO.SongCoverData = (byte[])reader.GetValue(7);
-						songDTO.SongCoverContentType = reader.GetString(8);
+						SongDTO songDTO = new SongDTO
+						{
+							SongID = reader.GetInt32(0),
+							SongTitle = reader.GetString(1),
+							ArtistDTO = new ArtistDTO
+							{
+								ArtistID = reader.GetInt32(9),
+								Name = reader.GetString(11),
+								Active = reader.GetBoolean(10),
+								ArtistPictureName = reader.GetString(12),
+								ArtistPictureData = (byte[])reader.GetValue(13),
+								ArtistPictureContentType = reader.GetString(14)
+							},
+							ReleaseDate = reader.GetDateTime(3),
+							RunTime = reader.GetInt32(4),
+							Genre = reader.GetString(5),
+							SongCoverName = reader.GetString(6),
+							SongCoverData = (byte[])reader.GetValue(7),
+							SongCoverContentType = reader.GetString(8)
+						};
 
 						songs.Add(songDTO);
+
 					}
 				}
 			}
@@ -201,8 +255,11 @@ namespace Infrastructure
 			{
 				cmd.Connection = conn;
 				cmd.CommandType = CommandType.Text;
-				cmd.CommandText = "SELECT SongID, Title, ArtistID, Date, Genre " +
-								  "FROM [Song] WHERE Title = @Title AND ArtistID = @ArtistID";
+				cmd.CommandText = "SELECT S.SongID, S.Title, S.ArtistID, " +
+								  "AR.ArtistID, AR.Active AS ArtistActive, AR.Name, AR.AritstPictureName, AR.ArtistPictureData, AR.ArtistPictureContentType" +
+								  "FROM [Song] S" +
+								  "INNER JOIN [Artist] AR ON S.ArtistID = AR.ArtistID" +
+								  "WHERE S.Title = @Title AND AR.ArtistID = @ArtistID";
 
 				cmd.Parameters.AddWithValue("@Title", title);
 				cmd.Parameters.AddWithValue("@ArtistID", artistId);
@@ -213,14 +270,20 @@ namespace Infrastructure
 				{
 					while (reader.Read())
 					{
-						SongDTO songDTO = new SongDTO();
-
-						songDTO.SongID = reader.GetInt32(0);
-						songDTO.SongTitle = reader.GetString(1);
-						songDTO.ArtistID = reader.GetInt32(2);
-						songDTO.ReleaseDate = reader.GetDateTime(3);
-						songDTO.RunTime = reader.GetInt32(4);
-						songDTO.Genre = reader.GetString(5);
+						SongDTO songDTO = new SongDTO
+						{
+							SongID = reader.GetInt32(0),
+							SongTitle = reader.GetString(1),
+							ArtistDTO = new ArtistDTO
+							{
+								ArtistID = reader.GetInt32(2),
+								Name = reader.GetString(4),
+								Active = reader.GetBoolean(3),
+								ArtistPictureName = reader.GetString(5),
+								ArtistPictureData = (byte[])reader.GetValue(6),
+								ArtistPictureContentType = reader.GetString(7)
+							}
+						};
 
 						return songDTO;
 					}
@@ -266,7 +329,7 @@ namespace Infrastructure
 
 				cmd.Parameters.AddWithValue("SongID", songDTO.SongID);
 				cmd.Parameters.AddWithValue("@Title", songDTO.SongTitle);
-				cmd.Parameters.AddWithValue("@ArtistID", songDTO.ArtistID);
+				cmd.Parameters.AddWithValue("@ArtistID", songDTO.ArtistDTO.ArtistID);
 
 				// This converts DateTime to string in the format "yyyy-MM-dd HH:mm:ss.fff" so that it works with the databse
 				string releaseDateString = songDTO.ReleaseDate.ToString("yyyy-MM-dd HH:mm:ss.fff");

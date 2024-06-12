@@ -4,7 +4,7 @@ namespace Infrastructure
 	public interface ISongRepository
 	{
 		Result InsertSong(SongDTO songDTO);
-		List<SongDTO> GetRecentSong(int count);
+		List<SongDTO> GetSongs(int count);
 		List<SongDTO> GetSongsForAlbum(int albumID);
 		List<SongDTO> GetSongsForUser(int userID);
 		SongDTO GetSongByTitleAndArtist(string title, int artistId);

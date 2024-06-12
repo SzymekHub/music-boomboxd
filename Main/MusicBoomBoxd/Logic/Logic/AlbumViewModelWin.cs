@@ -12,7 +12,7 @@ namespace Logic
         public string Title { get; set; }
         public string Artist { get; set; }
         public DateTime Date { get; set; }
-        public string Genre { get; set; }
+        public genreType Genre { get; set; }
         public string AlbumCoverName { get; set; }
         public byte[] AlbumCoverData { get; set; }
         public string AlbumCoverContentType { get; set; }
@@ -22,7 +22,7 @@ namespace Logic
             AlbumID = album.AlbumID;
             Title = album.Title;
             Artist = album.Artist.Name;
-            Genre = album.Genre.ToString();
+            Genre = album.Genre;
             Date = album.Date;
             AlbumCoverName = album.AlbumCoverName;
             AlbumCoverData = album.AlbumCoverData;

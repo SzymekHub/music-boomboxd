@@ -20,7 +20,7 @@ namespace Infrastructure
                                         VALUES (@AlbumID, @ArtistID, @Title, @Date, @RunTimeSec, @Genre, @AlbumCoverName, @AlbumCoverData, @AlbumCoverContentType); 
                                         SELECT SCOPE_IDENTITY();";
 
-					cmd.Parameters.AddWithValue("@AlbumID", albumDTO.ArtistDTO.ArtistID);
+					cmd.Parameters.AddWithValue("@AlbumID", albumDTO.AlbumID);
 				}
 				else
 				{
