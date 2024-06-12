@@ -1,5 +1,4 @@
-﻿using Infrastructure.DTOs;
-
+﻿
 namespace Infrastructure
 {
     public interface IArtistRepository

@@ -1,9 +1,10 @@
-﻿namespace Infrastructure
+﻿
+namespace Infrastructure
 {
     public class AlbumDTO
     {
         public int AlbumID { get; set; }
-        public int ArtistID { get; set; }
+        public ArtistDTO ArtistDTO { get; set; }
         public string AlbumTitle { get; set; }
         public DateTime ReleaseDate { get; set; }
         public int RunTime { get; set; }

@@ -22,7 +22,7 @@ public static class AlbumMapper
 		AlbumDTO albumDTO = new();
 
 		albumDTO.AlbumID = album.AlbumID;
-		albumDTO.ArtistID = album.Artist.ArtistID;
+		albumDTO.ArtistDTO = ArtistMapper.ConvertToArtistDTO(album.Artist);
 		albumDTO.AlbumTitle = album.Title;
 		albumDTO.ReleaseDate = album.Date;
 		albumDTO.RunTime = album.RunTime;

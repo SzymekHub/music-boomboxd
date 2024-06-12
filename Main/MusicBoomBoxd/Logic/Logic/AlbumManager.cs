@@ -21,11 +21,11 @@ namespace Logic
         public List<Album> LoadAlbumsFromDatabase()
         {
             List<Album> albums = new();
-            List<AlbumDTO> albumDTOs = _albumRepository.GetRecentAlbum(1000);
+            List<AlbumDTO> albumDTOs = _albumRepository.GetAlbums(1000);
 
             foreach (var albumDTO in albumDTOs)
             {
-                Artist artist = _artistManager.GetArtistByArtistID(albumDTO.ArtistID);
+                Artist artist = _artistManager.GetArtistByArtistID(albumDTO.ArtistDTO.ArtistID);
 
                 if (artist != null)
                 {
@@ -46,7 +46,7 @@ namespace Logic
 
             foreach (var albumDTO in albumDTOs)
             {
-                Artist artist = _artistManager.GetArtistByArtistID(albumDTO.ArtistID);
+                Artist artist = _artistManager.GetArtistByArtistID(albumDTO.ArtistDTO.ArtistID);
 
                 if (artist != null)
                 {
@@ -152,7 +152,7 @@ namespace Logic
         }
         public Result SendAlbumToTheDbWEB(AlbumDTO newAlbum)
         {
-            var errors = _validateAlbum.ValidateAlbums(newAlbum.AlbumTitle, newAlbum.ArtistID);
+            var errors = _validateAlbum.ValidateAlbums(newAlbum.AlbumTitle, newAlbum.ArtistDTO.ArtistID);
             if (errors.Any())
             {
                 return new Result

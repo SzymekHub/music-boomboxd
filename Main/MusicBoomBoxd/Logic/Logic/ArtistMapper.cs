@@ -1,4 +1,4 @@
-﻿using Infrastructure.DTOs;
+﻿using Infrastructure;
 
 namespace Logic
 {

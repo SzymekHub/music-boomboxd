@@ -1,5 +1,4 @@
-﻿using Infrastructure.DTOs;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using System.Data;
 
 namespace Infrastructure
