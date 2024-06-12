@@ -1,28 +1,62 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Infrastructure;
 
 namespace Logic
 {
     public class ReviewManager
     {
-        private List<Review> reviews;
+        private readonly IReviewRepository _reviewRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IAlbumRepository _albumRepository;
 
-        public ReviewManager()
+        public ReviewManager(IReviewRepository irevRep, IUserRepository iuserRep, IAlbumRepository ialbRep)
         {
-            reviews = new List<Review>();
+            _reviewRepository = irevRep;
+            _userRepository = iuserRep;
+            _albumRepository = ialbRep;
         }
 
-        public void Add(Review review)
+        public Result AddReview(Review review)
         {
-            reviews.Add(review);
+            ReviewDTO reviewDTO = ReviewMapper.ConvertToReviewDTO(review);
+            return _reviewRepository.InsertReview(reviewDTO);
         }
 
-        public bool Remove(Review review)
+        public Result UpdateRating(Review review)
         {
-            return reviews.Remove(review);
+            ReviewDTO reviewDTO = ReviewMapper.ConvertToReviewDTO(review);
+            return _reviewRepository.UpdateReview(reviewDTO);
+        }
+
+        public Review GetReviewByUsernameAndAlbumID(ReviewDTO reviewDTO)
+        {
+
+            _reviewRepository.GetReviewByUserAndAlbumID(reviewDTO);
+
+            if (reviewDTO == null)
+            {
+                return null;
+            }
+
+            return ReviewMapper.ConvertToReview(reviewDTO);
+        }
+
+        public double GetAverageRatingByAlbumID(AlbumDTO albumDTO)
+        {
+            List<ReviewDTO> reviews = _reviewRepository.GetReviewsByAlbumID(albumDTO);
+
+            int totalRatings = reviews.Count;
+            if (totalRatings == 0)
+            {
+                return 0;
+            }
+
+            int totalRatingSum = reviews.Sum(r => r.Rate);
+
+            double averageRating = (double)totalRatingSum / totalRatings;
+
+            _albumRepository.AddAverageRating(albumDTO, averageRating);
+
+            return averageRating;
         }
     }
 }

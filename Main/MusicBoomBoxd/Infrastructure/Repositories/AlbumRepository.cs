@@ -360,7 +360,39 @@ namespace Infrastructure
 			return albumID;
 		}
 
-		public Result UpdateAlbum(AlbumDTO albumDTO)
+        public Result AddAverageRating(AlbumDTO albumDTO, double averageRating)
+        {
+            using (SqlConnection connection = GetSqlConnection())
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = connection;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = @"UPDATE [Album] SET AverageRating = @AverageRating WHERE AlbumID = @AlbumID";
+
+                cmd.Parameters.AddWithValue("@AverageRating", averageRating);
+                cmd.Parameters.AddWithValue("@AlbumID", albumDTO.AlbumID);
+
+                try
+                {
+                    connection.Open();
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    if (rowsAffected > 0)
+                    {
+                        return new Result { Success = true, Message = "Average rating updated successfully." };
+                    }
+                    return new Result { Success = false, Message = "Failed to update average rating. No rows affected." };
+                }
+                catch (SqlException ex)
+                {
+                    return new Result { Success = false, Message = $"SQL Exception: {ex.Message}" };
+                }
+                catch (Exception ex)
+                {
+                    return new Result { Success = false, Message = $"Exception: {ex.Message}" };
+                }
+            }
+        }
+        public Result UpdateAlbum(AlbumDTO albumDTO)
 		{
 			using (SqlConnection conn = GetSqlConnection())
 			using (SqlCommand cmd = new SqlCommand())

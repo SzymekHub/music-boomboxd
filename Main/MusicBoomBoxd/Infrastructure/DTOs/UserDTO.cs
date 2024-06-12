@@ -15,5 +15,7 @@
         public string ProfilePictureContentType { get; set; }
 		public ProfileDTO ProfileDTO { get; set; }
 
+        public bool Active { get; set; }
+
     }
 }

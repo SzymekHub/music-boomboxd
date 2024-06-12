@@ -3,11 +3,11 @@ using Logic;
 
 public static class AlbumMapper
 {
-	public static Album ToAlbum(AlbumDTO albumDTO, Artist artist)
+	public static Album ToAlbum(AlbumDTO albumDTO)
 	{
 		return new Album(
 			albumDTO.AlbumID,
-			artist,
+			ArtistMapper.ConvertToArtist(albumDTO.ArtistDTO),
 			albumDTO.AlbumTitle,
 			albumDTO.ReleaseDate,
 			albumDTO.RunTime,

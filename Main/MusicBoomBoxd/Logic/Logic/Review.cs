@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Logic
+﻿namespace Logic
 {
 	public class Review
 	{
@@ -23,5 +17,11 @@ namespace Logic
 			Album = album;
 			Rate = rate;
 		}
-	}
+        public Review(User user, Album album, int rate)
+        {
+            User = user;
+            Album = album;
+            Rate = rate;
+        }
+    }
 }

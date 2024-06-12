@@ -1,0 +1,88 @@
+﻿@page
+@model WebApp.Pages.AlbumsPageModel
+@{
+	ViewData["Title"] = "Rate Albums!";
+}
+<link rel="stylesheet" href="~/css/albumPage.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<main>
+    <div class="rating-header">
+        <h1>@ViewData["Title"]</h1>
+    </div>
+
+    <table class="stock-table">
+        <thead>
+            <tr>
+                <th>Ticker</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Percentage Difference</th>
+                <th>Your Rating</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var stock in Model.Stocks)
+            {
+                <tr>
+                    <td>@stock.Ticker</td>
+                    <td>@stock.Name</td>
+                    <td>@stock.Price.ToString("0.00")</td>
+                    <td class="@Model.GetPercentageDifferenceClass(stock.PercentageDifference)">
+                        @stock.PercentageDifference.ToString("0.00") %
+                    </td>
+                    <td>
+                        <form method="post" asp-page-handler="Rate">
+                            <input type="hidden" name="ticker" value="@stock.Ticker" />
+                            <div class="star-rating" data-rating="0">
+                                <i class="fa fa-star" data-value="1"></i>
+                                <i class="fa fa-star" data-value="2"></i>
+                                <i class="fa fa-star" data-value="3"></i>
+                                <i class="fa fa-star" data-value="4"></i>
+                                <i class="fa fa-star" data-value="5"></i>
+                                <button type="submit" class="btn-primary">Rate</button>
+                            </div>
+                            <input type="hidden" name="rating" id="rating-@stock.Ticker" value="0" required />
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</main>
+
+<script>
+    function initStarRating() {
+        document.querySelectorAll('.star-rating').forEach(function (ratingElem) {
+            var stars = ratingElem.querySelectorAll('.fa-star');
+            stars.forEach(function (star) {
+                star.addEventListener('click', function () {
+                    var value = parseInt(this.getAttribute('data-value'));
+                    var ratingInput = ratingElem.nextElementSibling;
+                    ratingInput.value = value;
+                    clearStars(ratingElem);
+                    fillStars(ratingElem, value);
+                });
+            });
+        });
+    }
+
+    function clearStars(ratingElem) {
+        ratingElem.querySelectorAll('.fa-star').forEach(function (star) {
+            star.classList.remove('checked');
+        });
+    }
+
+    function fillStars(ratingElem, value) {
+        var stars = ratingElem.querySelectorAll('.fa-star');
+        stars.forEach(function (star, index) {
+            if (index < value) {
+                star.classList.add('checked');
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        initStarRating();
+    });
+</script>
