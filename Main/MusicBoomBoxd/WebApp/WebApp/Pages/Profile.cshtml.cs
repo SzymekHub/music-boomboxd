@@ -95,7 +95,7 @@ namespace WebApp.Pages
                     }
                 }
 
-                var result = _userManager.Update(newUser, oldUser);
+                var result = _userManager.Update(newUser);
 
                 if (result.Success)
                 {
