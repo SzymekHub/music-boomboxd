@@ -197,7 +197,7 @@ namespace WinFormsApp
 				User selectedUser = userManager.LoadUsersFromDataBase().Find(user => user.UserID == selecetedUserView.UserID);
 
 				// Open the NewUser_Form with the selected Users's information
-				using (NewUsers_Form addUserForm = new NewUsers_Form(userManager, albumManager, songManager, artistManager, selectedUser))
+				using (NewUsers_Form addUserForm = new NewUsers_Form(userManager, albumManager, songManager, artistManager, selectedUser, false, true))
                 {
                     if (addUserForm.ShowDialog() == DialogResult.OK)
                     {
@@ -227,7 +227,7 @@ namespace WinFormsApp
 				User selectedUser = userManager.LoadUsersFromDataBase().Find(user => user.UserID == selecetedUserView.UserID);
 
 				// Opens the NewUser_Form with the selected Users's information
-				using (NewUsers_Form addUserForm = new NewUsers_Form(userManager, albumManager, songManager, artistManager, selectedUser, true))
+				using (NewUsers_Form addUserForm = new NewUsers_Form(userManager, albumManager, songManager, artistManager, selectedUser, true, true))
                 {
                     if (addUserForm.ShowDialog() == DialogResult.OK)
                     {
@@ -578,7 +578,7 @@ namespace WinFormsApp
         private void bntAddAlbum_Click(object sender, EventArgs e)
         {
             // Open the NewAlbum_Form
-            using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, songManager, artistManager))
+            using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, songManager, artistManager, null, false, false))
             {
                 // Show the addAlbumForm
                 if (addAlbumForm.ShowDialog() == DialogResult.OK)
@@ -602,7 +602,7 @@ namespace WinFormsApp
                 Album selectedAlbum = albumManager.LoadAlbumsFromDatabase().Find(album => album.AlbumID == selectedAlbumView.AlbumID);
 
                 // Open the NewAlbum_Form with the selected albums's information
-                using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, songManager, artistManager, selectedAlbum))
+                using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, songManager, artistManager, selectedAlbum, false, true))
                 {
                     if (addAlbumForm.ShowDialog() == DialogResult.OK)
                     {
@@ -632,7 +632,7 @@ namespace WinFormsApp
 				Album selectedAlbum = albumManager.LoadAlbumsFromDatabase().Find(album => album.AlbumID == selectedAlbumView.AlbumID);
 
 				// Opens the NewAlbum_Form with the selected albums's information
-				using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, songManager, artistManager, selectedAlbum, true))
+				using (NewAlbum_Form addAlbumForm = new NewAlbum_Form(albumManager, songManager, artistManager, selectedAlbum, true, true))
                 {
                     if (addAlbumForm.ShowDialog() == DialogResult.OK)
                     {

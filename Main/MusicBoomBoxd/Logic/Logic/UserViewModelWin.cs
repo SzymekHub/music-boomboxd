@@ -3,7 +3,7 @@ namespace Logic
 {
 	public class UserViewModelWin
 	{
-		public int UserID { get; private set; }
+		public int UserID { get; }
 		public string Username { get; }
 		public string Password { get; }
 		public string Email { get; }

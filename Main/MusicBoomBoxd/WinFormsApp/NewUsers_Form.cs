@@ -18,7 +18,7 @@ namespace WinFormsApp
         private ArtistManager artistManager;
         private string selectedImagePath;
 
-        public NewUsers_Form(UserManager um, AlbumManager am, SongManager sm, ArtistManager arm, User user = null, bool view = false)
+        public NewUsers_Form(UserManager um, AlbumManager am, SongManager sm, ArtistManager arm, User user = null, bool view = false, bool update = false)
         {
             userManager = um;
             albumManager = am;
@@ -38,6 +38,53 @@ namespace WinFormsApp
                 DisplayProfilePicture(exisitingUser.ProfilePictureData);
             }
 
+			lblTop5Albums.Visible = false;
+			lblTop5Artists.Visible = false;
+			lblTop5Songs.Visible = false;
+			lblSongWarning.Visible = false;
+			lblArtistWarning.Visible = false;
+			lblAlbumWarning.Visible = false;
+			lblArtist.Visible = false;
+			lblSongsUsers.Visible = false;
+			lblAlbumsUser.Visible = false;
+			cklbAlbumUser.Visible = false;
+			cklbAritstUser.Visible = false;
+			cklbSongsUser.Visible = false;
+			btnAddAlbumUser.Visible = false;
+			btnAddArtistUser.Visible = false;
+			btnAddSongsUser.Visible = false;
+			btnRemoveAlbumUser.Visible = false;
+			btnRemoveArtistUser.Visible = false;
+			btnRemoveSongUser.Visible = false;
+            tbAlbumsSearchUser.Visible = false;
+            tbArtistSearchUser.Visible = false;
+            tbSongsSearchUsers.Visible = false;
+
+			if (update)
+            {
+                lblTop5Albums.Visible = true;
+                lblTop5Artists.Visible = true;
+                lblTop5Songs.Visible = true;
+                lblSongWarning.Visible = true;
+                lblArtistWarning.Visible = true;
+                lblAlbumWarning.Visible = true;
+                lblArtist.Visible = true;
+                lblSongsUsers.Visible = true;
+                lblAlbumsUser.Visible = true;
+                cklbAlbumUser.Visible = true;
+                cklbAritstUser.Visible = true;
+                cklbSongsUser.Visible = true;
+                btnAddAlbumUser.Visible = true;
+                btnAddArtistUser.Visible = true;
+                btnAddSongsUser.Visible = true;
+                btnRemoveAlbumUser.Visible = true;
+                btnRemoveArtistUser.Visible = true;
+                btnRemoveSongUser.Visible = true;
+				tbAlbumsSearchUser.Visible = true;
+				tbArtistSearchUser.Visible = true;
+				tbSongsSearchUsers.Visible = true;
+			}
+            
             if (view)
             {
                 tbNameUser.Enabled = false;
@@ -54,6 +101,12 @@ namespace WinFormsApp
                 btnAddAlbumUser.Enabled = false;
                 btnAddArtistUser.Enabled = false;
                 btnAddSongsUser.Enabled = false;
+                btnRemoveAlbumUser.Enabled = false;
+                btnRemoveArtistUser.Enabled =false;
+                btnRemoveSongUser.Enabled = false;
+                tbSongsSearchUsers.Enabled = false;
+                tbArtistSearchUser.Enabled = false;
+                tbAlbumsSearchUser.Enabled = false;
             }
         }
 

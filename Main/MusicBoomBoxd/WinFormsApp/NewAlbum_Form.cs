@@ -16,7 +16,7 @@ namespace WinFormsApp
         private ArtistManager artistManager;
         private string selectedImagePath;
 
-        public NewAlbum_Form(AlbumManager am, SongManager sm, ArtistManager arm, Album album = null, bool view = false)
+        public NewAlbum_Form(AlbumManager am, SongManager sm, ArtistManager arm, Album album = null, bool view = false, bool update = false)
         {
             albumManager = am;
             songManager = sm;
@@ -34,6 +34,22 @@ namespace WinFormsApp
                 DisplayAlbumCover(existingAlbum.AlbumCoverData);
             }
 
+            lblSongs.Visible = false;
+            txtSongsSearch.Visible = false;
+            cklbSongs.Visible = false;
+            label1.Visible = false;
+            btnAddSongs.Visible = false;
+            btnRemoveSong.Visible = false;
+
+            if (update)
+            {
+				lblSongs.Visible = true;
+				txtSongsSearch.Visible = true;
+				cklbSongs.Visible = true;
+				label1.Visible = true;
+				btnAddSongs.Visible = true;
+				btnRemoveSong.Visible = true;
+			}
             #region Disables_Controls
             if (view)
             {
@@ -46,7 +62,13 @@ namespace WinFormsApp
                 nudRunTimeAlbum.Enabled = false;
                 btnAddPictureAlbum.Enabled = false;
                 btnAddAlbum.Enabled = false;
-            }
+				lblSongs.Enabled = false;
+				txtSongsSearch.Enabled = false;
+				cklbSongs.Enabled = false;
+				label1.Enabled = false;
+				btnAddSongs.Enabled = false;
+				btnRemoveSong.Enabled = false;
+			}
             #endregion
         }
 
