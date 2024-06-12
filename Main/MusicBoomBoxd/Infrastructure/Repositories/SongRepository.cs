@@ -3,100 +3,100 @@ using System.Data;
 
 namespace Infrastructure
 {
-    // This class is responisble for databse operations related to songs
-    public class SongRepository : DbConnection, ISongRepository
-    {
-        public Result InsertSong(SongDTO songDTO)
-        {
-            using (SqlConnection conn = GetSqlConnection())
-            using (SqlCommand cmd = new SqlCommand())
-            {
-                cmd.Connection = conn;
-                cmd.CommandType = CommandType.Text;
-                if (songDTO.SongID != 0)
-                {
-                    cmd.CommandText = @"SET IDENTITY_INSERT [Song] ON
+	// This class is responisble for databse operations related to songs
+	public class SongRepository : DbConnection, ISongRepository
+	{
+		public Result InsertSong(SongDTO songDTO)
+		{
+			using (SqlConnection conn = GetSqlConnection())
+			using (SqlCommand cmd = new SqlCommand())
+			{
+				cmd.Connection = conn;
+				cmd.CommandType = CommandType.Text;
+				if (songDTO.SongID != 0)
+				{
+					cmd.CommandText = @"SET IDENTITY_INSERT [Song] ON
                                     INSERT INTO [Song] (SongID, Title, ArtistID, Date, RunTimeSec, Genre, SongCoverName, SongCoverData, SongCoverContentType) 
                                     VALUES (@SongID, @Title, @ArtistID, @ReleaseDate, @RunTimeSec, @Genre, @SongCoverName, @SongCoverData, @SongCoverContentType)
                                     SELECT SCOPE_IDENTITY();";
 
-                    cmd.Parameters.AddWithValue("@SongID", songDTO.SongID);
-                }
-                else
-                {
-                    cmd.CommandText = @"INSERT INTO [Song] (Title, ArtistID, Date, RunTimeSec, Genre, SongCoverName, SongCoverData, SongCoverContentType) 
+					cmd.Parameters.AddWithValue("@SongID", songDTO.SongID);
+				}
+				else
+				{
+					cmd.CommandText = @"INSERT INTO [Song] (Title, ArtistID, Date, RunTimeSec, Genre, SongCoverName, SongCoverData, SongCoverContentType) 
                                     VALUES (@Title, @ArtistID, @ReleaseDate, @RunTimeSec, @Genre, @SongCoverName, @SongCoverData, @SongCoverContentType)
                                     SELECT SCOPE_IDENTITY();";
 
-                }
-                cmd.Parameters.AddWithValue("@Title", songDTO.SongTitle);
+				}
+				cmd.Parameters.AddWithValue("@Title", songDTO.SongTitle);
 
-                cmd.Parameters.AddWithValue("@ArtistID", songDTO.ArtistID);
+				cmd.Parameters.AddWithValue("@ArtistID", songDTO.ArtistID);
 
-                // This converts DateTime to string in the format "yyyy-MM-dd HH:mm:ss.fff" so that it works with the databse
-                string releaseDateString = songDTO.ReleaseDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                cmd.Parameters.AddWithValue("@ReleaseDate", releaseDateString);
+				// This converts DateTime to string in the format "yyyy-MM-dd HH:mm:ss.fff" so that it works with the databse
+				string releaseDateString = songDTO.ReleaseDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
+				cmd.Parameters.AddWithValue("@ReleaseDate", releaseDateString);
 
-                cmd.Parameters.AddWithValue("@RunTimeSec", songDTO.RunTime);
-
-
-                // This converts the genre enum to a string to pass it to Database
-                string genreString = songDTO.Genre.ToString();
-                cmd.Parameters.AddWithValue("@Genre", genreString);
-
-                cmd.Parameters.AddWithValue("@SongCoverName", songDTO.SongCoverName);
-
-                //This converts the songcover to a byte array to pass it to Database
-                byte[] songCoverData = songDTO.SongCoverData.ToArray();
-                cmd.Parameters.AddWithValue("@SongCoverData", songCoverData);
-
-                cmd.Parameters.AddWithValue("@SongCoverContentType", songDTO.SongCoverContentType);
-
-                try
-                {
-                    conn.Open();
-                    var result = cmd.ExecuteScalar();
-                    int newSongID;
-                    if (int.TryParse(result?.ToString(), out newSongID))
-                    {
-                        songDTO.SongID = newSongID;
-                        return new Result { Success = true, Message = "Song inserted successfully." };
-                    }
-                    return new Result { Success = false, Message = "Failed to retrieve new song ID." };
-                }
-                catch (SqlException ex)
-                {
-                    return new Result { Success = false, Message = $"SQL Exception: {ex.Message}" };
-                }
-                catch (Exception ex)
-                {
-                    return new Result { Success = false, Message = $"Exception: {ex.Message}" };
-                }
-            }
-        }
-
-        public List<SongDTO> GetRecentSong(int count)
-        {
-            List<SongDTO> recentSongs = new List<SongDTO>();
-
-            using (SqlConnection conn = GetSqlConnection())
-            using (SqlCommand cmd = new SqlCommand())
-            {
-                cmd.Connection = conn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "SELECT TOP (@Count) SongID, Title, ArtistID, Date, RunTimeSec, Genre, SongCoverName, SongCoverData, SongCoverContentType " +
-                                  "FROM [Song] WHERE Active = 1 ORDER BY SongID DESC";
+				cmd.Parameters.AddWithValue("@RunTimeSec", songDTO.RunTime);
 
 
-                cmd.Parameters.AddWithValue("@Count", count);
+				// This converts the genre enum to a string to pass it to Database
+				string genreString = songDTO.Genre.ToString();
+				cmd.Parameters.AddWithValue("@Genre", genreString);
 
-                conn.Open();
+				cmd.Parameters.AddWithValue("@SongCoverName", songDTO.SongCoverName);
 
-                using (SqlDataReader reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        SongDTO songDTO = new SongDTO();
+				//This converts the songcover to a byte array to pass it to Database
+				byte[] songCoverData = songDTO.SongCoverData.ToArray();
+				cmd.Parameters.AddWithValue("@SongCoverData", songCoverData);
+
+				cmd.Parameters.AddWithValue("@SongCoverContentType", songDTO.SongCoverContentType);
+
+				try
+				{
+					conn.Open();
+					var result = cmd.ExecuteScalar();
+					int newSongID;
+					if (int.TryParse(result?.ToString(), out newSongID))
+					{
+						songDTO.SongID = newSongID;
+						return new Result { Success = true, Message = "Song inserted successfully." };
+					}
+					return new Result { Success = false, Message = "Failed to retrieve new song ID." };
+				}
+				catch (SqlException ex)
+				{
+					return new Result { Success = false, Message = $"SQL Exception: {ex.Message}" };
+				}
+				catch (Exception ex)
+				{
+					return new Result { Success = false, Message = $"Exception: {ex.Message}" };
+				}
+			}
+		}
+
+		public List<SongDTO> GetRecentSong(int count)
+		{
+			List<SongDTO> recentSongs = new List<SongDTO>();
+
+			using (SqlConnection conn = GetSqlConnection())
+			using (SqlCommand cmd = new SqlCommand())
+			{
+				cmd.Connection = conn;
+				cmd.CommandType = CommandType.Text;
+				cmd.CommandText = "SELECT TOP (@Count) SongID, Title, ArtistID, Date, RunTimeSec, Genre, SongCoverName, SongCoverData, SongCoverContentType " +
+								  "FROM [Song] WHERE Active = 1 ORDER BY SongID DESC";
+
+
+				cmd.Parameters.AddWithValue("@Count", count);
+
+				conn.Open();
+
+				using (SqlDataReader reader = cmd.ExecuteReader())
+				{
+					while (reader.Read())
+					{
+						SongDTO songDTO = new SongDTO();
 
 						songDTO.SongID = reader.GetInt32(0);
 						songDTO.SongTitle = reader.GetString(1);
@@ -108,34 +108,34 @@ namespace Infrastructure
 						songDTO.SongCoverData = (byte[])reader.GetValue(7);
 						songDTO.SongCoverContentType = reader.GetString(8);
 
-                        recentSongs.Add(songDTO);
-                    }
-                }
-            }
-            return recentSongs;
-        }
+						recentSongs.Add(songDTO);
+					}
+				}
+			}
+			return recentSongs;
+		}
 
-        public List<SongDTO> GetSongsForAlbum(int albumID)
-        {
-            List<SongDTO> songs = new List<SongDTO>();
+		public List<SongDTO> GetSongsForAlbum(int albumID)
+		{
+			List<SongDTO> songs = new List<SongDTO>();
 
-            using (SqlConnection conn = GetSqlConnection())
-            using (SqlCommand cmd = new SqlCommand())
-            {
-                cmd.Connection = conn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT S.SongID, S.Title, S.ArtistID, S.Date, S.RunTimeSec, S.Genre, S.SongCoverName, S.SongCoverData, S.SongCoverContentType 
+			using (SqlConnection conn = GetSqlConnection())
+			using (SqlCommand cmd = new SqlCommand())
+			{
+				cmd.Connection = conn;
+				cmd.CommandType = CommandType.Text;
+				cmd.CommandText = @"SELECT S.SongID, S.Title, S.ArtistID, S.Date, S.RunTimeSec, S.Genre, S.SongCoverName, S.SongCoverData, S.SongCoverContentType 
                             FROM [Song] S 
                             INNER JOIN [AlbumSongs] ALB ON S.SongID = ALB.SongID 
                             WHERE ALB.AlbumID = @AlbumID";
 
-                cmd.Parameters.AddWithValue("@AlbumID", albumID);
+				cmd.Parameters.AddWithValue("@AlbumID", albumID);
 
-                conn.Open();
-                using (SqlDataReader reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
+				conn.Open();
+				using (SqlDataReader reader = cmd.ExecuteReader())
+				{
+					while (reader.Read())
+					{
 						SongDTO songDTO = new SongDTO();
 
 						songDTO.SongID = reader.GetInt32(0);
@@ -148,34 +148,34 @@ namespace Infrastructure
 						songDTO.SongCoverData = (byte[])reader.GetValue(7);
 						songDTO.SongCoverContentType = reader.GetString(8);
 
-                        songs.Add(songDTO);
-                    }
-                }
-            }
-            return songs;
-        }
+						songs.Add(songDTO);
+					}
+				}
+			}
+			return songs;
+		}
 
-        public List<SongDTO> GetSongsForUser(int userID)
-        {
-            List<SongDTO> songs = new List<SongDTO>();
+		public List<SongDTO> GetSongsForUser(int userID)
+		{
+			List<SongDTO> songs = new List<SongDTO>();
 
-            using (SqlConnection conn = GetSqlConnection())
-            using (SqlCommand cmd = new SqlCommand())
-            {
-                cmd.Connection = conn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT SO.SongID, SO.Title, SO.ArtistID, SO.Date, SO.RunTimeSec, SO.Genre, SO.SongCoverName, SO.SongCoverData, SO.SongCoverContentType 
+			using (SqlConnection conn = GetSqlConnection())
+			using (SqlCommand cmd = new SqlCommand())
+			{
+				cmd.Connection = conn;
+				cmd.CommandType = CommandType.Text;
+				cmd.CommandText = @"SELECT SO.SongID, SO.Title, SO.ArtistID, SO.Date, SO.RunTimeSec, SO.Genre, SO.SongCoverName, SO.SongCoverData, SO.SongCoverContentType 
                             FROM [Song] SO 
                             INNER JOIN [UserSongs] USR ON SO.SongID = USR.SongID 
                             WHERE USR.UserID = @UserID";
 
-                cmd.Parameters.AddWithValue("@UserID", userID);
+				cmd.Parameters.AddWithValue("@UserID", userID);
 
-                conn.Open();
-                using (SqlDataReader reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
+				conn.Open();
+				using (SqlDataReader reader = cmd.ExecuteReader())
+				{
+					while (reader.Read())
+					{
 						SongDTO songDTO = new SongDTO();
 
 						songDTO.SongID = reader.GetInt32(0);
@@ -188,12 +188,12 @@ namespace Infrastructure
 						songDTO.SongCoverData = (byte[])reader.GetValue(7);
 						songDTO.SongCoverContentType = reader.GetString(8);
 
-                        songs.Add(songDTO);
-                    }
-                }
-            }
-            return songs; 
-        }
+						songs.Add(songDTO);
+					}
+				}
+			}
+			return songs;
+		}
 		public SongDTO GetSongByTitleAndArtist(string title, int artistId)
 		{
 			using (SqlConnection conn = GetSqlConnection())
@@ -222,7 +222,7 @@ namespace Infrastructure
 						songDTO.RunTime = reader.GetInt32(4);
 						songDTO.Genre = reader.GetString(5);
 
-                        return songDTO;
+						return songDTO;
 					}
 				}
 			}
@@ -253,99 +253,91 @@ namespace Infrastructure
 			return songID;
 		}
 
-		public Result UpdateSong(SongDTO newSongDTO, SongDTO oldSongDTO)
-        {
-            using (SqlConnection conn = GetSqlConnection())
-            using (SqlCommand cmd = new SqlCommand())
-            {
-                cmd.Connection = conn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE [Song] SET Title = @Title, ArtistID = @ArtistID, Date = @ReleaseDate, RunTimeSec = @RunTimeSec, Genre = @Genre, SongCoverName = @SongCoverName, SongCoverData = @SongCoverData, SongCoverContentType = @SongCoverContentType
+		public Result UpdateSong(SongDTO songDTO)
+		{
+			using (SqlConnection conn = GetSqlConnection())
+			using (SqlCommand cmd = new SqlCommand())
+			{
+				cmd.Connection = conn;
+				cmd.CommandType = CommandType.Text;
+				cmd.CommandText = @"UPDATE [Song] SET Title = @Title, ArtistID = @ArtistID, Date = @ReleaseDate, RunTimeSec = @RunTimeSec, Genre = @Genre, SongCoverName = @SongCoverName, SongCoverData = @SongCoverData, SongCoverContentType = @SongCoverContentType
                                 WHERE SongID = @SongID";
 
 
-                cmd.Parameters.AddWithValue("SongID", newSongDTO.SongID);
-                cmd.Parameters.AddWithValue("@Title", newSongDTO.SongTitle);
-                cmd.Parameters.AddWithValue("@ArtistID", newSongDTO.ArtistID);
+				cmd.Parameters.AddWithValue("SongID", songDTO.SongID);
+				cmd.Parameters.AddWithValue("@Title", songDTO.SongTitle);
+				cmd.Parameters.AddWithValue("@ArtistID", songDTO.ArtistID);
 
-                // This converts DateTime to string in the format "yyyy-MM-dd HH:mm:ss.fff" so that it works with the databse
-                string releaseDateString = newSongDTO.ReleaseDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                cmd.Parameters.AddWithValue("@ReleaseDate", releaseDateString);
+				// This converts DateTime to string in the format "yyyy-MM-dd HH:mm:ss.fff" so that it works with the databse
+				string releaseDateString = songDTO.ReleaseDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
+				cmd.Parameters.AddWithValue("@ReleaseDate", releaseDateString);
 
-                cmd.Parameters.AddWithValue("@RunTimeSec", newSongDTO.RunTime);
+				cmd.Parameters.AddWithValue("@RunTimeSec", songDTO.RunTime);
 
-                // This converts the genre enum to a string to pass it to Database
-                string genreString = newSongDTO.Genre.ToString();
-                cmd.Parameters.AddWithValue("@Genre", genreString);
-                cmd.Parameters.AddWithValue("@SongCoverName", newSongDTO.SongCoverName);
+				// This converts the genre enum to a string to pass it to Database
+				string genreString = songDTO.Genre.ToString();
+				cmd.Parameters.AddWithValue("@Genre", genreString);
+				cmd.Parameters.AddWithValue("@SongCoverName", songDTO.SongCoverName);
 
-                //This converts the Songcover to a byte array to pass it to Database
-                byte[] SongCoverData = newSongDTO.SongCoverData.ToArray();
-                cmd.Parameters.AddWithValue("@SongCoverData", SongCoverData);
-                cmd.Parameters.AddWithValue("@SongCoverContentType", newSongDTO.SongCoverContentType);
-                //// Parameters for old Song to find it in the database
-                //cmd.Parameters.AddWithValue("@OldTitle", oldSongDTO.SongTitle);
-                //cmd.Parameters.AddWithValue("@OldArtistID", oldSongDTO.ArtistID);
-                //cmd.Parameters.AddWithValue("@OldReleaseDate", oldSongDTO.ReleaseDate);
-                //cmd.Parameters.AddWithValue("@OldGenre", oldSongDTO.Genre.ToString());
-                //cmd.Parameters.AddWithValue("OldSongCoverName", oldSongDTO.SongCoverName);
-                //cmd.Parameters.AddWithValue("OldSongCoverData", oldSongDTO.SongCoverData.ToArray());
-                //cmd.Parameters.AddWithValue("OldSongCoverContentType", oldSongDTO.SongCoverContentType);
+				//This converts the Songcover to a byte array to pass it to Database
+				byte[] SongCoverData = songDTO.SongCoverData.ToArray();
+				cmd.Parameters.AddWithValue("@SongCoverData", SongCoverData);
+				cmd.Parameters.AddWithValue("@SongCoverContentType", songDTO.SongCoverContentType);
 
-                try
-                {
-                    conn.Open();
-                    var result = cmd.ExecuteNonQuery();
-                    if (result > 0)
-                    {
-                        return new Result { Success = true, Message = "Song updated successfully." };
-                    }
+				try
+				{
+					conn.Open();
+					var result = cmd.ExecuteNonQuery();
+					if (result > 0)
+					{
+						return new Result { Success = true, Message = "Song updated successfully." };
+					}
 
-                    return new Result { Success = false, Message = "Failed to retrieve song ID." };
-                }
-                catch (SqlException ex)
-                {
-                    return new Result { Success = false, Message = $"SQL Exception: {ex.Message}" };
-                }
-                catch (Exception ex)
-                {
-                    return new Result { Success = false, Message = $"Exception: {ex.Message}" };
-                }
-            }
-        }
+					return new Result { Success = false, Message = "Failed to retrieve song ID." };
+				}
+				catch (SqlException ex)
+				{
+					return new Result { Success = false, Message = $"SQL Exception: {ex.Message}" };
+				}
+				catch (Exception ex)
+				{
+					return new Result { Success = false, Message = $"Exception: {ex.Message}" };
+				}
+			}
+		}
 
-        public Result DeleteSong(SongDTO songDTO)
-        {
-            using (SqlConnection conn = GetSqlConnection())
-            using (SqlCommand cmd = new SqlCommand())
-            {
-                cmd.Connection = conn;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE [Song] SET Active = 0 
+		public Result DeleteSong(SongDTO songDTO)
+		{
+			using (SqlConnection conn = GetSqlConnection())
+			using (SqlCommand cmd = new SqlCommand())
+			{
+				cmd.Connection = conn;
+				cmd.CommandType = CommandType.Text;
+				cmd.CommandText = @"UPDATE [Song] SET Active = 0 
                                     WHERE SongID = @SongID ";
 
-                cmd.Parameters.AddWithValue("@SongID", songDTO.SongID);
+				cmd.Parameters.AddWithValue("@SongID", songDTO.SongID);
 
-                try
-                {
-                    conn.Open();
-                    var result = cmd.ExecuteScalar();
-                    int newSongID;
-                    if (int.TryParse(result?.ToString(), out newSongID))
-                    {
-                        return new Result { Success = true, Message = "Song deleted successfully." };
-                    }
-                    return new Result { Success = false, Message = "Failed to retrieve song ID." };
-                }
-                catch (SqlException ex)
-                {
-                    return new Result { Success = false, Message = $"SQL Exception: {ex.Message}" };
-                }
-                catch (Exception ex)
-                {
-                    return new Result { Success = false, Message = $"Exception: {ex.Message}" };
-                }
-            }
-        }
-    }
+				try
+				{
+					conn.Open();
+					var result = cmd.ExecuteScalar();
+					int newSongID;
+					if (int.TryParse(result?.ToString(), out newSongID))
+					{
+						return new Result { Success = true, Message = "Song deleted successfully." };
+					}
+					return new Result { Success = false, Message = "Failed to retrieve song ID." };
+				}
+				catch (SqlException ex)
+				{
+					return new Result { Success = false, Message = $"SQL Exception: {ex.Message}" };
+				}
+				catch (Exception ex)
+				{
+					return new Result { Success = false, Message = $"Exception: {ex.Message}" };
+				}
+			}
+		}
+	}
 }

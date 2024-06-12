@@ -152,7 +152,7 @@ namespace WinFormsApp
                     );
                 }
 
-                Result result = songManager.Update(NewSong, exisitingSong);
+                Result result = songManager.Update(NewSong);
 
                 if (result.Success)
                 {
@@ -293,8 +293,7 @@ namespace WinFormsApp
                         (genreType)cbGenre.SelectedItem,
                         songCoverName,
                         songCoverData,
-                        songCoverContentType),
-                        exisitingSong
+                        songCoverContentType)
                      );
                 return new Song(
                         exisitingSong.SongID,

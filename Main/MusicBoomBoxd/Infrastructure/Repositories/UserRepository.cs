@@ -411,7 +411,7 @@ namespace Infrastructure
 			return null;
 		}
 
-		public Result UpdateUser(UserDTO newUserDTO, UserDTO oldUserDTO)
+		public Result UpdateUser(UserDTO userDTO)
 		{
 			using (SqlConnection conn = GetSqlConnection())
 			using (SqlCommand cmd = new SqlCommand())
@@ -421,43 +421,30 @@ namespace Infrastructure
 				cmd.CommandText = @"UPDATE [User] SET Username = @Username, Password = @Password, Email = @Email, UserType = @UserType, Birthday = @Birthday, FavGenre = @FavGenre, ProfilePictureName = @ProfilePictureName, ProfilePictureData = @ProfilePictureData, ProfilePictureContentType = @ProfilePictureContentType
                                 WHERE UserID = @UserID";
 
-				cmd.Parameters.AddWithValue("@UserID", newUserDTO.UserID);
-				cmd.Parameters.AddWithValue("@Username", newUserDTO.Username);
-				cmd.Parameters.AddWithValue("@Password", newUserDTO.Password);
-				cmd.Parameters.AddWithValue("@Email", newUserDTO.Email);
+				cmd.Parameters.AddWithValue("@UserID", userDTO.UserID);
+				cmd.Parameters.AddWithValue("@Username", userDTO.Username);
+				cmd.Parameters.AddWithValue("@Password", userDTO.Password);
+				cmd.Parameters.AddWithValue("@Email", userDTO.Email);
 
 				//This converts the user enum to a string to pass it to the databse
-				string userString = newUserDTO.UserType.ToString();
+				string userString = userDTO.UserType.ToString();
 				cmd.Parameters.AddWithValue("@UserType", userString);
 
 				// This converts DateTime to string in the format "yyyy-MM-dd HH:mm:ss.fff" so that it works with the databse
-				string BirthdayString = newUserDTO.Birthday.ToString("yyyy-MM-dd HH:mm:ss.fff");
+				string BirthdayString = userDTO.Birthday.ToString("yyyy-MM-dd HH:mm:ss.fff");
 				cmd.Parameters.AddWithValue("@Birthday", BirthdayString);
 
 				//This converts the FavGenre chklist to a string to pass it to the databse
-				string favGenreString = newUserDTO.FavGenre.ToString();
+				string favGenreString = userDTO.FavGenre.ToString();
 				cmd.Parameters.AddWithValue("@FavGenre", favGenreString);
 
-				cmd.Parameters.AddWithValue("@ProfilePictureName", newUserDTO.ProfilePictureName);
+				cmd.Parameters.AddWithValue("@ProfilePictureName", userDTO.ProfilePictureName);
 
 				//This converts the Profile Picture to a byte array to pass it to Database
-				byte[] profilePicData = newUserDTO.ProfilePictureData.ToArray();
+				byte[] profilePicData = userDTO.ProfilePictureData.ToArray();
 				cmd.Parameters.AddWithValue("@ProfilePictureData", profilePicData);
 
-				cmd.Parameters.AddWithValue("@ProfilePictureContentType", newUserDTO.ProfilePictureContentType);
-
-				#region OLD
-				//// Parameters for old Song to find it in the database
-				//cmd.Parameters.AddWithValue("@OldUsername", oldUserDTO.Username);
-				//cmd.Parameters.AddWithValue("@OldPassword", oldUserDTO.Password);
-				//cmd.Parameters.AddWithValue("@OldEmail", oldUserDTO.Email);
-				//cmd.Parameters.AddWithValue("@OldUserType", oldUserDTO.UserType.ToString());
-				//cmd.Parameters.AddWithValue("@OldBirthday", oldUserDTO.Birthday.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-				//cmd.Parameters.AddWithValue("@OldFavGenre", oldUserDTO.FavGenre.ToString());
-				//cmd.Parameters.AddWithValue("@OldProfilePictureName", oldUserDTO.ProfilePictureName);
-				//cmd.Parameters.AddWithValue("@OldProfilePictureData", oldUserDTO.ProfilePictureData.ToArray());
-				//cmd.Parameters.AddWithValue("@OldProfilePictureContentType", oldUserDTO.ProfilePictureContentType);
-				#endregion
+				cmd.Parameters.AddWithValue("@ProfilePictureContentType", userDTO.ProfilePictureContentType);
 
 				try
 				{

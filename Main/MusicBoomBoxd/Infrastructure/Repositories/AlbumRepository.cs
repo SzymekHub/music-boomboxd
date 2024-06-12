@@ -284,7 +284,7 @@ namespace Infrastructure
             return albumID;
 		}
 
-		public Result UpdateAlbum(AlbumDTO newAlbumDTO, AlbumDTO oldAlbumDTO)
+		public Result UpdateAlbum(AlbumDTO albumDTO)
         {
             using (SqlConnection conn = GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand())
@@ -295,34 +295,27 @@ namespace Infrastructure
                                   WHERE AlbumID = @AlbumID";
 
 
-                cmd.Parameters.AddWithValue("@AlbumID", newAlbumDTO.AlbumID);
-                cmd.Parameters.AddWithValue("@ArtistID", newAlbumDTO.ArtistID);
+                cmd.Parameters.AddWithValue("@AlbumID", albumDTO.AlbumID);
+                cmd.Parameters.AddWithValue("@ArtistID", albumDTO.ArtistID);
 
-                cmd.Parameters.AddWithValue("@Title", newAlbumDTO.AlbumTitle);
+                cmd.Parameters.AddWithValue("@Title", albumDTO.AlbumTitle);
 
                 // This converts DateTime to string in the format "yyyy-MM-dd HH:mm:ss.fff" so that it works with the databse
-                string releaseDateString = newAlbumDTO.ReleaseDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                string releaseDateString = albumDTO.ReleaseDate.ToString("yyyy-MM-dd HH:mm:ss.fff");
                 cmd.Parameters.AddWithValue("@Date", releaseDateString);
 
-                cmd.Parameters.AddWithValue("@RunTimeSec", newAlbumDTO.RunTime);
+                cmd.Parameters.AddWithValue("@RunTimeSec", albumDTO.RunTime);
 
                 // This converts the genre enum to a string to pass it to Database
-                string genreString = newAlbumDTO.Genre.ToString();
+                string genreString = albumDTO.Genre.ToString();
                 cmd.Parameters.AddWithValue("@Genre", genreString);
-                cmd.Parameters.AddWithValue("@AlbumCoverName", newAlbumDTO.AlbumCoverName);
+                cmd.Parameters.AddWithValue("@AlbumCoverName", albumDTO.AlbumCoverName);
 
                 //This converts the albumcover to a byte array to pass it to Database
-                byte[] albumCoverData = newAlbumDTO.AlbumCoverData.ToArray();
+                byte[] albumCoverData = albumDTO.AlbumCoverData.ToArray();
                 cmd.Parameters.AddWithValue("@AlbumCoverData", albumCoverData);
-                cmd.Parameters.AddWithValue("@AlbumCoverContentType", newAlbumDTO.AlbumCoverContentType);
+                cmd.Parameters.AddWithValue("@AlbumCoverContentType", albumDTO.AlbumCoverContentType);
 
-                //// Parameters for old album to find it in the database
-                //cmd.Parameters.AddWithValue("@OldTitle", oldAlbumDTO.AlbumTitle);
-                //cmd.Parameters.AddWithValue("@OldReleaseDate", oldAlbumDTO.ReleaseDate);
-                //cmd.Parameters.AddWithValue("@OldGenre", oldAlbumDTO.Genre.ToString());
-                //cmd.Parameters.AddWithValue("@OldAlbumCoverName", oldAlbumDTO.AlbumCoverName);
-                //cmd.Parameters.AddWithValue("@OldAlbumCoverData", oldAlbumDTO.AlbumCoverData.ToArray());
-                //cmd.Parameters.AddWithValue("@OldAlbumCoverContentType", oldAlbumDTO.AlbumCoverContentType);
 
                 try
                 {

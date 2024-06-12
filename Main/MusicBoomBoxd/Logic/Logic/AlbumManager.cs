@@ -131,36 +131,19 @@ namespace Logic
             return resultRemoveAlbum;
         }
 
-        public Result Update(Album newAlbum, Album oldAlbum)
+        public Result Update(Album newAlbum)
         {
-            AlbumDTO newAlbumDTO = AlbumMapper.ToAlbumDTO(newAlbum);
+            AlbumDTO albumDTO = AlbumMapper.ToAlbumDTO(newAlbum);
 
-            if (oldAlbum == null)
+            if (newAlbum.AlbumID == 0)
             {
-                Result resultAdd = Add(newAlbum);
-                return resultAdd;
+                return Add(newAlbum);
             }
-            else
-            {
-                AlbumDTO oldAlbumDTO = AlbumMapper.ToAlbumDTO(oldAlbum);
 
-                // This calls the repository method to update the album
-                Result resultupdate = _albumRepository.UpdateAlbum(newAlbumDTO, oldAlbumDTO);
+            Result resultUpdate = _albumRepository.UpdateAlbum(albumDTO);
 
-                if (resultupdate.Success)
-                {
-                    List<Album> albums = LoadAlbumsFromDatabase();
-                    // If the update was successful, this updates the album in the list
-                    int index = albums.FindIndex(a => a == oldAlbum);
-
-                    if (index != -1)
-                    {
-                        albums[index] = newAlbum;
-                    }
-                }
-
-                return resultupdate;
-            }
+            return resultUpdate;
+           
         }
 
         public Result SendAlbumToTheDb(AlbumDTO newAlbum)

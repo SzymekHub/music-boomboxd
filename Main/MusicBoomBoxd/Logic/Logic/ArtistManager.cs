@@ -1,5 +1,6 @@
 ﻿using Infrastructure;
 using Infrastructure.DTOs;
+using Logic;
 
 namespace Logic
 {
@@ -77,3 +78,4 @@ namespace Logic
         }
     }
 }
+

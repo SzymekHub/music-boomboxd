@@ -29,9 +29,9 @@
         UserDTO GetUserByUsername(string username);
         UserDTO GetUserByEmail(string email);
 
-        Result UpdateUser(UserDTO newUserDTO, UserDTO oldUserDTO);
+        Result UpdateUser(UserDTO userDTO);
 
-        Result UpdateUserRoleToCritic(UserDTO userDTO);
+		Result UpdateUserRoleToCritic(UserDTO userDTO);
 
         Result UpdateUserRoleToMusician(UserDTO userDTO);
 

@@ -204,7 +204,7 @@ namespace WinFormsApp
                     );
                 }
 
-                Result result = albumManager.Update(NewAlbum, existingAlbum);
+                Result result = albumManager.Update(NewAlbum);
 
                 if (result.Success)
                 {
@@ -394,8 +394,7 @@ namespace WinFormsApp
                         (genreType)cbGenreAlbum.SelectedItem,
                         albumCoverName,
                         albumCoverData,
-                        albumCoverContentType),
-                        existingAlbum
+                        albumCoverContentType)
                     );
 
                 return new Album(

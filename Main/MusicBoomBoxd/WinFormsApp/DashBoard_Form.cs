@@ -202,7 +202,7 @@ namespace WinFormsApp
                         User updatedUser = addUserForm.GetUpdatedUser();
                         if (updatedUser != null)
                         {
-                            userManager.Update(updatedUser, selectedUser);
+                            userManager.Update(updatedUser);
                             PopulateUsers();
                         }
                     }
@@ -230,7 +230,7 @@ namespace WinFormsApp
                         User updatedUser = addUserForm.GetUpdatedUser();
                         if (updatedUser != null)
                         {
-                            userManager.Update(updatedUser, selectedUser);
+                            userManager.Update(updatedUser);
                             PopulateUsers();
                         }
                     }
@@ -459,7 +459,7 @@ namespace WinFormsApp
                         Song updatedSong = addSongForm.GetUpdatedSong();
                         if (updatedSong != null)
                         {
-                            songManager.Update(updatedSong, selectedSong);
+                            songManager.Update(updatedSong);
                             PopulateSongs();
                         }
                     }
@@ -487,7 +487,7 @@ namespace WinFormsApp
                         Song updatedSong = addSongForm.GetUpdatedSong();
                         if (updatedSong != null)
                         {
-                            songManager.Update(updatedSong, selectedSong);
+                            songManager.Update(updatedSong);
                             PopulateSongs();
                         }
                     }
@@ -592,7 +592,7 @@ namespace WinFormsApp
                         Album updatedAlbum = addAlbumForm.GetUpdatedAlbum();
                         if (updatedAlbum != null)
                         {
-                            albumManager.Update(updatedAlbum, selectedAlbum);
+                            albumManager.Update(updatedAlbum);
                             PopulateAlbums();
                         }
                     }
@@ -620,7 +620,7 @@ namespace WinFormsApp
                         Album updatedAlbum = addAlbumForm.GetUpdatedAlbum();
                         if (updatedAlbum != null)
                         {
-                            albumManager.Update(updatedAlbum, selectedAlbum);
+                            albumManager.Update(updatedAlbum);
                             PopulateAlbums();
                         }
                     }

@@ -108,41 +108,18 @@ namespace Logic
             return resultRemoveSong;
         }
 
-        public Result Update(Song newSong, Song oldSong)
+        public Result Update(Song newSong)
         {
-            SongDTO newSongDTO = SongMapper.ToSongDTO(newSong);
+            SongDTO songDTO = SongMapper.ToSongDTO(newSong);
 
-            if (oldSong == null)
+            if (newSong.SongID == 0)
             {
-                Result resultAdd = Add(newSong);
-                return resultAdd;
+                return Add(newSong);
             }
-            else
-            {
-                SongDTO oldSongDTO = SongMapper.ToSongDTO(oldSong);
 
-                // This calls the repository method to update the Song
-                Result resultUpdate = _songRepository.UpdateSong(newSongDTO, oldSongDTO);
+            Result resultUpdated = _songRepository.UpdateSong(songDTO);
 
-                if (resultUpdate.Success)
-                {
-                    List<Song> songs = LoadSongsFromDataBase();
-
-                    // If the update was successful, this updates the Song in the list
-                    int index = songs.FindIndex(a => a == oldSong);
-
-                    if (index != -1)
-                    {
-                        songs[index] = newSong;
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Looks like something went wrong when updating the Song in the database :(");
-                }
-
-                return resultUpdate;
-            }
+            return resultUpdated;
         }
 
         public Result SendSongToTheDb(SongDTO newSong)

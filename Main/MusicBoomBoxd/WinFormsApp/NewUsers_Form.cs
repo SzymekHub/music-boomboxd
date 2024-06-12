@@ -439,7 +439,7 @@ namespace WinFormsApp
                 }
 
 
-                Result result = userManager.Update(NewUser, exisitingUser);
+                Result result = userManager.Update(NewUser);
 
                 if (result.Success)
                 {
@@ -663,8 +663,7 @@ namespace WinFormsApp
                         (genreType)cbFavGenre.SelectedItem,
                         profilePictureName,
                         profilePictureData,
-                        profilePictureContentType),
-                        exisitingUser
+                        profilePictureContentType)
                     );
                 return new User(
                         exisitingUser.UserID,

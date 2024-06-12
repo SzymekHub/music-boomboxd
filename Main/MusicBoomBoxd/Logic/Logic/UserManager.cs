@@ -220,38 +220,19 @@ namespace Logic
         }
 
         // Method to update an existing user
-        public Result Update(User newUser, User oldUser)
+        public Result Update(User newUser)
         {
-            UserDTO newUserDTO = UserMapper.ConvertToUserDTO(newUser);
-            if (oldUser == null)
+            UserDTO userDTO = UserMapper.ConvertToUserDTO(newUser);
+
+            if (newUser.UserID == 0)
             {
-                Result resultAdd = Add(newUser);
-                return resultAdd;
+                return Add(newUser);
             }
-            else
-            {
-                UserDTO oldUserDTO = UserMapper.ConvertToUserDTO(oldUser);
 
-                //This calls the repository method to update the User
-                Result resultupdate = _userRepository.UpdateUser(newUserDTO, oldUserDTO);
+            Result resultUpdate = _userRepository.UpdateUser(userDTO);
 
-                if (resultupdate.Success)
-                {
-                    List<User> users = LoadUsersFromDataBase();
-                    int index = users.FindIndex(ur => ur == oldUser);
+            return resultUpdate;
 
-                    if (index != -1)
-                    {
-                        users[index] = newUser;
-                    }
-                }
-                else if (!resultupdate.Success)
-                {
-                    return new Result { Success = false, Message = "Something went wrong when updating the user" };
-                }
-
-                return resultupdate;
-            }
         }
 
         public Result SendUserToTheDb(UserDTO newUser)

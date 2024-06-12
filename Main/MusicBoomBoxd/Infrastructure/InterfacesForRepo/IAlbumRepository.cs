@@ -14,8 +14,8 @@
         AlbumDTO GetAlbumByTitleAndArtist(string title, int artistId);
         int GetAlbumIDByAlbumTitle(string albumTitle);
 
-		Result UpdateAlbum(AlbumDTO newAlbumDTO, AlbumDTO oldAlbumDTO);
+        Result UpdateAlbum(AlbumDTO albumDTO);
 
-        Result DeleteAlbum(AlbumDTO albumDTO);
+		Result DeleteAlbum(AlbumDTO albumDTO);
     }
 }
