@@ -37,7 +37,7 @@ namespace WebApp.Pages
 
                 List<Song> songs = _songManager.GetSongsForAlbum(album.AlbumID);
 
-                Albums.Add(new AlbumViewModel(artist.Name, songs, album.Title, album.Date, album.Genre, Convert.ToBase64String(album.AlbumCoverData), album.AlbumCoverContentType));
+                Albums.Add(new AlbumViewModel(album.AlbumID, artist, songs, album.Title, album.Date, album.RunTime, album.Genre, Convert.ToBase64String(album.AlbumCoverData), album.AlbumCoverContentType));
             }
         }
 

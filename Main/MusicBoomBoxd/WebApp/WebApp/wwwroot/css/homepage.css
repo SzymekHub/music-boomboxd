@@ -65,3 +65,68 @@ h2 {
         .Album-info ol li {
             text-align: left;
         }
+
+/* Star rating styles */
+.star-rating {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 20px;
+}
+
+    .star-rating .fa-star {
+        color: #ccc;
+        cursor: pointer;
+        font-size: 24px;
+        transition: color 0.3s ease;
+    }
+
+        .star-rating .fa-star.checked {
+            color: #ffcc00;
+        }
+
+.rating-header {
+    margin-bottom: 30px;
+}
+
+    .rating-header h1 {
+        font-size: 36px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+    form button[type="submit"] {
+        background-color: #1161ee;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 15px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-left: 5px;
+    }
+
+        form button[type="submit"]:hover {
+            background-color: #1454c4;
+        }
+
+@media only screen and (max-width: 768px) {
+    .star-rating .fa-star {
+        font-size: 20px;
+    }
+
+    form button[type="submit"] {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+}

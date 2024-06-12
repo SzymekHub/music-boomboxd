@@ -27,10 +27,12 @@ namespace Logic
             return _reviewRepository.UpdateReview(reviewDTO);
         }
 
-        public Review GetReviewByUsernameAndAlbumID(ReviewDTO reviewDTO)
+        public Review GetReviewByUsernameAndAlbumID(string username, int albumID)
         {
+            UserDTO userDTO = _userRepository.GetUserByUsername(username);
+            AlbumDTO albumDTO = _albumRepository.GetAlbumByAlbumID(albumID);
 
-            _reviewRepository.GetReviewByUserAndAlbumID(reviewDTO);
+            ReviewDTO reviewDTO = _reviewRepository.GetReviewByUserAndAlbumID(userDTO, albumDTO);
 
             if (reviewDTO == null)
             {

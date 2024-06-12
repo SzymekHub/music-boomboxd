@@ -29,9 +29,9 @@ namespace Logic
 
                 if (artist != null)
                 {
-                    Album album = AlbumMapper.ToAlbum(albumDTO, artist);
+                    Album album = AlbumMapper.ToAlbum(albumDTO);
                     album.Artist = artist;
-                    albums.Add(AlbumMapper.ToAlbum(albumDTO, artist));
+                    albums.Add(AlbumMapper.ToAlbum(albumDTO));
                 }
             }
 
@@ -50,7 +50,7 @@ namespace Logic
 
                 if (artist != null)
                 {
-                    Album album = AlbumMapper.ToAlbum(albumDTO, artist);
+                    Album album = AlbumMapper.ToAlbum(albumDTO);
                     album.Artist = artist;
                     albums.Add(album);
                 }
@@ -106,6 +106,11 @@ namespace Logic
             return _albumRepository.GetAlbumIDByAlbumTitle(albumTitle);
         }
 
+        public Album GetAlbumByAlbumID(int albumID)
+        {
+            AlbumDTO albumDTO = _albumRepository.GetAlbumByAlbumID(albumID);
+            return AlbumMapper.ToAlbum(albumDTO);
+        }
 
         public Result Add(Album album)
         {

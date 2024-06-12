@@ -108,7 +108,7 @@
                 @if (User.Identity.IsAuthenticated && (User.IsInRole("Critic") || User.IsInRole("Admin")))
                 {
                     <ul>
-                        <li><a class="form-link" asp-area="" asp-page="/Rating">Leave A Rating for Album</a></li>
+                        <li><a class="form-link" asp-area="" asp-page="/AlbumsPage">Leave A Rating for Album</a></li>
                         <li><a class="form-link" asp-area="" asp-page="/RatingSong">Leave A Rating for Song</a></li>
                     </ul>
                 }

@@ -6,13 +6,14 @@ namespace Logic
 	{
 		public static Artist ConvertToArtist(ArtistDTO artistDTO)
 		{
-			return new Artist(
+			 Artist artist = new(
 				artistDTO.ArtistID,
 				artistDTO.Name,
 				artistDTO.ArtistPictureName,
 				artistDTO.ArtistPictureData,
 				artistDTO.ArtistPictureContentType
 			);
+			return artist;
 		}
 		public static ArtistDTO ConvertToArtistDTO(Artist artist)
 		{

@@ -253,7 +253,7 @@ namespace Infrastructure
 									Name = reader.GetString(11),
 									Active = reader.GetBoolean(10),
 									ArtistPictureName = reader.GetString(12),
-									ArtistPictureData =  (byte[])reader.GetValue(13),
+									ArtistPictureData = (byte[])reader.GetValue(13),
 									ArtistPictureContentType = reader.GetString(14)
 								},
 								AlbumTitle = reader.GetString(2),
@@ -286,7 +286,7 @@ namespace Infrastructure
 		public AlbumDTO GetAlbumByTitleAndArtist(string title, int artistId)
 		{
 			// I initialize albumDTO as null to handle case where no results are found
-			AlbumDTO albumDTO = null; 
+			AlbumDTO albumDTO = null;
 
 			using (SqlConnection conn = GetSqlConnection())
 			using (SqlCommand cmd = new SqlCommand())
@@ -360,39 +360,89 @@ namespace Infrastructure
 			return albumID;
 		}
 
-        public Result AddAverageRating(AlbumDTO albumDTO, double averageRating)
-        {
-            using (SqlConnection connection = GetSqlConnection())
-            using (SqlCommand cmd = new SqlCommand())
-            {
-                cmd.Connection = connection;
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"UPDATE [Album] SET AverageRating = @AverageRating WHERE AlbumID = @AlbumID";
+		public AlbumDTO GetAlbumByAlbumID(int albumID)
+		{
+			AlbumDTO albumDTO = new AlbumDTO();
 
-                cmd.Parameters.AddWithValue("@AverageRating", averageRating);
-                cmd.Parameters.AddWithValue("@AlbumID", albumDTO.AlbumID);
+			using (SqlConnection connection = GetSqlConnection())
+			using (SqlCommand cmd = new SqlCommand())
+			{
+				cmd.Connection = connection;
+				cmd.CommandType = CommandType.Text;
+				cmd.CommandText = @"SELECT AL.AlbumID, AL.ArtistID, AL.Active, AL.Title, AL.Date, AL.RunTimeSec, AL.Genre, AL.AverageRate, AL.AlbumCoverName, AL.AlbumCoverData, AL.AlbumCoverContentType,
+								   AR.ArtistID, AR.Active AS ArtistActive, AR.Name, AR.AritstPictureName, AR.ArtistPictureData, AR.ArtistPictureContentType
+								   FROM [Album] AL  
+								   INNER JOIN [Artist] AR ON AL.ArtistID = AR.ArtistID
+								   WHERE AL.AlbumID = @AlbumID";
 
-                try
-                {
-                    connection.Open();
-                    int rowsAffected = cmd.ExecuteNonQuery();
-                    if (rowsAffected > 0)
-                    {
-                        return new Result { Success = true, Message = "Average rating updated successfully." };
-                    }
-                    return new Result { Success = false, Message = "Failed to update average rating. No rows affected." };
-                }
-                catch (SqlException ex)
-                {
-                    return new Result { Success = false, Message = $"SQL Exception: {ex.Message}" };
-                }
-                catch (Exception ex)
-                {
-                    return new Result { Success = false, Message = $"Exception: {ex.Message}" };
-                }
-            }
-        }
-        public Result UpdateAlbum(AlbumDTO albumDTO)
+				cmd.Parameters.AddWithValue("@AlbumID", albumID);
+
+
+				connection.Open();
+
+				using (SqlDataReader reader = cmd.ExecuteReader())
+				{
+					while (reader.Read())
+					{
+						albumDTO = new AlbumDTO
+						{
+							AlbumID = reader.GetInt32(0),
+							AlbumTitle = reader.GetString(1),
+							ArtistDTO = new ArtistDTO
+							{
+								ArtistID = reader.GetInt32(10),
+								Name = reader.GetString(12),
+								Active = reader.GetBoolean(11),
+								ArtistPictureName = reader.GetString(13),
+								ArtistPictureData = (byte[])reader.GetValue(14),
+								ArtistPictureContentType = reader.GetString(15)
+							},
+							ReleaseDate = reader.GetDateTime(4),
+							Genre = reader.GetString(5),
+							RunTime = reader.GetInt32(6),
+							AlbumCoverName = reader.GetString(7),
+							AlbumCoverData = (byte[])reader.GetValue(8),
+							AlbumCoverContentType = reader.GetString(9)
+						};
+					}
+				}
+			}
+			return albumDTO;
+		}
+
+		public Result AddAverageRating(AlbumDTO albumDTO, double averageRating)
+		{
+			using (SqlConnection connection = GetSqlConnection())
+			using (SqlCommand cmd = new SqlCommand())
+			{
+				cmd.Connection = connection;
+				cmd.CommandType = CommandType.Text;
+				cmd.CommandText = @"UPDATE [Album] SET AverageRating = @AverageRating WHERE AlbumID = @AlbumID";
+
+				cmd.Parameters.AddWithValue("@AverageRating", averageRating);
+				cmd.Parameters.AddWithValue("@AlbumID", albumDTO.AlbumID);
+
+				try
+				{
+					connection.Open();
+					int rowsAffected = cmd.ExecuteNonQuery();
+					if (rowsAffected > 0)
+					{
+						return new Result { Success = true, Message = "Average rating updated successfully." };
+					}
+					return new Result { Success = false, Message = "Failed to update average rating. No rows affected." };
+				}
+				catch (SqlException ex)
+				{
+					return new Result { Success = false, Message = $"SQL Exception: {ex.Message}" };
+				}
+				catch (Exception ex)
+				{
+					return new Result { Success = false, Message = $"Exception: {ex.Message}" };
+				}
+			}
+		}
+		public Result UpdateAlbum(AlbumDTO albumDTO)
 		{
 			using (SqlConnection conn = GetSqlConnection())
 			using (SqlCommand cmd = new SqlCommand())

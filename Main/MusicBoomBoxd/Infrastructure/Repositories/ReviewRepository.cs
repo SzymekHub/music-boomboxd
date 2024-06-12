@@ -67,7 +67,7 @@ namespace Infrastructure
             }
         }
 
-        public ReviewDTO GetReviewByUserAndAlbumID(ReviewDTO reviewDTO)
+        public ReviewDTO GetReviewByUserAndAlbumID(UserDTO userDTO, AlbumDTO albumDTO)
         {
             using (SqlConnection connection = GetSqlConnection())
             using (SqlCommand cmd = new SqlCommand())
@@ -84,8 +84,8 @@ namespace Infrastructure
                             INNER JOIN [Artist] AR ON A.ArtistID = AR.ArtistID
                             WHERE UR.UserID = @UserID AND UR.AlbumID = @AlbumID";
 
-                cmd.Parameters.AddWithValue("@UserID", reviewDTO.UserDTO.UserID);
-                cmd.Parameters.AddWithValue("@AlbumID", reviewDTO.AlbumDTO.AlbumID);
+                cmd.Parameters.AddWithValue("@UserID", userDTO.UserID);
+                cmd.Parameters.AddWithValue("@AlbumID", albumDTO.AlbumID);
 
                 connection.Open();
 

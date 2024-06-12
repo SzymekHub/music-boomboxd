@@ -6,50 +6,40 @@
 <link rel="stylesheet" href="~/css/albumPage.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-<main>
-    <div class="rating-header">
-        <h1>@ViewData["Title"]</h1>
-    </div>
+<div class="container">
+	<div class="New-Music-Content">
+		<h2>ALBUMS</h2>
+		<section id="New-Music-Coming" class="New-Albums-Grid">
+			@foreach (var album in Model.Albums)
+			{
+				<article class="New-Albums">
+					<img src="data:@album.AlbumCoverContentType;base64,@album.AlbumCoverData" alt="@album.Title" class="albums">
+					<div class="Album-Name">
+						<p>@album.Title</p>
+					</div>
+					<div class="Album-info">
+						<p>By: @album.Artist</p>
+						<p>Genre: @album.Genre</p>
+						<p>Released: @album.Date.ToString("dd/MM/yyyy")</p>
+					</div>
+					<form method="post" asp-page-handler="Rate">
+						<input type="hidden" name="albumID" value="@album.AlbumID" />
+						<div class="star-rating" data-rating="0">
+							<i class="fa fa-star" data-value="1"></i>
+							<i class="fa fa-star" data-value="2"></i>
+							<i class="fa fa-star" data-value="3"></i>
+							<i class="fa fa-star" data-value="4"></i>
+							<i class="fa fa-star" data-value="5"></i>
+							<button type="submit" class="btn-primary">Rate</button>
+						</div>
+						<input type="hidden" name="rating" id="rating-@album.AlbumID" value="0" required />
+					</form>
+				</article>
+			}
+		</section>
+	</div>
+</div>
 
-    <table class="stock-table">
-        <thead>
-            <tr>
-                <th>Ticker</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Percentage Difference</th>
-                <th>Your Rating</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var stock in Model.Stocks)
-            {
-                <tr>
-                    <td>@stock.Ticker</td>
-                    <td>@stock.Name</td>
-                    <td>@stock.Price.ToString("0.00")</td>
-                    <td class="@Model.GetPercentageDifferenceClass(stock.PercentageDifference)">
-                        @stock.PercentageDifference.ToString("0.00") %
-                    </td>
-                    <td>
-                        <form method="post" asp-page-handler="Rate">
-                            <input type="hidden" name="ticker" value="@stock.Ticker" />
-                            <div class="star-rating" data-rating="0">
-                                <i class="fa fa-star" data-value="1"></i>
-                                <i class="fa fa-star" data-value="2"></i>
-                                <i class="fa fa-star" data-value="3"></i>
-                                <i class="fa fa-star" data-value="4"></i>
-                                <i class="fa fa-star" data-value="5"></i>
-                                <button type="submit" class="btn-primary">Rate</button>
-                            </div>
-                            <input type="hidden" name="rating" id="rating-@stock.Ticker" value="0" required />
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</main>
 
 <script>
     function initStarRating() {

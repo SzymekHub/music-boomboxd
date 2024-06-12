@@ -16,6 +16,8 @@
 
         int GetAlbumIDByAlbumTitle(string albumTitle);
 
+        AlbumDTO GetAlbumByAlbumID(int albumID);
+
         Result AddAverageRating(AlbumDTO albumDTO, double averageRating);
 
         Result UpdateAlbum(AlbumDTO albumDTO);

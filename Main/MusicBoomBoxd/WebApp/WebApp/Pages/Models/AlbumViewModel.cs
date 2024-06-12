@@ -4,20 +4,24 @@ namespace WebApp.Pages.Models
 {
 	public class AlbumViewModel
 	{
-        public string ArtistName { get; set; }
+        public int AlbumID { get; }
+        public Artist Artist { get; set; }
         public List<Song> Songs { get; set; }
         public string Title { get; set; }
         public DateTime Date { get; set; }
+        public int RunTime { get; set; }
         public genreType Genre { get; set; }
         public string AlbumCoverData { get; set; }
 		public string AlbumCoverContentType { get; set; }
 
-        public AlbumViewModel(string artistName, List<Song> songs, string title, DateTime date, genreType genre, string albumCoverData, string albumCoverContentType)
+        public AlbumViewModel(int albumID, Artist artist, List<Song> songs, string title, DateTime date, int runTime, genreType genre, string albumCoverData, string albumCoverContentType)
         {
-            ArtistName = artistName;
+            AlbumID = albumID;
+            Artist = artist;
             Songs = songs;
             Title = title;
             Date = date;
+            RunTime = runTime;
             Genre = genre;
             AlbumCoverData = albumCoverData;
             AlbumCoverContentType = albumCoverContentType;
