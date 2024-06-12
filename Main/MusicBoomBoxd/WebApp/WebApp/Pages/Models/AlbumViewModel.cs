@@ -11,7 +11,9 @@ namespace WebApp.Pages.Models
         public DateTime Date { get; set; }
         public int RunTime { get; set; }
         public genreType Genre { get; set; }
-        public string AlbumCoverData { get; set; }
+		public double AverageRating { get; set; }
+
+		public string AlbumCoverData { get; set; }
 		public string AlbumCoverContentType { get; set; }
 
         public AlbumViewModel(int albumID, Artist artist, List<Song> songs, string title, DateTime date, int runTime, genreType genre, string albumCoverData, string albumCoverContentType)
@@ -27,6 +29,19 @@ namespace WebApp.Pages.Models
             AlbumCoverContentType = albumCoverContentType;
         }
 
-    }
+		public AlbumViewModel(int albumID, Artist artist, List<Song> songs, string title, DateTime date, int runTime, genreType genre, double averageRating, string albumCoverData, string albumCoverContentType)
+		{
+			AlbumID = albumID;
+			Artist = artist;
+			Songs = songs;
+			Title = title;
+			Date = date;
+			RunTime = runTime;
+			Genre = genre;
+			AverageRating = averageRating;
+			AlbumCoverData = albumCoverData;
+			AlbumCoverContentType = albumCoverContentType;
+		}
+	}
 
 }

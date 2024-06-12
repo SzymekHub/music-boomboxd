@@ -42,8 +42,10 @@ namespace Logic
             return ReviewMapper.ConvertToReview(reviewDTO);
         }
 
-        public double GetAverageRatingByAlbumID(AlbumDTO albumDTO)
+        public double GetAverageRatingByAlbumID(Album album)
         {
+            AlbumDTO albumDTO = AlbumMapper.ToAlbumDTO(album);
+
             List<ReviewDTO> reviews = _reviewRepository.GetReviewsByAlbumID(albumDTO);
 
             int totalRatings = reviews.Count;

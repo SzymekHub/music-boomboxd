@@ -4,6 +4,7 @@ namespace Infrastructure
     public class AlbumDTO
     {
         public int AlbumID { get; set; }
+        public bool Active { get; set; }
         public ArtistDTO ArtistDTO { get; set; }
         public string AlbumTitle { get; set; }
         public DateTime ReleaseDate { get; set; }

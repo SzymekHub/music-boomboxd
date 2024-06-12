@@ -112,7 +112,7 @@ namespace WebApp.Pages
                 _reviewManager.AddReview(newRating);
             }
 
-            return RedirectToPage("/Rating");
+            return RedirectToPage("/AlbumsPage");
         }
 
     }

@@ -369,7 +369,7 @@ namespace Infrastructure
 			{
 				cmd.Connection = connection;
 				cmd.CommandType = CommandType.Text;
-				cmd.CommandText = @"SELECT AL.AlbumID, AL.ArtistID, AL.Active, AL.Title, AL.Date, AL.RunTimeSec, AL.Genre, AL.AverageRate, AL.AlbumCoverName, AL.AlbumCoverData, AL.AlbumCoverContentType,
+				cmd.CommandText = @"SELECT AL.AlbumID, AL.ArtistID, AL.Active, AL.Title, AL.Date, AL.RunTimeSec, AL.Genre, AL.AlbumCoverName, AL.AlbumCoverData, AL.AlbumCoverContentType,
 								   AR.ArtistID, AR.Active AS ArtistActive, AR.Name, AR.AritstPictureName, AR.ArtistPictureData, AR.ArtistPictureContentType
 								   FROM [Album] AL  
 								   INNER JOIN [Artist] AR ON AL.ArtistID = AR.ArtistID
@@ -387,10 +387,11 @@ namespace Infrastructure
 						albumDTO = new AlbumDTO
 						{
 							AlbumID = reader.GetInt32(0),
-							AlbumTitle = reader.GetString(1),
+							Active = reader.GetBoolean(2),
+							AlbumTitle = reader.GetString(3),
 							ArtistDTO = new ArtistDTO
 							{
-								ArtistID = reader.GetInt32(10),
+								ArtistID = reader.GetInt32(1),
 								Name = reader.GetString(12),
 								Active = reader.GetBoolean(11),
 								ArtistPictureName = reader.GetString(13),
@@ -398,8 +399,8 @@ namespace Infrastructure
 								ArtistPictureContentType = reader.GetString(15)
 							},
 							ReleaseDate = reader.GetDateTime(4),
-							Genre = reader.GetString(5),
-							RunTime = reader.GetInt32(6),
+							Genre = reader.GetString(6),
+							RunTime = reader.GetInt32(5),
 							AlbumCoverName = reader.GetString(7),
 							AlbumCoverData = (byte[])reader.GetValue(8),
 							AlbumCoverContentType = reader.GetString(9)
@@ -417,9 +418,9 @@ namespace Infrastructure
 			{
 				cmd.Connection = connection;
 				cmd.CommandType = CommandType.Text;
-				cmd.CommandText = @"UPDATE [Album] SET AverageRating = @AverageRating WHERE AlbumID = @AlbumID";
+				cmd.CommandText = @"UPDATE [Album] SET AverageRate = @AverageRate WHERE AlbumID = @AlbumID";
 
-				cmd.Parameters.AddWithValue("@AverageRating", averageRating);
+				cmd.Parameters.AddWithValue("@AverageRate", averageRating);
 				cmd.Parameters.AddWithValue("@AlbumID", albumDTO.AlbumID);
 
 				try

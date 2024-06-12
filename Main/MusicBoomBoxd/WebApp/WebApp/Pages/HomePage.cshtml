@@ -7,6 +7,7 @@
 }
 
 <link rel="stylesheet" href="~/css/homepage.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 <div class="container">
 	<div class="New-Music-Content">
@@ -46,8 +47,33 @@
 							}
 						</p>
 					</div>
+					<div class="star-rating" data-rating="@album.AverageRating">
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
+					</div>
 				</article>
 			}
 		</section>
 	</div>
 </div>
+
+<script>
+	function fillStars() {
+		document.querySelectorAll('.star-rating').forEach(function (ratingElem) {
+			var rating = parseFloat(ratingElem.getAttribute('data-rating'));
+			var stars = ratingElem.querySelectorAll('.fa-star');
+			for (var i = 0; i < stars.length; i++) {
+				if (i < rating) {
+					stars[i].classList.add('checked');
+				}
+			}
+		});
+	}
+
+	window.onload = function () {
+		fillStars();
+	};
+</script>

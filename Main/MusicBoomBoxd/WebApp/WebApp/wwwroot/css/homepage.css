@@ -6,6 +6,7 @@
 .New-Music-Content {
     text-align: center;
 }
+
 h2 {
     margin-top: 3%;
     font-size: 30px;
@@ -22,11 +23,13 @@ h2 {
 }
 
 .New-Albums {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     background-color: rgba(26, 26, 26, 0.8);
     border: 2px solid #d45800;
     border-radius: 10%;
     padding: 2%;
-    padding-bottom: 1%;
     margin-top: 2%;
     max-width: 22%;
     min-width: 20%;
@@ -55,24 +58,24 @@ h2 {
     text-align: left;
 }
 
-    .Album-info ol {
-        padding: 0;
-        margin-top: 10px;
-        margin-left: 7%;
+.Album-info ol {
+    padding: 0;
+    margin-top: 10px;
+    margin-left: 7%;
+    text-align: left;
+}
+
+    .Album-info ol li {
         text-align: left;
     }
-
-        .Album-info ol li {
-            text-align: left;
-        }
 
 /* Star rating styles */
 .star-rating {
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
     gap: 5px;
-    margin-bottom: 20px;
+    margin-top: auto; /* Ensures the star rating is pushed to the bottom */
 }
 
     .star-rating .fa-star {
@@ -83,7 +86,7 @@ h2 {
     }
 
         .star-rating .fa-star.checked {
-            color: #ffcc00;
+            color: #d45800;
         }
 
 .rating-header {
