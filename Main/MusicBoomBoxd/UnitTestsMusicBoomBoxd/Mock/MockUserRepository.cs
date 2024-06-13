@@ -5,7 +5,12 @@ namespace UnitTestsMusicBoomBoxd
 	public class MockUserRepository :IUserRepository
 	{
 		private Dictionary<int, UserDTO> users = new();
+		private readonly List<UserDTO> _mockUser;
 
+		public MockUserRepository(List<UserDTO> mockUser)
+		{
+			_mockUser = mockUser;
+		}
 
 		public Result InsertUser(UserDTO userDTO)
 		{
@@ -13,10 +18,11 @@ namespace UnitTestsMusicBoomBoxd
 			return new Result { Success = true, Message = "User inserted successfully." };
 		}
 
+		//This method returns the most recent users based on their UserID in descending order,
+		//It is limited by the count parameter.
 		public List<UserDTO> GetRecentUser(int count)
 		{
-			throw new NotImplementedException();
-
+			return _mockUser;
 		}
 
 		//for artists
@@ -60,16 +66,21 @@ namespace UnitTestsMusicBoomBoxd
 
 		public UserDTO GetUserByUsername(string username)
 		{
-			throw new NotImplementedException();
+			return users.Values.FirstOrDefault(u => u.Username == username);
 		}
 		public UserDTO GetUserByEmail(string email)
 		{
-			throw new NotImplementedException();
+            return users.Values.FirstOrDefault(u => u.Email == email);
 		}
 
 		public Result UpdateUser(UserDTO userDTO)
 		{
-			throw new NotImplementedException();
+			if (users.ContainsKey(userDTO.UserID))
+			{
+				users[userDTO.UserID] = userDTO;
+				return new Result { Success = true, Message = "User updated successfully." };
+			}
+			return new Result { Success = false, Message = "User not found." };
 		}
 
 		public Result UpdateUserRoleToCritic(UserDTO userDTO)
@@ -84,7 +95,8 @@ namespace UnitTestsMusicBoomBoxd
 
 		public Result DeleteUser(UserDTO userDTO)
 		{
-			throw new NotImplementedException();
+			users.Remove(userDTO.UserID);
+			return new Result { Success = true, Message = "User removed successfully." };
 		}
 	}
 }

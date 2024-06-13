@@ -5,13 +5,17 @@ namespace UnitTestsMusicBoomBoxd.Mock
 {
 	public class MockProfileRepository : IProfileRepository
 	{
+		private Dictionary<int, ProfileDTO> profiles = new();
+
 		public Result InsertProfile(ProfileDTO profileDTO)
 		{
-			throw new NotImplementedException();
+			profiles.Add(profileDTO.ProfileID, profileDTO);
+			return new Result { Success = true, Message = "Profile created successfully" };
 		}
 		public Result AddProfileCritic(ProfileDTO profileDTO)
 		{
-			throw new NotImplementedException();
+			profiles.Add(profileDTO.UserDTO.UserID, profileDTO);
+			return new Result { Success = true, };
 		}
 		public Result AddProfileMusician(ProfileDTO profileDTO)
 		{
