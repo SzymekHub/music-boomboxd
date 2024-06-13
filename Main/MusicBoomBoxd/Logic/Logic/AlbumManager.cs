@@ -112,6 +112,17 @@ namespace Logic
             return AlbumMapper.ToAlbum(albumDTO);
         }
 
+        public List<Album> GetAlbumsByAlbumIDs(List<int> albumIDs)
+        {
+            List<Album> albums = new List<Album>();
+            foreach (int albumID in albumIDs)
+            {
+                AlbumDTO albumDTO = _albumRepository.GetAlbumByAlbumID(albumID);
+                albums.Add(AlbumMapper.ToAlbum(albumDTO));
+            }
+            return albums;
+        }
+
         public Result Add(Album album)
         {
             AlbumDTO albumDTO = AlbumMapper.ToAlbumDTO(album);

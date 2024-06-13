@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace Logic
 {
-	public class RecomemmendationManager
+	public class RecommendationManager
 	{
 		private readonly IAlbumRepository _albumRepository;
 		private readonly IProfileRepository _profileRepository;
@@ -13,7 +13,7 @@ namespace Logic
 		private readonly IArtistRepository _artistRepository;
 		private readonly Recommendations _recommendations;
 
-        public RecomemmendationManager(IAlbumRepository albumRepository, IProfileRepository profileRepository, IUserRepository userRepository, IReviewRepository reviewRepository, IArtistRepository artistRepository, List<IRecommendationFilter> filters)
+        public RecommendationManager(IAlbumRepository albumRepository, IProfileRepository profileRepository, IUserRepository userRepository, IReviewRepository reviewRepository, IArtistRepository artistRepository, List<IRecommendationFilter> filters)
         {
             _albumRepository = albumRepository;
 			_profileRepository = profileRepository;
@@ -23,6 +23,7 @@ namespace Logic
 			_recommendations = new Recommendations();
         }
 
+		//if one of the bools returns true it adds to the filer and it passes the filters to teh get recommended albums
 		public List<Album> GetRecommendedAlbums(User user, bool userArtistGenre, bool userReviewFilter, bool userAlbumFilter)
 		{
 			var filters = new List<IRecommendationFilter>();

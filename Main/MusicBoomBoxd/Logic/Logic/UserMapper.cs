@@ -1,5 +1,6 @@
 ﻿using Infrastructure;
 using Logic;
+using Microsoft.Extensions.Logging.Abstractions;
 
 
 namespace Logic
@@ -8,6 +9,10 @@ namespace Logic
 	{
 		public static User ConvertToUser(UserDTO newUserDTO)
 		{
+			if (newUserDTO == null)
+			{
+				return null;
+			}
 			//Converts the user role enum to a string
 			userType type = (userType)Enum.Parse(typeof(userType), newUserDTO.UserType);
 

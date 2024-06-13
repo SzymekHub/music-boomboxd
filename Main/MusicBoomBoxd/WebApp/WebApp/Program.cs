@@ -23,13 +23,6 @@ builder.Services.AddSingleton<IAlbumRepository, AlbumRepository>();
 builder.Services.AddSingleton<AlbumManager>();
 builder.Services.AddRazorPages();
 
-builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(7);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
 
 // Tells us how we want to use auth.
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -52,8 +45,6 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
-app.UseSession();
 
 //this tells us that we want to use auth.
 app.UseAuthentication();

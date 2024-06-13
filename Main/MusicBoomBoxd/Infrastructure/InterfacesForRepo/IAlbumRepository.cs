@@ -18,6 +18,8 @@
 
         AlbumDTO GetAlbumByAlbumID(int albumID);
 
+        List<AlbumDTO> GetAlbumsByAlbumIDs(List<int> albumsIDs);
+
         Result AddAverageRating(AlbumDTO albumDTO, double averageRating);
 
         Result UpdateAlbum(AlbumDTO albumDTO);
