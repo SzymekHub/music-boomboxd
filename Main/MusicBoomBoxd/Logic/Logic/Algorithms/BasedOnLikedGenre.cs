@@ -1,20 +1,12 @@
-﻿using Logic;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Logic.Algorithms
+﻿namespace Logic
 {
-
     //extend on other things
     // like: genre and something else fav songs,  etc.
-    public class BasedOnLikedGenre : IRecommendations
-    {
-        public List<Song> GetRecommendedSong(User user)
-        {
-            throw new NotImplementedException();
-        }
-    }
+    //public class BasedOnLikedGenre : IRecommendations
+    //{
+    //    public List<Song> GetRecommendedSongs(User user)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 }

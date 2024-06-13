@@ -12,68 +12,79 @@
 <div class="container">
 	<div class="New-Music-Content">
 		<h2>ALBUMS</h2>
-		<section id="New-Music-Coming" class="New-Albums-Grid">
-			@foreach (var album in Model.Albums)
+		<form method="post">
+			@if (User.Identity.IsAuthenticated && (User.IsInRole("Musician") || User.IsInRole("Admin") || User.IsInRole("Critic")))
 			{
-				<article class="New-Albums">
-					<img src="data:@album.AlbumCoverContentType;base64,@album.AlbumCoverData" alt="@album.Title" class="albums">
-					<div class="Album-Name">
-						<p>@album.Title</p>
-					</div>
-					<div class="Album-info">
-						<p>By: @album.Artist</p>
-						<p>Genre: @album.Genre</p>
-						<p>Released: @album.Date.ToString("dd/MM/yyyy")</p>
-						<p>
-							Songs:
-							<ol>
-								@foreach (var song in album.Songs)
-								{
-									if (songCount <= 3)
-									{
-										<li>@song.Title</li>
-										songCount++;
-									}
-									else
-									{
-										break;
-									}
-								}
-							</ol>
-
-							@if (album.Songs.Count > 3)
-							{
-							<p>Etc...</p>
-							}
-						</p>
-					</div>
-					<div class="star-rating" data-rating="@album.AverageRating">
-						<i class="fa fa-star"></i>
-						<i class="fa fa-star"></i>
-						<i class="fa fa-star"></i>
-						<i class="fa fa-star"></i>
-						<i class="fa fa-star"></i>
-					</div>
-				</article>
+				<div class="filter-options">
+                    <label><input type="checkbox" name="userArtistGenre" value="true"> Filter by Favorite Artist</label><br>
+                    <label><input type="checkbox" name="userAlbumFilter" value="true"> Filter by Favorite Genre</label><br>
+                    <label><input type="checkbox" name="userReviewFilter" value="true"> Filter by Rating</label><br>
+				</div>
+                <button type="submit" class="recommend" asp-page-handler="GetRecommendation">Filter!</button>
 			}
-		</section>
+		</form>
+        <section id="New-Music-Coming" class="New-Albums-Grid">
+            @foreach (var album in Model.RecommendedAlbums)
+            {
+                <article class="New-Albums">
+                    <img src="data:@album.AlbumCoverContentType;base64,@album.AlbumCoverData" alt="@album.Title" class="albums">
+                    <div class="Album-Name">
+                        <p>@album.Title</p>
+                    </div>
+                    <div class="Album-info">
+                        <p>By: @album.Artist</p>
+                        <p>Genre: @album.Genre</p>
+                        <p>Released: @album.Date.ToString("dd/MM/yyyy")</p>
+                        <p>
+                            Songs:
+                            <ol>
+                                @foreach (var song in album.Songs)
+                                {
+                                    if (songCount <= 3)
+                                    {
+                                        <li>@song.Title</li>
+                                        songCount++;
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                            </ol>
+
+                            @if (album.Songs.Count > 3)
+                            {
+                            <p>Etc...</p>
+                            }
+                        </p>
+                    </div>
+                    <div class="star-rating" data-rating="@album.AverageRatings">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                    </div>
+                </article>
+            }
+        </section>
 	</div>
 </div>
 
 <script>
-	function fillStars() {
-		document.querySelectorAll('.star-rating').forEach(function (ratingElem) {
-			var rating = parseFloat(ratingElem.getAttribute('data-rating'));
-			var stars = ratingElem.querySelectorAll('.fa-star');
-			for (var i = 0; i < stars.length; i++) {
-				if (i < rating) {
-					stars[i].classList.add('checked');
-				}
-			}
-		});
-	}
+    function fillStars() {
+        document.querySelectorAll('.star-rating').forEach(function (ratingElem) {
+            var rating = parseFloat(ratingElem.getAttribute('data-rating'));
+            var stars = ratingElem.querySelectorAll('.fa-star');
+            for (var i = 0; i < stars.length; i++) {
+                if (i < rating) {
+                    stars[i].classList.add('checked');
+                }
+            }
+        });
+    }
 
-	window.onload = function () {
-		fillStars();
-	};
+    window.onload = function () {
+        fillStars();
+    };
 </script>

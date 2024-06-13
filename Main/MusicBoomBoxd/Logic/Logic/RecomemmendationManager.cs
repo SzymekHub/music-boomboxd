@@ -1,0 +1,46 @@
+﻿using Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
+using System.Drawing;
+
+namespace Logic
+{
+	public class RecomemmendationManager
+	{
+		private readonly IAlbumRepository _albumRepository;
+		private readonly IProfileRepository _profileRepository;
+		public  readonly IUserRepository _userRepository;
+		private readonly IReviewRepository _reviewRepository;
+		private readonly IArtistRepository _artistRepository;
+		private readonly Recommendations _recommendations;
+
+        public RecomemmendationManager(IAlbumRepository albumRepository, IProfileRepository profileRepository, IUserRepository userRepository, IReviewRepository reviewRepository, IArtistRepository artistRepository, List<IRecommendationFilter> filters)
+        {
+            _albumRepository = albumRepository;
+			_profileRepository = profileRepository;
+			_userRepository = userRepository;
+			_reviewRepository = reviewRepository;
+			_artistRepository = artistRepository;
+			_recommendations = new Recommendations();
+        }
+
+		public List<Album> GetRecommendedAlbums(User user, bool userArtistGenre, bool userReviewFilter, bool userAlbumFilter)
+		{
+			var filters = new List<IRecommendationFilter>();
+
+			if (userArtistGenre)
+			{
+				filters.Add(new FavArtistFilter(_albumRepository, _artistRepository));
+			}
+			if (userReviewFilter)
+			{
+				filters.Add(new ReviewFilter(_reviewRepository, _albumRepository));
+			}
+			if (userAlbumFilter)
+			{
+				filters.Add(new FavGenreFilter(_albumRepository));
+			}
+
+			return _recommendations.GetRecommendedAlbums(user, filters);
+		}
+    }
+}

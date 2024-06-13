@@ -184,7 +184,7 @@ namespace Infrastructure
         }
 
 
-        public List<ReviewDTO> GetAllReviews()
+        public List<ReviewDTO> GetAllReviews(int count)
         {
             List<ReviewDTO> reviews = new List<ReviewDTO>();
 
@@ -193,14 +193,19 @@ namespace Infrastructure
             {
                 cmd.Connection = connection;
                 cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"SELECT UR.UserRatingID, UR.UserID, UR.AlbumID, UR.Rate, 
+                cmd.CommandText = @"SELECT TOP (@Count) 
+                            UR.UserRatingID, UR.UserID, UR.AlbumID, UR.Rate, 
                             U.Active, U.Username, U.Password, U.Email, U.UserType, U.Birthday, U.FavGenre, U.ProfilePictureName, U.ProfilePictureData, U.ProfilePictureContentType, 
-                            A.ArtistID, A.Active, A.Title, A.Date, A.RunTimeSec, A.Genre, A.AverageRate, A.AlbumCoverName, A.AlbumCoverData, A.AlbumCoverContentType,
+                            A.ArtistID, A.Active, A.Title, A.Date, A.RunTimeSec, A.Genre, A.AlbumCoverName, A.AlbumCoverData, A.AlbumCoverContentType,
                             AR.ArtistID, AR.Active, AR.Name, AR.AritstPictureName, AR.ArtistPictureData, AR.ArtistPictureContentType
                             FROM [UserAlbumRating] UR
                             INNER JOIN [User] U ON UR.UserID = U.UserID
                             INNER JOIN [Album] A ON UR.AlbumID = A.AlbumID
-                            INNER JOIN [Artist] AR ON A.ArtistID = AR.ArtistID";
+                            INNER JOIN [Artist] AR ON A.ArtistID = AR.ArtistID
+                            ORDER BY AlbumID DESC";
+				
+
+				cmd.Parameters.AddWithValue("@Count", count);
 
                 connection.Open();
 
@@ -232,19 +237,19 @@ namespace Infrastructure
                                 ArtistDTO = new ArtistDTO
                                 {
                                     ArtistID = reader.GetInt32(14),
-                                    Active = reader.GetBoolean(15),
-                                    Name = reader.GetString(16),
-                                    ArtistPictureName = reader.GetString(17),
-                                    ArtistPictureData = (byte[])reader[18],
-                                    ArtistPictureContentType = reader.GetString(19)
+                                    Active = reader.GetBoolean(24),
+                                    Name = reader.GetString(25),
+                                    ArtistPictureName = reader.GetString(26),
+                                    ArtistPictureData = (byte[])reader[27],
+                                    ArtistPictureContentType = reader.GetString(28)
                                 },
-                                AlbumTitle = reader.GetString(20),
-                                ReleaseDate = reader.GetDateTime(21),
-                                RunTime = reader.GetInt32(22),
-                                Genre = reader.GetString(23),
-                                AlbumCoverName = reader.GetString(25),
-                                AlbumCoverData = (byte[])reader[26],
-                                AlbumCoverContentType = reader.GetString(27)
+                                AlbumTitle = reader.GetString(16),
+                                ReleaseDate = reader.GetDateTime(17),
+                                RunTime = reader.GetInt32(18),
+                                Genre = reader.GetString(19),
+                                AlbumCoverName = reader.GetString(20),
+                                AlbumCoverData = (byte[])reader[21],
+                                AlbumCoverContentType = reader.GetString(22)
                             }
                         };
 

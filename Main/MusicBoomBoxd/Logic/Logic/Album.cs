@@ -10,6 +10,7 @@
         public DateTime Date { get; set; }
         public int RunTime { get; set; }
         public genreType Genre { get; set; }
+        public double AverageRatings { get; set; }
         public string AlbumCoverName { get; set; }
         public byte[] AlbumCoverData { get; set; }
         public string AlbumCoverContentType { get; set; }

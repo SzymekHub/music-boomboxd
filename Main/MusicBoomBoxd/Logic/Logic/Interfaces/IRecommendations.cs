@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Logic
+﻿namespace Logic
 {
     public interface IRecommendations
     {
-        List<Song> GetRecommendedSong(User user);
-    }
+        List<Album> GetRecommendedAlbums(User user, List<IRecommendationFilter> _filters);
+
+	}
 }
