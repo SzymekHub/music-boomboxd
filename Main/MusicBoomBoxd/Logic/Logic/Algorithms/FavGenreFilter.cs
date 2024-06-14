@@ -1,8 +1,13 @@
-﻿using Infrastructure;
+﻿using Infrastructure.InterfacesForRepo;
+using Infrastructure.Repositories;
+using Infrastructure;
+using Logic.Interfaces;
+using Logic.Algorithms;
+using Infrastructure.DTOs;
 
-namespace Logic
+namespace Logic.Algorithms
 {
-	public class FavGenreFilter : IRecommendationFilter
+    public class FavGenreFilter : IRecommendationFilter
 	{
 		private readonly IAlbumRepository _albumRepository;
 

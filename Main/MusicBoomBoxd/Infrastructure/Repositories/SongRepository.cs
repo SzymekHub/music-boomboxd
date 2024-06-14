@@ -1,10 +1,12 @@
 ﻿using Microsoft.Data.SqlClient;
 using System.Data;
+using Infrastructure.InterfacesForRepo;
+using Infrastructure.DTOs;
 
-namespace Infrastructure
+namespace Infrastructure.Repositories
 {
-	// This class is responisble for databse operations related to songs
-	public class SongRepository : DbConnection, ISongRepository
+    // This class is responisble for databse operations related to songs
+    public class SongRepository : DbConnection, ISongRepository
 	{
 		public Result InsertSong(SongDTO songDTO)
 		{

@@ -1,39 +1,48 @@
-﻿using Infrastructure;
-using Logic;
+﻿using Infrastructure.InterfacesForRepo;
+using Infrastructure.Repositories;
+using Infrastructure;
+using Logic.Interfaces;
+using Logic.Algorithms;
+using Infrastructure.DTOs;
 
-public class FavArtistFilter : IRecommendationFilter
+namespace Logic.Algorithms
 {
-	private readonly IAlbumRepository _albumRepository;
-	private readonly IArtistRepository _artistRepository;
 
-	public FavArtistFilter(IAlbumRepository albumRepository, IArtistRepository artistRepository)
+
+    public class FavArtistFilter : IRecommendationFilter
 	{
-		_albumRepository = albumRepository;
-		_artistRepository = artistRepository;
-	}
+		private readonly IAlbumRepository _albumRepository;
+		private readonly IArtistRepository _artistRepository;
 
-	public List<Album> GetFilteredAlbum(User user)
-	{
-		List<Album> filteredAlbums = new List<Album>();
-
-		// Fetch albums from the repository
-		List<AlbumDTO> albums = _albumRepository.GetAlbums(1000);
-
-		// Fetch favorite artists for the user
-		List<ArtistDTO> favoriteArtists = _artistRepository.GetArtistForUser(user.UserID);
-
-		// Get the list of favorite artist names
-		var favoriteArtistNames = favoriteArtists.Select(a => a.Name).ToHashSet();
-
-		// Filter albums based on favorite artist names
-		foreach (var album in albums)
+		public FavArtistFilter(IAlbumRepository albumRepository, IArtistRepository artistRepository)
 		{
-			if (favoriteArtistNames.Contains(album.ArtistDTO.Name))
-			{
-				filteredAlbums.Add(AlbumMapper.ToAlbum(album));
-			}
+			_albumRepository = albumRepository;
+			_artistRepository = artistRepository;
 		}
 
-		return filteredAlbums;
+		public List<Album> GetFilteredAlbum(User user)
+		{
+			List<Album> filteredAlbums = new List<Album>();
+
+			// Fetch albums from the repository
+			List<AlbumDTO> albums = _albumRepository.GetAlbums(1000);
+
+			// Fetch favorite artists for the user
+			List<ArtistDTO> favoriteArtists = _artistRepository.GetArtistForUser(user.UserID);
+
+			// Get the list of favorite artist names
+			var favoriteArtistNames = favoriteArtists.Select(a => a.Name).ToHashSet();
+
+			// Filter albums based on favorite artist names
+			foreach (var album in albums)
+			{
+				if (favoriteArtistNames.Contains(album.ArtistDTO.Name))
+				{
+					filteredAlbums.Add(AlbumMapper.ToAlbum(album));
+				}
+			}
+
+			return filteredAlbums;
+		}
 	}
 }

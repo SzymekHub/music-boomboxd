@@ -1,8 +1,13 @@
-﻿using Infrastructure;
+﻿using Infrastructure.InterfacesForRepo;
+using Infrastructure.Repositories;
+using Infrastructure;
+using Logic.Interfaces;
+using Logic.Algorithms;
+using Infrastructure.DTOs;
 
-namespace Logic
+namespace Logic.Algorithms
 {
-	public class ReviewFilter : IRecommendationFilter
+    public class ReviewFilter : IRecommendationFilter
 	{
 		public readonly IReviewRepository _reviewRepository;
 		public readonly IAlbumRepository _albumRepository;

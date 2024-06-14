@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebApp.Pages
+namespace WebApp.Pages.Models
 {
     public class LoginUser
     {

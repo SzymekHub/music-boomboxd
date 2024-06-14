@@ -1,4 +1,6 @@
-﻿namespace Infrastructure
+﻿using Infrastructure.DTOs;
+
+namespace Infrastructure.InterfacesForRepo
 {
     public interface IAlbumRepository
     {

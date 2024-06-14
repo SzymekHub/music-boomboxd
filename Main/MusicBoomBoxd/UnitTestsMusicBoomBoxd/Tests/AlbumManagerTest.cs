@@ -1,128 +1,176 @@
-﻿using Infrastructure;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Infrastructure.DTOs;
 using Logic;
+using System;
+using System.Collections.Generic;
 using UnitTestsMusicBoomBoxd.Mock;
+using Logic.Interfaces;
+using Infrastructure.Repositories;
+using Infrastructure;
 
-namespace UnitTestsMusicBoomBoxd
+namespace UnitTestsMusicBoomBoxd.Tests
 {
-	[TestClass]
-	public class AlbumManagerTest
-	{
-		private List<AlbumDTO> mockAlbum;
-		private List<ArtistDTO> mockArtist;
+    [TestClass]
+    public class AlbumManagerTest
+    {
+        [TestMethod]
+        public void Insert_Album_Should_Return_Success()
+        {
+            // Arrange
+            var mockAlbum = new List<AlbumDTO>();
+            var mockArtist = new List<ArtistDTO>
+            {
+                new ArtistDTO
+                {
+                    Active = true,
+                    ArtistID = 1,
+                    Name = "TestArtist",
+                    ArtistPictureName = "ArtistProfilePic",
+                    ArtistPictureData = new byte[] { 1, 1, 1, 1 },
+                    ArtistPictureContentType = "JPG"
+                }
+            };
 
-		[TestMethod]
-		public void Insert_Album_Should_Return_Success()
-		{
-			// Arrange
-			mockArtist = new List<ArtistDTO>(); // Ensure mockArtist is initialized
-			mockArtist.Add(new ArtistDTO { ArtistID = 1, Name = "TestArtist" }); // Example data
+            MockAlbumRepository albumRepository = new MockAlbumRepository(mockAlbum);
+            MockArtistRepository artistRepository = new MockArtistRepository(mockArtist);
+            MockValidateAlbum validateAlbum = new MockValidateAlbum();
 
-			// Ensure mockAlbum is initialized if used in MockAlbumRepository constructor
-			mockAlbum = new List<AlbumDTO>();
+            AlbumManager albumManager = new AlbumManager(albumRepository, artistRepository, validateAlbum);
 
-			MockAlbumRepository albumRepository = new MockAlbumRepository(mockAlbum);
-			MockArtistRepository artistRepository = new MockArtistRepository(mockArtist);
-			MockValidateAlbum validateAlbum = new MockValidateAlbum();
+            ArtistDTO artistDTO = mockArtist.First();
+            Artist artist = new Artist(1, artistDTO.Name, "ArtistPicture", new byte[] { 1, 1, 1, 1 }, "JPG");
 
-			AlbumManager albumManager = new AlbumManager(albumRepository, artistRepository, validateAlbum);
+            Album album = new Album(artist, "AlbumTest", DateTime.Now, 23, genreType.Metal, "albumcover", new byte[] { 1, 1, 1, 1 }, "JPG");
 
-			ArtistDTO artistDTO = mockArtist.FirstOrDefault();
-			Artist artist = new Artist(0, artistDTO.Name, "ArtstPicture", new byte[] { 1, 1, 1, 1 }, "JPG");
+            // Act
+            Result result = albumManager.Add(album);
 
-			Album album = new Album(artist, "AlbumTest", DateTime.Now, 23, genreType.Metal, "albumcover", new byte[] { 1, 1, 1, 1 }, "JPG");
+            // Assert
+            Assert.IsTrue(result.Success);
+            var recentAlbums = albumRepository.GetAlbums(1);
+            Assert.AreEqual(1, recentAlbums.Count);
+            Assert.AreEqual("AlbumTest", recentAlbums[0].AlbumTitle);
+            Assert.AreEqual("albumcover", recentAlbums[0].AlbumCoverName);
+        }
 
-			// Act
-			Result result = albumManager.Add(album);
+        [TestMethod]
+        public void GetAlbum_When_AlbumExists_Should_Return_Album()
+        {
+            // Arrange
+            var mockAlbum = new List<AlbumDTO>
+            {
+                new AlbumDTO
+                {
+                    AlbumID = 1,
+                    AlbumTitle = "AlbumTest",
+                    ReleaseDate = DateTime.Now,
+                    RunTime = 23,
+                    Genre = "Metal",
+                    AlbumCoverName = "albumcover",
+                    AlbumCoverData = new byte[] { 1, 1, 1, 1 },
+                    AlbumCoverContentType = "JPG",
+                    ArtistDTO = new ArtistDTO
+                    {
+                        ArtistID = 1,
+                        Name = "TestArtist",
+                        ArtistPictureName = "ArtistProfilePic",
+                        ArtistPictureData = new byte[] { 1, 1, 1, 1 },
+                        ArtistPictureContentType = "JPG"
+                    }
+                }
+            };
 
-			// Assert
-			Assert.IsTrue(result.Success);
-			Assert.AreEqual("Album inserted successfully.", result.Message);
+            var mockArtist = new List<ArtistDTO>
+            {
+                new ArtistDTO
+                {
+                    Active = true,
+                    ArtistID = 1,
+                    Name = "TestArtist",
+                    ArtistPictureName = "ArtistProfilePic",
+                    ArtistPictureData = new byte[] { 1, 1, 1, 1 },
+                    ArtistPictureContentType = "JPG"
+                }
+            };
 
-			// Retrieve albums again after adding
-			var recentAlbums = albumRepository.GetAlbums(1);
+            MockAlbumRepository albumRepository = new MockAlbumRepository(mockAlbum);
+            MockArtistRepository artistRepository = new MockArtistRepository(mockArtist);
+            MockValidateAlbum validateAlbum = new MockValidateAlbum();
 
-			// Assert based on the actual count of recentAlbums
-			Assert.AreEqual(0, recentAlbums.Count);
+            AlbumManager albumManager = new AlbumManager(albumRepository, artistRepository, validateAlbum);
 
-			if (recentAlbums.Count > 0)
-			{
-				Assert.AreEqual("AlbumTest", recentAlbums[0].AlbumTitle);
-				Assert.AreEqual("albumcover", recentAlbums[0].AlbumCoverName);
-			}
-		}
+            ArtistDTO artistDTO = mockArtist.First();
+            Artist artist = new Artist(1, artistDTO.Name, "ArtistPicture", new byte[] { 1, 1, 1, 1 }, "JPG");
 
-		//This test retrieving a album by title and checks if the correct album is returned.
-		[TestMethod]
-		public void GetAlbum_When_AlbumExists_Should_Return_Album()
-		{
-			// Arrange
-			mockArtist = new List<ArtistDTO>(); // Ensure mockArtist is initialized
-			mockArtist.Add(new ArtistDTO { ArtistID = 1, Name = "TestArtist" }); // Example data
+            Album album = new Album(artist, "AlbumTest", DateTime.Now, 23, genreType.Metal, "albumcover", new byte[] { 1, 1, 1, 1 }, "JPG");
+            albumManager.Add(album);
 
-			// Ensure mockAlbum is initialized if used in MockAlbumRepository constructor
-			mockAlbum = new List<AlbumDTO>();
+            // Act
+            AlbumDTO retrievedAlbum = albumRepository.GetAlbumByTitleAndArtist("AlbumTest", artist.ArtistID);
 
-			MockAlbumRepository albumRepository = new MockAlbumRepository(mockAlbum);
-			MockArtistRepository artistRepository = new MockArtistRepository(mockArtist);
-			MockValidateAlbum validateAlbum = new MockValidateAlbum();
+            // Assert
+            Assert.IsNotNull(retrievedAlbum);
+            Assert.AreEqual("AlbumTest", retrievedAlbum.AlbumTitle);
+        }
 
-			AlbumManager albumManager = new AlbumManager(albumRepository, artistRepository, validateAlbum);
-			
-			ArtistDTO artistDTO = mockArtist.FirstOrDefault();
-			Artist artist = new Artist(0, artistDTO.Name, "ArtstPicture", new byte[] { 1, 1, 1, 1 }, "JPG");
+        [TestMethod]
+        public void Update_Album_When_ValidAlbum_Provided_Should_Update_Album()
+        {
+            // Arrange
+            var mockAlbum = new List<AlbumDTO>
+            {
+                new AlbumDTO
+                {
+                    AlbumID = 1,
+                    AlbumTitle = "AlbumTest",
+                    ReleaseDate = DateTime.Now,
+                    RunTime = 23,
+                    Genre = "Metal",
+                    AlbumCoverName = "albumcover",
+                    AlbumCoverData = new byte[] { 1, 1, 1, 1 },
+                    AlbumCoverContentType = "JPG",
+                    ArtistDTO = new ArtistDTO
+                    {
+                        ArtistID = 1,
+                        Name = "TestArtist",
+                        ArtistPictureName = "ArtistProfilePic",
+                        ArtistPictureData = new byte[] { 1, 1, 1, 1 },
+                        ArtistPictureContentType = "JPG"
+                    }
+                }
+            };
 
-			Album album = new Album(artist, "AlbumTest", DateTime.Now, 23, genreType.Metal, "albumcover", new byte[] { 1, 1, 1, 1 }, "JPG");
+            var mockArtist = new List<ArtistDTO>
+            {
+                new ArtistDTO
+                {
+                    Active = true,
+                    ArtistID = 1,
+                    Name = "TestArtist",
+                    ArtistPictureName = "ArtistProfilePic",
+                    ArtistPictureData = new byte[] { 1, 1, 1, 1 },
+                    ArtistPictureContentType = "JPG"
+                }
+            };
 
-			Result result = albumManager.Add(album);
+            MockAlbumRepository albumRepository = new MockAlbumRepository(mockAlbum);
+            MockArtistRepository artistRepository = new MockArtistRepository(mockArtist);
+            MockValidateAlbum validateAlbum = new MockValidateAlbum();
 
-			// Act
-			AlbumDTO retrievedAlbum = albumRepository.GetAlbumByTitleAndArtist("AlbumTest", artist.ArtistID);
+            AlbumManager albumManager = new AlbumManager(albumRepository, artistRepository, validateAlbum);
 
-			// Assert
-			Assert.IsNotNull(retrievedAlbum);
-			Assert.AreEqual("AlbumTest", retrievedAlbum.AlbumTitle);
+            AlbumDTO albumDTO = albumRepository.GetAlbumByTitleAndArtist("AlbumTest", 1);
+            albumDTO.AlbumTitle = "AlbumTestUpdated";
 
-		}
+            // Act
+            Result result = albumManager.Update(AlbumMapper.ToAlbum(albumDTO));
 
-		//This tests updating a album's title and verifies if the update is successful.
-		[TestMethod]
-		public void Update_Album_When_ValidAlbum_Provided_Should_Update_Album()
-		{
+            // Assert
+            Assert.IsTrue(result.Success);
+            Assert.AreEqual("Album updated successfully.", result.Message);
 
-			// Arrange
-			mockArtist = new List<ArtistDTO>(); // Ensure mockArtist is initialized
-			mockArtist.Add(new ArtistDTO { ArtistID = 1, Name = "TestArtist" }); // Example data
-
-			// Ensure mockAlbum is initialized if used in MockAlbumRepository constructor
-			mockAlbum = new List<AlbumDTO>();
-
-			MockAlbumRepository albumRepository = new MockAlbumRepository(mockAlbum);
-			MockArtistRepository artistRepository = new MockArtistRepository(mockArtist);
-			MockValidateAlbum validateAlbum = new MockValidateAlbum();
-
-			AlbumManager albumManager = new AlbumManager(albumRepository, artistRepository, validateAlbum);
-
-			ArtistDTO artistDTO = mockArtist.FirstOrDefault();
-			Artist artist = new Artist(0, artistDTO.Name, "ArtstPicture", new byte[] { 1, 1, 1, 1 }, "JPG");
-
-			Album album = new Album(artist, "AlbumTest", DateTime.Now, 23, genreType.Metal, "albumcover", new byte[] { 1, 1, 1, 1 }, "JPG");
-
-			albumManager.Add(album);
-
-			AlbumDTO albumDTO = albumRepository.GetAlbumByTitleAndArtist("AlbumTest", artist.ArtistID);
-			artist.Name = "Artist2";
-
-			// Act
-			Result result = albumManager.Update(AlbumMapper.ToAlbum(albumDTO));
-
-			// Assert
-			Assert.IsTrue(result.Success);
-			Assert.AreEqual("Album updated successfully.", result.Message);
-
-			AlbumDTO updatedAlbum = albumRepository.GetAlbumByTitleAndArtist("AlbumTest", artist.ArtistID);
-			Assert.AreEqual("AlbumTest23", updatedAlbum.AlbumTitle);
-
-		}
-
-	}
+            AlbumDTO updatedAlbum = albumRepository.GetAlbumByTitleAndArtist("AlbumTestUpdated", 1);
+            Assert.AreEqual("AlbumTestUpdated", updatedAlbum.AlbumTitle);
+        }
+    }
 }

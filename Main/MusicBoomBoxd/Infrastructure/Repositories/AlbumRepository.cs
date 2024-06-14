@@ -1,7 +1,9 @@
 ﻿using Microsoft.Data.SqlClient;
 using System.Data;
+using Infrastructure.DTOs;
+using Infrastructure.InterfacesForRepo;
 
-namespace Infrastructure
+namespace Infrastructure.Repositories
 {
     public class AlbumRepository : DbConnection, IAlbumRepository
     {

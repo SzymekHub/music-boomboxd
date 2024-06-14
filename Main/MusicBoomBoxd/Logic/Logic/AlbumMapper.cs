@@ -1,10 +1,19 @@
 ﻿using Infrastructure;
+using Infrastructure.InterfacesForRepo;
+using Infrastructure.Repositories;
+using Logic.Algorithms;
+using Logic.Interfaces;
 using Logic;
+using Infrastructure.DTOs;
 
 public static class AlbumMapper
 {
 	public static Album ToAlbum(AlbumDTO albumDTO)
 	{
+		if (albumDTO == null)
+		{
+			return null;
+		}
 		return new Album(
 			albumDTO.AlbumID,
 			ArtistMapper.ConvertToArtist(albumDTO.ArtistDTO),
@@ -19,7 +28,11 @@ public static class AlbumMapper
 
 	public static AlbumDTO ToAlbumDTO(Album album)
 	{
-		AlbumDTO albumDTO = new();
+        if (album == null)
+        {
+            return null;
+        }
+        AlbumDTO albumDTO = new();
 
 		albumDTO.AlbumID = album.AlbumID;
 		albumDTO.ArtistDTO = ArtistMapper.ConvertToArtistDTO(album.Artist);

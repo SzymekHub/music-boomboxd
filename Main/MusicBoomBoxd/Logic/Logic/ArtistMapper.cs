@@ -1,8 +1,13 @@
 ﻿using Infrastructure;
+using Infrastructure.DTOs;
+using Infrastructure.InterfacesForRepo;
+using Infrastructure.Repositories;
+using Logic.Algorithms;
+using Logic.Interfaces;
 
 namespace Logic
 {
-	public class ArtistMapper
+    public class ArtistMapper
 	{
 		public static Artist ConvertToArtist(ArtistDTO artistDTO)
 		{

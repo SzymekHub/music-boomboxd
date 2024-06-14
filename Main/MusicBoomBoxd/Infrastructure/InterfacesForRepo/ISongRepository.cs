@@ -1,7 +1,8 @@
-﻿
-namespace Infrastructure
+﻿using Infrastructure.DTOs;
+
+namespace Infrastructure.InterfacesForRepo
 {
-	public interface ISongRepository
+    public interface ISongRepository
 	{
 		Result InsertSong(SongDTO songDTO);
 		List<SongDTO> GetSongs(int count);

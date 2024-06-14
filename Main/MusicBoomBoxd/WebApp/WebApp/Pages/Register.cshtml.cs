@@ -1,13 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Infrastructure.DTOs;
+using Infrastructure.InterfacesForRepo;
+using Infrastructure.Repositories;
+using Logic.Algorithms;
+using Logic.Interfaces;
 using Logic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Infrastructure;
+using WebApp.Pages.Models;
 
 namespace WebApp.Pages
 {
-	public class RegisterModel : PageModel
+    public class RegisterModel : PageModel
 	{
 		public readonly UserManager _userManager;
         public readonly IPasswordHasher _passwordHasher;

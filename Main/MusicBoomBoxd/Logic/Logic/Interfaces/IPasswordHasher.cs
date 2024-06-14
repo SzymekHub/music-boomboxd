@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Infrastructure.InterfacesForRepo;
+using Infrastructure.Repositories;
+using Infrastructure;
+using Logic.Interfaces;
+using Logic.Algorithms;
+using Infrastructure.DTOs;
 
-namespace Logic
+namespace Logic.Interfaces
 {
     public interface IPasswordHasher
     {

@@ -1,28 +1,41 @@
 ﻿using Infrastructure;
+using Infrastructure.DTOs;
+using Infrastructure.InterfacesForRepo;
+using Infrastructure.Repositories;
+using Logic.Algorithms;
+using Logic.Interfaces;
 
-namespace UnitTestsMusicBoomBoxd
+
+namespace UnitTestsMusicBoomBoxd.Mock
 {
-	public class MockUserRepository :IUserRepository
+    public class MockUserRepository :IUserRepository
 	{
-		private Dictionary<int, UserDTO> users = new();
-		private readonly List<UserDTO> _mockUser;
+		private readonly List<UserDTO> _mockUsers;
 
 		public MockUserRepository(List<UserDTO> mockUser)
 		{
-			_mockUser = mockUser;
+			_mockUsers = mockUser;
 		}
 
 		public Result InsertUser(UserDTO userDTO)
 		{
-			users.Add(userDTO.UserID, userDTO);
-			return new Result { Success = true, Message = "User inserted successfully." };
-		}
+			if (_mockUsers.Any(u => u.Username == userDTO.Username))
+			{
+                return new Result { Success = false, Message = "User already exists." };
+            }
 
-		//This method returns the most recent users based on their UserID in descending order,
-		//It is limited by the count parameter.
+			int newUserId = _mockUsers.Count +1;
+			userDTO.UserID = newUserId;
+
+			_mockUsers.Add(userDTO);
+
+			return new Result { Success = true, };
+
+        }
+
 		public List<UserDTO> GetRecentUser(int count)
 		{
-			return _mockUser;
+			return _mockUsers;
 		}
 
 		//for artists
@@ -64,24 +77,34 @@ namespace UnitTestsMusicBoomBoxd
 		}
 		#endregion
 
-		public UserDTO GetUserByUsername(string username)
+		public UserDTO GetUserByUsername(string username)	
 		{
-			return users.Values.FirstOrDefault(u => u.Username == username);
+			return _mockUsers.FirstOrDefault(u => u.Username == username);
 		}
 		public UserDTO GetUserByEmail(string email)
 		{
-            return users.Values.FirstOrDefault(u => u.Email == email);
+            return _mockUsers.FirstOrDefault(u => u.Email == email);
 		}
 
 		public Result UpdateUser(UserDTO userDTO)
 		{
-			if (users.ContainsKey(userDTO.UserID))
-			{
-				users[userDTO.UserID] = userDTO;
-				return new Result { Success = true, Message = "User updated successfully." };
-			}
-			return new Result { Success = false, Message = "User not found." };
-		}
+            var existingUser = _mockUsers.FirstOrDefault(u => u.UserID == userDTO.UserID);
+            if (existingUser != null)
+            {
+                existingUser.Username = userDTO.Username;
+                existingUser.Email = userDTO.Email;
+                existingUser.UserType = userDTO.UserType;
+                existingUser.Birthday = userDTO.Birthday;
+                existingUser.FavGenre = userDTO.FavGenre;
+                existingUser.ProfilePictureName = userDTO.ProfilePictureName;
+                existingUser.ProfilePictureData = userDTO.ProfilePictureData;
+                existingUser.ProfilePictureContentType = userDTO.ProfilePictureContentType;
+                existingUser.ProfileDTO = userDTO.ProfileDTO;
+                existingUser.Active = userDTO.Active;
+                return new Result { Success = true, Message = "User updated successfully." };
+            }
+            return new Result { Success = false, Message = "User not found." };
+        }
 
 		public Result UpdateUserRoleToCritic(UserDTO userDTO)
 		{
@@ -95,7 +118,7 @@ namespace UnitTestsMusicBoomBoxd
 
 		public Result DeleteUser(UserDTO userDTO)
 		{
-			users.Remove(userDTO.UserID);
+			_mockUsers.Remove(userDTO);
 			return new Result { Success = true, Message = "User removed successfully." };
 		}
 	}

@@ -1,5 +1,7 @@
-using Infrastructure;
+using Infrastructure.InterfacesForRepo;
+using Infrastructure.Repositories;
 using Logic;
+using Logic.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 

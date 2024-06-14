@@ -1,17 +1,22 @@
-﻿using Logic;
+﻿using Infrastructure;
+using Infrastructure.InterfacesForRepo;
+using Infrastructure.Repositories;
+using Logic.Algorithms;
+using Logic.Interfaces;
 
-namespace UnitTestsMusicBoomBoxd
+
+namespace UnitTestsMusicBoomBoxd.Mock
 {
 	public class MockPasswordHasher : IPasswordHasher
 	{
 		public string HashPassword(string password)
 		{
-			return "MockedHashPass";
+			return password;
 		}
 
 		public bool VerifyPassword(string password, string hashedPassword)
 		{
-			return password == "MockPassword" && hashedPassword == "MockedHashPass";
+			throw new NotImplementedException();
 		}
 	}
 }

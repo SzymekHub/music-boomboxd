@@ -1,22 +1,37 @@
 ﻿using Infrastructure;
-using Logic;
+using Infrastructure.DTOs;
+using Infrastructure.InterfacesForRepo;
+using Infrastructure.Repositories;
+using Logic.Algorithms;
+using Logic.Interfaces;
+
 
 namespace UnitTestsMusicBoomBoxd.Mock
 {
-	public class MockProfileRepository : IProfileRepository
+    public class MockProfileRepository : IProfileRepository
 	{
-		private Dictionary<int, ProfileDTO> profiles = new();
+		private readonly double _mockUserBalance;
+		private readonly ProfileDTO _mockProfile;
 
-		public Result InsertProfile(ProfileDTO profileDTO)
+        public MockProfileRepository(ProfileDTO mockProfile, double mockUserBalance)
+        {
+            _mockProfile = mockProfile;
+			_mockUserBalance = mockUserBalance;
+        }
+
+        public Result InsertProfile(ProfileDTO profileDTO)
 		{
-			profiles.Add(profileDTO.ProfileID, profileDTO);
-			return new Result { Success = true, Message = "Profile created successfully" };
+			int newProfileID = _mockProfile.ProfileID + 1;
+			profileDTO.ProfileID = newProfileID;
+
+			_mockProfile.ProfileID = newProfileID;
+			
+			return new Result { Success = true };
 		}
 		public Result AddProfileCritic(ProfileDTO profileDTO)
 		{
-			profiles.Add(profileDTO.UserDTO.UserID, profileDTO);
-			return new Result { Success = true, };
-		}
+			throw new NotImplementedException();
+        }
 		public Result AddProfileMusician(ProfileDTO profileDTO)
 		{
 			throw new NotImplementedException();

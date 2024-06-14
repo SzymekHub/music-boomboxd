@@ -1,11 +1,12 @@
 ﻿using Microsoft.Data.SqlClient;
 using System.Data;
+using Infrastructure.InterfacesForRepo;
+using Infrastructure.DTOs;
 
-
-namespace Infrastructure
+namespace Infrastructure.Repositories
 {
-	// This class is responisble for databse operations related to users
-	public class UserRepository : DbConnection, IUserRepository
+    // This class is responisble for databse operations related to users
+    public class UserRepository : DbConnection, IUserRepository
 	{
 		public Result InsertUser(UserDTO userDTO)
 		{

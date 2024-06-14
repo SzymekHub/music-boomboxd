@@ -3,11 +3,15 @@ using Logic;
 using WebApp.Pages.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using Infrastructure;
+using Infrastructure.DTOs;
+using Infrastructure.InterfacesForRepo;
+using Infrastructure.Repositories;
+using Logic.Algorithms;
+using Logic.Interfaces;
 
 namespace WebApp.Pages
 {
-	[Authorize]
+    [Authorize]
 	public class AlbumReviewsModel : PageModel
 	{
 		private readonly AlbumManager _albumManager;

@@ -1,10 +1,14 @@
 ﻿using Infrastructure;
-using Logic;
-using System.Reflection.Metadata.Ecma335;
+using Infrastructure.DTOs;
+using Infrastructure.InterfacesForRepo;
+using Infrastructure.Repositories;
+using Logic.Algorithms;
+using Logic.Interfaces;
 
-namespace UnitTestsMusicBoomBoxd
+
+namespace UnitTestsMusicBoomBoxd.Mock
 {
-	public class MockArtistRepository : IArtistRepository
+    public class MockArtistRepository : IArtistRepository
 	{
 		private Dictionary<int, ArtistDTO> artists = new();
 		private readonly List<ArtistDTO> _mockArtist;

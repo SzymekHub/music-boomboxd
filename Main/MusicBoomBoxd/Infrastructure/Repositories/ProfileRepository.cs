@@ -1,9 +1,11 @@
 ﻿using System.Data;
 using Microsoft.Data.SqlClient;
+using Infrastructure.InterfacesForRepo;
+using Infrastructure.DTOs;
 
-namespace Infrastructure
+namespace Infrastructure.Repositories
 {
-	public class ProfileRepository : DbConnection, IProfileRepository
+    public class ProfileRepository : DbConnection, IProfileRepository
 	{
 		public Result InsertProfile(ProfileDTO profileDTO)
 		{

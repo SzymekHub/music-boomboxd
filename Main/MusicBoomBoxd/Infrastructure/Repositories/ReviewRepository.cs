@@ -1,7 +1,9 @@
 ﻿using Microsoft.Data.SqlClient;
 using System.Data;
+using Infrastructure.InterfacesForRepo;
+using Infrastructure.DTOs;
 
-namespace Infrastructure
+namespace Infrastructure.Repositories
 {
     public class ReviewRepository : DbConnection, IReviewRepository
     {

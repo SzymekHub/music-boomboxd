@@ -1,5 +1,5 @@
 ﻿
-namespace Infrastructure
+namespace Infrastructure.DTOs
 {
     public class AlbumDTO
     {

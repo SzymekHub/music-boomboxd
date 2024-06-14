@@ -1,6 +1,13 @@
-﻿using Logic;
+﻿using Infrastructure;
+using Infrastructure.DTOs;
+using Infrastructure.InterfacesForRepo;
+using Infrastructure.Repositories;
+using Logic.Algorithms;
+using Logic.Interfaces;
+using Logic;
 
-namespace UnitTestsMusicBoomBoxd
+
+namespace UnitTestsMusicBoomBoxd.Mock
 {
 	public class MockValidateUser : IValidateUser
 	{

@@ -1,8 +1,13 @@
 ﻿using Infrastructure;
+using Infrastructure.DTOs;
+using Infrastructure.InterfacesForRepo;
+using Infrastructure.Repositories;
+using Logic.Algorithms;
+using Logic.Interfaces;
 
 namespace Logic
 {
-	public class ProfileManager
+    public class ProfileManager
 	{
 		private readonly IProfileRepository _profileRepository;
 		private readonly IUserRepository _userRepository;

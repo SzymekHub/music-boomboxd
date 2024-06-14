@@ -1,11 +1,15 @@
 ﻿using Infrastructure;
-using Logic;
+using Infrastructure.DTOs;
+using Infrastructure.InterfacesForRepo;
+using Infrastructure.Repositories;
+using Logic.Algorithms;
+using Logic.Interfaces;
 using Microsoft.Extensions.Logging.Abstractions;
 
 
 namespace Logic
 {
-	public static class UserMapper
+    public static class UserMapper
 	{
 		public static User ConvertToUser(UserDTO newUserDTO)
 		{
@@ -36,8 +40,12 @@ namespace Logic
 
 		public static UserDTO ConvertToUserDTO(User user)
 		{
-			// this converts User to UserDTO
-			UserDTO userDTO = new();
+            if (user == null)
+            {
+                return null;
+            }
+            // this converts User to UserDTO
+            UserDTO userDTO = new();
 
 			userDTO.UserID = user.UserID;
 			userDTO.Username = user.Username;
