@@ -32,7 +32,7 @@ namespace UnitTestsMusicBoomBoxd.Tests
             };
 
             MockAlbumRepository albumRepository = new MockAlbumRepository(mockAlbum);
-            MockArtistRepository artistRepository = new MockArtistRepository(mockArtist);
+            MockArtistRepository artistRepository = new MockArtistRepository(mockArtist, new());
             MockValidateAlbum validateAlbum = new MockValidateAlbum();
 
             AlbumManager albumManager = new AlbumManager(albumRepository, artistRepository, validateAlbum);
@@ -94,7 +94,7 @@ namespace UnitTestsMusicBoomBoxd.Tests
             };
 
             MockAlbumRepository albumRepository = new MockAlbumRepository(mockAlbum);
-            MockArtistRepository artistRepository = new MockArtistRepository(mockArtist);
+            MockArtistRepository artistRepository = new MockArtistRepository(mockArtist, new());
             MockValidateAlbum validateAlbum = new MockValidateAlbum();
 
             AlbumManager albumManager = new AlbumManager(albumRepository, artistRepository, validateAlbum);
@@ -154,7 +154,7 @@ namespace UnitTestsMusicBoomBoxd.Tests
             };
 
             MockAlbumRepository albumRepository = new MockAlbumRepository(mockAlbum);
-            MockArtistRepository artistRepository = new MockArtistRepository(mockArtist);
+            MockArtistRepository artistRepository = new MockArtistRepository(mockArtist, new());
             MockValidateAlbum validateAlbum = new MockValidateAlbum();
 
             AlbumManager albumManager = new AlbumManager(albumRepository, artistRepository, validateAlbum);

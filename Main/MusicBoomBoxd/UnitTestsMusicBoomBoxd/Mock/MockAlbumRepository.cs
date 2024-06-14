@@ -9,16 +9,16 @@ using Logic.Interfaces;
 namespace UnitTestsMusicBoomBoxd.Mock
 {
     public class MockAlbumRepository : IAlbumRepository
-	{
-		private readonly List<AlbumDTO> _mockAlbum;
+    {
+        private readonly List<AlbumDTO> _mockAlbum;
 
         public MockAlbumRepository(List<AlbumDTO> mockAlbum)
         {
-			_mockAlbum = mockAlbum;
+            _mockAlbum = mockAlbum;
         }
 
         public Result InsertAlbum(AlbumDTO albumDTO)
-		{
+        {
             if (_mockAlbum.Any(a => a.AlbumTitle == albumDTO.AlbumTitle))
             {
                 return new Result { Success = false, Message = "Album already exists." };
@@ -33,28 +33,28 @@ namespace UnitTestsMusicBoomBoxd.Mock
         }
 
 
-		public List<AlbumDTO> GetAlbums(int count)
-		{
-			return _mockAlbum;
-		}
+        public List<AlbumDTO> GetAlbums(int count)
+        {
+            return _mockAlbum;
+        }
 
-		public Result AddSongToAlbum(int albumID, int songID)
-		{
-			throw new NotImplementedException();
+        public Result AddSongToAlbum(int albumID, int songID)
+        {
+            throw new NotImplementedException();
 
-		}
+        }
 
-		public Result RemoveSongFromAlbum(int albumID, int songID)
-		{
-			throw new NotImplementedException();
+        public Result RemoveSongFromAlbum(int albumID, int songID)
+        {
+            throw new NotImplementedException();
 
-		}
+        }
 
-		public List<AlbumDTO> GetAlbumsForUser(int userID)
-		{
-			throw new NotImplementedException();
+        public List<AlbumDTO> GetAlbumsForUser(int userID)
+        {
+            throw new NotImplementedException();
 
-		}
+        }
 
         public AlbumDTO GetAlbumByTitleAndArtist(string title, int artistId)
         {
@@ -64,35 +64,35 @@ namespace UnitTestsMusicBoomBoxd.Mock
 
 
         public int GetAlbumIDByAlbumTitle(string albumTitle)
-		{
-			var album = _mockAlbum.FirstOrDefault(u => u.AlbumTitle == albumTitle);
-			if (album != null)
-			{
-				return album.AlbumID;
-			}
-			throw new InvalidOperationException("Album not found.");
-		}
+        {
+            var album = _mockAlbum.FirstOrDefault(u => u.AlbumTitle == albumTitle);
+            if (album != null)
+            {
+                return album.AlbumID;
+            }
+            throw new InvalidOperationException("Album not found.");
+        }
 
 
-		public AlbumDTO GetAlbumByAlbumID(int albumID)
-		{
-			throw new NotImplementedException();
+        public AlbumDTO GetAlbumByAlbumID(int albumID)
+        {
+            return _mockAlbum.FirstOrDefault(album => album.AlbumID == albumID);
 
-		}
+        }
 
-		public List<AlbumDTO> GetAlbumsByAlbumIDs(List<int> albumsIDs)
-		{
-			throw new NotImplementedException();
+        public List<AlbumDTO> GetAlbumsByAlbumIDs(List<int> albumsIDs)
+        {
+            throw new NotImplementedException();
 
-		}
+        }
 
-		public Result AddAverageRating(AlbumDTO albumDTO, double averageRating)
-		{
-			throw new NotImplementedException();
+        public Result AddAverageRating(AlbumDTO albumDTO, double averageRating)
+        {
+            throw new NotImplementedException();
 
-		}
+        }
 
-		public Result UpdateAlbum(AlbumDTO albumDTO)
+        public Result UpdateAlbum(AlbumDTO albumDTO)
         {
             var existingAlbum = _mockAlbum.FirstOrDefault(a => a.AlbumID == albumDTO.AlbumID);
             if (existingAlbum != null)
@@ -109,10 +109,10 @@ namespace UnitTestsMusicBoomBoxd.Mock
             return new Result { Success = false, Message = "Album not found." };
         }
 
-		public Result DeleteAlbum(AlbumDTO albumDTO)
-		{
-			_mockAlbum.Remove(albumDTO);
-			return new Result { Success = true, Message = "Album removed successfully." };
-		}
-	}
+        public Result DeleteAlbum(AlbumDTO albumDTO)
+        {
+            _mockAlbum.Remove(albumDTO);
+            return new Result { Success = true, Message = "Album removed successfully." };
+        }
+    }
 }
