@@ -21,8 +21,8 @@
             else if (User.Identity.IsAuthenticated && User.IsInRole("Regular"))
             {
                 <ul class="left-links">
-                    <a asp-area="" asp-page="/Albums">Albums</a>
-                    <a asp-area="" asp-page="/Songs">Songs</a>
+                    <a asp-area="" asp-page="/AlbumReviews">Albums Reviews</a>
+                    <a asp-area="" asp-page="/SongReviews">Songs Reviews</a>
                     <a asp-area="" asp-page="/Artists">Artists</a>
                     <a asp-area="" asp-page="#">Search</a>
                 </ul>
@@ -41,8 +41,8 @@
             else if (User.Identity.IsAuthenticated && (User.IsInRole("Critic") || User.IsInRole("Admin")))
             {
                 <ul class="left-links">
-                    <a asp-area="" asp-page="/Albums">Albums</a>
-                    <a asp-area="" asp-page="/Songs">Songs</a>
+                    <a asp-area="" asp-page="/AlbumReviews">Albums Reviews</a>
+                    <a asp-area="" asp-page="/SongReviews">Songs Reviews</a>
                     <a asp-area="" asp-page="/Artists">Artists</a>
                     <a asp-area="" asp-page="#">Search</a>
                 </ul>
@@ -60,8 +60,8 @@
             else if (User.Identity.IsAuthenticated && User.IsInRole("Musician"))
             {
                 <ul class="left-links">
-                    <a asp-area="" asp-page="/Albums">Albums</a>
-                    <a asp-area="" asp-page="/Songs">Songs</a>
+                    <a asp-area="" asp-page="/AlbumReviews">Albums Reviews</a>
+                    <a asp-area="" asp-page="/SongReviews">Songs Reviews</a>
                     <a asp-area="" asp-page="/Artists">Artists</a>
                     <a asp-area="" asp-page="#">Search</a>
                 </ul>
