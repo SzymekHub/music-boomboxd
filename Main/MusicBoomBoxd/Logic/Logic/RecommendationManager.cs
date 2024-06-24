@@ -50,3 +50,7 @@ namespace Logic
 		}
     }
 }
+
+//if i wanted to make it more efficent and use List<filtes> IReccommendation instead of injecting bools
+//I would have to inject the filter and create a enum with the names of the filters and then populate the checkboxes with the enum
+ 
